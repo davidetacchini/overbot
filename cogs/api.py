@@ -3,9 +3,9 @@ import platform
 
 import distro
 import psutil
+import aiohttp_cors
 from aiohttp import web
 from discord.ext import tasks, commands
-import aiohttp_cors
 
 
 class Api(commands.Cog):
