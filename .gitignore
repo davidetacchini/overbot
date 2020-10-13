@@ -1,0 +1,12 @@
+__pycache__
+cogs/__pycache__
+utils/__pycache__
+classes/__pycache__
+
+.DS_Store
+cogs/.DS_Store
+.vscode
+
+config.py
+
+env

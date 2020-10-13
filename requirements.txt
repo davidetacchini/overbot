@@ -1,0 +1,10 @@
+discord.py
+termcolor
+psutil
+asyncpg
+distro
+uvloop
+bs4
+pygit2
+speedtest-cli
+aiohttp_cors
