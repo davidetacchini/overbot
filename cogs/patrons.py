@@ -14,20 +14,20 @@ class Patron(commands.Cog):
     @has_profile()
     @commands.command(brief="premium")
     async def track(self, ctx):
-        """Receive your ranks updated every 24 hours in your DMs."""
+        """Set up your profile to be tracked and receive your ranks updated every 24 hours in your DMs."""
         async with ctx.typing():
             await self.bot.pool.execute(
                 "UPDATE profile SET track=true WHERE id=$1", ctx.author.id
             )
             await ctx.send(
-                "Your profile has been successfully linked to be tracked. You will receive your profile information every 24 hours in your DMs. Make sure you can receive DM messages from me!"
+                "Your profile has been successfully linked to be tracked. You will receive your ranks information every 24 hours in your DMs. Make sure you can receive DM messages from me!"
             )
 
     @is_donator()
     @has_profile()
     @commands.command(brief="premium")
     async def untrack(self, ctx):
-        """Stop receiving ranks in DMs every 24 hours."""
+        """Remove your profile from monitoring."""
         if not await ctx.confirm(
             "Are you sure you want to remove your profile from being monitored?"
         ):
@@ -42,7 +42,7 @@ class Patron(commands.Cog):
     async def track_profile(self):
         await self.bot.wait_until_ready()
         if self.bot.is_ready():
-            # not sending rank everytime the bot start
+            # don't send the message everytime the bot starts
             return
 
         profiles = await self.bot.pool.fetch(
