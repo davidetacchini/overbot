@@ -9,7 +9,6 @@ from subprocess import PIPE
 import discord
 import aiosqlite
 from discord.ext import commands
-from asyncpg.exceptions import UniqueViolationError
 
 from utils.globals import group_embed
 
@@ -253,52 +252,50 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def insert_guild(self, ctx):
         async with ctx.typing():
-            if not await self.bot.pool.fetchrow(
-                "SELECT * FROM server WHERE id=$1;", ctx.guild.id
-            ):
-                await self.bot.pool.execute(
-                    'INSERT INTO server (id, "prefix") VALUES ($1, $2);',
-                    ctx.guild.id,
-                    self.bot.config.default_prefix,
-                )
-
-    @commands.command(hidden=True)
-    @commands.is_owner()
-    async def migratep(self, ctx):
-        async with aiosqlite.connect("main.sqlite") as conn:
-            async with conn.execute("SELECT * FROM profiles") as pool:
-                rows = await pool.fetchall()
-                for row in rows:
+            for guild in self.bot.guilds:
+                if not await self.bot.pool.fetchrow(
+                    "SELECT * FROM server WHERE id=$1;", guild.id
+                ):
                     await self.bot.pool.execute(
-                        'INSERT INTO profile (id, "platform", "name") VALUES ($1, $2, $3)',
-                        row[0],
-                        row[1],
-                        row[2],
+                        'INSERT INTO server (id, "prefix") VALUES ($1, $2);',
+                        guild.id,
+                        self.bot.config.default_prefix,
                     )
-        await ctx.send("""```css\nProfiles successfully inserted.```""")
+            await ctx.send("""```css\nGuilds successfully inserted.```""")
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def migrateg(self, ctx):
-        async with aiosqlite.connect("main.sqlite") as conn:
-            async with conn.execute("SELECT * FROM prefixes") as pool:
-                rows = await pool.fetchall()
-                for guild in self.bot.guilds:
-                    try:
+    async def insert_profiles(self, ctx):
+        async with ctx.typing():
+            async with aiosqlite.connect("main.sqlite") as conn:
+                async with conn.execute("SELECT * FROM profiles") as pool:
+                    rows = await pool.fetchall()
+                    for row in rows:
                         await self.bot.pool.execute(
-                            "INSERT INTO server (id, prefix) VALUES ($1, $2)",
-                            guild.id,
-                            self.bot.config.default_prefix,
+                            'INSERT INTO profile (id, "platform", "name") VALUES ($1, $2, $3)',
+                            row[0],
+                            row[1],
+                            row[2],
                         )
-                    except UniqueViolationError:
-                        print(f"The guild {str(guild)} is already in the database.")
-                for row in rows:
-                    try:
-                        await self.bot.pool.execute(
-                            "UPDATE SET prefix=$1 WHERE id=$1", int(row[0])
-                        )
-                    except Exception:
-                        pass
+            await ctx.send("""```css\nProfiles successfully inserted.```""")
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def insert_prefixes(self, ctx):
+        async with ctx.typing():
+            async with aiosqlite.connect("main.sqlite") as conn:
+                async with conn.execute("SELECT * FROM prefixes") as pool:
+                    rows = await pool.fetchall()
+                    for row in rows:
+                        try:
+                            await self.bot.pool.execute(
+                                "UPDATE server SET prefix=$1 WHERE id=$2",
+                                row[1],
+                                int(row[0]),
+                            )
+                        except Exception as exc:
+                            print(exc)
+            await ctx.send("""```css\nPrefixes successfully updated.```""")
 
     @commands.command(aliases=["medals", "quick", "quickplay", "comp", "competitive"])
     async def awards(self, ctx):
