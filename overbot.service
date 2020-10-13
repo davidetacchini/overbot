@@ -1,0 +1,13 @@
+[Unit]
+Description=The Overwatch bot for Discord
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/OverBot/
+ExecStart=/usr/bin/python3 /path/to/OverBot/bot.py
+User=username
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
