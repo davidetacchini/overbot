@@ -2,26 +2,17 @@
 <h2 align="center">The best Overwatch bot for Discord.</h2>
 
 <p align="center">
-  <a href="https://travis-ci.org/github/davidetacchini/OverBot/builds/" traget="_blank">
+  <a href="https://travis-ci.org/github/davidetacchini/overbot/builds/" traget="_blank">
     <img src="https://travis-ci.com/davidetacchini/overbot.svg?branch=v2.1" alt="Build">
   </a>
-  <!-- <a href="https://lgtm.com/projects/g/davidetacchini/OverBot/alerts/">
-    <img alt="Total alerts" src="https://img.shields.io/lgtm/alerts/g/davidetacchini/OverBot.svg?logo=lgtm&logoWidth=18"/>
-  </a>
-  <a href="https://lgtm.com/projects/g/davidetacchini/OverBot/context:python">
-    <img alt="Language grade: Python" src="https://img.shields.io/lgtm/grade/python/g/davidetacchini/OverBot.svg?logo=lgtm&logoWidth=18"/>
-  </a> -->
   <a href="https://github.com/psf/black" traget="_blank">
     <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
-  </a>
-    <a href="https://github.com/davidetacchini/OverBot/blob/master/LICENSE" traget="_blank"> 
-    <img alt="GitHub" src="https://img.shields.io/github/license/davidetacchini/overbot">
   </a>
   <a href="https://pypi.org/project/discord.py/" traget="_blank">
     <img alt="PyPI" src="https://img.shields.io/pypi/v/discord.py?label=discord.py">
   </a>
   <a href="https://ow-api.com/docs/" traget="_blank">
-    <img alt="API" src="https://img.shields.io/badge/API-ow--api-red">
+    <img alt="API" src="https://img.shields.io/badge/API-ow--api-orange">
   </a>
   <a href="https://discordapp.com/invite/8g3jnxv" traget="_blank">
   <img alt="Discord" src="https://img.shields.io/discord/550685823784321035"> 
@@ -46,9 +37,10 @@ Note: make sure you have PostgreSQL 9.5 (or higher) installed
 
 2. Setup the bot and run it
 ```sh
-git clone https://github.com/davidetacchini/OverBot.git
-cd OverBot
+git clone https://github.com/davidetacchini/overbot.git
+cd overbot
 python3 -m venv env
+source env/bin/activate
 ./scripts/init.sh
 systemctl start overbot
 ```
