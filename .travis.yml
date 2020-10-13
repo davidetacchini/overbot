@@ -1,5 +1,10 @@
 language: python
 
+os:
+  - "linux"
+  
+dist: "focal"
+
 python:
   - "3.9"
   
