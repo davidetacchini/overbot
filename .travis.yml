@@ -5,7 +5,7 @@ python:
   
 branches:
   only:
-    - v2.1
+    - next
 
 install:
   - pip install --upgrade pip
