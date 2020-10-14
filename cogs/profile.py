@@ -45,7 +45,7 @@ class Profile(commands.Cog):
         except asyncio.TimeoutError:
             await ctx.send("You didn't choose any platform.")
             return
-            # this 'return' avoid showing an UnboundLocalError if no choice is given
+            # return to avoid displaying an UnboundLocalError if no choice is given
 
         if str(reaction.emoji) == "<:battlenet:679469162724196387>":
             return "pc"
