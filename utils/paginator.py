@@ -101,11 +101,13 @@ class Paginator:
         if len(self.pages) == 1:
             await self.base.add_reaction("⏹")
         else:
+            await self.base.edit(content="**Adding reactions...**")
             for reaction in self.controls:
                 try:
                     await self.base.add_reaction(reaction)
                 except discord.HTTPException:
                     return
+            await self.base.edit(content=None)
 
         def check(r, u):
             if str(r) not in self.controls.keys():
