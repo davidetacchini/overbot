@@ -16,7 +16,7 @@ class Statistics(commands.Cog):
         command = str(ctx.command.name).lower()
 
         async with ctx.bot.session.get(url) as r:
-            if r.status != 200:
+            if not r or r.status != 200:
                 return await ctx.send(
                     "Profile not found. Please try again and make sure you didn't miss any capital letter."
                 )
