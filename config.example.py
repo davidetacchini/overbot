@@ -83,7 +83,7 @@ website = "https://over-bot.web.app"
 support = "https://discord.gg/8g3jnxv"
 
 """Invite link."""
-invite = "https://discord.com/oauth2/authorize?client_id=547546531666984961&permissions=321600&scope=bot"
+invite = "https://discord.com/api/oauth2/authorize?client_id=547546531666984961&permissions=288832&scope=bot"
 
 """Vote link."""
 vote = "https://top.gg/bot/547546531666984961/vote"
