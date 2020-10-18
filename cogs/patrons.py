@@ -1,8 +1,8 @@
 import discord
 from discord.ext import tasks, commands
 
-from utils.embed import CustomEmbed
 from utils.checks import is_donator, has_profile
+from utils.profile import Profile
 
 
 class Patron(commands.Cog):
@@ -60,7 +60,7 @@ class Patron(commands.Cog):
 
             try:
                 await user.send(
-                    embed=CustomEmbed(
+                    embed=Profile(
                         data=data, platform=profile["platform"], name=profile["name"]
                     ).rank()
                 )
