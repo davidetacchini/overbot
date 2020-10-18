@@ -190,6 +190,10 @@ class Profile:
         """Returns an embed with private profile information."""
         embed = discord.Embed(color=0xFF3232, timestamp=ctx.message.created_at)
         embed.title = "This profile is set to private"
-        embed.description = "Profiles are set to private by default. You can modify this setting in Overwatch under `Options - Social`. Please Note that these changes may take effect after approximately 30 minutes."
+        embed.description = (
+            "Profiles are set to private by default."
+            " You can modify this setting in Overwatch under `Options - Social`."
+            " Please Note that these changes may take effect after approximately 30 minutes."
+        )
         embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
         return embed
