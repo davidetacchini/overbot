@@ -61,7 +61,7 @@ class Statistics(commands.Cog):
     @commands.command(aliases=["rating"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def rank(self, ctx, platform: Platform, *, username: Username):
-        """Returns player rank."""
+        """Returns player ranks."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, username)
 
