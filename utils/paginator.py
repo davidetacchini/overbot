@@ -98,9 +98,7 @@ class Paginator:
 
         self.base = await ctx.send(embed=self.pages[0])
 
-        if len(self.pages) == 1:
-            await self.base.add_reaction("⏹")
-        else:
+        if len(self.pages) > 1:
             await self.base.edit(content="**Adding reactions...**")
             for reaction in self.controls:
                 try:
@@ -162,6 +160,9 @@ class Paginator:
         )
 
     async def paginate(self, ctx):
+        if isinstance(self.extras, discord.Embed):
+            return await ctx.send(embed=self.extras)
+
         if self.extras:
             self.pages = [p for p in self.extras if isinstance(p, discord.Embed)]
 
