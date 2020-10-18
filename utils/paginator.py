@@ -99,7 +99,7 @@ class Paginator:
         self.base = await ctx.send(embed=self.pages[0])
 
         if len(self.pages) > 1:
-            await self.base.edit(content="**Adding reactions...**")
+            await self.base.edit(content="**Wait until i finish adding reactions...**")
             for reaction in self.controls:
                 try:
                     await self.base.add_reaction(reaction)
