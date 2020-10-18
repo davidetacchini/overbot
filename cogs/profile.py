@@ -184,7 +184,7 @@ class Profile(commands.Cog):
     @profile.command(aliases=["rating"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def rank(self, ctx, user: discord.Member = None):
-        """Returns linked profile rank."""
+        """Returns linked profile ranks."""
         async with ctx.typing():
             user = user or ctx.author
             if not await self.bot.pool.fetchrow(
