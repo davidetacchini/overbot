@@ -16,7 +16,7 @@ class Miscellaneous(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["pong"])
+    @commands.command(aliases=["pong", "latency"])
     async def ping(self, ctx):
         """Displays the bot's current websocket latency."""
         embed = discord.Embed(color=self.bot.color)
@@ -35,22 +35,19 @@ class Miscellaneous(commands.Cog):
         """Returns bot license."""
         await ctx.send(f"""```text\n{license_file}```""")
 
-    @commands.command()
+    @commands.command(aliases=["feed"])
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     async def feedback(self, ctx, *, message: str):
         """Leave a feedback about the bot (you can leave a feedback once a minute)."""
-
-        i = len(ctx.prefix) + 8
-        message = ctx.message.content[i:]
         channel = self.bot.get_channel(self.bot.config.feedback_channel)
 
         if not channel:
             return
 
         embed = discord.Embed(color=self.bot.color)
-        embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-        embed.description = message
+        embed.description = ctx.message.content
         embed.timestamp = ctx.message.created_at
+        embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         await channel.send(embed=embed)
         await ctx.send(
             f"{ctx.author.name}, your feedback has been successfully sent, thanks!"
@@ -181,7 +178,7 @@ class Miscellaneous(commands.Cog):
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = "Latest Overwatch News"
-                embed.description = f"[Click here to check out all the new Overwatch news.]({self.bot.config.overwatch['news']})"
+                embed.description = f"[Click here to check out all the Overwatch news.]({self.bot.config.overwatch['news']})"
                 embed.set_footer(text="Blizzard Entertainment")
                 await ctx.send(embed=embed)
             else:
