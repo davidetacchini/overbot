@@ -1,7 +1,7 @@
 from discord.ext import commands
 
-from utils.embed import CustomEmbed, NoStatistics, NoHeroStatistics
 from utils.globals import embed_exception
+from utils.profile import Profile, NoStatistics, NoHeroStatistics
 from classes.converters import Hero, Platform, Username
 
 
@@ -16,13 +16,26 @@ class Statistics(commands.Cog):
         command = str(ctx.command.name).lower()
 
         async with ctx.bot.session.get(url) as r:
-            if not r or r.status != 200:
+            if r.status == 200:
+                data = await r.json()
+            elif r.status == 400:
                 return await ctx.send(
-                    "Profile not found. Please try again and make sure you didn't miss any capital letter."
+                    f"Wrong battletag format! Correct format: {name}#0000"
                 )
-            data = await r.json()
+            elif r.status == 404:
+                return await ctx.send(
+                    "Profile not found. Please make sure you aren't missing any capital letter."
+                )
+            elif r.status == 500:
+                return await ctx.send(
+                    "API Internal server error. Please be patiente and try again."
+                )
+            else:
+                return await ctx.send(
+                    "The API is under maintenance. Please be patiente and try again later."
+                )
 
-        profile = CustomEmbed(data=data, platform=platform, name=name)
+        profile = Profile(data=data, platform=platform, name=name)
 
         try:
             if profile.is_private:
@@ -33,10 +46,7 @@ class Statistics(commands.Cog):
                 embed = profile.hero(ctx, hero)
             else:
                 embed = profile.statistics(ctx)
-            try:
-                await ctx.bot.paginator.Paginator(extras=embed).paginate(ctx)
-            except TypeError:  # if there is just one page
-                await ctx.send(embed=embed)
+            await ctx.bot.paginator.Paginator(extras=embed).paginate(ctx)
         except NoStatistics:
             await ctx.send(
                 "This profile has no quick play nor competitive statistics to display."
@@ -51,26 +61,14 @@ class Statistics(commands.Cog):
     @commands.command(aliases=["rating"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def rank(self, ctx, platform: Platform, *, username: Username):
-        """Returns player rank.
-
-        Arguments
-            - platform: must be pc, psn or xbl.
-            - name: battletag if platform is pc else your console gamertag.
-            Please note that the name is case sensitive.
-        """
+        """Returns player rank."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, username)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def stats(self, ctx, platform: Platform, *, username: Username):
-        """Returns player both competitive and quick play statistics.
-
-        Arguments
-            - platform: must be pc, psn or xbl.
-            - name: battletag if platform is pc else your console gamertag.
-            Please note that the name is case sensitive.
-        """
+        """Returns player both competitive and quick play statistics."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, username)
 
@@ -84,14 +82,7 @@ class Statistics(commands.Cog):
         *,
         username: Username,
     ):
-        """Returns player stats for a given hero.
-
-        Arguments
-            - hero: the hero name you want to see the stats for.
-            - platform: must be pc, psn or xbl.
-            - name: battletag if platform is pc else your console gamertag.
-            Please note that the name is case sensitive.
-        """
+        """Returns player stats for a given hero."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, username, hero)
 
