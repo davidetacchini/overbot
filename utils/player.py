@@ -26,7 +26,7 @@ class NoHeroStatistics(Exception):
     pass
 
 
-class Profile:
+class Player:
 
     __slots__ = ("data", "platform", "name", "color")
 
@@ -69,17 +69,17 @@ class Profile:
 
     @staticmethod
     def get_rating_icon(rating):
-        if rating > 0 and rating <= 1499:
+        if rating > 0 and rating < 1500:
             return "<:bronze:632281015863214096>"
-        elif rating > 1499 and rating <= 1999:
+        elif rating >= 1500 and rating < 2000:
             return "<:silver:632281054211997718>"
-        elif rating > 1999 and rating <= 2499:
+        elif rating >= 2000 and rating < 2500:
             return "<:gold:632281064596832278>"
-        elif rating > 2499 and rating <= 2999:
+        elif rating >= 2500 and rating < 3000:
             return "<:platinum:632281092875091998>"
-        elif rating > 2999 and rating <= 3499:
+        elif rating >= 3000 and rating < 3500:
             return "<:diamond:632281105571119105>"
-        elif rating > 3499 and rating <= 3999:
+        elif rating >= 3500 and rating < 4000:
             return "<:master:632281117394993163>"
         else:
             return "<:grandmaster:632281128966946826>"
