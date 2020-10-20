@@ -16,14 +16,19 @@ ROLES = {
 class NoStatistics(Exception):
     """Exception raised when a player has no statistics to display."""
 
-    pass
+    def __init__(self):
+        super().__init__(
+            "This profile has no quick play nor competitive statistics to display."
+        )
 
 
 class NoHeroStatistics(Exception):
     """Exception raised when a player has no quick play nor competitive stats
     for a given hero."""
 
-    pass
+    def __init__(self, hero):
+        message = f"This profile has no quick play nor competitive stats for **{hero}** to display."
+        super().__init__(message)
 
 
 class Player:
@@ -117,17 +122,17 @@ class Player:
             return True
         return False
 
-    def get_statistics(self, arg="allHeroes"):
+    def get_statistics(self, hero="allHeroes"):
         if not self.has_statistics():
             raise NoStatistics()
 
         # quickplay_keys and competitive_keys
-        q_k = self.data.get("quickPlayStats").get("careerStats").get(arg) or {}
-        c_k = self.data.get("competitiveStats").get("careerStats").get(arg) or {}
+        q_k = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
+        c_k = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
 
-        if arg != "allHeroes":
+        if hero != "allHeroes":
             if not q_k and not c_k:
-                raise NoHeroStatistics()
+                raise NoHeroStatistics(hero)
 
         keys = list(
             {
