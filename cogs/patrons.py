@@ -2,7 +2,7 @@ import discord
 from discord.ext import tasks, commands
 
 from utils.checks import is_donator, has_profile
-from utils.profile import Profile
+from utils.player import Player
 
 
 class Patron(commands.Cog):
@@ -50,17 +50,13 @@ class Patron(commands.Cog):
         )
         for profile in profiles:
             user = self.bot.get_user(profile["id"])
-            url = f'{self.bot.config.base_url}/{profile["platform"]}/{profile["name"]}/profile'
-            async with self.bot.session.get(url) as r:
-                if r.status != 200:
-                    return await user.send(
-                        "The profile linked to your Discord ID doesn't exists. Please update it to able to receive your ranks information."
-                    )
-                data = await r.json()
+            data = await self.bot.data.Data(
+                platform=profile["platform"], name=profile["name"]
+            ).get()
 
             try:
                 await user.send(
-                    embed=Profile(
+                    embed=Player(
                         data=data, platform=profile["platform"], name=profile["name"]
                     ).rank()
                 )
