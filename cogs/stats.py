@@ -21,9 +21,9 @@ class Statistics(commands.Cog):
                 await ctx.send(exc)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
-            profile = Player(data=data, platform=platform, name=username).rank()
+            embed = Player(data=data, platform=platform, name=username).rank()
             try:
-                await ctx.send(embed=profile)
+                await ctx.send(embed=embed)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
 
@@ -38,11 +38,9 @@ class Statistics(commands.Cog):
                 await ctx.send(exc)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
-            profile = Player(data=data, platform=platform, name=username).statistics(
-                ctx
-            )
+            embed = Player(data=data, platform=platform, name=username).statistics(ctx)
             try:
-                await self.bot.paginator.Paginator(extras=profile).paginate(ctx)
+                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
             except NoStatistics:
                 await ctx.send(
                     "This profile has no quick play nor competitive statistics to display."
@@ -68,11 +66,9 @@ class Statistics(commands.Cog):
                 await ctx.send(exc)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
-            profile = Player(data=data, platform=platform, name=username).hero(
-                ctx, hero
-            )
+            embed = Player(data=data, platform=platform, name=username).hero(ctx, hero)
             try:
-                await self.bot.paginator.Paginator(extras=profile).paginate(ctx)
+                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
             except NoHeroStatistics:
                 await ctx.send(
                     f"This profile has no quick play nor competitive stats for **{hero}** to display."
