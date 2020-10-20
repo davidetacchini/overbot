@@ -3,11 +3,19 @@ import asyncio
 import discord
 from discord.ext import commands
 
+from utils.data import RequestError
 from utils.checks import has_profile, has_no_profile
+from utils.player import Player, NoStatistics, NoHeroStatistics
 from utils.globals import group_embed, profile_info, embed_exception
 from classes.converters import Hero, Platform, Username
 
-from .stats import Statistics
+
+class UserHasNoProfile(Exception):
+    """Exception raised when tagged user has no profile connected."""
+
+    def __init__(self, username):
+        message = f"{username} hasn't connected a profile yet."
+        super().__init__(message)
 
 
 class Profile(commands.Cog):
@@ -168,17 +176,15 @@ class Profile(commands.Cog):
         except Exception as exc:
             await ctx.send(embed=embed_exception(exc))
 
-    async def embed_profile_stats(self, ctx, user_id, hero=None):
-        """Embeds stats for commands."""
-        try:
-            profile = await self.bot.pool.fetchrow(
-                "SELECT platform, name FROM profile WHERE id=$1;", user_id
-            )
-            await Statistics.embed_stats(
-                ctx, profile["platform"], profile["name"], hero
-            )
-        except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+    async def get_profile(self, user):
+        """Returns profile information."""
+        profile = await self.bot.pool.fetchrow(
+            "SELECT platform, name FROM profile WHERE id=$1", user.id
+        )
+        if profile:
+            return profile
+        else:
+            raise UserHasNoProfile(user)
 
     @has_profile()
     @profile.command(aliases=["rating"])
@@ -187,11 +193,25 @@ class Profile(commands.Cog):
         """Returns linked profile ranks."""
         async with ctx.typing():
             user = user or ctx.author
-            if not await self.bot.pool.fetchrow(
-                "SELECT platform, name FROM profile WHERE id=$1", user.id
-            ):
-                return await ctx.send(f"{user} hasn't connected a profile yet.")
-            await self.embed_profile_stats(ctx, user.id)
+            try:
+                profile = await self.get_profile(user)
+            except UserHasNoProfile as exc:
+                return await ctx.send(exc)
+            try:
+                data = await self.bot.data.Data(
+                    platform=profile["platform"], name=profile["name"]
+                ).get()
+            except RequestError as exc:
+                await ctx.send(exc)
+            except Exception as exc:
+                await ctx.send(embed=embed_exception(exc))
+            embed = Player(
+                data=data, platform=profile["platform"], name=profile["name"]
+            ).rank()
+            try:
+                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+            except Exception as exc:
+                await ctx.send(exc)
 
     @has_profile()
     @profile.command()
@@ -200,11 +220,29 @@ class Profile(commands.Cog):
         """Returns linked profile both competitive and quick play statistics."""
         async with ctx.typing():
             user = user or ctx.author
-            if not await self.bot.pool.fetchrow(
-                "SELECT platform, name FROM profile WHERE id=$1", user.id
-            ):
-                return await ctx.send(f"{user} hasn't connected a profile yet.")
-            await self.embed_profile_stats(ctx, user.id)
+            try:
+                profile = await self.get_profile(user)
+            except UserHasNoProfile as exc:
+                return await ctx.send(exc)
+            try:
+                data = await self.bot.data.Data(
+                    platform=profile["platform"], name=profile["name"]
+                ).get()
+            except RequestError as exc:
+                await ctx.send(exc)
+            except Exception as exc:
+                await ctx.send(embed=embed_exception(exc))
+            embed = Player(
+                data=data, platform=profile["platform"], name=profile["name"]
+            ).statistics(ctx)
+            try:
+                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+            except NoStatistics:
+                await ctx.send(
+                    "This profile has no quick play nor competitive statistics to display."
+                )
+            except Exception as exc:
+                await ctx.send(embed=embed_exception(exc))
 
     @has_profile()
     @profile.command()
@@ -213,11 +251,29 @@ class Profile(commands.Cog):
         """Returns linked profile statistics for a given hero."""
         async with ctx.typing():
             user = user or ctx.author
-            if not await self.bot.pool.fetchrow(
-                "SELECT platform, name FROM profile WHERE id=$1", user.id
-            ):
-                return await ctx.send(f"{user} hasn't connected a profile yet.")
-            await self.embed_profile_stats(ctx, user.id, hero)
+            try:
+                profile = await self.get_profile(user)
+            except UserHasNoProfile as exc:
+                return await ctx.send(exc)
+            try:
+                data = await self.bot.data.Data(
+                    platform=profile["platform"], name=profile["name"]
+                ).get()
+            except RequestError as exc:
+                await ctx.send(exc)
+            except Exception as exc:
+                await ctx.send(embed=embed_exception(exc))
+            embed = Player(
+                data=data, platform=profile["platform"], name=profile["name"]
+            ).hero(ctx, hero)
+            try:
+                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+            except NoHeroStatistics:
+                await ctx.send(
+                    f"This profile has no quick play nor competitive stats for **{hero}** to display."
+                )
+            except Exception as exc:
+                await ctx.send(embed=embed_exception(exc))
 
 
 def setup(bot):
