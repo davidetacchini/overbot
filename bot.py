@@ -33,7 +33,7 @@ from termcolor import colored
 from discord.ext import commands
 
 import config
-from utils import paginator
+from utils import data, paginator
 from classes.context import Context
 
 try:
@@ -59,6 +59,7 @@ class Bot(commands.AutoShardedBot):
         self.start_time = None
 
         self.paginator = paginator
+        self.data = data
 
     def __repr__(self):
         return "<Bot>"
