@@ -3,7 +3,6 @@ from asyncpg import DataError
 from discord.ext import commands
 
 from utils import checks
-from classes.context import NoChoice
 
 
 class ErrorHandler(commands.Cog):
@@ -71,9 +70,6 @@ class ErrorHandler(commands.Cog):
                     "Become a patron and unlock the pro features!"
                     f"\nMore information at {self.bot.config.patreon}"
                 )
-
-        elif isinstance(error, NoChoice):
-            await ctx.send("You didn't choose anything.")
 
 
 def setup(bot):
