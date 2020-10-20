@@ -1,14 +1,10 @@
-from asyncio import TimeoutError as AsyncTimeoutError
+import asyncio
 from contextlib import suppress
 
 import discord
 from discord.ext import commands
 
 from config import main_color
-
-
-class NoChoice(commands.CommandInvokeError):
-    pass
 
 
 class Context(commands.Context):
@@ -40,9 +36,9 @@ class Context(commands.Context):
             reaction, _ = await self.bot.wait_for(
                 "reaction_add", check=check, timeout=timeout
             )
-        except AsyncTimeoutError:
+        except asyncio.TimeoutError:
             await cleanup()
-            raise NoChoice()
+            await self.send("You took too long to confirm.")
 
         await cleanup()
 
