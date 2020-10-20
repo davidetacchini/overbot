@@ -4,8 +4,8 @@ from discord.ext import commands
 class InvalidPlatform(commands.BadArgument):
     """Exception raised when an invalid platform is given."""
 
-    def __str__(self):
-        return (
+    def __init__(self):
+        super().__init__(
             "Invalid platform. Supported platforms: `pc, psn, xbl and nintendo-switch`"
         )
 
