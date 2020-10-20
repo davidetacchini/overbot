@@ -196,22 +196,24 @@ class Profile(commands.Cog):
             try:
                 profile = await self.get_profile(user)
             except UserHasNoProfile as exc:
-                return await ctx.send(exc)
-            try:
-                data = await self.bot.data.Data(
-                    platform=profile["platform"], name=profile["name"]
-                ).get()
-            except RequestError as exc:
                 await ctx.send(exc)
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
-            embed = Player(
-                data=data, platform=profile["platform"], name=profile["name"]
-            ).rank()
-            try:
-                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
-            except Exception as exc:
-                await ctx.send(exc)
+            else:
+                try:
+                    data = await self.bot.data.Data(
+                        platform=profile["platform"], name=profile["name"]
+                    ).get()
+                except RequestError as exc:
+                    await ctx.send(exc)
+                except Exception as exc:
+                    await ctx.send(embed=embed_exception(exc))
+                else:
+                    embed = Player(
+                        data=data, platform=profile["platform"], name=profile["name"]
+                    ).rank()
+                    try:
+                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                    except Exception as exc:
+                        await ctx.send(exc)
 
     @has_profile()
     @profile.command()
@@ -223,26 +225,28 @@ class Profile(commands.Cog):
             try:
                 profile = await self.get_profile(user)
             except UserHasNoProfile as exc:
-                return await ctx.send(exc)
-            try:
-                data = await self.bot.data.Data(
-                    platform=profile["platform"], name=profile["name"]
-                ).get()
-            except RequestError as exc:
                 await ctx.send(exc)
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
-            embed = Player(
-                data=data, platform=profile["platform"], name=profile["name"]
-            ).statistics(ctx)
-            try:
-                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
-            except NoStatistics:
-                await ctx.send(
-                    "This profile has no quick play nor competitive statistics to display."
-                )
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
+            else:
+                try:
+                    data = await self.bot.data.Data(
+                        platform=profile["platform"], name=profile["name"]
+                    ).get()
+                except RequestError as exc:
+                    await ctx.send(exc)
+                except Exception as exc:
+                    await ctx.send(embed=embed_exception(exc))
+                else:
+                    embed = Player(
+                        data=data, platform=profile["platform"], name=profile["name"]
+                    ).statistics(ctx)
+                    try:
+                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                    except NoStatistics:
+                        await ctx.send(
+                            "This profile has no quick play nor competitive statistics to display."
+                        )
+                    except Exception as exc:
+                        await ctx.send(embed=embed_exception(exc))
 
     @has_profile()
     @profile.command()
@@ -254,26 +258,28 @@ class Profile(commands.Cog):
             try:
                 profile = await self.get_profile(user)
             except UserHasNoProfile as exc:
-                return await ctx.send(exc)
-            try:
-                data = await self.bot.data.Data(
-                    platform=profile["platform"], name=profile["name"]
-                ).get()
-            except RequestError as exc:
                 await ctx.send(exc)
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
-            embed = Player(
-                data=data, platform=profile["platform"], name=profile["name"]
-            ).hero(ctx, hero)
-            try:
-                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
-            except NoHeroStatistics:
-                await ctx.send(
-                    f"This profile has no quick play nor competitive stats for **{hero}** to display."
-                )
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
+            else:
+                try:
+                    data = await self.bot.data.Data(
+                        platform=profile["platform"], name=profile["name"]
+                    ).get()
+                except RequestError as exc:
+                    await ctx.send(exc)
+                except Exception as exc:
+                    await ctx.send(embed=embed_exception(exc))
+                else:
+                    embed = Player(
+                        data=data, platform=profile["platform"], name=profile["name"]
+                    ).hero(ctx, hero)
+                    try:
+                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                    except NoHeroStatistics:
+                        await ctx.send(
+                            f"This profile has no quick play nor competitive stats for **{hero}** to display."
+                        )
+                    except Exception as exc:
+                        await ctx.send(embed=embed_exception(exc))
 
 
 def setup(bot):
