@@ -125,7 +125,8 @@ class Profile(commands.Cog):
     async def unlink(self, ctx):
         """Unlink your Overwatch profile from your Discord account."""
         if not await ctx.confirm(
-            f"Are you sure you want to unlink your Overwatch profile from your Discord account? You can always add a new one by running `{ctx.prefix}profile link`."
+            "Are you sure you want to unlink your Overwatch profile from your Discord account?"
+            f" You can always add a new one by running `{ctx.prefix}profile link`."
         ):
             return
 
@@ -168,13 +169,10 @@ class Profile(commands.Cog):
             embed = profile_info(
                 ctx, profile["platform"], profile["name"].replace("-", "#")
             )
-            await ctx.send(embed=embed)
-        except TypeError:
-            await ctx.send(
-                f"Connect your profile by running `{ctx.prefix}profile link`"
-            )
         except Exception as exc:
             await ctx.send(embed=embed_exception(exc))
+        else:
+            await ctx.send(embed=embed)
 
     async def get_profile(self, user):
         """Returns profile information."""
@@ -207,13 +205,16 @@ class Profile(commands.Cog):
                 except Exception as exc:
                     await ctx.send(embed=embed_exception(exc))
                 else:
-                    embed = Player(
-                        data=data, platform=profile["platform"], name=profile["name"]
-                    ).rank()
                     try:
-                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                        embed = Player(
+                            data=data,
+                            platform=profile["platform"],
+                            name=profile["name"],
+                        ).rank()
                     except Exception as exc:
                         await ctx.send(exc)
+                    else:
+                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
     @has_profile()
     @profile.command()
@@ -236,17 +237,18 @@ class Profile(commands.Cog):
                 except Exception as exc:
                     await ctx.send(embed=embed_exception(exc))
                 else:
-                    embed = Player(
-                        data=data, platform=profile["platform"], name=profile["name"]
-                    ).statistics(ctx)
                     try:
-                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
-                    except NoStatistics:
-                        await ctx.send(
-                            "This profile has no quick play nor competitive statistics to display."
-                        )
+                        embed = Player(
+                            data=data,
+                            platform=profile["platform"],
+                            name=profile["name"],
+                        ).statistics(ctx)
+                    except NoStatistics as exc:
+                        await ctx.send(exc)
                     except Exception as exc:
                         await ctx.send(embed=embed_exception(exc))
+                    else:
+                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
     @has_profile()
     @profile.command()
@@ -269,17 +271,18 @@ class Profile(commands.Cog):
                 except Exception as exc:
                     await ctx.send(embed=embed_exception(exc))
                 else:
-                    embed = Player(
-                        data=data, platform=profile["platform"], name=profile["name"]
-                    ).hero(ctx, hero)
                     try:
-                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
-                    except NoHeroStatistics:
-                        await ctx.send(
-                            f"This profile has no quick play nor competitive stats for **{hero}** to display."
-                        )
+                        embed = Player(
+                            data=data,
+                            platform=profile["platform"],
+                            name=profile["name"],
+                        ).hero(ctx, hero)
+                    except NoHeroStatistics as exc:
+                        await ctx.send(exc)
                     except Exception as exc:
                         await ctx.send(embed=embed_exception(exc))
+                    else:
+                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
 
 def setup(bot):
