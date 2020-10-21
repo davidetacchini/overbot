@@ -10,7 +10,7 @@ import discord
 import aiosqlite
 from discord.ext import commands
 
-from utils.globals import group_embed
+from utils.globals import command_embed
 
 
 class Owner(commands.Cog):
@@ -203,7 +203,7 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def cmd(self, ctx, commands: str = None):
         """[Owner Only] Get usage information for 'cmd' command."""
-        embed = group_embed(ctx, self.bot.get_command(ctx.command.name))
+        embed = command_embed(ctx, self.bot.get_command(ctx.command.name))
         await ctx.send(embed=embed)
 
     @cmd.command(hidden=True)
