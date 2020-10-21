@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 
 from utils.checks import is_donator
-from utils.globals import embed_exception, group_signature
+from utils.globals import embed_exception, command_signature
 
 
 class Server(commands.Cog):
@@ -43,13 +43,13 @@ class Server(commands.Cog):
                 continue
             try:
                 embed.add_field(
-                    name=group_signature(subcommand),
+                    name=command_signature(subcommand),
                     value=f"{desc}\n{setting[subcommand.name]}",
                     inline=False,
                 )
             except KeyError:
                 embed.add_field(
-                    name=group_signature(subcommand),
+                    name=command_signature(subcommand),
                     value=desc,
                 )
         return embed
