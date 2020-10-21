@@ -12,24 +12,7 @@ def embed_exception(exc):
     return embed
 
 
-def profile_info(ctx, platform, name):
-    """Returns linked profile information."""
-    embed = discord.Embed(color=main_color)
-    embed.title = f"{ctx.author} Profile Information"
-    embed.description = (
-        "Here you can check the Overwatch profile linked to your Discord ID."
-    )
-    embed.add_field(name="Platform", value=platform)
-    embed.add_field(name="Name", value=name)
-    embed.add_field(
-        name="Want to update it?",
-        value=f"`{ctx.prefix}profile update <platform> <username>`",
-        inline=False,
-    )
-    return embed
-
-
-def group_signature(subcommand):
+def command_signature(subcommand):
     """Returns groups commands signatures."""
     parent = subcommand.full_parent_name
     if len(subcommand.aliases) > 0:
@@ -41,7 +24,7 @@ def group_signature(subcommand):
     return f"{fmt} {subcommand.signature}"
 
 
-def group_embed(ctx, command):
+def command_embed(ctx, command):
     """Returns an embed for groups of commands."""
     subcommands = getattr(command, "commands", None)
     embed = discord.Embed(color=main_color)
@@ -52,5 +35,5 @@ def group_embed(ctx, command):
             desc = subcommand.callback.__doc__
         else:
             desc = "No description set"
-        embed.add_field(name=group_signature(subcommand), value=desc, inline=False)
+        embed.add_field(name=command_signature(subcommand), value=desc, inline=False)
     return embed
