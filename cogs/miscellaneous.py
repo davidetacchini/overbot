@@ -50,7 +50,7 @@ class Miscellaneous(commands.Cog):
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         await channel.send(embed=embed)
         await ctx.send(
-            f"{ctx.author.name}, your feedback has been successfully sent, thanks!"
+            f"{str(ctx.author)}, your feedback has been successfully sent, thanks!"
         )
 
     @staticmethod
