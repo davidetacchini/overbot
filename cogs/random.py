@@ -29,7 +29,7 @@ ROLES = [
 ]
 
 
-class Randoms(commands.Cog):
+class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -46,7 +46,7 @@ class Randoms(commands.Cog):
             return 0xE61B23
         return 0x13A549
 
-    async def embed_random_hero(self):
+    async def random_hero(self):
         hero = await self.get_hero()
 
         embed = discord.Embed(color=self.get_hero_color(hero))
@@ -86,7 +86,7 @@ class Randoms(commands.Cog):
     async def hero(self, ctx):
         """Returns a random hero to play."""
         try:
-            embed = await self.embed_random_hero()
+            embed = await self.random_hero()
         except Exception as exc:
             await ctx.send(embed=embed_exception(exc))
         else:
@@ -105,4 +105,4 @@ class Randoms(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Randoms(bot))
+    bot.add_cog(Random(bot))
