@@ -3,7 +3,7 @@ import secrets
 import discord
 from discord.ext import commands
 
-from utils.globals import group_embed, embed_exception
+from utils.globals import command_embed, embed_exception
 
 ROLES = [
     {
@@ -78,7 +78,7 @@ class Randoms(commands.Cog):
             - Hero: random hero
             - Role: random role
         """
-        embed = group_embed(ctx, self.bot.get_command(ctx.command.name))
+        embed = command_embed(ctx, self.bot.get_command(ctx.command.name))
         await ctx.send(embed=embed)
 
     @random.command()
