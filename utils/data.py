@@ -30,7 +30,7 @@ class InternalServerError(RequestError):
 
     def __init__(self):
         super().__init__(
-            "The API is having internal server problems. Please be patiente and try again later."
+            "The API is having internal server problems. Please be patient and try again later."
         )
 
 
@@ -39,7 +39,7 @@ class ServiceUnavailable(RequestError):
 
     def __init__(self):
         super().__init__(
-            "The API is under maintenance. Please be patiente and try again later."
+            "The API is under maintenance. Please be patient and try again later."
         )
 
 
