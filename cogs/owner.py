@@ -191,10 +191,7 @@ class Owner(commands.Cog):
             embed.add_field(name="Profiles", value=len(profiles))
             embed.add_field(name="Prefixes", value=len(prefixes))
             embed.add_field(name="Guilds", value=len(guilds))
-            embed.add_field(
-                name="Commands Used (Session)", value=self.bot.commands_used
-            )
-            embed.add_field(name="Commands Used (Lifetime)", value=total_commands)
+            embed.add_field(name="Commands Used", value=total_commands)
             await ctx.send(embed=embed)
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
@@ -301,7 +298,7 @@ class Owner(commands.Cog):
     async def awards(self, ctx):
         message = (
             "This command has been deprecated."
-            f" To see your whole quickplay/competitive statistics run `{ctx.prefix}stats <pc/psn/xbl> <battletag/username>`."
+            f" To see your whole quickplay/competitive statistics run `{ctx.prefix}stats <pc/psn/xbl/nsw> <battletag/username>`."
             " For more information run the `help` command."
         )
         await ctx.send(message)
