@@ -21,12 +21,17 @@ class Statistics(commands.Cog):
                 await ctx.send(exc)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
-            try:
-                embed = Player(data=data, platform=platform, name=username).rank()
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
             else:
-                await ctx.send(embed=embed)
+                try:
+                    profile = Player(data=data, platform=platform, name=username)
+                    if profile.is_private:
+                        embed = profile.private(ctx)
+                    else:
+                        embed = profile.rank()
+                except Exception as exc:
+                    await ctx.send(embed=embed_exception(exc))
+                else:
+                    await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -39,16 +44,19 @@ class Statistics(commands.Cog):
                 await ctx.send(exc)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
-            try:
-                embed = Player(data=data, platform=platform, name=username).statistics(
-                    ctx
-                )
-            except NoStatistics as exc:
-                await ctx.send(exc)
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
             else:
-                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                try:
+                    profile = Player(data=data, platform=platform, name=username)
+                    if profile.is_private:
+                        embed = profile.private(ctx)
+                    else:
+                        embed = profile.statistics(ctx)
+                except NoStatistics as exc:
+                    await ctx.send(exc)
+                except Exception as exc:
+                    await ctx.send(embed=embed_exception(exc))
+                else:
+                    await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -68,16 +76,19 @@ class Statistics(commands.Cog):
                 await ctx.send(exc)
             except Exception as exc:
                 await ctx.send(embed=embed_exception(exc))
-            try:
-                embed = Player(data=data, platform=platform, name=username).hero(
-                    ctx, hero
-                )
-            except NoHeroStatistics as exc:
-                await ctx.send(exc)
-            except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
             else:
-                await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                try:
+                    profile = Player(data=data, platform=platform, name=username)
+                    if profile.is_private:
+                        embed = profile.private(ctx)
+                    else:
+                        embed = profile.hero(ctx, hero)
+                except NoHeroStatistics as exc:
+                    await ctx.send(exc)
+                except Exception as exc:
+                    await ctx.send(embed=embed_exception(exc))
+                else:
+                    await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
 
 def setup(bot):
