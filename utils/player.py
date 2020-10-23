@@ -168,7 +168,7 @@ class Player:
         pages = []
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=self.color, timestamp=ctx.message.created_at)
+            embed = discord.Embed(color=self.color)
             embed.title = self.format_key(key)
             embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
             embed.set_thumbnail(url=self.level_icon)
@@ -182,7 +182,7 @@ class Player:
         pages = []
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=self.color, timestamp=ctx.message.created_at)
+            embed = discord.Embed(color=self.color)
             embed.title = self.format_key(key)
             embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
             embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
@@ -193,7 +193,7 @@ class Player:
 
     def private(self, ctx):
         """Returns an embed with private profile information."""
-        embed = discord.Embed(color=0xFF3232, timestamp=ctx.message.created_at)
+        embed = discord.Embed(color=0xFF3232)
         embed.title = "This profile is set to private"
         embed.description = (
             "Profiles are set to private by default."
