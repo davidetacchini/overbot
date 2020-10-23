@@ -55,6 +55,7 @@ class Server(commands.Cog):
         return embed
 
     @commands.group(invoke_without_command=True)
+    @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     async def settings(self, ctx, command: str = None):
         """Change the settings for your Discord server."""
@@ -62,6 +63,7 @@ class Server(commands.Cog):
         await ctx.send(embed=embed)
 
     @settings.command(name="prefix")
+    @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     async def _prefix(self, ctx, prefix):
         """Change the prefix for this server."""
@@ -78,6 +80,7 @@ class Server(commands.Cog):
             await ctx.send(f"Prefix successfully set to `{prefix}`")
 
     @settings.command()
+    @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     async def reset(self, ctx):
         """Reset the server settings."""
@@ -95,6 +98,7 @@ class Server(commands.Cog):
 
     @is_donator()
     @settings.command(brief="premium")
+    @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     async def news(
         self,
@@ -141,11 +145,9 @@ class Server(commands.Cog):
         )
 
     @commands.command()
+    @commands.guild_only()
     async def prefix(self, ctx):
         """Displays information about the prefix."""
-        if not ctx.guild:
-            return
-
         _prefix = await self.bot.pool.fetchval(
             "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
         )
