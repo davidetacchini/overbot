@@ -77,7 +77,7 @@ overwatch = {
 }
 
 """Official website."""
-website = "https://over-bot.web.app"
+website = "https://overbot.netlify.app"
 
 """Official support server invite."""
 support = "https://discord.gg/8g3jnxv"
