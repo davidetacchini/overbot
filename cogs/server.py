@@ -62,23 +62,6 @@ class Server(commands.Cog):
         embed = await self.embed_settings(ctx, self.bot.get_command(ctx.command.name))
         await ctx.send(embed=embed)
 
-    @settings.command(name="prefix")
-    @commands.guild_only()
-    @commands.has_permissions(manage_guild=True)
-    async def _prefix(self, ctx, prefix):
-        """Change the prefix for this server."""
-        if len(prefix) > 5:
-            return await ctx.send("Prefixes may not be longer than 5 characters.")
-
-        try:
-            await self.bot.pool.execute(
-                'UPDATE server SET "prefix"=$1 WHERE id=$2;', prefix, ctx.guild.id
-            )
-        except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
-        else:
-            await ctx.send(f"Prefix successfully set to `{prefix}`")
-
     @settings.command()
     @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
@@ -99,7 +82,6 @@ class Server(commands.Cog):
     @is_donator()
     @settings.command(brief="premium")
     @commands.guild_only()
-    @commands.has_permissions(manage_guild=True)
     async def news(
         self,
         ctx,
@@ -144,24 +126,41 @@ class Server(commands.Cog):
             "Bad argument! This setting only accepts `enable/disable`"
         )
 
+    async def set_prefix(self, ctx, prefix):
+        if len(prefix) > 5:
+            return await ctx.send("Prefixes may not be longer than 5 characters.")
+        try:
+            await self.bot.pool.execute(
+                'UPDATE server SET "prefix"=$1 WHERE id=$2;', prefix, ctx.guild.id
+            )
+        except Exception as exc:
+            await ctx.send(embed=embed_exception(exc))
+        else:
+            await ctx.send(f"Prefix successfully set to `{prefix}`")
+
     @commands.command()
     @commands.guild_only()
-    async def prefix(self, ctx):
-        """Displays information about the prefix."""
-        _prefix = await self.bot.pool.fetchval(
-            "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
-        )
-        embed = discord.Embed(title="Prefix Information", color=self.bot.color)
-        embed.add_field(name="Current prefix", value=f"`{_prefix}`")
-        embed.add_field(
-            name="Want to change it?", value=f"`{_prefix}settings prefix <prefix>`"
-        )
-        embed.add_field(
-            name="Permissions",
-            value="`Manage Server` permission is required to change the prefix.",
-            inline=False,
-        )
-        await ctx.send(embed=embed)
+    async def prefix(
+        self, ctx, prefix: commands.clean_content(escape_markdown=True) = None
+    ):
+        """Displays information about the prefix or change it if a value is given."""
+        if prefix:
+            if ctx.author.guild_permissions.manage_guild:
+                await self.set_prefix(ctx, prefix)
+            else:
+                await ctx.send(
+                    "`Manage Server` permission is required to change the prefix."
+                )
+        else:
+            pre = await self.bot.pool.fetchval(
+                "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
+            )
+            embed = discord.Embed(
+                title="Prefix Information", color=discord.Color.blurple()
+            )
+            embed.add_field(name="Current prefix", value=f"`{pre}`")
+            embed.add_field(name="How to change it", value=f"`{pre}prefix value`")
+            await ctx.send(embed=embed)
 
 
 def setup(bot):
