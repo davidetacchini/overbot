@@ -54,7 +54,6 @@ class Bot(commands.AutoShardedBot):
         self.version = config.version
         self.color = config.main_color
         self.total_lines = 0
-        self.commands_used = 0
         self.get_line_count()
         self.start_time = None
 
@@ -86,7 +85,6 @@ class Bot(commands.AutoShardedBot):
                         self.total_lines += len(f.readlines())
 
     async def on_command(self, ctx):
-        self.commands_used += 1
         await self.pool.execute(
             "UPDATE command SET used=used+1 WHERE name=$1;",
             ctx.command.qualified_name,
