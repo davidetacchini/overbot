@@ -240,7 +240,8 @@ class Miscellaneous(commands.Cog):
             guilds = await self.bot.pool.fetch(
                 "SELECT id, commands_runned FROM server ORDER BY commands_runned DESC LIMIT 5;"
             )
-            embed = discord.Embed(title="Top 5 Active Servers", color=self.bot.color)
+            embed = discord.Embed()
+            embed.title = "Top 5 Active Servers"
             # set the first place server icon as thumbnail
             g = self.bot.get_guild(guilds[0]["id"])
             embed.set_thumbnail(url=g.icon_url)
@@ -248,7 +249,10 @@ class Miscellaneous(commands.Cog):
             res = ""
             for i, guild in enumerate(guilds, start=1):
                 guild_name = self.bot.get_guild(guild["id"])
-                res += f"""{self.get_placement(i)} `{guild_name}` runned a total of **{guild["commands_runned"]}** commands\n"""
+                res += (
+                    f"{self.get_placement(i)} `{guild_name}`"
+                    f" runned a total of **{guild['commands_runned']}** commands\n"
+                )
             embed.description = res
             await ctx.send(embed=embed)
 
