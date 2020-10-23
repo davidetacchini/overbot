@@ -121,7 +121,6 @@ class Api(commands.Cog):
                 "Members": total_members,
                 "Large Servers": large_servers,
                 "Total Commands": total_commands,
-                "Session Commands": self.bot.commands_used,
                 "Uptime": str(self.bot.uptime),
                 "Ping": f"{self.bot.ping}ms",
                 "Lines of Code": self.bot.total_lines,
