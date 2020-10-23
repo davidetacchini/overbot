@@ -148,7 +148,7 @@ class Miscellaneous(commands.Cog):
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     async def status(self, ctx):
         """Returns both OverBot and Overwatch servers status."""
-        embed = discord.Embed(color=self.bot.color)
+        embed = discord.Embed(color=discord.Color.blue())
         embed.title = "Status"
         embed.timestamp = self.bot.timestamp
         try:
