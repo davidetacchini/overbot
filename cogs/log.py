@@ -39,9 +39,8 @@ class Log(commands.Cog):
         embed.title = guild.name
         if guild.icon:
             embed.set_thumbnail(url=guild.icon_url)
-        embed.add_field(name="Owner", value=guild.owner)
-        embed.add_field(name="Region", value=guild.region)
         embed.add_field(name="Members", value=guild.member_count)
+        embed.add_field(name="Region", value=guild.region)
         embed.set_footer(text=f"ID: {guild.id}")
         await self.webhook.send(embed=embed)
 
