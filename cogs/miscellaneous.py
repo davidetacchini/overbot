@@ -8,9 +8,6 @@ import pygit2
 import discord
 from discord.ext import commands
 
-with open("LICENSE", "r") as fp:
-    license_file = fp.read()
-
 
 class Miscellaneous(commands.Cog):
     def __init__(self, bot):
@@ -28,12 +25,6 @@ class Miscellaneous(commands.Cog):
         embed.add_field(name="Heartbeat", value=f"{self.bot.ping}ms")
         embed.add_field(name="ACK", value=f"{ack}ms")
         await msg.edit(embed=embed)
-
-    # i don't even know why i created this command, but i'll keep it
-    @commands.command(name="license")
-    async def _license(self, ctx):
-        """Returns bot license."""
-        await ctx.send(f"""```text\n{license_file}```""")
 
     @commands.command(aliases=["feed"])
     @commands.cooldown(1, 60.0, commands.BucketType.user)
@@ -67,6 +58,8 @@ class Miscellaneous(commands.Cog):
         # since the commits are already formatted, just join them to an empty string
         return "".join(self.format_commit(c) for c in commits)
 
+    # Inspired by RoboDanny (Rapptz)
+    # https://github.com/Rapptz/RoboDanny/blob/df340e6cd89f32cd1d96a6b86dfb21419308066b/cogs/stats.py#L217
     @commands.command()
     @commands.guild_only()
     async def about(self, ctx):
@@ -98,24 +91,36 @@ class Miscellaneous(commands.Cog):
             total_commands = await self.bot.pool.fetchval(
                 "SELECT SUM(used) FROM command;"
             )
-            commands_runned = (
-                f"{self.bot.commands_used} (session)\n" f"{total_commands} (total)"
-            )
 
-            total_members = sum(guild.member_count for guild in self.bot.guilds)
+            total_members = 0
+
+            text = 0
+            voice = 0
+            guilds = 0
+            for guild in self.bot.guilds:
+                guilds += 1
+                total_members += guild.member_count
+                for channel in guild.channels:
+                    if isinstance(channel, discord.TextChannel):
+                        text += 1
+                    elif isinstance(channel, discord.VoiceChannel):
+                        voice += 1
 
             embed.add_field(name="Activity Monitor", value=activity)
             embed.add_field(name="Host Statistics", value=host)
-            embed.add_field(name="Commands Runned", value=commands_runned)
+            embed.add_field(
+                name="Channels",
+                value=f"{text + voice} total\n{text} text\n{voice} voice",
+            )
             embed.add_field(name="Members", value=total_members)
             embed.add_field(name="Servers", value=len(self.bot.guilds))
             embed.add_field(
                 name="Shards",
                 value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
             )
+            embed.add_field(name="Commands Runned", value=total_commands)
             embed.add_field(name="Lines of code", value=self.bot.total_lines)
             embed.add_field(name="Uptime", value=self.bot.uptime)
-            embed.add_field(name="\u200b", value="\u200b")
             embed.set_footer(
                 text=f"Made with discord.py v{discord.__version__}",
                 icon_url=self.bot.config.python_logo,
@@ -124,12 +129,12 @@ class Miscellaneous(commands.Cog):
 
     @staticmethod
     def format_overbot_status(n, s):
-        # TODO: add the last possible status
-        if s == "Operational":
+        status = s.lower()
+        if status == "Operational":
             return f"<:online:648186001361076243> {n}: {s}"
-        elif s == "Under Maintenance":
+        elif status == "Under Maintenance":
             return f":tools: {n}: {s}"
-        elif s == "Degraded Performance":
+        elif status == "Degraded Performance" or status == "partial outage":
             return f"<:idle:648185977717915650> {n}: {s}"
         return f"<:dnd:648185968209428490> {n}: {s}"
 
@@ -143,56 +148,52 @@ class Miscellaneous(commands.Cog):
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     async def status(self, ctx):
         """Returns both OverBot and Overwatch servers status."""
-        async with ctx.typing():
-            embed = discord.Embed(color=self.bot.color)
-            embed.title = "Status"
-            embed.timestamp = self.bot.timestamp
-            try:
-                overwatch = await self.bot.get_overwatch_status()
-                names, statuses = await self.bot.get_overbot_status()
-            except Exception:
-                embed.description = (
-                    f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
-                )
-            else:
-                embed.description = f'[Overwatch]({self.bot.config.overwatch["status"]}) · [OverBot](https://overbot.statuspage.io/)'
-                fmt = ""
-                for name, status in zip(names, statuses):
-                    fmt += f"{self.format_overbot_status(str(name).strip(), str(status).strip())}\n"
-                embed.add_field(name="OverBot", value=fmt)
-                embed.add_field(
-                    name="Overwatch",
-                    value=self.format_overwatch_status(str(overwatch).strip()),
-                    inline=False,
-                )
-            await ctx.send(embed=embed)
+        embed = discord.Embed(color=self.bot.color)
+        embed.title = "Status"
+        embed.timestamp = self.bot.timestamp
+        try:
+            overwatch = await self.bot.get_overwatch_status()
+            names, statuses = await self.bot.get_overbot_status()
+        except Exception:
+            embed.description = (
+                f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
+            )
+        else:
+            embed.description = f'[Overwatch]({self.bot.config.overwatch["status"]}) · [OverBot](https://overbot.statuspage.io/)'
+            fmt = ""
+            for name, status in zip(names, statuses):
+                fmt += f"{self.format_overbot_status(str(name).strip(), str(status).strip())}\n"
+            embed.add_field(name="OverBot", value=fmt)
+            embed.add_field(
+                name="Overwatch",
+                value=self.format_overwatch_status(str(overwatch).strip()),
+                inline=False,
+            )
+        await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 60.0, commands.BucketType.user)
+    @commands.cooldown(1, 30.0, commands.BucketType.user)
     async def news(self, ctx):
         """Returns the latest Overwatch news."""
         async with ctx.typing():
             pages = []
             try:
-                titles, links, imgs = await self.bot.get_news()
+                titles, links, imgs, dates = await self.bot.get_news()
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = "Latest Overwatch News"
-                embed.description = f"[Click here to check out all the Overwatch news.]({self.bot.config.overwatch['news']})"
-                embed.set_footer(text="Blizzard Entertainment")
+                embed.description = f"[Click here]({self.bot.config.overwatch['news']})"
                 await ctx.send(embed=embed)
             else:
-                for i, (title, link, img) in enumerate(
-                    zip(titles, links, imgs), start=1
+                for i, (title, link, img, date) in enumerate(
+                    zip(titles, links, imgs, dates), start=1
                 ):
-                    embed = discord.Embed(color=self.bot.color)
+                    embed = discord.Embed()
+                    embed.set_author(name="Blizzard Entertainment")
                     embed.title = title
                     embed.url = link
-                    embed.timestamp = self.bot.timestamp
                     embed.set_image(url=f"https:{img}")
-                    embed.set_footer(
-                        text=f"News {i}/{len(titles)} - Blizzard Entertainment"
-                    )
+                    embed.set_footer(text=f"News {i}/{len(titles)} - {date}")
                     pages.append(embed)
                 await self.bot.paginator.Paginator(extras=pages).paginate(ctx)
 
@@ -200,25 +201,24 @@ class Miscellaneous(commands.Cog):
     @commands.cooldown(1, 10.0, commands.BucketType.user)
     async def patch(self, ctx):
         """Returns the most recent Overwatch patch note."""
-        async with ctx.typing():
-            embed = discord.Embed(color=self.bot.color)
-            embed.title = "Overwatch Patch Notes"
-            embed.add_field(
-                name="Live",
-                value=f"[Click here to view **live** patch notes]({self.bot.config.overwatch['patch'].format('live')})",
-                inline=False,
-            )
-            embed.add_field(
-                name="Ptr",
-                value=f"[Click here to view **ptr** patch notes]({self.bot.config.overwatch['patch'].format('ptr')})",
-                inline=False,
-            )
-            embed.add_field(
-                name="Experimental",
-                value=f"[Click here to view **experimental** patch notes]({self.bot.config.overwatch['patch'].format('experimental')})",
-                inline=False,
-            )
-            await ctx.send(embed=embed)
+        embed = discord.Embed(color=self.bot.color)
+        embed.title = "Overwatch Patch Notes"
+        embed.add_field(
+            name="Live",
+            value=f"[Click here to view **live** patch notes]({self.bot.config.overwatch['patch'].format('live')})",
+            inline=False,
+        )
+        embed.add_field(
+            name="Ptr",
+            value=f"[Click here to view **ptr** patch notes]({self.bot.config.overwatch['patch'].format('ptr')})",
+            inline=False,
+        )
+        embed.add_field(
+            name="Experimental",
+            value=f"[Click here to view **experimental** patch notes]({self.bot.config.overwatch['patch'].format('experimental')})",
+            inline=False,
+        )
+        await ctx.send(embed=embed)
 
     @staticmethod
     def get_placement(place):
