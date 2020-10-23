@@ -138,7 +138,8 @@ class Bot(commands.AutoShardedBot):
             x["style"].split("url(")[1][:-1]
             for x in news.find_all("div", {"class", "Card-thumbnail"})
         ]
-        return [titles, links, imgs]
+        dates = [x.get_text() for x in news.find_all("p", {"class": "Card-date"})]
+        return [titles, links, imgs, dates]
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=Context)
