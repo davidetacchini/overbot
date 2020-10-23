@@ -1,8 +1,6 @@
 clean:
 	rm -rf ./__pycache__
-	rm -rf ./classes/__pycache__
-	rm -rf ./cogs/__pycache__
-	rm -rf ./utils/__pycache__
+	rm -rf */__pycache__
 
 install:
 	pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
