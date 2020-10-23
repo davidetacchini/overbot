@@ -6,7 +6,7 @@ from discord.ext import commands
 from utils.data import RequestError
 from utils.checks import has_profile, has_no_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
-from utils.globals import group_embed, profile_info, embed_exception
+from utils.globals import command_embed, embed_exception
 from classes.converters import Hero, Platform, Username
 
 
@@ -24,8 +24,8 @@ class Profile(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def profile(self, ctx, command: str = None):
-        """Displays a list with all its subcommands."""
-        embed = group_embed(ctx, self.bot.get_command(ctx.command.name))
+        """Displays a list with all profile's subcommands."""
+        embed = command_embed(ctx, self.bot.get_command(ctx.command.name))
         await ctx.send(embed=embed)
 
     async def get_platform(self, ctx, msg):
@@ -157,6 +157,24 @@ class Profile(commands.Cog):
                 f"Profile successfully updated. Run `{ctx.prefix}profile info` to see the changes."
             )
 
+    def resolved_name(self, platform):
+        if platform == "pc":
+            return "Battletag"
+        elif platform == "psn":
+            return "Online ID"
+        elif platform == "xbl":
+            return "Gamertag"
+        else:
+            return "Nintendo ID"
+
+    def profile_info(self, ctx, platform, name):
+        """Returns linked profile information."""
+        embed = discord.Embed(color=self.bot.color)
+        embed.title = f"{ctx.author} Linked Profile"
+        embed.add_field(name="Platform", value=platform)
+        embed.add_field(name=self.resolved_name(platform), value=name)
+        return embed
+
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -166,7 +184,7 @@ class Profile(commands.Cog):
             profile = await self.bot.pool.fetchrow(
                 "SELECT * FROM profile WHERE id=$1;", ctx.author.id
             )
-            embed = profile_info(
+            embed = self.profile_info(
                 ctx, profile["platform"], profile["name"].replace("-", "#")
             )
         except Exception as exc:
@@ -206,11 +224,15 @@ class Profile(commands.Cog):
                     await ctx.send(embed=embed_exception(exc))
                 else:
                     try:
-                        embed = Player(
+                        profile = Player(
                             data=data,
                             platform=profile["platform"],
                             name=profile["name"],
-                        ).rank()
+                        )
+                        if profile.is_private:
+                            embed = profile.private(ctx)
+                        else:
+                            embed = profile.rank()
                     except Exception as exc:
                         await ctx.send(exc)
                     else:
@@ -238,11 +260,15 @@ class Profile(commands.Cog):
                     await ctx.send(embed=embed_exception(exc))
                 else:
                     try:
-                        embed = Player(
+                        profile = Player(
                             data=data,
                             platform=profile["platform"],
                             name=profile["name"],
-                        ).statistics(ctx)
+                        )
+                        if profile.is_private:
+                            embed = profile.private(ctx)
+                        else:
+                            embed = profile.statistics(ctx)
                     except NoStatistics as exc:
                         await ctx.send(exc)
                     except Exception as exc:
@@ -272,11 +298,15 @@ class Profile(commands.Cog):
                     await ctx.send(embed=embed_exception(exc))
                 else:
                     try:
-                        embed = Player(
+                        profile = Player(
                             data=data,
                             platform=profile["platform"],
                             name=profile["name"],
-                        ).hero(ctx, hero)
+                        )
+                        if profile.is_private:
+                            embed = profile.private(ctx)
+                        else:
+                            embed = profile.hero(ctx, hero)
                     except NoHeroStatistics as exc:
                         await ctx.send(exc)
                     except Exception as exc:
