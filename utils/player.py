@@ -27,7 +27,7 @@ class NoHeroStatistics(Exception):
     for a given hero."""
 
     def __init__(self, hero):
-        message = f"This profile has no quick play nor competitive stats for **{hero}** to display."
+        message = f"This profile has no quick play nor competitive statistics for **{hero}** to display."
         super().__init__(message)
 
 
