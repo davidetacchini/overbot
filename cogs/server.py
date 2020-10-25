@@ -13,14 +13,13 @@ class Server(commands.Cog):
 
     async def get_settings_status(self, ctx):
         guild = await self.bot.pool.fetchrow(
-            'SELECT "prefix", news_channel FROM server WHERE id=$1;', ctx.guild.id
+            "SELECT news_channel FROM server WHERE id=$1;", ctx.guild.id
         )
         c = self.bot.get_channel(guild["news_channel"])
         return {
             "news": f"<:online:648186001361076243> `Enabled` in **{str(c) if c.id != ctx.channel.id else 'this channel'}**"
             if guild["news_channel"] != 0
-            else "<:dnd:648185968209428490> `Disabled`",
-            "prefix": f"Current prefix set: `{guild['prefix']}`",
+            else "<:dnd:648185968209428490> `Disabled`"
         }
 
     async def embed_settings(self, ctx, command):
@@ -73,8 +72,7 @@ class Server(commands.Cog):
             return
 
         await self.bot.pool.execute(
-            'UPDATE server SET "prefix"=$1, news_channel=0 WHERE id=$2;',
-            self.bot.config.default_prefix,
+            "UPDATE server SET news_channel=0 WHERE id=$1;",
             ctx.guild.id,
         )
         await ctx.send("Settings have been successfully reset.")
@@ -138,6 +136,7 @@ class Server(commands.Cog):
         else:
             await ctx.send(f"Prefix successfully set to `{prefix}`")
 
+    # TODO: find a best way to display prefixes
     @commands.command()
     @commands.guild_only()
     async def prefix(
@@ -155,11 +154,11 @@ class Server(commands.Cog):
             pre = await self.bot.pool.fetchval(
                 "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
             )
-            embed = discord.Embed(
-                title="Prefix Information", color=discord.Color.blurple()
+            embed = discord.Embed(color=discord.Color.blurple())
+            embed.description = f"Use `{ctx.prefix}prefix value` to change it"
+            embed.add_field(
+                name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`"
             )
-            embed.add_field(name="Current prefix", value=f"`{pre}`")
-            embed.add_field(name="How to change it", value=f"`{pre}prefix value`")
             await ctx.send(embed=embed)
 
 
