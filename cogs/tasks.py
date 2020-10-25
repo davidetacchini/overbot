@@ -150,9 +150,9 @@ class Tasks(commands.Cog):
             return
         await self.bot.wait_until_ready()
 
-        payload_statistics = self.get_statistics()
-        payload_commands = self.get_commands()
-        payload_servers = self.get_servers()
+        payload_statistics = await self.get_statistics()
+        payload_commands = await self.get_commands()
+        payload_servers = await self.get_servers()
 
         headers = {
             "Content-Type": "application/json",
