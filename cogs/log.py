@@ -23,7 +23,7 @@ class Log(commands.Cog):
 
     async def send_command_log(self, ctx):
         """Command logs on OverBot support server."""
-        if self.bot.config.is_beta:
+        if self.bot.is_beta:
             return
         embed = discord.Embed(color=self.bot.color, timestamp=self.bot.timestamp)
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
@@ -46,21 +46,21 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        if self.bot.config.is_beta:
+        if self.bot.is_beta:
             return
         embed = discord.Embed(color=0x4CA64C)
         await self.send_guild_log(embed, guild)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        if self.bot.config.is_beta:
+        if self.bot.is_beta:
             return
         embed = discord.Embed(color=0xFF3232)
         await self.send_guild_log(embed, guild)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if self.bot.config.is_beta:
+        if self.bot.is_beta:
             return
         if not isinstance(
             error, (commands.CommandInvokeError, commands.ConversionError)

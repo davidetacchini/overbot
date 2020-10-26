@@ -51,11 +51,9 @@ class Bot(commands.AutoShardedBot):
         super().__init__(command_prefix=self.get_pre, **kwargs)
         self.remove_command("help")
         self.config = config
-        self.version = config.version
-        self.color = config.main_color
+        self.start_time = None
         self.total_lines = 0
         self.get_line_count()
-        self.start_time = None
 
         self.paginator = paginator
         self.data = data
@@ -75,6 +73,22 @@ class Bot(commands.AutoShardedBot):
     @property
     def ping(self):
         return round(self.latency * 1000)
+
+    @property
+    def prefix(self):
+        return config.default_prefix
+
+    @property
+    def version(self):
+        return config.version
+
+    @property
+    def color(self):
+        return config.main_color
+
+    @property
+    def is_beta(self):
+        return config.is_beta
 
     def get_line_count(self):
         for root, dirs, files in os.walk(os.getcwd()):

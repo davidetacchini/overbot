@@ -102,7 +102,7 @@ class Tasks(commands.Cog):
     @tasks.loop(minutes=30.0)
     async def update(self):
         """Updates Bot stats on Discord portals."""
-        if self.bot.config.is_beta:
+        if self.bot.is_beta:
             return
 
         # POST stats on top.gg
@@ -146,7 +146,7 @@ class Tasks(commands.Cog):
     @tasks.loop(seconds=30.0)
     async def statistics(self):
         """POST bot statistics to private API."""
-        if self.bot.config.is_beta:
+        if self.bot.is_beta:
             return
         await self.bot.wait_until_ready()
 
