@@ -39,7 +39,7 @@ class Events(commands.Cog):
         await self.bot.wait_until_ready()
         await self.bot.change_presence(
             activity=discord.Activity(
-                name=f"{self.bot.config.default_prefix}help",
+                name=f"{self.bot.prefix}help",
                 type=discord.ActivityType.playing,
             ),
             status=discord.Status.idle,
@@ -50,7 +50,7 @@ class Events(commands.Cog):
         await self.bot.pool.execute(
             'INSERT INTO server (id, "prefix") VALUES ($1, $2);',
             guild.id,
-            self.bot.config.default_prefix,
+            self.bot.prefix,
         )
 
     @commands.Cog.listener()

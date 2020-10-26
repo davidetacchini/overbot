@@ -256,7 +256,7 @@ class Owner(commands.Cog):
                     await self.bot.pool.execute(
                         'INSERT INTO server (id, "prefix") VALUES ($1, $2);',
                         guild.id,
-                        self.bot.config.default_prefix,
+                        self.bot.prefix,
                     )
             await ctx.send("""```css\nGuilds successfully inserted.```""")
 
