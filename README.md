@@ -4,8 +4,8 @@
 <h2 align="center">The best Overwatch bot for Discord.</h2>
 
 <p align="center">
-  <a href="https://travis-ci.org/github/davidetacchini/overbot/builds/" traget="_blank">
-    <img src="https://travis-ci.com/davidetacchini/overbot.svg?branch=next" alt="Build">
+  <a href="https://github.com/davidetacchini/overbot/actions" traget="_blank">
+    <img src="https://github.com/davidetacchini/overbot/workflows/Code%20style/badge.svg" alt="Build">
   </a>
   <a href="https://github.com/psf/black" traget="_blank">
     <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
