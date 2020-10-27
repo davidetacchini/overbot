@@ -7,7 +7,7 @@ from utils.data import RequestError
 from utils.checks import has_profile, has_no_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
 from utils.globals import command_embed, embed_exception
-from classes.converters import Hero, Platform, Username
+from classes.converters import Hero, Platform
 
 
 class UserHasNoProfile(Exception):
@@ -141,7 +141,7 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def update(self, ctx, platform: Platform, *, username: Username):
+    async def update(self, ctx, platform: Platform, *, username):
         """Update your Overwatch profile linked to your Discord account."""
         try:
             await self.bot.pool.execute(

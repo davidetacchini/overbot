@@ -3,7 +3,7 @@ from discord.ext import commands
 from utils.data import RequestError
 from utils.player import Player, NoStatistics, NoHeroStatistics
 from utils.globals import embed_exception
-from classes.converters import Hero, Platform, Username
+from classes.converters import Hero, Platform
 
 
 class Statistics(commands.Cog):
@@ -12,7 +12,7 @@ class Statistics(commands.Cog):
 
     @commands.command(aliases=["rating"])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def rank(self, ctx, platform: Platform, *, username: Username):
+    async def rank(self, ctx, platform: Platform, *, username):
         """Returns player ranks."""
         async with ctx.typing():
             try:
@@ -35,7 +35,7 @@ class Statistics(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def stats(self, ctx, platform: Platform, *, username: Username):
+    async def stats(self, ctx, platform: Platform, *, username):
         """Returns player both competitive and quick play statistics."""
         async with ctx.typing():
             try:
@@ -66,7 +66,7 @@ class Statistics(commands.Cog):
         hero: Hero,
         platform: Platform,
         *,
-        username: Username,
+        username,
     ):
         """Returns player stats for a given hero."""
         async with ctx.typing():

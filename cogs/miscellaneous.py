@@ -46,7 +46,7 @@ class Miscellaneous(commands.Cog):
 
     @staticmethod
     def format_commit(commit):
-        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/OverBot/commit/{commit.hex}) {commit.message}"
+        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {commit.message}"
 
     def get_latest_commits(self, count=3):
         repo = pygit2.Repository(".git")
