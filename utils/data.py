@@ -84,10 +84,10 @@ class Data:
                 ):
                     return name["urlName"]
                 if name["platform"] == self.platform:
-                    total_names.append(name["name"])
+                    total_names.append(name["name"].lower())
             if (
                 len(total_names) == 0
-                or "#" in self.name.lower()
+                or "#" in self.name
                 and self.name.lower() not in total_names
             ):
                 raise NotFound()
