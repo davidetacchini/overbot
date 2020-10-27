@@ -76,13 +76,15 @@ class Data:
         if len(names) == 1:
             return names[0]["urlName"]
         elif len(names) > 1:
+            total_names = []
             for name in names:
                 if (
                     name["name"].lower() == self.name.lower()
                     and name["platform"] == self.platform
                 ):
                     return name["urlName"]
-            total_names = [n["name"] for n in names if n["platform"] == self.platform]
+                if name["platform"] == self.platform:
+                    total_names.append(name["name"])
             if (
                 len(total_names) == 0
                 or "#" in self.name.lower()
