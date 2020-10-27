@@ -43,6 +43,24 @@ class ServiceUnavailable(RequestError):
         )
 
 
+class TooManyAccounts(RequestError):
+    """Exception raise when the API found too many accounts under that name."""
+
+    def __init__(self, platform, name, names):
+        if platform == "pc":
+            message = (
+                f"**{len(names)}** accounts found under the name of `{name}`"
+                f" playing on `{platform}`. Please be more specific by entering"
+                f" your full battletag in the following format: `name#0000`"
+            )
+        else:
+            message = (
+                f"**{len(names)}** accounts found under the name of `{name}`"
+                f" playing on `{platform}`. Please be more specific."
+            )
+        super().__init__(message)
+
+
 class Data:
     __slots__ = ("platform", "name")
 
@@ -51,9 +69,42 @@ class Data:
         self.name = kwargs.pop("name", None)
 
     @property
-    def url(self):
+    def account_url(self):
+        return f"{config.overwatch['account']}/{self.name}"
+
+    async def resolve_name(self, names):
+        if len(names) == 1:
+            return names[0]["urlName"]
+        elif len(names) > 1:
+            for name in names:
+                if (
+                    name["name"].lower() == self.name.lower()
+                    and name["platform"] == self.platform
+                ):
+                    return name["urlName"]
+            total_names = [n["name"] for n in names if n["platform"] == self.platform]
+            if (
+                len(total_names) == 0
+                or "#" in self.name.lower()
+                and self.name.lower() not in total_names
+            ):
+                raise NotFound()
+            else:
+                raise TooManyAccounts(self.platform, self.name, total_names)
+        else:
+            # return self.name and let resolve_response handle it
+            return self.name
+
+    async def get_name(self):
+        async with aiohttp.ClientSession() as s:
+            async with s.get(self.account_url) as r:
+                name = await r.json()
+                return await self.resolve_name(name)
+
+    async def url(self):
         """Returns the resolved url."""
-        return f"{config.base_url}/{self.platform}/{self.name}/complete"
+        name = await self.get_name()
+        return f"{config.base_url}/{self.platform}/{name}/complete"
 
     async def resolve_response(self, response):
         """Resolve the response."""
@@ -70,8 +121,9 @@ class Data:
 
     async def response(self):
         """Returns the aiohttp response."""
+        url = await self.url()
         async with aiohttp.ClientSession() as s:
-            async with s.get(self.url) as r:
+            async with s.get(url) as r:
                 return await self.resolve_response(r)
 
     async def get(self):

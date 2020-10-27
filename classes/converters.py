@@ -20,11 +20,6 @@ class Platform(commands.Converter):
         return x
 
 
-class Username(commands.Converter):
-    async def convert(self, ctx, arg):
-        return arg.replace("#", "-")
-
-
 class Hero(commands.Converter):
     async def convert(self, ctx, arg):
         hero = arg.lower()
