@@ -141,7 +141,6 @@ class Server(commands.Cog):
         else:
             await ctx.send(f"Prefix successfully set to `{prefix}`")
 
-    # TODO: find a best way to display prefixes
     @commands.command()
     @commands.guild_only()
     async def prefix(
