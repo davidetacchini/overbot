@@ -158,6 +158,7 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def sql(self, ctx, *, query: str):
         """[Owner Only] Run a query."""
+        query = self.cleanup_code(query)
         async with self.bot.pool.acquire() as conn:
             try:
                 res = await conn.fetch(query)
