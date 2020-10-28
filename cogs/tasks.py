@@ -9,8 +9,6 @@ import discord
 from bs4 import BeautifulSoup
 from discord.ext import tasks, commands
 
-from utils.player import Player
-
 
 class Tasks(commands.Cog):
     def __init__(self, bot):
@@ -225,36 +223,10 @@ class Tasks(commands.Cog):
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
         )
 
-    @tasks.loop(hours=24.0)
-    async def track_profile(self):
-        await self.bot.wait_until_ready()
-        if self.bot.is_ready():
-            # don't send the message everytime the bot starts
-            return
-
-        profiles = await self.bot.pool.fetch(
-            "SELECT id, platform, name FROM profile WHERE track <> false"
-        )
-        for profile in profiles:
-            user = self.bot.get_user(profile["id"])
-            data = await self.bot.data.Data(
-                platform=profile["platform"], name=profile["name"]
-            ).get()
-
-            try:
-                await user.send(
-                    embed=Player(
-                        data=data, platform=profile["platform"], name=profile["name"]
-                    ).rank()
-                )
-            except discord.Forbidden:
-                return
-
     def cog_unload(self):
         self.update.cancel()
         self.statistics.cancel()
         self.send_news.cancel()
-        self.track_profile.cancel()
 
 
 def setup(bot):
