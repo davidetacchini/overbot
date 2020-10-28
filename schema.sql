@@ -55,6 +55,19 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 
 
 --
+-- Name: member; Type: TABLE; Schema: public; Owner: davide
+--
+
+CREATE TABLE public.member (
+    id bigint NOT NULL,
+    news_channel bigint DEFAULT 0 NOT NULL,
+    commands_runned integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.member OWNER TO davide;
+
+--
 -- Name: news; Type: TABLE; Schema: public; Owner: davide
 --
 
@@ -108,25 +121,12 @@ ALTER SEQUENCE public.profile_id_seq OWNED BY public.profile.id;
 
 CREATE TABLE public.server (
     id bigint NOT NULL,
-    prefix character varying NOT NULL,
-    commands_runned integer NOT NULL
+    prefix character varying(5) NOT NULL,
+    commands_runned integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.server OWNER TO davide;
-
---
--- Name: user; Type: TABLE; Schema: public; Owner: davide
---
-
-CREATE TABLE public."user" (
-    id bigint NOT NULL,
-    news_channel bigint NOT NULL,
-    commands_runned integer NOT NULL
-);
-
-
-ALTER TABLE public."user" OWNER TO davide;
 
 --
 -- Name: command id; Type: DEFAULT; Schema: public; Owner: davide
@@ -151,6 +151,14 @@ ALTER TABLE ONLY public.command
 
 
 --
+-- Name: member member_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.member
+    ADD CONSTRAINT member_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -172,14 +180,6 @@ ALTER TABLE ONLY public.profile
 
 ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (id);
-
-
---
--- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public."user"
-    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
 
 
 --
