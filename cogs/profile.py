@@ -165,7 +165,7 @@ class Profile(commands.Cog):
         elif platform == "xbl":
             return "Gamertag"
         else:
-            return "Nintendo ID"
+            return "Nintendo Switch ID"
 
     def profile_info(self, ctx, platform, name):
         """Returns linked profile information."""
