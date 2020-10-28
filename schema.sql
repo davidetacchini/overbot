@@ -25,9 +25,8 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.command (
-    id integer NOT NULL,
-    name text NOT NULL,
-    used integer DEFAULT 0 NOT NULL
+    id smallint NOT NULL,
+    total integer DEFAULT 0 NOT NULL
 );
 
 
@@ -38,7 +37,7 @@ ALTER TABLE public.command OWNER TO davide;
 --
 
 CREATE SEQUENCE public.command_id_seq
-    AS integer
+    AS smallint
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -66,28 +65,6 @@ CREATE TABLE public.news (
 
 
 ALTER TABLE public.news OWNER TO davide;
-
---
--- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
---
-
-CREATE SEQUENCE public.news_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.news_id_seq OWNER TO davide;
-
---
--- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
---
-
-ALTER SEQUENCE public.news_id_seq OWNED BY public.news.id;
-
 
 --
 -- Name: profile; Type: TABLE; Schema: public; Owner: davide
@@ -131,8 +108,8 @@ ALTER SEQUENCE public.profile_id_seq OWNED BY public.profile.id;
 
 CREATE TABLE public.server (
     id bigint NOT NULL,
-    prefix character varying(5) NOT NULL,
-    commands_runned integer DEFAULT 0 NOT NULL
+    prefix character varying NOT NULL,
+    commands_runned integer NOT NULL
 );
 
 
@@ -144,8 +121,8 @@ ALTER TABLE public.server OWNER TO davide;
 
 CREATE TABLE public."user" (
     id bigint NOT NULL,
-    news_channel bigint DEFAULT 0 NOT NULL,
-    commands_runned integer DEFAULT 0 NOT NULL
+    news_channel bigint NOT NULL,
+    commands_runned integer NOT NULL
 );
 
 
@@ -159,25 +136,10 @@ ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.comm
 
 
 --
--- Name: news id; Type: DEFAULT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.news ALTER COLUMN id SET DEFAULT nextval('public.news_id_seq'::regclass);
-
-
---
 -- Name: profile id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.profile_id_seq'::regclass);
-
-
---
--- Name: user User_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public."user"
-    ADD CONSTRAINT "User_pkey" PRIMARY KEY (id);
 
 
 --
@@ -210,6 +172,14 @@ ALTER TABLE ONLY public.profile
 
 ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
 
 
 --
