@@ -2,10 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.2
--- Dumped by pg_dump version 12.2
-
--- Started on 2020-05-13 16:41:30 CEST
+-- Dumped from database version 13.0
+-- Dumped by pg_dump version 13.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,7 +21,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 204 (class 1259 OID 16393)
 -- Name: command; Type: TABLE; Schema: public; Owner: davide
 --
 
@@ -37,7 +34,6 @@ CREATE TABLE public.command (
 ALTER TABLE public.command OWNER TO davide;
 
 --
--- TOC entry 203 (class 1259 OID 16391)
 -- Name: command_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
 --
 
@@ -53,8 +49,6 @@ CREATE SEQUENCE public.command_id_seq
 ALTER TABLE public.command_id_seq OWNER TO davide;
 
 --
--- TOC entry 3221 (class 0 OID 0)
--- Dependencies: 203
 -- Name: command_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
 --
 
@@ -62,7 +56,6 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 
 
 --
--- TOC entry 207 (class 1259 OID 24584)
 -- Name: news; Type: TABLE; Schema: public; Owner: davide
 --
 
@@ -75,7 +68,6 @@ CREATE TABLE public.news (
 ALTER TABLE public.news OWNER TO davide;
 
 --
--- TOC entry 206 (class 1259 OID 24582)
 -- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
 --
 
@@ -91,8 +83,6 @@ CREATE SEQUENCE public.news_id_seq
 ALTER TABLE public.news_id_seq OWNER TO davide;
 
 --
--- TOC entry 3222 (class 0 OID 0)
--- Dependencies: 206
 -- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
 --
 
@@ -100,29 +90,48 @@ ALTER SEQUENCE public.news_id_seq OWNED BY public.news.id;
 
 
 --
--- TOC entry 202 (class 1259 OID 16386)
 -- Name: profile; Type: TABLE; Schema: public; Owner: davide
 --
 
 CREATE TABLE public.profile (
-    id bigint NOT NULL,
+    id integer NOT NULL,
+    user_id bigint NOT NULL,
     platform character varying(15) NOT NULL,
-    name character varying(100) NOT NULL,
-    track boolean DEFAULT false NOT NULL
+    name character varying(100) NOT NULL
 );
 
 
 ALTER TABLE public.profile OWNER TO davide;
 
 --
--- TOC entry 205 (class 1259 OID 16403)
+-- Name: profile_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
+--
+
+CREATE SEQUENCE public.profile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.profile_id_seq OWNER TO davide;
+
+--
+-- Name: profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
+--
+
+ALTER SEQUENCE public.profile_id_seq OWNED BY public.profile.id;
+
+
+--
 -- Name: server; Type: TABLE; Schema: public; Owner: davide
 --
 
 CREATE TABLE public.server (
     id bigint NOT NULL,
     prefix character varying(5) NOT NULL,
-    news_channel bigint DEFAULT 0 NOT NULL,
     commands_runned integer DEFAULT 0 NOT NULL
 );
 
@@ -130,7 +139,19 @@ CREATE TABLE public.server (
 ALTER TABLE public.server OWNER TO davide;
 
 --
--- TOC entry 3076 (class 2604 OID 16396)
+-- Name: user; Type: TABLE; Schema: public; Owner: davide
+--
+
+CREATE TABLE public."user" (
+    id bigint NOT NULL,
+    news_channel bigint DEFAULT 0 NOT NULL,
+    commands_runned integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public."user" OWNER TO davide;
+
+--
 -- Name: command id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
@@ -138,7 +159,6 @@ ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.comm
 
 
 --
--- TOC entry 3081 (class 2604 OID 24592)
 -- Name: news id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
@@ -146,7 +166,21 @@ ALTER TABLE ONLY public.news ALTER COLUMN id SET DEFAULT nextval('public.news_id
 
 
 --
--- TOC entry 3085 (class 2606 OID 16402)
+-- Name: profile id; Type: DEFAULT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.profile_id_seq'::regclass);
+
+
+--
+-- Name: user User_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "User_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: command command_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -155,7 +189,6 @@ ALTER TABLE ONLY public.command
 
 
 --
--- TOC entry 3089 (class 2606 OID 24594)
 -- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -164,7 +197,6 @@ ALTER TABLE ONLY public.news
 
 
 --
--- TOC entry 3083 (class 2606 OID 16390)
 -- Name: profile profile_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -173,15 +205,12 @@ ALTER TABLE ONLY public.profile
 
 
 --
--- TOC entry 3087 (class 2606 OID 16409)
 -- Name: server server_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (id);
 
-
--- Completed on 2020-05-13 16:41:31 CEST
 
 --
 -- PostgreSQL database dump complete
