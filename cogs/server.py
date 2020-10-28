@@ -86,7 +86,10 @@ class Server(commands.Cog):
         choice: str,
         channel: Optional[Union[int, discord.TextChannel]] = None,
     ):
-        """Set up live Overwatch news feed to a channel. If no channel is provided, the channel ID in which this command is executed is used."""
+        """Set up live Overwatch news feed to a channel.
+
+        If no channel is provided, the channel ID in which this command is executed is used.
+        """
         choice = choice.lower()
         channel = channel or ctx.channel.id
         if isinstance(channel, int):
@@ -102,7 +105,8 @@ class Server(commands.Cog):
 
         if not ch.permissions_for(ctx.guild.me).send_messages:
             return await ctx.send(
-                f"I can't send messages in that channel. Please provide a channel where I can send messages to, or give me `Send Messages` permission in **{str(ch)}**."
+                "I can't send messages in that channel. Please provide a channel where I can"
+                f" send messages to, or give me `Send Messages` permission in **{str(ch)}**."
             )
 
         if choice == "enable":
@@ -113,7 +117,8 @@ class Server(commands.Cog):
             )
             channel_name = str(ch) if ch.id != ctx.channel.id else "this channel"
             return await ctx.send(
-                f"You have enabled news notification in **{channel_name}**. To disable this setting run: `{ctx.prefix}settings news disable`"
+                f"You have enabled news notification in **{channel_name}**."
+                f" To disable this setting run: `{ctx.prefix}settings news disable`"
             )
         elif choice == "disable":
             await self.bot.pool.execute(
@@ -155,7 +160,7 @@ class Server(commands.Cog):
                 "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
             )
             embed = discord.Embed(color=discord.Color.blurple())
-            embed.description = f"Use `{ctx.prefix}prefix value` to change it"
+            embed.set_footer(text=f'Use "{ctx.prefix}prefix value" to change it.')
             embed.add_field(
                 name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`"
             )
