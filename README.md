@@ -35,7 +35,7 @@ CREATE DATABASE overbot;
 CREATE user [username] WITH PASSWORD [password]
 GRANT ALL PRIVILEGES ON DATABASE overbot TO [username]
 ```
-Note: make sure you have PostgreSQL 9.5 (or higher) installed
+Note: It is recommended to run the latest stable version of [postgresql](https://www.postgresql.org/docs/release/)
 
 2. Setup the bot and run it
 ```sh
@@ -46,7 +46,7 @@ source env/bin/activate
 ./scripts/init.sh
 systemctl start overbot
 ```
-Note: make sure you have python3.6 (or higher) installed.
+Note: It is recommended to run the latest stable version of [python](https://www.python.org/doc/versions/)
 
 Code Style
 ------
