@@ -10,12 +10,10 @@ class ErrorHandler(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error, bypass=False):
+    async def on_command_error(self, ctx, error):
 
-        if (
-            hasattr(ctx.command, "on_error")
-            or (ctx.command and hasattr(ctx.cog, f"_{ctx.command.cog_name}__error"))
-            and not bypass
+        if hasattr(ctx.command, "on_error") or (
+            ctx.command and hasattr(ctx.cog, f"_{ctx.command.cog_name}__error")
         ):
             # return if a command has its own error handler
             return
