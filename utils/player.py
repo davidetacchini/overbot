@@ -41,6 +41,14 @@ class Player:
         self.name = kwargs.get("name", None)
         self.color = kwargs.get("color", config.main_color)
 
+    def __repr__(self):
+        return "<{}(data={}, platform={}, name={}, color={})>".format(
+            type(self).__name__, type(self.data), self.platform, self.name, self.color
+        )
+
+    def __str__(self):
+        return self.data["name"]
+
     @property
     def _name(self):
         return self.data["name"]
