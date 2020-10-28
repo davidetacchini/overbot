@@ -32,7 +32,6 @@ class Owner(commands.Cog):
 
         Use cogs.cog_name as cog parameter.
         """
-
         try:
             self.bot.load_extension(cog)
         except Exception as exc:
@@ -47,7 +46,6 @@ class Owner(commands.Cog):
 
         Use cogs.cog_name as cog parameter.
         """
-
         try:
             self.bot.unload_extension(cog)
         except Exception as exc:
@@ -62,7 +60,6 @@ class Owner(commands.Cog):
 
         Use cogs.cog_name as cog parameter.
         """
-
         try:
             self.bot.reload_extension(cog)
         except Exception as exc:
