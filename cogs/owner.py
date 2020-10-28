@@ -296,7 +296,8 @@ class Owner(commands.Cog):
     async def awards(self, ctx):
         message = (
             "This command has been deprecated."
-            f" To see your whole quickplay/competitive statistics run `{ctx.prefix}stats <pc/psn/xbl/nsw> <battletag/username>`."
+            f" To see your whole quickplay/competitive statistics run `{ctx.prefix}stats"
+            " <pc/psn/xbl/nsw> <battletag/username>`."
             " For more information run the `help` command."
         )
         await ctx.send(message)
