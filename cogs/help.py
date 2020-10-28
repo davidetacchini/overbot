@@ -38,7 +38,7 @@ class Help(commands.Cog):
         all_commands = {}
         for cog, instance in self.bot.cogs.items():
             # avoid showing commands for this cog/s
-            if cog in ["Owner"]:
+            if cog in ["Owner", "Tasks"]:
                 continue
             commands = list(chunks(list(instance.get_commands()), 10))
             if len(commands) == 1:
