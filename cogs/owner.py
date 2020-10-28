@@ -214,7 +214,7 @@ class Owner(commands.Cog):
             )
 
     @cmd.command(hidden=True)
-    async def addall(self, ctx):
+    async def add(self, ctx):
         """[Owner Only] Insert commands into commands table."""
         async with ctx.typing():
             for command in self.bot.walk_commands():
