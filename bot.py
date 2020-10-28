@@ -99,15 +99,22 @@ class Bot(commands.AutoShardedBot):
                         self.total_lines += len(f.readlines())
 
     async def on_command(self, ctx):
-        await self.pool.execute(
-            "UPDATE command SET used=used+1 WHERE name=$1;",
-            ctx.command.qualified_name,
-        )
+        await self.pool.execute("UPDATE command SET total=total+1 WHERE id=1;")
         if ctx.guild:
             await self.pool.execute(
                 "UPDATE server SET commands_runned=commands_runned+1 WHERE id=$1;",
                 ctx.guild.id,
             )
+        if not await self.pool.fetchrow(
+            "SELECT * FROM member WHERE id=$1", ctx.author.id
+        ):
+            await self.pool.execute(
+                "INSERT INTO member (id) VALUES ($1);", ctx.author.id
+            )
+        await self.pool.execute(
+            "UPDATE member SET commands_runned=commands_runned+1 WHERE id=$1;",
+            ctx.author.id,
+        )
 
     async def on_message(self, message):
         if not self.is_ready():
