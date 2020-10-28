@@ -222,15 +222,14 @@ class Miscellaneous(commands.Cog):
 
     @staticmethod
     def get_placement(place):
-        if place == 1:
-            return "<:top500:632281138832080926>"
-        elif place == 2:
-            return "<:grandmaster:632281128966946826>"
-        elif place == 3:
-            return "<:master:632281117394993163>"
-        elif place == 4:
-            return "<:diamond:632281105571119105>"
-        return "<:platinum:632281092875091998>"
+        placements = {
+            1: "<:top500:632281138832080926>",
+            2: "<:grandmaster:632281128966946826>",
+            3: "<:master:632281117394993163>",
+            4: "<:diamond:632281105571119105>",
+            5: "<:platinum:632281092875091998>",
+        }
+        return placements[place]
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.user)
@@ -241,19 +240,19 @@ class Miscellaneous(commands.Cog):
                 "SELECT id, commands_runned FROM server ORDER BY commands_runned DESC LIMIT 5;"
             )
             embed = discord.Embed()
-            embed.title = "Top 5 Active Servers"
-            # set the first place server icon as thumbnail
-            g = self.bot.get_guild(guilds[0]["id"])
-            embed.set_thumbnail(url=g.icon_url)
+            embed.title = "Five Most Active Servers"
 
-            res = ""
+            board = ""
             for i, guild in enumerate(guilds, start=1):
-                guild_name = self.bot.get_guild(guild["id"])
-                res += (
-                    f"{self.get_placement(i)} `{guild_name}`"
+                g = self.bot.get_guild(guild["id"])
+                board += (
+                    f"{self.get_placement(i)} **{str(g)}**"
                     f" runned a total of **{guild['commands_runned']}** commands\n"
+                    f"Joined on: **{str(g.me.joined_at).split(' ')[0]}**\n"
                 )
-            embed.description = res
+                if i < 5:
+                    board += "-----------\n"
+            embed.description = board
             await ctx.send(embed=embed)
 
 
