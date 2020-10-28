@@ -159,7 +159,7 @@ class Bot(commands.AutoShardedBot):
         return await super().get_context(message, cls=Context)
 
     async def start(self, *args, **kwargs):
-        self.session = ClientSession()
+        self.session = ClientSession(loop=self.loop)
         self.pool = await asyncpg.create_pool(
             **self.config.database, max_size=20, command_timeout=60.0
         )
