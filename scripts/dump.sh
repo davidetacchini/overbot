@@ -6,7 +6,6 @@ if [ -z "$1" ]
 fi
 
 echo "Removing old schema..."
-rm schema.sql
-touch schema.sql
+rm -f schema.sql
 echo "Dumping database $1..."
-pg_dump -U postgres $1 --schema-only > schema.sql
+pg_dump -U davide $1 --schema-only > schema.sql

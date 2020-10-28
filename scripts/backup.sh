@@ -6,5 +6,5 @@ if [ -z "$1" ]
 fi
 
 echo "Backing up database $1..."
-pg_dump -U postgres $1 > backup.sql
+pg_dump -U davide $1 > backup.sql
 echo "$1 has been successfully backed up!"
