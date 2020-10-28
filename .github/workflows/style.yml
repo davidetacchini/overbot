@@ -3,7 +3,7 @@ name: Code style
 on:
   push:
     branches:
-      - improve_search
+      - next
 
 jobs:
   style:
