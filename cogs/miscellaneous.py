@@ -130,11 +130,11 @@ class Miscellaneous(commands.Cog):
     @staticmethod
     def format_overbot_status(n, s):
         status = s.lower()
-        if status == "Operational":
+        if status == "operational":
             return f"<:online:648186001361076243> {n}: {s}"
-        elif status == "Under Maintenance":
+        elif status == "under maintenance":
             return f":tools: {n}: {s}"
-        elif status == "Degraded Performance" or status == "partial outage":
+        elif status == "degraded Performance" or status == "partial outage":
             return f"<:idle:648185977717915650> {n}: {s}"
         return f"<:dnd:648185968209428490> {n}: {s}"
 
