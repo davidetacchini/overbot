@@ -1,4 +1,5 @@
 """This paginator has been written by EvieePy.
+Modified by Davide Tacchini for OverBot.
 
 The MIT License (MIT) Copyright (c) 2018 EvieePy Permission is hereby
 granted, free of charge, to any person obtaining a copy of this software
