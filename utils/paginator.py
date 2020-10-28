@@ -18,6 +18,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 import asyncio
+from contextlib import suppress
 
 import discord
 
@@ -39,11 +40,8 @@ class Paginator:
         "color",
         "footer",
         "length",
-        "prepend",
-        "append",
         "fmt",
         "timeout",
-        "ordered",
         "controls",
         "controller",
         "pages",
@@ -64,11 +62,8 @@ class Paginator:
         self.footer = kwargs.get("footer", None)
 
         self.length = kwargs.get("length", 10)
-        self.prepend = kwargs.get("prepend", "")
-        self.append = kwargs.get("append", "")
         self.fmt = kwargs.get("fmt", "")
         self.timeout = kwargs.get("timeout", 120)
-        self.ordered = kwargs.get("ordered", False)
 
         self.controller = None
         self.pages = []
@@ -79,11 +74,40 @@ class Paginator:
         self.previous = 0
         self.eof = 0
 
-        self.controls = {"⏮": 0.0, "◀": -1, "⏹️": "stop", "▶": +1, "⏭": None}
+        self.controls = {
+            "⏮": 0.0,
+            "◀": -1,
+            "⏹️": "stop",
+            "▶": +1,
+            "⏭": None,
+            "❔": "help",
+        }
+
+    async def go_back_to_current_page(self):
+        await asyncio.sleep(30.0)
+        await self.base.edit(embed=self.pages[self.current])
 
     async def indexer(self, ctx, ctrl):
         if ctrl == "stop":
             ctx.bot.loop.create_task(self.stop_controller(self.base))
+
+        if ctrl == "help":
+            embed = discord.Embed(color=self.color)
+            embed.set_footer(text=f"We were on page {self.current + 1} page before")
+            embed.title = "Paginator help"
+            embed.description = "Welcome to the paginator help"
+            reactions_help = (
+                "⏮: Go to the first page\n"
+                "◀: Go to the previous page\n"
+                "⏹️: Close the paginator\n"
+                "▶: Go to the next page\n"
+                "⏭: Go to the last page\n"
+                "❔: Shows this page"
+            )
+            embed.add_field(name="Reactions usage", value=reactions_help)
+            await self.base.edit(embed=embed)
+
+            ctx.bot.loop.create_task(self.go_back_to_current_page())
 
         elif isinstance(ctrl, int):
             self.current += ctrl
@@ -126,10 +150,8 @@ class Paginator:
 
             control = self.controls.get(str(react))
 
-            try:
+            with suppress(discord.HTTPException):
                 await self.base.remove_reaction(react, user)
-            except discord.HTTPException:
-                pass
 
             self.previous = self.current
             await self.indexer(ctx, control)
@@ -143,10 +165,8 @@ class Paginator:
                 pass
 
     async def stop_controller(self, message):
-        try:
+        with suppress(discord.HTTPException):
             await message.delete()
-        except discord.HTTPException:
-            pass
 
         try:
             self.controller.cancel()
@@ -154,10 +174,7 @@ class Paginator:
             pass
 
     def formmater(self, chunk):
-        return "\n".join(
-            f"{self.prepend}{self.fmt}{value}{self.fmt[::-1]}{self.append}"
-            for value in chunk
-        )
+        return "\n".join(f"{self.fmt}{value}{self.fmt[::-1]}" for value in chunk)
 
     async def paginate(self, ctx):
         if isinstance(self.extras, discord.Embed):
