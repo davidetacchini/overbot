@@ -187,7 +187,8 @@ class Owner(commands.Cog):
                 "SELECT SUM(used) FROM command"
             )
 
-            embed = discord.Embed(title="Admin Panel", color=self.bot.color)
+            embed = discord.Embed()
+            embed.title = "Admin Panel"
             embed.add_field(name="Profiles", value=len(profiles))
             embed.add_field(name="Prefixes", value=len(prefixes))
             embed.add_field(name="Guilds", value=len(guilds))
