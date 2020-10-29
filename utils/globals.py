@@ -7,8 +7,11 @@ def embed_exception(exc):
     """Returns a custom embed for exceptions."""
     embed = discord.Embed(color=0xFF3232)
     embed.title = "An unknown error occured."
-    embed.description = "Please report the following error to the developer by joning the support server at https://discord.gg/eZU69EV"
-    embed.add_field(name="Error", value=exc, inline=False)
+    embed.description = (
+        "Please report the following error to the developer"
+        "by joning the support server at https://discord.gg/eZU69EV"
+    )
+    embed.add_field(name="Error", value=exc)
     return embed
 
 
