@@ -1,7 +1,6 @@
 import re
 import json
 import platform
-from random import randint
 
 import distro
 import psutil
@@ -15,11 +14,10 @@ class Tasks(commands.Cog):
         self.bot = bot
         self.update.start()
         self.statistics.start()
-        self.send_news.start()
-        self.track_profile.start()
+        self.send_overwatch_news.start()
 
     async def get_statistics(self):
-        total_commands = await self.bot.pool.fetchval("SELECT SUM(used) FROM command;")
+        total_commands = await self.bot.pool.fetchval("SELECT total FROM command;")
         total_members = sum(guild.member_count for guild in self.bot.guilds)
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
         latencies = dict(s for s in self.bot.latencies)
@@ -35,32 +33,30 @@ class Tasks(commands.Cog):
         cpu_freq = f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz"
         ram = f"{psutil.virtual_memory()[2]}%"
 
-        statistics = json.dumps(
-            {
-                "host": {
-                    "Postgres Version": pg_version,
-                    "Python Version": py_version,
-                    "O.S. Name": os_name,
-                    "O.S. Version": os_version,
-                    "CPU Percent": cpu_perc,
-                    "CPU Cores": cpu_cores,
-                    "CPU Frequency": cpu_freq,
-                    "RAM Usage": ram,
-                },
-                "bot": {
-                    "Servers": len(self.bot.guilds),
-                    "Shards": self.bot.shard_count,
-                    "Members": total_members,
-                    "Large Servers": large_servers,
-                    "Total Commands": total_commands,
-                    "Uptime": str(self.bot.uptime),
-                    "Ping": f"{self.bot.ping}ms",
-                    "Lines of Code": self.bot.total_lines,
-                },
-                "shards": shards,
-            }
-        )
-        return json.dumps(statistics)
+        statistics = {
+            "host": {
+                "Postgres Version": pg_version,
+                "Python Version": py_version,
+                "O.S. Name": os_name,
+                "O.S. Version": os_version,
+                "CPU Percent": cpu_perc,
+                "CPU Cores": cpu_cores,
+                "CPU Frequency": cpu_freq,
+                "RAM Usage": ram,
+            },
+            "bot": {
+                "Servers": len(self.bot.guilds),
+                "Shards": self.bot.shard_count,
+                "Members": total_members,
+                "Large Servers": large_servers,
+                "Total Commands": total_commands,
+                "Uptime": str(self.bot.uptime),
+                "Ping": f"{self.bot.ping}ms",
+                "Lines of Code": self.bot.total_lines,
+            },
+            "shards": shards,
+        }
+        return statistics
 
     async def get_commands(self):
         all_commands = []
@@ -97,6 +93,34 @@ class Tasks(commands.Cog):
             )
         return json.dumps(servers)
 
+    # TODO: Fix this; it doesn't work with Node.js express API
+    @tasks.loop(seconds=10.0)
+    async def statistics(self):
+        """POST bot statistics to private API."""
+        await self.bot.wait_until_ready()
+
+        headers = {"Content-Type": "application/json"}
+
+        payload_statistics = await self.get_statistics()
+        payload_commands = await self.get_commands()
+        payload_servers = await self.get_servers()
+
+        await self.bot.session.post(
+            f"{self.bot.config.obapi}/statistics",
+            json=payload_statistics,
+            headers=headers,
+        )
+        await self.bot.session.post(
+            f"{self.bot.config.obapi}/commands",
+            json=payload_commands,
+            headers=headers,
+        )
+        await self.bot.session.post(
+            f"{self.bot.config.obapi}/servers",
+            json=payload_servers,
+            headers=headers,
+        )
+
     @tasks.loop(minutes=30.0)
     async def update(self):
         """Updates Bot stats on Discord portals."""
@@ -125,12 +149,10 @@ class Tasks(commands.Cog):
         )
 
         # POST stats on discord.bots.gg
-        payload = json.dumps(
-            {
-                "guildCount": len(self.bot.guilds),
-                "shardCount": self.bot.shard_count,
-            }
-        )
+        payload = {
+            "guildCount": len(self.bot.guilds),
+            "shardCount": self.bot.shard_count,
+        }
 
         headers = {
             "Authorization": self.bot.config.discord_bots["token"],
@@ -138,40 +160,11 @@ class Tasks(commands.Cog):
         }
 
         await self.bot.session.post(
-            self.bot.config.discord_bots["url"], data=payload, headers=headers
-        )
-
-    @tasks.loop(seconds=30.0)
-    async def statistics(self):
-        """POST bot statistics to private API."""
-        if self.bot.is_beta:
-            return
-        await self.bot.wait_until_ready()
-
-        payload_statistics = await self.get_statistics()
-        payload_commands = await self.get_commands()
-        payload_servers = await self.get_servers()
-
-        headers = {
-            "Content-Type": "application/json",
-        }
-
-        await self.bot.session.post(
-            f"{self.bot.config.obapi}/statistics",
-            data=payload_statistics,
-            headers=headers,
-        )
-
-        await self.bot.session.post(
-            f"{self.bot.config.obapi}/commands", data=payload_commands, headers=headers
-        )
-
-        await self.bot.session.post(
-            f"{self.bot.config.obapi}/servers", data=payload_servers, headers=headers
+            self.bot.config.discord_bots["url"], json=payload, headers=headers
         )
 
     @tasks.loop(minutes=5.0)
-    async def send_news(self):
+    async def send_overwatch_news(self):
         await self.bot.wait_until_ready()
         async with self.bot.session.get(self.bot.config.overwatch["news"]) as r:
             content = await r.read()
@@ -188,35 +181,28 @@ class Tasks(commands.Cog):
         title = news.find("h1", {"class": "Card-title"})
         img = news.find("div", {"class", "Card-thumbnail"})
         img_url = img["style"].split("url(")[1][:-1]
+        date = news.find("p", {"class": "Card-date"})
 
-        embed = discord.Embed(
-            title=title.get_text(),
-            url="https://playoverwatch.com" + news["href"],
-            color=self.bot.color,
-            timestamp=self.bot.timestamp,
-        )
-
+        embed = discord.Embed()
+        embed.title = title.get_text()
+        embed.url = "https://playoverwatch.com" + news["href"]
+        embed.set_author(name="Blizzard Entertainment")
+        embed.set_footer(text=date.get_text())
         embed.set_image(url=f"https:{img_url}")
-        embed.set_footer(text="Blizzard Entertainment")
-        if randint(0, 2) == 1:
-            embed.add_field(
-                name="Info",
-                value="You can disable news feed notification by running the `settings news disable`.",
-            )
 
-        channels = await self.bot.pool.fetch(
-            "SELECT news_channel FROM server WHERE news_channel <> 0;"
+        members = await self.bot.pool.fetch(
+            "SELECT news_channel FROM member WHERE news_channel <> 0;"
         )
 
-        for channel in channels:
-            c = self.bot.get_channel(channel["news_channel"])
+        for member in members:
+            c = self.bot.get_channel(member["news_channel"])
             try:
                 await c.send(embed=embed)
             except AttributeError:
                 # if the channel set for the news notification has been deleted, reset to 0
                 await self.bot.pool.execute(
-                    "UPDATE server SET news_channel=0 WHERE news_channel=$1;",
-                    channel["news_channel"],
+                    "UPDATE member SET news_channel=0 WHERE news_channel=$1;",
+                    member["news_channel"],
                 )
 
         await self.bot.pool.execute(
@@ -226,7 +212,7 @@ class Tasks(commands.Cog):
     def cog_unload(self):
         self.update.cancel()
         self.statistics.cancel()
-        self.send_news.cancel()
+        self.send_overwatch_news.cancel()
 
 
 def setup(bot):
