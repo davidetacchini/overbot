@@ -72,7 +72,8 @@ class Miscellaneous(commands.Cog):
             embed.url = self.bot.config.website
             embed.timestamp = self.bot.timestamp
 
-            owner = self.bot.get_user(self.bot.config.owner_id)
+            guild = await self.bot.fetch_guild(self.bot.config.support_server_id)
+            owner = await guild.fetch_member(self.bot.config.owner_id)
 
             embed.set_author(
                 name=str(owner),
