@@ -60,7 +60,6 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 
 CREATE TABLE public.member (
     id bigint NOT NULL,
-    news_channel bigint DEFAULT 0 NOT NULL,
     commands_runned integer DEFAULT 0 NOT NULL
 );
 
