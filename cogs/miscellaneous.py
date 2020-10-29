@@ -88,10 +88,7 @@ class Miscellaneous(commands.Cog):
             os_version = distro.linux_distribution()[1]
             host = f"{os_name} {os_version}\n" f"Python {platform.python_version()}"
 
-            total_commands = await self.bot.pool.fetchval(
-                "SELECT SUM(used) FROM command;"
-            )
-
+            total_commands = await self.bot.pool.fetchval("SELECT total FROM command;")
             total_members = 0
 
             text = 0
@@ -178,7 +175,7 @@ class Miscellaneous(commands.Cog):
         async with ctx.typing():
             pages = []
             try:
-                titles, links, imgs, dates = await self.bot.get_news()
+                titles, links, imgs, dates = await self.bot.get_overwatch_news()
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = "Latest Overwatch News"
