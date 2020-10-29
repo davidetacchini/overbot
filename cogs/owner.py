@@ -10,8 +10,6 @@ import discord
 import aiosqlite
 from discord.ext import commands
 
-from utils.globals import command_embed
-
 
 class Owner(commands.Cog):
     def __init__(self, bot):
@@ -21,17 +19,14 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def clr(self, ctx, amount: int = 1):
-        """[Owner Only] Remove the given amount of messages."""
+        """Remove the given amount of messages."""
         amount += 1
         await ctx.channel.purge(limit=amount)
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def load(self, ctx, *, cog: str):
-        """[Owner Only] Loads a module.
-
-        Use cogs.cog_name as cog parameter.
-        """
+        """Loads a module."""
         try:
             self.bot.load_extension(cog)
         except Exception as exc:
@@ -42,10 +37,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, *, cog: str):
-        """[Owner Only] Unloads a module.
-
-        Use cogs.cog_name as cog parameter.
-        """
+        """Unloads a module."""
         try:
             self.bot.unload_extension(cog)
         except Exception as exc:
@@ -56,10 +48,7 @@ class Owner(commands.Cog):
     @commands.command(name="reload", aliases=["rld"], hidden=True)
     @commands.is_owner()
     async def _reload(self, ctx, *, cog: str):
-        """[Owner Only] Reloads a module.
-
-        Use cogs.cog_name as cog parameter.
-        """
+        """Reloads a module."""
         try:
             self.bot.reload_extension(cog)
         except Exception as exc:
@@ -70,14 +59,14 @@ class Owner(commands.Cog):
     @commands.command(aliases=["kys", "die"], hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
-        """[Owner Only] Kills the bot session."""
+        """Kills the bot session."""
         await ctx.send("Successfully gone offline.")
         await self.bot.logout()
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def runas(self, ctx, member: discord.Member, *, command: str):
-        """[Owner Only] Run a command as if you were the user."""
+        """Run a command as if you were the user."""
         msg = copy.copy(ctx.message)
         msg._update(dict(channel=ctx.channel, content=ctx.prefix + command))
         msg.author = member
@@ -96,7 +85,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def exc(self, ctx, *, body: str):
-        """[Owner Only] Evaluates a code."""
+        """Evaluates a code."""
         try:
             env = {
                 "bot": self.bot,
@@ -146,7 +135,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def speedtest(self, ctx):
-        """[Owner Only] Run a speedtest directly from Discord."""
+        """Run a speedtest directly from Discord."""
         msg = await ctx.send("Running the speedtest...")
         process = await asyncio.create_subprocess_shell(
             "speedtest-cli --simple", stdin=None, stderr=PIPE, stdout=PIPE
@@ -157,7 +146,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def sql(self, ctx, *, query: str):
-        """[Owner Only] Run a query."""
+        """Run a query."""
         query = self.cleanup_code(query)
         async with self.bot.pool.acquire() as conn:
             try:
@@ -174,7 +163,7 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def admin(self, ctx):
-        """[Owner Only] Display an admin panel."""
+        """Display an admin panel."""
         try:
             profiles = await self.bot.pool.fetch("SELECT * FROM profile;")
             prefixes = await self.bot.pool.fetch(
@@ -192,55 +181,6 @@ class Owner(commands.Cog):
             embed.add_field(name="Guilds", value=len(guilds))
             embed.add_field(name="Commands Used", value=total_commands)
             await ctx.send(embed=embed)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
-
-    @commands.group(invoke_without_command=True, hidden=True)
-    @commands.is_owner()
-    async def cmd(self, ctx, commands: str = None):
-        """[Owner Only] Get usage information for 'cmd' command."""
-        embed = command_embed(ctx, self.bot.get_command(ctx.command.name))
-        await ctx.send(embed=embed)
-
-    @cmd.command(hidden=True)
-    async def ls(self, ctx):
-        """[Owner Only] Lists commands table."""
-        async with ctx.typing():
-            rows = [
-                tuple(i) for i in await self.bot.pool.fetch("SELECT * FROM command;")
-            ]
-            await self.bot.paginator.Paginator(title="Commands", entries=rows).paginate(
-                ctx
-            )
-
-    @cmd.command(hidden=True)
-    async def add(self, ctx):
-        """[Owner Only] Insert commands into commands table."""
-        async with ctx.typing():
-            for command in self.bot.walk_commands():
-                fmt = str(command).strip()
-                if not await self.bot.pool.fetchrow(
-                    'SELECT * FROM command WHERE "name"=$1;', fmt
-                ):
-                    await self.bot.pool.execute(
-                        'INSERT INTO command ("name") VALUES ($1);', fmt
-                    )
-
-    @cmd.command(hidden=True)
-    async def update(self, ctx, command_id, *, name):
-        try:
-            await self.bot.pool.execute(
-                'UPDATE command SET "name"=$1 WHERE id=$2;', name, command_id
-            )
-            await ctx.send("Command successfully updated.")
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
-
-    @cmd.command(hidden=True)
-    async def delete(self, ctx, command_id):
-        try:
-            await self.bot.pool.execute("DELETE FROM command WHERE id=$1;", command_id)
-            await ctx.send("Command successfully deleted.")
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
 
