@@ -69,7 +69,7 @@ class Log(commands.Cog):
         error = error.original
         if isinstance(error, (discord.Forbidden, discord.NotFound)):
             return
-        embed = discord.Embed(title="Error", color=0xFF3232)
+        embed = discord.Embed(title="Error", color=discord.Color.red())
         embed.add_field(name="Command", value=ctx.command.qualified_name)
         embed.add_field(name="Author", value=ctx.author)
         fmt = f"Channel: {ctx.channel} (ID: {ctx.channel.id})"
