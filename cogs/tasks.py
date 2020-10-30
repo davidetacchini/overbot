@@ -190,20 +190,8 @@ class Tasks(commands.Cog):
         embed.set_footer(text=date.get_text())
         embed.set_image(url=f"https:{img_url}")
 
-        members = await self.bot.pool.fetch(
-            "SELECT news_channel FROM member WHERE news_channel <> 0;"
-        )
-
-        for member in members:
-            c = self.bot.get_channel(member["news_channel"])
-            try:
-                await c.send(embed=embed)
-            except AttributeError:
-                # if the channel set for the news notification has been deleted, reset to 0
-                await self.bot.pool.execute(
-                    "UPDATE member SET news_channel=0 WHERE news_channel=$1;",
-                    member["news_channel"],
-                )
+        c = self.bot.get_channel(self.bot.config.news_channel)
+        await c.send(embed=embed)
 
         await self.bot.pool.execute(
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
