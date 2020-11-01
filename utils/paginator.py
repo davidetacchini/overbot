@@ -86,7 +86,8 @@ class Paginator:
 
     async def go_back_to_current_page(self):
         await asyncio.sleep(30.0)
-        await self.base.edit(embed=self.pages[self.current])
+        with suppress(discord.NotFound):
+            await self.base.edit(embed=self.pages[self.current])
 
     async def indexer(self, ctx, ctrl):
         if ctrl == "stop":
