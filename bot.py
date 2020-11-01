@@ -90,6 +90,9 @@ class Bot(commands.AutoShardedBot):
     def is_beta(self):
         return config.is_beta
 
+    async def total_commands(self):
+        return await self.pool.fetchval("SELECT total FROM command;")
+
     def get_line_count(self):
         for root, dirs, files in os.walk(os.getcwd()):
             [dirs.remove(d) for d in list(dirs) if d == "env"]
@@ -131,13 +134,6 @@ class Bot(commands.AutoShardedBot):
             return commands.when_mentioned_or(prefix)(bot, message)
         return commands.when_mentioned_or(config.default_prefix)(bot, message)
 
-    async def get_overwatch_status(self):
-        """Returns Overwatch servers status."""
-        async with self.session.get(self.config.overwatch["status"]) as r:
-            content = await r.read()
-        page = BeautifulSoup(content, features="html.parser")
-        return page.find(class_="entry-title").get_text()
-
     async def get_overbot_status(self):
         async with self.session.get("https://overbot.statuspage.io/") as r:
             content = await r.read()
@@ -148,7 +144,13 @@ class Bot(commands.AutoShardedBot):
         )
         return names, status
 
-    async def get_news(self):
+    async def get_overwatch_status(self):
+        async with self.session.get(self.config.overwatch["status"]) as r:
+            content = await r.read()
+        page = BeautifulSoup(content, features="html.parser")
+        return page.find(class_="entry-title").get_text()
+
+    async def get_overwatch_news(self):
         async with self.session.get(self.config.overwatch["news"]) as r:
             content = await r.read()
         page = BeautifulSoup(content, features="html.parser")
