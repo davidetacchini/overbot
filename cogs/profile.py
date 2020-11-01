@@ -6,7 +6,6 @@ from discord.ext import commands
 from utils.data import RequestError
 from utils.checks import has_profile, has_no_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
-from utils.globals import command_embed, embed_exception
 from classes.converters import Hero, Platform
 
 
@@ -21,12 +20,6 @@ class UserHasNoProfile(Exception):
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.group(invoke_without_command=True)
-    async def profile(self, ctx, command: str = None):
-        """Displays a list with all profile's subcommands."""
-        embed = command_embed(ctx, self.bot.get_command(ctx.command.name))
-        await ctx.send(embed=embed)
 
     async def get_platform(self, ctx, msg):
         reactions = [
@@ -64,6 +57,12 @@ class Profile(commands.Cog):
         elif str(reaction.emoji) == "<:nsw:752653766377078817>":
             return "nintendo-switch"
         return
+
+    @commands.group(invoke_without_command=True)
+    async def profile(self, ctx, command: str = None):
+        """Displays a list with all profile's subcommands."""
+        embed = self.bot.get_subcommands(ctx, self.bot.get_command(ctx.command.name))
+        await ctx.send(embed=embed)
 
     @has_no_profile()
     @profile.command(aliases=["bind"])
@@ -107,13 +106,13 @@ class Profile(commands.Cog):
         else:
             try:
                 await self.bot.pool.execute(
-                    'INSERT INTO profile (id, "platform", "name") VALUES ($1, $2, $3);',
+                    'INSERT INTO profile (user_id, "platform", "name") VALUES ($1, $2, $3);',
                     ctx.author.id,
                     platform,
                     str(username.content).replace("#", "-"),
                 )
             except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 await ctx.send(
                     f"Profile successfully linked. Run `{ctx.prefix}profile info` to see your profile information."
@@ -132,11 +131,11 @@ class Profile(commands.Cog):
 
         try:
             await self.bot.pool.execute(
-                "DELETE FROM profile WHERE id=$1;", ctx.author.id
+                "DELETE FROM profile WHERE user_id=$1;", ctx.author.id
             )
             return await ctx.send("Profile successfully unlinked.")
         except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+            await ctx.send(embed=self.bot.embed_exception(exc))
 
     @has_profile()
     @profile.command()
@@ -145,13 +144,13 @@ class Profile(commands.Cog):
         """Update your Overwatch profile linked to your Discord account."""
         try:
             await self.bot.pool.execute(
-                'UPDATE profile SET "platform"=$1, "name"=$2 WHERE id=$3;',
+                'UPDATE profile SET "platform"=$1, "name"=$2 WHERE user_id=$3;',
                 platform,
                 username,
                 ctx.author.id,
             )
         except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(
                 f"Profile successfully updated. Run `{ctx.prefix}profile info` to see the changes."
@@ -176,26 +175,26 @@ class Profile(commands.Cog):
         return embed
 
     @has_profile()
-    @profile.command()
+    @profile.command(name="list")
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def info(self, ctx):
+    async def _list(self, ctx):
         """Displays your linked profile information."""
         try:
             profile = await self.bot.pool.fetchrow(
-                "SELECT * FROM profile WHERE id=$1;", ctx.author.id
+                "SELECT * FROM profile WHERE user_id=$1;", ctx.author.id
             )
             embed = self.profile_info(
                 ctx, profile["platform"], profile["name"].replace("-", "#")
             )
         except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(embed=embed)
 
     async def get_profile(self, user):
         """Returns profile information."""
         profile = await self.bot.pool.fetchrow(
-            "SELECT platform, name FROM profile WHERE id=$1", user.id
+            "SELECT platform, name FROM profile WHERE user_id=$1", user.id
         )
         if profile:
             return profile
@@ -221,7 +220,7 @@ class Profile(commands.Cog):
                 except RequestError as exc:
                     await ctx.send(exc)
                 except Exception as exc:
-                    await ctx.send(embed=embed_exception(exc))
+                    await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
                         profile = Player(
@@ -239,9 +238,9 @@ class Profile(commands.Cog):
                         await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
     @has_profile()
-    @profile.command()
+    @profile.command(aliases=["stats"])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def stats(self, ctx, user: discord.Member = None):
+    async def statistics(self, ctx, user: discord.Member = None):
         """Returns linked profile both competitive and quick play statistics."""
         async with ctx.typing():
             user = user or ctx.author
@@ -257,7 +256,7 @@ class Profile(commands.Cog):
                 except RequestError as exc:
                     await ctx.send(exc)
                 except Exception as exc:
-                    await ctx.send(embed=embed_exception(exc))
+                    await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
                         profile = Player(
@@ -272,7 +271,7 @@ class Profile(commands.Cog):
                     except NoStatistics as exc:
                         await ctx.send(exc)
                     except Exception as exc:
-                        await ctx.send(embed=embed_exception(exc))
+                        await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
                         await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
@@ -295,7 +294,7 @@ class Profile(commands.Cog):
                 except RequestError as exc:
                     await ctx.send(exc)
                 except Exception as exc:
-                    await ctx.send(embed=embed_exception(exc))
+                    await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
                         profile = Player(
@@ -310,7 +309,7 @@ class Profile(commands.Cog):
                     except NoHeroStatistics as exc:
                         await ctx.send(exc)
                     except Exception as exc:
-                        await ctx.send(embed=embed_exception(exc))
+                        await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
                         await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
