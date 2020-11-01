@@ -17,7 +17,7 @@ class Tasks(commands.Cog):
         self.send_overwatch_news.start()
 
     async def get_statistics(self):
-        total_commands = await self.bot.pool.fetchval("SELECT total FROM command;")
+        total_commands = await self.bot.total_commands()
         total_members = sum(guild.member_count for guild in self.bot.guilds)
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
         latencies = dict(s for s in self.bot.latencies)

@@ -170,9 +170,7 @@ class Owner(commands.Cog):
                 "SELECT * FROM server WHERE prefix <> '-';"
             )
             guilds = await self.bot.pool.fetch("SELECT * FROM server;")
-            total_commands = await self.bot.pool.fetchval(
-                "SELECT SUM(used) FROM command"
-            )
+            total_commands = await self.bot.total_commands()
 
             embed = discord.Embed()
             embed.title = "Admin Panel"
