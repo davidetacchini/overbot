@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
 
-from utils.globals import embed_exception
-
 
 class Server(commands.Cog):
     def __init__(self, bot):
@@ -16,7 +14,7 @@ class Server(commands.Cog):
                 'UPDATE server SET "prefix"=$1 WHERE id=$2;', prefix, ctx.guild.id
             )
         except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(f"Prefix successfully set to `{prefix}`")
 
