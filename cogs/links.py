@@ -7,7 +7,7 @@ class Links(commands.Cog):
 
     @commands.command()
     async def support(self, ctx):
-        """Returns OverBot official support server."""
+        """Returns the official support server."""
         await ctx.send(self.bot.config.support)
 
     @commands.command()
