@@ -3,8 +3,6 @@ import secrets
 import discord
 from discord.ext import commands
 
-from utils.globals import command_embed, embed_exception
-
 ROLES = [
     {
         "name": "tank",
@@ -78,7 +76,7 @@ class Random(commands.Cog):
             - Hero: random hero
             - Role: random role
         """
-        embed = command_embed(ctx, self.bot.get_command(ctx.command.name))
+        embed = self.bot.get_subcommands(ctx, self.bot.get_command(ctx.command.name))
         await ctx.send(embed=embed)
 
     @random.command()
@@ -88,7 +86,7 @@ class Random(commands.Cog):
         try:
             embed = await self.random_hero()
         except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(embed=embed)
 
@@ -99,7 +97,7 @@ class Random(commands.Cog):
         try:
             embed = self.random_role()
         except Exception as exc:
-            await ctx.send(embed=embed_exception(exc))
+            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(embed=embed)
 
