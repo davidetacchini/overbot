@@ -231,16 +231,6 @@ class Owner(commands.Cog):
                             print(exc)
             await ctx.send("""```css\nPrefixes successfully updated.```""")
 
-    @commands.command(aliases=["medals", "quick", "quickplay", "comp", "competitive"])
-    async def awards(self, ctx):
-        message = (
-            "This command has been deprecated."
-            f" To see your whole quickplay/competitive statistics run `{ctx.prefix}stats"
-            " <pc/psn/xbl/nsw> <battletag/username>`."
-            " For more information run the `help` command."
-        )
-        await ctx.send(message)
-
 
 def setup(bot):
     bot.add_cog(Owner(bot))
