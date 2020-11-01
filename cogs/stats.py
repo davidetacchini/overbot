@@ -2,7 +2,6 @@ from discord.ext import commands
 
 from utils.data import RequestError
 from utils.player import Player, NoStatistics, NoHeroStatistics
-from utils.globals import embed_exception
 from classes.converters import Hero, Platform
 
 
@@ -20,7 +19,7 @@ class Statistics(commands.Cog):
             except RequestError as exc:
                 await ctx.send(exc)
             except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 try:
                     profile = Player(data=data, platform=platform, name=username)
@@ -29,21 +28,21 @@ class Statistics(commands.Cog):
                     else:
                         embed = profile.rank()
                 except Exception as exc:
-                    await ctx.send(embed=embed_exception(exc))
+                    await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def stats(self, ctx, platform: Platform, *, username):
-        """Returns player both competitive and quick play statistics."""
+        """Returns player both quick play and competitive statistics."""
         async with ctx.typing():
             try:
                 data = await self.bot.data.Data(platform=platform, name=username).get()
             except RequestError as exc:
                 await ctx.send(exc)
             except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 try:
                     profile = Player(data=data, platform=platform, name=username)
@@ -54,7 +53,7 @@ class Statistics(commands.Cog):
                 except NoStatistics as exc:
                     await ctx.send(exc)
                 except Exception as exc:
-                    await ctx.send(embed=embed_exception(exc))
+                    await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
@@ -68,14 +67,14 @@ class Statistics(commands.Cog):
         *,
         username,
     ):
-        """Returns player stats for a given hero."""
+        """Returns player both quick play and competitive statistics for a given hero."""
         async with ctx.typing():
             try:
                 data = await self.bot.data.Data(platform=platform, name=username).get()
             except RequestError as exc:
                 await ctx.send(exc)
             except Exception as exc:
-                await ctx.send(embed=embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 try:
                     profile = Player(data=data, platform=platform, name=username)
@@ -86,7 +85,7 @@ class Statistics(commands.Cog):
                 except NoHeroStatistics as exc:
                     await ctx.send(exc)
                 except Exception as exc:
-                    await ctx.send(embed=embed_exception(exc))
+                    await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
 
