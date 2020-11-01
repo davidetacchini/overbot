@@ -15,14 +15,14 @@ class Miscellaneous(commands.Cog):
 
     @commands.command(aliases=["pong", "latency"])
     async def ping(self, ctx):
-        """Displays the bot's current websocket latency."""
+        """Displays the bot's current websocket latency and ACK."""
         embed = discord.Embed(color=self.bot.color)
         embed.title = "Pinging..."
         start = time.monotonic()
         msg = await ctx.send(embed=embed)
         embed.title = None
         ack = round((time.monotonic() - start) * 1000)
-        embed.add_field(name="Heartbeat", value=f"{self.bot.ping}ms")
+        embed.add_field(name="Latency", value=f"{self.bot.ping}ms")
         embed.add_field(name="ACK", value=f"{ack}ms")
         await msg.edit(embed=embed)
 
@@ -198,7 +198,7 @@ class Miscellaneous(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10.0, commands.BucketType.user)
     async def patch(self, ctx):
-        """Returns the most recent Overwatch patch note."""
+        """Returns patch notes links."""
         embed = discord.Embed(color=self.bot.color)
         embed.title = "Overwatch Patch Notes"
         embed.add_field(
@@ -232,7 +232,10 @@ class Miscellaneous(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.user)
     async def leaderboard(self, ctx):
-        """Displays a leaderboard of the 5 most active servers (based on commands runned)."""
+        """Displays a leaderboard of the 5 most active servers.
+
+        The leaderboard is based on commands runned.
+        """
         async with ctx.typing():
             guilds = await self.bot.pool.fetch(
                 "SELECT id, commands_runned FROM server ORDER BY commands_runned DESC LIMIT 5;"
