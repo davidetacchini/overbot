@@ -11,26 +11,28 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def help_signature(self, command):
-        parent = command.full_parent_name
-        fmt = command.name if not parent else f"{parent} {command.name}"
-        return f"{fmt} {command.signature}"
+    def format_aliases(self, aliases):
+        return [f"`{alias}`" for alias in aliases]
 
     def format_desc(self, command):
         return str(command.callback.__doc__).split(".")[0] + "."
 
-    def embed_subcommands(self, embed, subcommands):
+    def command_signature(self, command):
+        parent = command.full_parent_name
+        fmt = command.name if not parent else f"{parent} {command.name}"
+        return f"{fmt} {command.signature}"
+
+    def command_embed(self, embed, subcommands):
         for subcommand in subcommands:
             if subcommand.callback.__doc__:
                 desc = self.format_desc(subcommand)
             else:
                 desc = "No description set"
             if len(subcommand.aliases) > 0:
-                desc = f"{desc}\nAliases: `{', '.join(subcommand.aliases)}`"
+                aliases = self.format_aliases(subcommand.aliases)
+                desc = f"{desc}\nAliases: {', '.join(aliases)}"
             embed.add_field(
-                name=self.help_signature(subcommand),
-                value=desc,
-                inline=False,
+                name=self.command_signature(subcommand), value=desc, inline=False
             )
         return embed
 
@@ -47,14 +49,15 @@ class Help(commands.Cog):
                     all_commands[f"{cog} ({i}/{len(commands)})"] = j
 
         pages = []
-        maxpages = len(all_commands)
+        max_pages = len(all_commands)
 
         embed = discord.Embed(color=self.bot.color)
         embed.title = "Help"
-        embed.set_footer(text=f"Page 1/{maxpages + 1}")
+        embed.set_footer(text=f"Page 1/{max_pages + 1}")
         embed.description = (
-            f'Use "{ctx.prefix}help command" for more details on a command'
-            f"\nOfficial website: {self.bot.config.website}"
+            f'Use "{ctx.prefix}help [command]" for more details on a command\n'
+            "Replace [command] with an existing command.\n"
+            f"Official website: {self.bot.config.website}"
         )
         embed.add_field(
             name="Note",
@@ -75,7 +78,7 @@ class Help(commands.Cog):
                 timestamp=self.bot.timestamp,
             )
             embed.set_footer(
-                text=f"Page {i + 1}/{maxpages + 1}",
+                text=f"Page {i + 1}/{max_pages + 1}",
             )
             for command in commands:
                 subcommands = getattr(command, "commands", None)
@@ -84,12 +87,13 @@ class Help(commands.Cog):
                 else:
                     desc = "No description set"
                 if len(command.aliases) > 0:
-                    desc = f"{desc}\nAliases: `{', '.join(command.aliases)}`"
+                    aliases = self.format_aliases(command.aliases)
+                    desc = f"{desc}\nAliases: {', '.join(aliases)}"
                 embed.add_field(
-                    name=self.help_signature(command), value=desc, inline=False
+                    name=self.command_signature(command), value=desc, inline=False
                 )
                 if subcommands:
-                    embed = self.embed_subcommands(embed, subcommands)
+                    embed = self.command_embed(embed, subcommands)
             pages.append(embed)
         return pages
 
@@ -103,16 +107,16 @@ class Help(commands.Cog):
             command = self.bot.get_command(command.lower())
             if not command:
                 return await ctx.send(f'No command called "{entered_command}" found.')
-            sig = self.help_signature(command)
+            sig = self.command_signature(command)
             subcommands = getattr(command, "commands", None)
             embed = discord.Embed(color=self.bot.color)
             embed.title = f"{ctx.prefix}{sig}"
             embed.description = getattr(command.callback, "__doc__")
             if len(command.aliases) > 0:
-                aliases = ", ".join(command.aliases)
+                aliases = ", ".join(self.format_aliases(command.aliases))
                 embed.add_field(name="Aliases", value=aliases)
             if subcommands:
-                embed = self.embed_subcommands(embed, subcommands)
+                embed = self.command_embed(embed, subcommands)
             return await ctx.send(embed=embed)
 
         await self.bot.paginator.Paginator(extras=self.make_pages(ctx)).paginate(ctx)
