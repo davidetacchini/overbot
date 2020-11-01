@@ -134,6 +134,35 @@ class Bot(commands.AutoShardedBot):
             return commands.when_mentioned_or(prefix)(bot, message)
         return commands.when_mentioned_or(config.default_prefix)(bot, message)
 
+    def get_subcommands(self, ctx, command):
+        subcommands = getattr(command, "commands")
+        embed = discord.Embed(color=self.color)
+        embed.title = f"{str(command).capitalize()} Commands"
+        embed.description = f"Use `{ctx.prefix}help {str(command)} [command]` for more information on a command"
+        embed.set_footer(
+            text="Replace [command] with one of the commands listed above."
+        )
+        sub = [f"`{subcommand.name}`" for subcommand in subcommands]
+        value = ", ".join(sub)
+        embed.add_field(name="Commands Available", value=value)
+        embed.add_field(
+            name="Usage",
+            value=f"`{ctx.prefix}{str(command)} [command]`",
+            inline=False,
+        )
+        return embed
+
+    def embed_exception(self, exc):
+        """Returns a custom embed for exceptions."""
+        embed = discord.Embed(color=0xFF3232)
+        embed.title = "An unknown error occured."
+        embed.description = (
+            "Please report the following error to the developer"
+            "by joning the support server at https://discord.gg/eZU69EV"
+        )
+        embed.add_field(name="Error", value=exc)
+        return embed
+
     async def get_overbot_status(self):
         async with self.session.get("https://overbot.statuspage.io/") as r:
             content = await r.read()
