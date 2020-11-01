@@ -55,7 +55,7 @@ class Help(commands.Cog):
         embed.title = "Help"
         embed.set_footer(text=f"Page 1/{max_pages + 1}")
         embed.description = (
-            f'Use "{ctx.prefix}help [command]" for more details on a command\n'
+            f"Use `{ctx.prefix}help [command]` for more details on a command\n"
             "Replace [command] with an existing command.\n"
             f"Official website: {self.bot.config.website}"
         )
