@@ -109,7 +109,7 @@ class Bot(commands.AutoShardedBot):
                 ctx.guild.id,
             )
         if not await self.pool.fetchrow(
-            "SELECT * FROM member WHERE id=$1", ctx.author.id
+            "SELECT * FROM member WHERE id=$1;", ctx.author.id
         ):
             await self.pool.execute(
                 "INSERT INTO member (id) VALUES ($1);", ctx.author.id
