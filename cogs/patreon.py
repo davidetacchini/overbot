@@ -1,13 +1,16 @@
 from discord.ext import commands
 
-# from utils.checks import is_donator, has_profile
+from utils.checks import is_donator
 
 
 class Patreon(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: Add patreon commands
+    @is_donator()
+    @commands.command()
+    async def compare(self, ctx):
+        pass
 
 
 def setup(bot):
