@@ -44,13 +44,18 @@ def is_donator():
     return commands.check(predicate)
 
 
+async def get_profiles(ctx):
+    return await ctx.bot.pool.fetch(
+        "SELECT * FROM profile WHERE user_id=$1;", ctx.author.id
+    )
+
+
 def has_profile():
     """Check for a user to have linked a profile."""
 
     async def predicate(ctx):
-        if await ctx.bot.pool.fetchrow(
-            "SELECT * FROM profile WHERE id=$1;", ctx.author.id
-        ):
+        profiles = await get_profiles(ctx)
+        if profiles:
             return True
         raise ProfileNotLinked()
 
@@ -61,9 +66,8 @@ def has_no_profile():
     """Check for a user to have no profile linked."""
 
     async def predicate(ctx):
-        if not await ctx.bot.pool.fetchrow(
-            "SELECT * FROM profile WHERE id=$1;", ctx.author.id
-        ):
+        profiles = await get_profiles(ctx)
+        if not profiles:
             return True
         raise ProfileAlreadyLinked()
 
