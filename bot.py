@@ -167,10 +167,10 @@ class Bot(commands.AutoShardedBot):
         async with self.session.get("https://overbot.statuspage.io/") as r:
             content = await r.read()
         page = BeautifulSoup(content, features="html.parser")
-        names = (n.get_text() for n in page.find_all("span", {"class": "name"}))
-        status = (
+        names = [n.get_text() for n in page.find_all("span", {"class": "name"})]
+        status = [
             s.get_text() for s in page.find_all("span", {"class": "component-status"})
-        )
+        ]
         return names, status
 
     async def get_overwatch_status(self):
@@ -191,7 +191,7 @@ class Bot(commands.AutoShardedBot):
             for x in news.find_all("div", {"class", "Card-thumbnail"})
         ]
         dates = [x.get_text() for x in news.find_all("p", {"class": "Card-date"})]
-        return [titles, links, imgs, dates]
+        return titles, links, imgs, dates
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=Context)
