@@ -158,7 +158,7 @@ class Bot(commands.AutoShardedBot):
         embed.title = "An unknown error occured."
         embed.description = (
             "Please report the following error to the developer"
-            "by joning the support server at https://discord.gg/eZU69EV"
+            " by joning the support server at https://discord.gg/eZU69EV"
         )
         embed.add_field(name="Error", value=exc)
         return embed
