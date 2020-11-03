@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://cdn.discordapp.com/attachments/646617232931160084/705411294596956293/overbot-banner_copy.png" alt="OverBot Banner" height="200"/>
+  <img src="https://cdn.discordapp.com/attachments/646617232931160084/705411294596956293/overbot-banner_copy.png" alt="OverBot Banner" width="300"/>
 </p>
 <h2 align="center">The best Overwatch bot for Discord.</h2>
 
