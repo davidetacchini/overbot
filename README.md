@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://github.com/davidetacchini/overbot/actions" traget="_blank">
-    <img src="https://github.com/davidetacchini/overbot/workflows/Code%20style/badge.svg" alt="Build">
+    <img src="https://github.com/davidetacchini/overbot/workflows/CI/badge.svg" alt="Build">
   </a>
   <a href="https://github.com/psf/black" traget="_blank">
     <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
@@ -51,6 +51,6 @@ Note: It is recommended to run the latest stable version of [python](https://www
 Code Style
 ------
 OverBot uses [black](https://pypi.org/project/black/), [isort](https://pypi.org/project/isort/) and [flake8](https://pypi.org/project/flake8/) as code style.
-If you want to contribute to OverBot, please run `./scripts/format.sh` before submitting any pull request.
+If you want to contribute to OverBot, please run `make format` before submitting any pull request.
 
 
