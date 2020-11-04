@@ -98,13 +98,12 @@ class Player:
             return "<:grandmaster:632281128966946826>"
 
     def format_key(self, key):
-        return (
-            self.add_space(key)
-            if key not in ["best", "average"]
-            else key.capitalize() + " (Most in game)"
-            if key == "best"
-            else key.capitalize() + " (per 10 minutes)"
-        )
+        if key == "best":
+            return key.capitalize() + " (Most in game)"
+        elif key == "average":
+            return key.capitalize() + " (per 10 minutes)"
+        else:
+            return self.add_space(key)
 
     def rank(self):
         """Returns players rank."""
