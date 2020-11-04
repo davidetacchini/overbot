@@ -15,9 +15,7 @@ class NotFound(RequestError):
     """Exception raised when a profile is not found."""
 
     def __init__(self):
-        super().__init__(
-            "Player not found. Please make sure you aren't missing any capital letter."
-        )
+        super().__init__("Player not found.")
 
 
 class BadRequest(RequestError):
@@ -67,14 +65,15 @@ class Data:
     __slots__ = ("platform", "name", "loop")
 
     def __init__(self, **kwargs):
-        self.platform = kwargs.pop("platform", None)
-        self.name = kwargs.pop("name", None)
+        self.platform = kwargs.get("platform", None)
+        self.name = kwargs.get("name", None)
         self.loop = asyncio.get_event_loop()
 
     @property
     def account_url(self):
         return f"{config.overwatch['account']}/{self.name}"
 
+    # TODO: find a way to do that faster
     async def resolve_name(self, names):
         if len(names) == 1:
             return names[0]["urlName"]
