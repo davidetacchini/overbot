@@ -55,7 +55,7 @@ class Statistics(commands.Cog):
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
-                    await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                    await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -87,7 +87,7 @@ class Statistics(commands.Cog):
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
-                    await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                    await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
 
 def setup(bot):

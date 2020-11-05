@@ -119,7 +119,7 @@ class Help(commands.Cog):
                 embed = self.command_embed(embed, subcommands)
             return await ctx.send(embed=embed)
 
-        await self.bot.paginator.Paginator(extras=self.make_pages(ctx)).paginate(ctx)
+        await self.bot.paginator.Paginator(pages=self.make_pages(ctx)).paginate(ctx)
 
 
 def setup(bot):
