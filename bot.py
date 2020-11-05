@@ -27,13 +27,14 @@ import datetime
 
 import asyncpg
 import discord
+import pygicord
 from bs4 import BeautifulSoup
 from aiohttp import ClientSession
 from termcolor import colored
 from discord.ext import commands
 
 import config
-from utils import data, paginator
+from utils import data
 from classes.context import Context
 
 try:
@@ -55,7 +56,7 @@ class Bot(commands.AutoShardedBot):
         self.total_lines = 0
         self.get_line_count()
 
-        self.paginator = paginator
+        self.paginator = pygicord
         self.data = data
 
     def __repr__(self):

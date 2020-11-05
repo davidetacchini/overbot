@@ -193,7 +193,7 @@ class Miscellaneous(commands.Cog):
                     embed.set_image(url=f"https:{img}")
                     embed.set_footer(text=f"News {i}/{len(titles)} - {date}")
                     pages.append(embed)
-                await self.bot.paginator.Paginator(extras=pages).paginate(ctx)
+                await self.bot.paginator.Paginator(pages=pages).paginate(ctx)
 
     @commands.command()
     @commands.cooldown(1, 10.0, commands.BucketType.user)

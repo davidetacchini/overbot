@@ -235,7 +235,7 @@ class Profile(commands.Cog):
                     except Exception as exc:
                         await ctx.send(exc)
                     else:
-                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                        await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
     @has_profile()
     @profile.command(aliases=["stats"])
@@ -273,7 +273,7 @@ class Profile(commands.Cog):
                     except Exception as exc:
                         await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
-                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                        await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
     @has_profile()
     @profile.command()
@@ -311,7 +311,7 @@ class Profile(commands.Cog):
                     except Exception as exc:
                         await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
-                        await self.bot.paginator.Paginator(extras=embed).paginate(ctx)
+                        await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
 
 def setup(bot):

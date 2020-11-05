@@ -1,4 +1,5 @@
 discord.py
+pygicord
 termcolor
 psutil
 asyncpg
