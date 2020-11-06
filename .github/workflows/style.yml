@@ -6,8 +6,8 @@ on:
       - next
 
 jobs:
-  style:
-    name: Code Style
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,6 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements-dev.txt
-    - name: Format code
+    - name: Lint
       run: |
         make format
