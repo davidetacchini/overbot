@@ -66,3 +66,11 @@ class Hero(commands.Converter):
         elif hero == "lúcio":
             return "lucio"
         return hero
+
+
+class Category(commands.Converter):
+    async def convert(self, ctx, arg):
+        category = arg.lower()
+        if category == "dps":
+            return "damage"
+        return category
