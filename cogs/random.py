@@ -82,6 +82,11 @@ class Random(commands.Cog):
     async def random(self, ctx, command: str = None):
         """Returns a random hero or role, based on your choice.
 
+        Available categories
+        - Damage (dps)
+        - Support
+        - Tank
+
         Choices
         - Hero: random hero
         - Role: random role
