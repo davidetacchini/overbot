@@ -205,7 +205,12 @@ class Profile(commands.Cog):
     @profile.command(aliases=["rating"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def rank(self, ctx, user: discord.Member = None):
-        """Returns linked profile ranks."""
+        """Returns linked profile ranks.
+
+        `[user]` - Must be a mention or the ID of a Discord member.
+
+        If no user is passed, the profile of the author of the message will be used.
+        """
         async with ctx.typing():
             user = user or ctx.author
             try:
@@ -241,7 +246,12 @@ class Profile(commands.Cog):
     @profile.command(aliases=["stats"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def statistics(self, ctx, user: discord.Member = None):
-        """Returns linked profile both competitive and quick play statistics."""
+        """Returns linked profile both competitive and quick play statistics.
+
+        `[user]` - Must be a mention or the ID of a Discord member.
+
+        If no user is passed, the profile of the author of the message will be used.
+        """
         async with ctx.typing():
             user = user or ctx.author
             try:
@@ -279,7 +289,13 @@ class Profile(commands.Cog):
     @profile.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def hero(self, ctx, hero: Hero, user: discord.Member = None):
-        """Returns linked profile statistics for a given hero."""
+        """Returns linked profile statistics for a given hero.
+
+        `<hero>` - The name of the hero you want to see stats for.
+        `[user]` - Must be a mention or the ID of a Discord member.
+
+        If no user is passed, the profile of the author of the message will be used.
+        """
         async with ctx.typing():
             user = user or ctx.author
             try:
