@@ -23,7 +23,10 @@ class Server(commands.Cog):
     async def prefix(
         self, ctx, prefix: commands.clean_content(escape_markdown=True) = None
     ):
-        """Displays information about the prefix or change it if a value is given."""
+        """Displays the prefix set; if a value is passed it will update the prefix.
+
+        You must have Manage Server permissions to change the prefix.
+        """
         if prefix:
             if ctx.author.guild_permissions.manage_guild:
                 await self.set_prefix(ctx, prefix)
