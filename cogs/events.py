@@ -11,7 +11,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        """Print info in the terminal."""
         print(
             textwrap.dedent(
                 f"""
