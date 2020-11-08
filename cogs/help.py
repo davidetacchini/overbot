@@ -2,9 +2,9 @@ import discord
 from discord.ext import commands
 
 
-def chunks(entries, chunk):
-    for x in range(0, len(entries), chunk):
-        yield entries[x : x + chunk]
+def chunks(entries, size):
+    for x in range(0, len(entries), size):
+        yield entries[x : x + size]
 
 
 class Help(commands.Cog):
@@ -72,11 +72,9 @@ class Help(commands.Cog):
 
         pages.append(embed)
         for i, (cog, commands) in enumerate(all_commands.items(), start=1):
-            embed = discord.Embed(
-                title=f"**{cog} Commands**",
-                color=self.bot.color,
-                timestamp=self.bot.timestamp,
-            )
+            embed = discord.Embed(color=self.bot.color)
+            embed.title = f"**{cog} Commands**"
+            embed.timestamp = (self.bot.timestamp,)
             embed.set_footer(
                 text=f"Page {i + 1}/{max_pages + 1}",
             )
@@ -101,7 +99,7 @@ class Help(commands.Cog):
     async def help(
         self, ctx, *, command: commands.clean_content(escape_markdown=True) = None
     ):
-        """Get usage information for commands."""
+        """Shows help about the bot or commands."""
         entered_command = command
         if command:
             command = self.bot.get_command(command.lower())
