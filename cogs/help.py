@@ -74,7 +74,7 @@ class Help(commands.Cog):
         for i, (cog, commands) in enumerate(all_commands.items(), start=1):
             embed = discord.Embed(color=self.bot.color)
             embed.title = f"**{cog} Commands**"
-            embed.timestamp = (self.bot.timestamp,)
+            embed.timestamp = self.bot.timestamp
             embed.set_footer(
                 text=f"Page {i + 1}/{max_pages + 1}",
             )
