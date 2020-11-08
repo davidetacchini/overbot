@@ -12,7 +12,26 @@ class Statistics(commands.Cog):
     @commands.command(aliases=["rating"])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def rank(self, ctx, platform: Platform, *, username):
-        """Returns player ranks."""
+        """Returns player ranks.
+
+        `<platform>` - The platform of the player to get ranks for.
+        `<username>` - The username of the player to get ranks for.
+
+        Available platforms
+        - pc
+        - playstation (ps, psn, play)
+        - xbox (xbl)
+        - nintendo-switch (nsw, switch)
+
+        Username formatting
+        - pc: Battletag (format: name#0000)
+        - playstation: Online ID
+        - xbox: Gamertag
+        - nintendo-switch: Nintendo Switch ID (format: name-code)
+
+        Battletag example: Smyile#2825
+        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
+        """
         async with ctx.typing():
             try:
                 data = await self.bot.data.Data(platform=platform, name=username).get()
@@ -32,10 +51,29 @@ class Statistics(commands.Cog):
                 else:
                     await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=["stats"])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def stats(self, ctx, platform: Platform, *, username):
-        """Returns player both quick play and competitive statistics."""
+    async def statistics(self, ctx, platform: Platform, *, username):
+        """Returns player both quick play and competitive statistics.
+
+        `<platform>` - The platform of the player to get stats for.
+        `<username>` - The username of the player to get stats for.
+
+        Available platforms
+        - pc
+        - playstation (ps, psn, play)
+        - xbox (xbl)
+        - nintendo-switch (nsw, switch)
+
+        Username formatting
+        - pc: Battletag (format: name#0000)
+        - playstation: Online ID
+        - xbox: Gamertag
+        - nintendo-switch: Nintendo Switch ID (format: name-code)
+
+        Battletag example: Smyile#2825
+        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
+        """
         async with ctx.typing():
             try:
                 data = await self.bot.data.Data(platform=platform, name=username).get()
@@ -67,7 +105,27 @@ class Statistics(commands.Cog):
         *,
         username,
     ):
-        """Returns player both quick play and competitive statistics for a given hero."""
+        """Returns player both quick play and competitive statistics for a given hero.
+
+        `<Hero>` - The name of the hero you want to see stats for.
+        `<platform>` - The platform of the player to get stats for.
+        `<username>` - The username of the player to get stats for.
+
+        Available platforms
+        - pc
+        - playstation (ps, psn, play)
+        - xbox (xbl)
+        - nintendo-switch (nsw, switch)
+
+        Username formatting
+        - pc: Battletag (format: name#0000)
+        - playstation: Online ID
+        - xbox: Gamertag
+        - nintendo-switch: Nintendo Switch ID (format: name-code)
+
+        Battletag example: Smyile#2825
+        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
+        """
         async with ctx.typing():
             try:
                 data = await self.bot.data.Data(platform=platform, name=username).get()
