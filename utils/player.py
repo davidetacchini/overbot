@@ -184,7 +184,6 @@ class Player:
         return self.pages
 
     def private(self, ctx):
-        """Returns an embed with private profile information."""
         embed = discord.Embed(color=0xFF3232)
         embed.title = "This profile is set to private"
         embed.description = (
