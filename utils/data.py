@@ -73,7 +73,6 @@ class Data:
     def account_url(self):
         return f"{config.overwatch['account']}/{self.name}"
 
-    # TODO: find a way to do that faster
     async def resolve_name(self, names):
         if len(names) == 1:
             return names[0]["urlName"]
