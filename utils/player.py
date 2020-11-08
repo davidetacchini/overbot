@@ -23,34 +23,31 @@ class NoStatistics(Exception):
 
 
 class NoHeroStatistics(Exception):
-    """Exception raised when a player has no quick play nor competitive stats
-    for a given hero."""
+    """Exception raised when a player has no quick play nor competitive stats for a given hero."""
 
-    def __init__(self, hero):
-        message = f"This profile has no quick play nor competitive statistics for **{hero}** to display."
+    def __init__(self, player, hero):
+        message = f"**{player}** has no quick play nor competitive statistics for **{hero}** to display."
         super().__init__(message)
 
 
 class Player:
 
-    __slots__ = ("data", "platform", "name", "color")
+    __slots__ = ("data", "platform", "name", "color", "pages")
 
     def __init__(self, **kwargs):
         self.data = kwargs.get("data", None)
         self.platform = kwargs.get("platform", None)
         self.name = kwargs.get("name", None)
-        self.color = kwargs.get("color", config.main_color)
+
+        self.color = config.main_color
+        self.pages = []
 
     def __repr__(self):
-        return "<{}(data={}, platform={}, name={}, color={})>".format(
-            type(self).__name__, type(self.data), self.platform, self.name, self.color
+        return "<{}(data={}, platform={}, name={})>".format(
+            type(self).__name__, type(self.data), self.platform, self.name
         )
 
     def __str__(self):
-        return self.data["name"]
-
-    @property
-    def _name(self):
         return self.data["name"]
 
     @property
@@ -80,6 +77,14 @@ class Player:
             .title()
         )
 
+    def format_key(self, key):
+        if key == "best":
+            return key.capitalize() + " (Most in game)"
+        elif key == "average":
+            return key.capitalize() + " (per 10 minutes)"
+        else:
+            return self.add_space(key)
+
     @staticmethod
     def get_rating_icon(rating):
         if rating > 0 and rating < 1500:
@@ -97,18 +102,10 @@ class Player:
         else:
             return "<:grandmaster:632281128966946826>"
 
-    def format_key(self, key):
-        if key == "best":
-            return key.capitalize() + " (Most in game)"
-        elif key == "average":
-            return key.capitalize() + " (per 10 minutes)"
-        else:
-            return self.add_space(key)
-
     def rank(self):
         """Returns players rank."""
         embed = discord.Embed(color=self.color)
-        embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
+        embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
 
         if not self.data["ratings"]:
             embed.description = "This profile is unranked."
@@ -133,70 +130,58 @@ class Player:
         if not self.has_statistics():
             raise NoStatistics()
 
-        # quickplay_keys and competitive_keys
-        q_k = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
-        c_k = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
+        # quickplay statistics
+        q = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
+        # competitive statistics
+        c = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
 
         if hero != "allHeroes":
-            if not q_k and not c_k:
-                raise NoHeroStatistics(hero)
+            if not q and not c:
+                raise NoHeroStatistics(str(self), hero)
 
-        keys = list(
-            {
-                *q_k,
-                *c_k,
-            }
-        )
+        keys = list({*q, *c})
         keys.sort()
-        quickplay, competitive = {}, {}
 
-        for key in keys:
-            quickplay[key] = q_k.get(key)
-            competitive[key] = c_k.get(key)
-        return keys, quickplay, competitive
+        for i, key in enumerate(keys):
+            if not q.get(key) and not c.get(key):
+                del keys[i]
 
-    def format_statistics(self, embed, key, competitive, quickplay):
-        if quickplay:
-            if quickplay[key]:
-                q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-                embed.add_field(name="Quickplay", value=self.add_space(q_t))
-            else:
-                embed.add_field(name="Quickplay", value="N/A")
-        if competitive:
-            if competitive[key]:
-                c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
-                embed.add_field(name="Competitive", value=self.add_space(c_t))
-            else:
-                embed.add_field(name="Competitive", value="N/A")
+        return keys, q, c
+
+    def format_statistics(self, embed, key, quickplay, competitive):
+        if quickplay and quickplay[key]:
+            q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
+            embed.add_field(name="Quickplay", value=self.add_space(q_t))
+        if competitive and competitive[key]:
+            c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
+            embed.add_field(name="Competitive", value=self.add_space(c_t))
 
     def statistics(self, ctx):
         """Returns competitive and/or quickplay player stats."""
         keys, quickplay, competitive = self.get_statistics()
-        pages = []
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=self.color)
             embed.title = self.format_key(key)
-            embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
+            embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
             embed.set_thumbnail(url=self.level_icon)
             embed.set_footer(text=f"Page {i}/{len(keys)}")
-            self.format_statistics(embed, key, competitive, quickplay)
-            pages.append(embed)
-        return pages
+            self.format_statistics(embed, key, quickplay, competitive)
+            self.pages.append(embed)
+        return self.pages
 
     def hero(self, ctx, hero):
         keys, quickplay, competitive = self.get_statistics(hero)
-        pages = []
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=self.color)
             embed.title = self.format_key(key)
-            embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
+            embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
             embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
             embed.set_footer(text=f"Page {i}/{len(keys)}")
-            self.format_statistics(embed, key, competitive, quickplay)
-            pages.append(embed)
-        return pages
+            self.format_statistics(embed, key, quickplay, competitive)
+            self.pages.append(embed)
+        return self.pages
 
     def private(self, ctx):
         """Returns an embed with private profile information."""
@@ -207,5 +192,5 @@ class Player:
             " You can modify this setting in Overwatch under `Options - Social`."
             " Please Note that these changes may take effect after approximately 30 minutes."
         )
-        embed.set_author(name=self._name, icon_url=self.avatar, url=self.url)
+        embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
         return embed
