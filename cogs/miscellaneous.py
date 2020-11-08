@@ -29,7 +29,9 @@ class Miscellaneous(commands.Cog):
     @commands.command(aliases=["feed"])
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     async def feedback(self, ctx, *, message: str):
-        """Leave a feedback about the bot (you can leave a feedback once a minute)."""
+        """Leave a feedback about the bot.
+
+        You can leave a feedback once a minute"""
         channel = self.bot.get_channel(self.bot.config.feedback_channel)
 
         if not channel:
@@ -105,7 +107,7 @@ class Miscellaneous(commands.Cog):
                         voice += 1
 
             embed.add_field(name="Activity Monitor", value=activity)
-            embed.add_field(name="Host Statistics", value=host)
+            embed.add_field(name="Host Stats", value=host)
             embed.add_field(
                 name="Channels",
                 value=f"{text + voice} total\n{text} text\n{voice} voice",
