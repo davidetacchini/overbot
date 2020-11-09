@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 from utils.data import RequestError
-from utils.player import Player, NoStatistics, NoHeroStatistics
+from utils.player import Player, PlayerException
 from classes.converters import Hero, Platform
 
 
@@ -88,7 +88,7 @@ class Statistics(commands.Cog):
                         embed = profile.private(ctx)
                     else:
                         embed = profile.statistics(ctx)
-                except NoStatistics as exc:
+                except PlayerException as exc:
                     await ctx.send(exc)
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
@@ -140,7 +140,7 @@ class Statistics(commands.Cog):
                         embed = profile.private(ctx)
                     else:
                         embed = profile.hero(ctx, hero)
-                except NoHeroStatistics as exc:
+                except PlayerException as exc:
                     await ctx.send(exc)
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
