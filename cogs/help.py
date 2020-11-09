@@ -107,7 +107,7 @@ class Help(commands.Cog):
             sig = self.command_signature(command)
             subcommands = getattr(command, "commands", None)
             embed = discord.Embed(color=self.bot.color)
-            embed.title = f"{ctx.prefix}{sig}"
+            embed.title = f"{self.bot.clean_prefix(ctx)}{sig}"
             embed.description = getattr(command.callback, "__doc__")
             if len(command.aliases) > 0:
                 aliases = ", ".join(self.format_aliases(command.aliases))
