@@ -13,7 +13,13 @@ ROLES = {
 }
 
 
-class NoStatistics(Exception):
+class PlayerException(Exception):
+    """Base exception class for player.py."""
+
+    pass
+
+
+class NoStatistics(PlayerException):
     """Exception raised when a player has no statistics to display."""
 
     def __init__(self):
@@ -22,7 +28,7 @@ class NoStatistics(Exception):
         )
 
 
-class NoHeroStatistics(Exception):
+class NoHeroStatistics(PlayerException):
     """Exception raised when a player has no quick play nor competitive stats for a given hero."""
 
     def __init__(self, player, hero):
@@ -41,11 +47,6 @@ class Player:
 
         self.color = config.main_color
         self.pages = []
-
-    def __repr__(self):
-        return "<{}(data={}, platform={}, name={})>".format(
-            type(self).__name__, type(self.data), self.platform, self.name
-        )
 
     def __str__(self):
         return self.data["name"]
