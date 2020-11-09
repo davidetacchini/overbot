@@ -115,7 +115,7 @@ class Profile(commands.Cog):
                 await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 await ctx.send(
-                    f"Profile successfully linked. Run `{ctx.prefix}profile info` to see your profile information."
+                    f'Profile successfully linked. Run "{ctx.prefix}profile info" to see your profile information.'
                 )
 
     @has_profile()
@@ -125,7 +125,7 @@ class Profile(commands.Cog):
         """Unlink your Overwatch profile from your Discord account."""
         if not await ctx.prompt(
             "Are you sure you want to unlink your Overwatch profile from your Discord account?"
-            f" You can always add a new one by running `{ctx.prefix}profile link`."
+            f' You can always add a new one by running "{ctx.prefix}profile link".'
         ):
             return
 
@@ -153,7 +153,7 @@ class Profile(commands.Cog):
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(
-                f"Profile successfully updated. Run `{ctx.prefix}profile info` to see the changes."
+                f'Profile successfully updated. Run "{ctx.prefix}profile info" to see the changes.'
             )
 
     def resolved_name(self, platform):
