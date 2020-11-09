@@ -39,7 +39,9 @@ class Server(commands.Cog):
                 "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
             )
             embed = discord.Embed(color=discord.Color.blurple())
-            embed.set_footer(text=f'Use "{ctx.prefix}prefix value" to change it.')
+            embed.set_footer(
+                text=f'Use "{self.bot.clean_prefix(ctx)}prefix value" to change it.'
+            )
             embed.add_field(
                 name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`"
             )
