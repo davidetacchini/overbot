@@ -21,6 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import os
+import re
 import time
 import asyncio
 import datetime
@@ -49,11 +50,12 @@ class Bot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
 
     def __init__(self, **kwargs):
-        super().__init__(command_prefix=self.get_pre, **kwargs)
+        super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.remove_command("help")
         self.config = config
         self.start_time = None
         self.total_lines = 0
+        self.prefixes = {}
         self.get_line_count()
 
         self.paginator = pygicord
@@ -125,15 +127,20 @@ class Bot(commands.AutoShardedBot):
             return
         await self.process_commands(message)
 
-    async def get_pre(self, bot, message):
+    async def _get_prefix(self, bot, message):
         if not message.guild:
-            return config.default_prefix
-        prefix = await self.pool.fetchval(
-            "SELECT prefix FROM server WHERE id=$1;", message.guild.id
-        )
-        if prefix != config.default_prefix:
-            return commands.when_mentioned_or(prefix)(bot, message)
-        return commands.when_mentioned_or(config.default_prefix)(bot, message)
+            return self.prefix
+        try:
+            return commands.when_mentioned_or(self.prefixes[message.guild.id])(
+                self, message
+            )
+        except KeyError:
+            return commands.when_mentioned_or(self.prefix)(self, message)
+
+    def clean_prefix(self, ctx):
+        user = ctx.guild.me if ctx.guild else ctx.bot.user
+        pattern = re.compile(r"<@!?%s>" % user.id)
+        return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), ctx.prefix)
 
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
@@ -202,6 +209,13 @@ class Bot(commands.AutoShardedBot):
         self.pool = await asyncpg.create_pool(
             **self.config.database, max_size=20, command_timeout=60.0
         )
+        # Caching prefixes at startup
+        guild_ids = [guild.id for guild in self.guilds]
+        prefixes = await self.pool.fetch('SELECT id, "prefix" FROM server;')
+        for prefix in prefixes:
+            if prefix["id"] in guild_ids:
+                self.prefixes[prefix["id"]] = prefix["prefix"]
+        self.command_prefix = self._get_prefix
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
                 try:
