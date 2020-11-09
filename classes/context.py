@@ -8,20 +8,18 @@ from config import main_color
 
 
 class Context(commands.Context):
-    async def confirm(self, message, timeout=30, user=None, cancel="❌", confirm="✅"):
+    async def prompt(self, message, timeout=30, user=None, cancel="❌", confirm="✅"):
         user = user or self.author
         reactions = (cancel, confirm)
 
         if user.id == self.bot.user.id:
             return False
 
-        msg = await self.send(
-            embed=discord.Embed(
-                title="Confirmation",
-                description=message,
-                color=main_color,
-            )
-        )
+        embed = discord.Embed(color=main_color)
+        embed.title = "Confirmation"
+        embed.description = message
+        msg = await self.send(embed=embed)
+
         for emoji in reactions:
             await msg.add_reaction(emoji)
 
