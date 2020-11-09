@@ -123,7 +123,7 @@ class Profile(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def unlink(self, ctx):
         """Unlink your Overwatch profile from your Discord account."""
-        if not await ctx.confirm(
+        if not await ctx.prompt(
             "Are you sure you want to unlink your Overwatch profile from your Discord account?"
             f" You can always add a new one by running `{ctx.prefix}profile link`."
         ):
