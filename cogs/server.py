@@ -7,7 +7,6 @@ class Server(commands.Cog):
         self.bot = bot
 
     async def set_prefix(self, ctx, prefix):
-        print(self.bot.prefixes)
         if len(prefix) > 5:
             return await ctx.send("Prefix may not be longer than 5 characters.")
         if prefix == self.bot.prefix:
