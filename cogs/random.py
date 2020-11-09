@@ -2,6 +2,7 @@ import secrets
 
 import discord
 from discord.ext import commands
+
 from classes.converters import Category
 
 ROLES = [
