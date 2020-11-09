@@ -49,14 +49,13 @@ class Help(commands.Cog):
                     all_commands[f"{cog} ({i}/{len(commands)})"] = j
 
         pages = []
-        max_pages = len(all_commands)
+        max_pages = len(all_commands) + 1
 
         embed = discord.Embed(color=self.bot.color)
         embed.title = "Help"
-        embed.set_footer(text=f"Page 1/{max_pages + 1}")
+        embed.set_footer(text=f"Page 1/{max_pages}")
         embed.description = (
-            f"Use `{ctx.prefix}help [command]` for more details on a command\n"
-            "Replace [command] with an existing command.\n"
+            f'Use "{ctx.prefix}help [command]" for more details on a command\n'
             f"Official website: {self.bot.config.website}"
         )
         embed.add_field(
@@ -76,7 +75,7 @@ class Help(commands.Cog):
             embed.title = f"**{cog} Commands**"
             embed.timestamp = self.bot.timestamp
             embed.set_footer(
-                text=f"Page {i + 1}/{max_pages + 1}",
+                text=f"Page {i + 1}/{max_pages}",
             )
             for command in commands:
                 subcommands = getattr(command, "commands", None)
