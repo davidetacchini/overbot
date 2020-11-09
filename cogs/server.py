@@ -7,16 +7,17 @@ class Server(commands.Cog):
         self.bot = bot
 
     async def set_prefix(self, ctx, prefix):
+        print(self.bot.prefixes)
         if len(prefix) > 5:
             return await ctx.send("Prefix may not be longer than 5 characters.")
-        try:
-            await self.bot.pool.execute(
-                'UPDATE server SET "prefix"=$1 WHERE id=$2;', prefix, ctx.guild.id
-            )
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
+        if prefix == self.bot.prefix:
+            del self.bot.prefixes[ctx.guild.id]
         else:
-            await ctx.send(f"Prefix successfully set to `{prefix}`")
+            self.bot.prefixes[ctx.guild.id] = prefix
+        await self.bot.pool.execute(
+            'UPDATE server SET "prefix"=$1 WHERE id=$2;', prefix, ctx.guild.id
+        )
+        await ctx.send(f"Prefix successfully set to `{prefix}`")
 
     @commands.command()
     @commands.guild_only()
