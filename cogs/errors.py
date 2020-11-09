@@ -55,12 +55,12 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
-                    f"You must have linked a profile in order to access this command. Please run `{ctx.prefix}profile link` to do so."
+                    f'You must have linked a profile in order to access this command. Please run "{ctx.prefix}profile link" to do so.'
                 )
 
             elif type(error) == checks.ProfileAlreadyLinked:
                 await ctx.send(
-                    f"You have already linked a profile. Head to `{ctx.prefix}profile info` to see its information."
+                    f'You have already linked a profile. Head to "{ctx.prefix}profile info" to see its information.'
                 )
 
             elif type(error) == checks.UserIsNotDonator:
