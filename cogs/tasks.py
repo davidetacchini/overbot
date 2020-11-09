@@ -1,5 +1,4 @@
 import re
-import json
 import platform
 
 import distro
@@ -74,7 +73,7 @@ class Tasks(commands.Cog):
                     brief=current_command.brief,
                 )
             )
-        return json.dumps(all_commands)
+        return all_commands
 
     async def get_servers(self):
         guilds = await self.bot.pool.fetch(
@@ -91,7 +90,7 @@ class Tasks(commands.Cog):
                     commands_runned=guild["commands_runned"],
                 )
             )
-        return json.dumps(servers)
+        return servers
 
     # TODO: Fix this; it doesn't work with Node.js express API
     @tasks.loop(seconds=10.0)
