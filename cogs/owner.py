@@ -3,10 +3,12 @@ import copy
 import asyncio
 import textwrap
 import traceback
+from importlib import reload as il_reload
 from contextlib import redirect_stdout
 from subprocess import PIPE
 
 import discord
+import suppress
 import aiosqlite
 from discord.ext import commands
 
@@ -14,7 +16,6 @@ from discord.ext import commands
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._last_result = None
 
     @commands.command(hidden=True)
     @commands.is_owner()
@@ -56,6 +57,15 @@ class Owner(commands.Cog):
         else:
             await ctx.message.add_reaction("✅")
 
+    @commands.command(hidden=True)
+    async def rldconf(self, ctx):
+        try:
+            il_reload(self.bot.config)
+        except Exception as exc:
+            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        else:
+            await ctx.message.add_reaction("✅")
+
     @commands.command(aliases=["kys", "die"], hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
@@ -86,51 +96,44 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def exc(self, ctx, *, body: str):
         """Evaluates a code."""
+        env = {
+            "bot": ctx.bot,
+            "ctx": ctx,
+            "channel": ctx.channel,
+            "author": ctx.author,
+            "guild": ctx.guild,
+            "message": ctx.message,
+        }
+
+        env.update(globals())
+
+        body = self.cleanup_code(body)
+        stdout = io.StringIO()
+
+        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
+
         try:
-            env = {
-                "bot": self.bot,
-                "ctx": ctx,
-                "channel": ctx.channel,
-                "author": ctx.author,
-                "guild": ctx.guild,
-                "message": ctx.message,
-                "_": self._last_result,
-            }
+            exec(to_compile, env)
+        except Exception as e:
+            return await ctx.send(f"```py\n{e.__class__.__name__}: {e}\n```")
 
-            env.update(globals())
+        func = env["func"]
+        try:
+            with redirect_stdout(stdout):
+                ret = await func()
+        except Exception:
+            value = stdout.getvalue()
+            await ctx.send(f"```py\n{value}{traceback.format_exc()}\n```")
+        else:
+            value = stdout.getvalue()
+            with suppress(discord.Forbidden):
+                await ctx.message.add_reaction("✅")
 
-            body = self.cleanup_code(body)
-            stdout = io.StringIO()
-
-            to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
-
-            try:
-                exec(to_compile, env)
-            except Exception as e:
-                return await ctx.send(f"```py\n{e.__class__.__name__}: {e}\n```")
-
-            func = env["func"]
-            try:
-                with redirect_stdout(stdout):
-                    ret = await func()
-            except Exception:
-                value = stdout.getvalue()
-                await ctx.send(f"```py\n{value}{traceback.format_exc()}\n```")
+            if not ret:
+                if value:
+                    await ctx.send(f"```py\n{value}\n```")
             else:
-                value = stdout.getvalue()
-                try:
-                    await ctx.message.add_reaction("✅")
-                except discord.Forbidden:
-                    pass
-
-                if not ret:
-                    if value:
-                        await ctx.send(f"```py\n{value}\n```")
-                else:
-                    self._last_result = ret
-                    await ctx.send(f"```py\n{value}{ret}\n```")
-        except Exception as exc:
-            await ctx.send(exc)
+                await ctx.send(f"```py\n{value}{ret}\n```")
 
     @commands.command(hidden=True)
     @commands.is_owner()
