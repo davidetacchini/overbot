@@ -4,11 +4,10 @@ import asyncio
 import textwrap
 import traceback
 from importlib import reload as il_reload
-from contextlib import redirect_stdout
+from contextlib import suppress, redirect_stdout
 from subprocess import PIPE
 
 import discord
-import suppress
 import aiosqlite
 from discord.ext import commands
 
