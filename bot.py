@@ -25,6 +25,7 @@ import re
 import time
 import asyncio
 import datetime
+from contextlib import suppress
 
 import asyncpg
 import discord
@@ -142,6 +143,15 @@ class Bot(commands.AutoShardedBot):
         pattern = re.compile(r"<@!?%s>" % user.id)
         return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), ctx.prefix)
 
+    def loading_embed(self):
+        embed = discord.Embed(color=discord.Color.dark_theme())
+        embed.set_author(name="Fetching...", icon_url=self.config.loading_gif)
+        return embed
+
+    async def cleanup(self, message):
+        with suppress(discord.HTTPException, discord.Forbidden):
+            await message.delete()
+
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
         embed = discord.Embed(color=self.color)
@@ -212,11 +222,10 @@ class Bot(commands.AutoShardedBot):
             **self.config.database, max_size=20, command_timeout=60.0
         )
         # Caching prefixes at startup
-        guild_ids = [guild.id for guild in self.guilds]
-        prefixes = await self.pool.fetch('SELECT id, "prefix" FROM server;')
-        for prefix in prefixes:
-            if prefix["id"] in guild_ids:
-                self.prefixes[prefix["id"]] = prefix["prefix"]
+        rows = await self.pool.fetch('SELECT id, "prefix" FROM server;')
+        for row in rows:
+            if row["prefix"] != self.prefix:
+                self.prefixes[row["id"]] = row["prefix"]
         self.command_prefix = self._get_prefix
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
