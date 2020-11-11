@@ -96,7 +96,7 @@ class Random(commands.Cog):
         await ctx.send(embed=embed)
 
     @random.command(invoke_without_command=True)
-    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.cooldown(1, 3.0, commands.BucketType.user)
     async def hero(self, ctx, category: Category = None):
         """Returns a random hero to play.
 
@@ -112,7 +112,7 @@ class Random(commands.Cog):
             await ctx.send(embed=embed)
 
     @random.command()
-    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.cooldown(1, 3.0, commands.BucketType.user)
     async def role(self, ctx):
         """Returns a random role to play."""
         try:
