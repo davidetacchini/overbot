@@ -71,6 +71,8 @@ class Hero(commands.Converter):
 class Category(commands.Converter):
     async def convert(self, ctx, arg):
         category = arg.lower()
+        if category in ["heal", "healer"]:
+            return "support"
         if category == "dps":
             return "damage"
         return category
