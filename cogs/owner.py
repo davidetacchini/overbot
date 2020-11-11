@@ -113,8 +113,8 @@ class Owner(commands.Cog):
 
         try:
             exec(to_compile, env)
-        except Exception as e:
-            return await ctx.send(f"```py\n{e.__class__.__name__}: {e}\n```")
+        except Exception as exc:
+            return await ctx.send(f"```py\n{type(exc).__name__}: {exc}\n```")
 
         func = env["func"]
         try:
