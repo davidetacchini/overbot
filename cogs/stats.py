@@ -32,24 +32,25 @@ class Statistics(commands.Cog):
         Battletag example: Smyile#2825
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
-        async with ctx.typing():
+        try:
+            message = await ctx.send(embed=self.bot.loading_embed())
+            data = await self.bot.data.Data(platform=platform, name=username).get()
+        except RequestError as exc:
+            await self.bot.cleanup(message)
+            await ctx.send(exc)
+        except Exception as exc:
+            await message.edit(embed=self.bot.embed_exception(exc))
+        else:
             try:
-                data = await self.bot.data.Data(platform=platform, name=username).get()
-            except RequestError as exc:
-                await ctx.send(exc)
-            except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
-            else:
-                try:
-                    profile = Player(data=data, platform=platform, name=username)
-                    if profile.is_private:
-                        embed = profile.private(ctx)
-                    else:
-                        embed = profile.rank()
-                except Exception as exc:
-                    await ctx.send(embed=self.bot.embed_exception(exc))
+                profile = Player(data=data, platform=platform, name=username)
+                if profile.is_private:
+                    embed = profile.private(ctx)
                 else:
-                    await ctx.send(embed=embed)
+                    embed = profile.rank()
+            except Exception as exc:
+                await message.edit(embed=self.bot.embed_exception(exc))
+            else:
+                await message.edit(embed=embed)
 
     @commands.command(aliases=["stats"])
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -74,26 +75,29 @@ class Statistics(commands.Cog):
         Battletag example: Smyile#2825
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
-        async with ctx.typing():
+        try:
+            message = await ctx.send(embed=self.bot.loading_embed())
+            data = await self.bot.data.Data(platform=platform, name=username).get()
+        except RequestError as exc:
+            await self.bot.cleanup(message)
+            await ctx.send(exc)
+        except Exception as exc:
+            await message.edit(embed=self.bot.embed_exception(exc))
+        else:
             try:
-                data = await self.bot.data.Data(platform=platform, name=username).get()
-            except RequestError as exc:
+                profile = Player(data=data, platform=platform, name=username)
+                if profile.is_private:
+                    embed = profile.private(ctx)
+                else:
+                    embed = profile.statistics(ctx)
+            except PlayerException as exc:
+                await self.bot.cleanup(message)
                 await ctx.send(exc)
             except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
+                await message.edit(embed=self.bot.embed_exception(exc))
             else:
-                try:
-                    profile = Player(data=data, platform=platform, name=username)
-                    if profile.is_private:
-                        embed = profile.private(ctx)
-                    else:
-                        embed = profile.statistics(ctx)
-                except PlayerException as exc:
-                    await ctx.send(exc)
-                except Exception as exc:
-                    await ctx.send(embed=self.bot.embed_exception(exc))
-                else:
-                    await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                await self.bot.cleanup(message)
+                await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
     @commands.command()
     @commands.cooldown(1, 5.0, commands.BucketType.user)
@@ -126,26 +130,29 @@ class Statistics(commands.Cog):
         Battletag example: Smyile#2825
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
-        async with ctx.typing():
+        try:
+            message = await ctx.send(embed=self.bot.loading_embed())
+            data = await self.bot.data.Data(platform=platform, name=username).get()
+        except RequestError as exc:
+            await self.bot.cleanup(message)
+            await ctx.send(exc)
+        except Exception as exc:
+            await message.edit(embed=self.bot.embed_exception(exc))
+        else:
             try:
-                data = await self.bot.data.Data(platform=platform, name=username).get()
-            except RequestError as exc:
+                profile = Player(data=data, platform=platform, name=username)
+                if profile.is_private:
+                    embed = profile.private(ctx)
+                else:
+                    embed = profile.hero(ctx, hero)
+            except PlayerException as exc:
+                await self.bot.cleanup(message)
                 await ctx.send(exc)
             except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
+                await message.edit(embed=self.bot.embed_exception(exc))
             else:
-                try:
-                    profile = Player(data=data, platform=platform, name=username)
-                    if profile.is_private:
-                        embed = profile.private(ctx)
-                    else:
-                        embed = profile.hero(ctx, hero)
-                except PlayerException as exc:
-                    await ctx.send(exc)
-                except Exception as exc:
-                    await ctx.send(embed=self.bot.embed_exception(exc))
-                else:
-                    await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                await self.bot.cleanup(message)
+                await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
 
 def setup(bot):
