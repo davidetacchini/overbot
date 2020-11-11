@@ -66,7 +66,7 @@ class Profile(commands.Cog):
 
     @has_no_profile()
     @profile.command(aliases=["bind"])
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def link(self, ctx):
         """Link your Overwatch profile to your Discord account."""
         embed = discord.Embed(color=self.bot.color)
@@ -120,7 +120,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["unbind"])
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def unlink(self, ctx):
         """Unlink your Overwatch profile from your Discord account."""
         if not await ctx.prompt(
@@ -139,7 +139,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def update(self, ctx, platform: Platform, *, username):
         """Update your Overwatch profile linked to your Discord account."""
         try:
@@ -176,7 +176,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(name="list")
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def _list(self, ctx):
         """Displays your linked profile information."""
         try:
@@ -203,7 +203,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["rating"])
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def rank(self, ctx, user: discord.Member = None):
         """Returns linked profile ranks.
 
@@ -244,7 +244,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["stats"])
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def statistics(self, ctx, user: discord.Member = None):
         """Returns linked profile both competitive and quick play statistics.
 
@@ -287,7 +287,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def hero(self, ctx, hero: Hero, user: discord.Member = None):
         """Returns linked profile statistics for a given hero.
 

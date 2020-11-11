@@ -206,7 +206,7 @@ class Miscellaneous(commands.Cog):
                 await self.bot.paginator.Paginator(pages=pages).paginate(ctx)
 
     @commands.command()
-    @commands.cooldown(1, 10.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.user)
     async def patch(self, ctx):
         """Returns patch notes links."""
         embed = discord.Embed(color=self.bot.color)
