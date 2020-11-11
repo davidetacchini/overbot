@@ -173,12 +173,20 @@ class Miscellaneous(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.user)
-    async def news(self, ctx):
-        """Returns the latest Overwatch news."""
+    async def news(self, ctx, amount: int = None):
+        """Returns the latest Overwatch news.
+
+        `[amount]` - The amount of news to return. Default to 4.
+
+        You can use this command once every 30 seconds.
+        """
         async with ctx.typing():
             pages = []
             try:
-                titles, links, imgs, dates = await self.bot.get_overwatch_news()
+                amount = amount or 4
+                titles, links, imgs, dates = await self.bot.get_overwatch_news(
+                    abs(amount)
+                )
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = "Latest Overwatch News"

@@ -187,18 +187,20 @@ class Bot(commands.AutoShardedBot):
         page = BeautifulSoup(content, features="html.parser")
         return page.find(class_="entry-title").get_text()
 
-    async def get_overwatch_news(self):
+    async def get_overwatch_news(self, a):
         async with self.session.get(self.config.overwatch["news"]) as r:
             content = await r.read()
         page = BeautifulSoup(content, features="html.parser")
         news = page.find("section", {"class", "NewsHeader-featured"})
-        titles = [x.get_text() for x in news.find_all("h1", {"class": "Card-title"})]
-        links = ["https://playoverwatch.com" + x["href"] for x in news]
+        titles = [x.get_text() for x in news.find_all("h1", {"class": "Card-title"})][
+            :a
+        ]
+        links = ["https://playoverwatch.com" + x["href"] for x in news][:a]
         imgs = [
             x["style"].split("url(")[1][:-1]
             for x in news.find_all("div", {"class", "Card-thumbnail"})
-        ]
-        dates = [x.get_text() for x in news.find_all("p", {"class": "Card-date"})]
+        ][:a]
+        dates = [x.get_text() for x in news.find_all("p", {"class": "Card-date"})][:a]
         return titles, links, imgs, dates
 
     async def get_context(self, message, *, cls=None):
