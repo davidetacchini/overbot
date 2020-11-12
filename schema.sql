@@ -83,36 +83,13 @@ ALTER TABLE public.news OWNER TO davide;
 --
 
 CREATE TABLE public.profile (
-    id integer NOT NULL,
-    user_id bigint NOT NULL,
+    id bigint NOT NULL,
     platform character varying(15) NOT NULL,
     name character varying(100) NOT NULL
 );
 
 
 ALTER TABLE public.profile OWNER TO davide;
-
---
--- Name: profile_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
---
-
-CREATE SEQUENCE public.profile_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.profile_id_seq OWNER TO davide;
-
---
--- Name: profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
---
-
-ALTER SEQUENCE public.profile_id_seq OWNED BY public.profile.id;
-
 
 --
 -- Name: server; Type: TABLE; Schema: public; Owner: davide
@@ -132,13 +109,6 @@ ALTER TABLE public.server OWNER TO davide;
 --
 
 ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.command_id_seq'::regclass);
-
-
---
--- Name: profile id; Type: DEFAULT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.profile_id_seq'::regclass);
 
 
 --
