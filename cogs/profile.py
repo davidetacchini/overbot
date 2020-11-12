@@ -106,7 +106,7 @@ class Profile(commands.Cog):
         else:
             try:
                 await self.bot.pool.execute(
-                    'INSERT INTO profile (user_id, "platform", "name") VALUES ($1, $2, $3);',
+                    'INSERT INTO profile (id, "platform", "name") VALUES ($1, $2, $3);',
                     ctx.author.id,
                     platform,
                     str(username.content).replace("#", "-"),
@@ -131,7 +131,7 @@ class Profile(commands.Cog):
 
         try:
             await self.bot.pool.execute(
-                "DELETE FROM profile WHERE user_id=$1;", ctx.author.id
+                "DELETE FROM profile WHERE id=$1;", ctx.author.id
             )
             return await ctx.send("Profile successfully unlinked.")
         except Exception as exc:
@@ -144,7 +144,7 @@ class Profile(commands.Cog):
         """Update your Overwatch profile linked to your Discord account."""
         try:
             await self.bot.pool.execute(
-                'UPDATE profile SET "platform"=$1, "name"=$2 WHERE user_id=$3;',
+                'UPDATE profile SET "platform"=$1, "name"=$2 WHERE id=$3;',
                 platform,
                 username,
                 ctx.author.id,
@@ -181,7 +181,7 @@ class Profile(commands.Cog):
         """Displays your linked profile information."""
         try:
             profile = await self.bot.pool.fetchrow(
-                "SELECT * FROM profile WHERE user_id=$1;", ctx.author.id
+                "SELECT * FROM profile WHERE id=$1;", ctx.author.id
             )
             embed = self.profile_info(
                 ctx, profile["platform"], profile["name"].replace("-", "#")
@@ -194,7 +194,7 @@ class Profile(commands.Cog):
     async def get_profile(self, user):
         """Returns profile information."""
         profile = await self.bot.pool.fetchrow(
-            "SELECT platform, name FROM profile WHERE user_id=$1", user.id
+            "SELECT platform, name FROM profile WHERE id=$1", user.id
         )
         if profile:
             return profile
