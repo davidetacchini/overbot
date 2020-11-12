@@ -7,7 +7,7 @@ token = "token"
 """Database credentials."""
 database = {
     "user": "username",
-    "password": "user_password",
+    "password": "password",
     "database": "database_name",
     "host": "localhost",
 }
@@ -36,11 +36,14 @@ discord_bots = {
     "token": "token",
 }
 
+"""Loading GIF"""
+loading_gif = "https://i.imgur.com/llF5iyg.gif"
+
 """The owner's ID."""
 owner_id = 285502621295312896
 
 """The version of the Bot."""
-version = "2.1.0"
+version = "3.0.0"
 
 """Prefix used if custom is not set."""
 default_prefix = "-"
@@ -57,7 +60,10 @@ errors_channel = 649188058574356481
 """OverBot's server ID."""
 support_server_id = 550685823784321035
 
-"""Random hero URL."""
+"""Overwatch news feed channel."""
+news_channel = 771489241288540220
+
+"""Hero portrait URL."""
 hero_url = "https://d1u1mce87gyfbn.cloudfront.net/hero/{}/hero-select-portrait.png"
 
 """Overwatch API url (unofficial)."""
@@ -74,7 +80,11 @@ overwatch = {
     "patch": "https://playoverwatch.com/en-us/news/patch-notes/{}",
     "news": "https://playoverwatch.com/en-us/news/",
     "player": "https://playoverwatch.com/en-us/career/{}/{}/",
+    "account": "This can't be shown.",
 }
+
+"""Python logo."""
+python_logo = "https://i.imgur.com/6pg6Xv4.png"
 
 """Official website."""
 website = "https://overbot.netlify.app"
