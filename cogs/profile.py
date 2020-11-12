@@ -8,6 +8,13 @@ from utils.checks import has_profile, has_no_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
 from classes.converters import Hero, Platform
 
+PLATFORMS = {
+    "pc": ("<:battlenet:679469162724196387>", discord.Color.blue()),
+    "psn": ("<:psn:679468542541693128>", discord.Color.blue()),
+    "xbl": ("<:xbl:679469487623503930>", discord.Color.green()),
+    "nintendo-switch": ("<:nsw:752653766377078817>", discord.Color.red()),
+}
+
 
 class UserHasNoProfile(Exception):
     """Exception raised when tagged user has no profile connected."""
@@ -76,8 +83,8 @@ class Profile(commands.Cog):
             name="Platforms",
             value=(
                 "<:battlenet:679469162724196387> - PC\n"
-                "<:psn:679468542541693128> - PS4\n"
-                "<:xbl:679469487623503930> - XBOX ONE\n"
+                "<:psn:679468542541693128> - PS\n"
+                "<:xbl:679469487623503930> - XBOX\n"
                 "<:nsw:752653766377078817> - NINTENDO SWITCH"
             ),
         )
@@ -168,24 +175,25 @@ class Profile(commands.Cog):
 
     def profile_info(self, ctx, platform, name):
         """Returns linked profile information."""
-        embed = discord.Embed(color=self.bot.color)
-        embed.title = f"{ctx.author} Linked Profile"
-        embed.add_field(name="Platform", value=platform)
+        embed = discord.Embed(color=PLATFORMS[platform][1])
+        embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+        embed.add_field(name="Platform", value=f"{PLATFORMS[platform][0]} {platform}")
         embed.add_field(name=self.resolved_name(platform), value=name)
         return embed
 
     @has_profile()
-    @profile.command(name="list")
+    @profile.command()
     @commands.cooldown(1, 5.0, commands.BucketType.user)
-    async def _list(self, ctx):
+    async def info(self, ctx):
         """Displays your linked profile information."""
         try:
             profile = await self.bot.pool.fetchrow(
-                "SELECT * FROM profile WHERE id=$1;", ctx.author.id
+                "SELECT platform, name FROM profile WHERE id=$1;", ctx.author.id
             )
-            embed = self.profile_info(
-                ctx, profile["platform"], profile["name"].replace("-", "#")
-            )
+            if profile["platform"] == "pc":
+                # Replace '-' with '#' only if the platform is PC. UI purpose only.
+                name = profile["name"].replace("-", "#")
+            embed = self.profile_info(ctx, profile["platform"], name)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
