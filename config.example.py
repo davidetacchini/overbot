@@ -1,4 +1,4 @@
-"""If the version is realase or beta."""
+"""Whether the version is realase or beta."""
 is_beta = True
 
 """The Bot token."""
