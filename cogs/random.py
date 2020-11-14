@@ -3,7 +3,7 @@ import secrets
 import discord
 from discord.ext import commands
 
-from classes.converters import HeroCategory, MapCategory
+from classes.converters import MapCategory, HeroCategory
 
 ROLES = [
     {
