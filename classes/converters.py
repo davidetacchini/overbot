@@ -15,28 +15,13 @@ PLATFORMS = [
 XBOX = ["xbl", "xbox"]
 PLAYSTATION = ["ps", "psn", "play", "playstation"]
 NINTENDO_SWITCH = ["nsw", "switch", "nintendo-switch"]
-ALL_PLATFORMS = {
-    "pc": [],
-    "playstation": PLAYSTATION,
-    "xbox": XBOX,
-    "nintendo-switch": NINTENDO_SWITCH,
-}
 
 
 class InvalidPlatform(commands.BadArgument):
     """Exception raised when an invalid platform is given."""
 
     def __init__(self):
-        platforms = [
-            f"{k} ({', '.join(self.resolve_value(k, v)) if v else 'No Aliases'})\n"
-            for k, v in ALL_PLATFORMS.items()
-        ]
-        super().__init__(
-            f"Invalid platform. Supported platforms:\n{''.join(platforms)}"
-        )
-
-    def resolve_value(self, key, value):
-        return [v for v in value if v != key]
+        super().__init__("Invalid platform.")
 
 
 class Platform(commands.Converter):
@@ -68,11 +53,16 @@ class Hero(commands.Converter):
         return hero
 
 
-class Category(commands.Converter):
+class HeroCategory(commands.Converter):
     async def convert(self, ctx, arg):
         category = arg.lower()
         if category in ["heal", "healer"]:
             return "support"
-        if category == "dps":
+        elif category == "dps":
             return "damage"
         return category
+
+
+class MapCategory(commands.Converter):
+    async def convert(self, ctx, arg):
+        return arg.lower()
