@@ -39,7 +39,7 @@ class Help(commands.Cog):
     def make_pages(self, ctx):
         all_commands = {}
         for cog, instance in self.bot.cogs.items():
-            if cog in ["Owner", "Tasks"]:
+            if cog in ["Owner", "Tasks", "Help"]:
                 continue
             commands = list(chunks(list(instance.get_commands()), 10))
             if len(commands) == 1:
@@ -73,9 +73,8 @@ class Help(commands.Cog):
         for i, (cog, commands) in enumerate(all_commands.items(), start=1):
             embed = discord.Embed(color=self.bot.color)
             embed.title = f"**{cog} Commands**"
-            embed.timestamp = self.bot.timestamp
             embed.set_footer(
-                text=f"Page {i + 1}/{max_pages}",
+                text=f'Use "{self.bot.clean_prefix(ctx)}help [command]" for more details on a command • Page {i + 1}/{max_pages}',
             )
             for command in commands:
                 subcommands = getattr(command, "commands", None)
