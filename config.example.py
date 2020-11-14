@@ -75,6 +75,12 @@ github = {
     "repo": "https://github.com/davidetacchini/OverBot",
 }
 
+"""Random endpoints."""
+random = {
+    "hero": "https://overwatch-api.tekrop.fr/heroes",
+    "map": "https://api.overwatchleague.com/maps",
+}
+
 overwatch = {
     "status": "https://downdetector.com/status/overwatch/",
     "patch": "https://playoverwatch.com/en-us/news/patch-notes/{}",
