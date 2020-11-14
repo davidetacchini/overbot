@@ -97,10 +97,6 @@ class Random(commands.Cog):
         embed.title = _map["name"]["en_US"]
         embed.set_thumbnail(url=_map["thumbnail"])
         embed.set_footer(text=f"Type: {_map['type'] or 'N/A'}")
-        modes = ""
-        for mod in _map["gameModes"]:
-            modes += "*" + mod["Name"] + "*" + "\n"
-        embed.description = f"Game Modes:\n{modes}"
         return embed
 
     @commands.group(invoke_without_command=True)
