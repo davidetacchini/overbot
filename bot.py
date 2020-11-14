@@ -178,7 +178,7 @@ class Bot(commands.AutoShardedBot):
             "Please report the following error to the developer"
             " by joning the support server at https://discord.gg/eZU69EV"
         )
-        embed.add_field(name="Error", value=exc)
+        embed.add_field(name=type(exc).__name__, value=exc)
         return embed
 
     async def get_overbot_status(self):
