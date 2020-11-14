@@ -33,8 +33,13 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def get_hero(self):
-        url = "https://overwatch-api.tekrop.fr/heroes"
+    async def get_heroes(self):
+        url = self.bot.config.random["hero"]
+        async with self.bot.session.get(url) as r:
+            return await r.json()
+
+    async def get_maps(self):
+        url = self.bot.config.random["map"]
         async with self.bot.session.get(url) as r:
             return await r.json()
 
@@ -46,16 +51,16 @@ class Random(commands.Cog):
             return 0xE61B23
         return 0x13A549
 
-    def get_category_heroes(self, heroes, category):
-        return [hero for hero in heroes if hero["role"] == category]
+    def heroes_by_category(self, heroes, category):
+        return [h for h in heroes if h["role"] == category]
 
     async def random_hero(self, category):
-        heroes = await self.get_hero()
+        heroes = await self.get_heroes()
 
         if not category:
             hero = secrets.choice(heroes)
         else:
-            category_heroes = self.get_category_heroes(heroes, category)
+            category_heroes = self.heroes_by_category(heroes, category)
             hero = secrets.choice(category_heroes)
 
         embed = discord.Embed(color=self.get_hero_color(hero))
@@ -79,14 +84,31 @@ class Random(commands.Cog):
         embed.set_thumbnail(url=rand["icon"])
         return embed
 
+    def maps_by_category(self, maps, category):
+        return [m for m in maps if m["type"] == category]
+
+    async def random_map(self, category):
+        maps = await self.get_maps()
+
+        if not category:
+            _map = secrets.choice(maps)
+        else:
+            category_heroes = self.maps_by_category(maps, category)
+            _map = secrets.choice(category_heroes)
+
+        embed = discord.Embed()
+        embed.title = _map["name"]["en_US"]
+        embed.set_thumbnail(url=_map["thumbnail"])
+        embed.set_footer(text=f"Type: {_map['type']}")
+        modes = ""
+        for mod in _map["gameModes"]:
+            modes += mod["Name"] + "\n"
+        embed.description = f"Game Modes:\n{modes}"
+        return embed
+
     @commands.group(invoke_without_command=True)
     async def random(self, ctx, command: str = None):
         """Returns a random hero or role, based on your choice.
-
-        Available categories
-        - Damage (dps)
-        - Support
-        - Tank
 
         Choices
         - Hero: random hero
@@ -102,7 +124,12 @@ class Random(commands.Cog):
 
         `[category]` - The category to get a random hero from.
 
-        If no category is passed, a random hero will be choose from all the categories.
+        Available categories
+        - Damage (dps)
+        - Support
+        - Tank
+
+        If no category is passed, a random hero will be chosen from all the categories.
         """
         try:
             embed = await self.random_hero(category)
@@ -117,6 +144,30 @@ class Random(commands.Cog):
         """Returns a random role to play."""
         try:
             embed = self.random_role()
+        except Exception as exc:
+            await ctx.send(embed=self.bot.embed_exception(exc))
+        else:
+            await ctx.send(embed=embed)
+
+    @random.command(invoke_without_command=True)
+    @commands.cooldown(1, 3.0, commands.BucketType.user)
+    async def map(self, ctx, category: str = None):
+        """Returns a random map.
+
+        `[category]` - The category to get a random map from.
+
+        Available categories
+        - Assault
+        - Control
+        - Escort
+        - Hybrid
+
+        If no category is passed, a random map will be chosen from all the categories.
+        """
+        if category:
+            category = category.lower()
+        try:
+            embed = await self.random_map(category)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
