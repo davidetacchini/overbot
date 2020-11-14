@@ -51,8 +51,8 @@ class Random(commands.Cog):
             return 0xE61B23
         return 0x13A549
 
-    def heroes_by_category(self, heroes, category):
-        return [h for h in heroes if h["role"] == category]
+    def get_by_category(self, items, path, category):
+        return [i for i in items if i[path] == category]
 
     async def random_hero(self, category):
         heroes = await self.get_heroes()
@@ -60,7 +60,7 @@ class Random(commands.Cog):
         if not category:
             hero = secrets.choice(heroes)
         else:
-            category_heroes = self.heroes_by_category(heroes, category)
+            category_heroes = self.get_by_category(heroes, "role", category)
             hero = secrets.choice(category_heroes)
 
         embed = discord.Embed(color=self.get_hero_color(hero))
@@ -84,16 +84,13 @@ class Random(commands.Cog):
         embed.set_thumbnail(url=rand["icon"])
         return embed
 
-    def maps_by_category(self, maps, category):
-        return [m for m in maps if m["type"] == category]
-
     async def random_map(self, category):
         maps = await self.get_maps()
 
         if not category:
             _map = secrets.choice(maps)
         else:
-            category_heroes = self.maps_by_category(maps, category)
+            category_heroes = self.get_by_category(maps, "type", category)
             _map = secrets.choice(category_heroes)
 
         embed = discord.Embed()
