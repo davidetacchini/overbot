@@ -92,7 +92,6 @@ class Tasks(commands.Cog):
             )
         return servers
 
-    # TODO: Fix this; it doesn't work with Node.js express API
     @tasks.loop(seconds=10.0)
     async def statistics(self):
         """POST bot statistics to private API."""
