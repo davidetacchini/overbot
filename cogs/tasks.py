@@ -92,7 +92,7 @@ class Tasks(commands.Cog):
             )
         return servers
 
-    @tasks.loop(seconds=10.0)
+    @tasks.loop(seconds=20.0)
     async def statistics(self):
         """POST bot statistics to private API."""
         await self.bot.wait_until_ready()
