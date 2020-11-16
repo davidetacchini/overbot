@@ -1,5 +1,5 @@
-import time
 import textwrap
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -23,16 +23,13 @@ class Events(commands.Cog):
             """
             )
         )
+        if not hasattr(self.bot, "uptime"):
+            self.bot.uptime = datetime.utcnow()
         await self.change_presence()
 
     @commands.Cog.listener()
     async def on_resumed(self):
         print("Connection resumed.")
-
-    @commands.Cog.listener()
-    async def on_connect(self):
-        if not self.bot.start_time:
-            self.bot.start_time = time.perf_counter()
 
     async def change_presence(self):
         await self.bot.wait_until_ready()
