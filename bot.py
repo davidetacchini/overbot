@@ -22,7 +22,6 @@ SOFTWARE.
 """
 import os
 import re
-import time
 import asyncio
 import datetime
 from contextlib import suppress
@@ -37,6 +36,7 @@ from discord.ext import commands
 
 import config
 from utils import data
+from utils.time import human_timedelta
 from classes.context import Context
 
 try:
@@ -54,7 +54,6 @@ class Bot(commands.AutoShardedBot):
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.remove_command("help")
         self.config = config
-        self.start_time = None
         self.total_lines = 0
         self.prefixes = {}
         self.get_line_count()
@@ -64,11 +63,6 @@ class Bot(commands.AutoShardedBot):
 
     def __repr__(self):
         return "<Bot>"
-
-    @property
-    def uptime(self):
-        raw = int(round(time.perf_counter() - self.start_time))
-        return datetime.timedelta(seconds=raw)
 
     @property
     def timestamp(self):
@@ -93,6 +87,10 @@ class Bot(commands.AutoShardedBot):
     @property
     def is_beta(self):
         return config.is_beta
+
+    @property
+    def get_uptime(self):
+        return human_timedelta(self.uptime, accuracy=None, brief=False, suffix=False)
 
     async def total_commands(self):
         return await self.pool.fetchval("SELECT total FROM command;")
