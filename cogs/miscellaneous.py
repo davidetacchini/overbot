@@ -1,4 +1,5 @@
 import time
+import datetime
 import platform
 import itertools
 
@@ -7,6 +8,8 @@ import psutil
 import pygit2
 import discord
 from discord.ext import commands
+
+from utils.time import human_timedelta
 
 
 class Miscellaneous(commands.Cog):
@@ -25,6 +28,11 @@ class Miscellaneous(commands.Cog):
         embed.add_field(name="Latency", value=f"{self.bot.ping}ms")
         embed.add_field(name="ACK", value=f"{ack}ms")
         await msg.edit(embed=embed)
+
+    @commands.command()
+    async def uptime(self, ctx):
+        """Shows how long the bot has been online."""
+        await ctx.send(f"Uptime: {self.bot.get_uptime}")
 
     @commands.command(aliases=["feed"])
     @commands.cooldown(1, 60.0, commands.BucketType.user)
@@ -48,7 +56,19 @@ class Miscellaneous(commands.Cog):
 
     @staticmethod
     def format_commit(commit):
-        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {commit.message}"
+        message, _, _ = commit.message.partition("\n")
+        commit_tz = datetime.timezone(
+            datetime.timedelta(minutes=commit.commit_time_offset)
+        )
+        commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(
+            commit_tz
+        )
+
+        offset = human_timedelta(
+            commit_time.astimezone(datetime.timezone.utc).replace(tzinfo=None),
+            accuracy=1,
+        )
+        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {message} ({offset})"
 
     def get_latest_commits(self, count=3):
         repo = pygit2.Repository(".git")
@@ -57,11 +77,10 @@ class Miscellaneous(commands.Cog):
                 repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count
             )
         )
-        # since the commits are already formatted, just join them to an empty string
-        return "".join(self.format_commit(c) for c in commits)
+        return "\n".join(self.format_commit(c) for c in commits)
 
-    # Inspired by RoboDanny (Rapptz)
-    # https://github.com/Rapptz/RoboDanny/blob/df340e6cd89f32cd1d96a6b86dfb21419308066b/cogs/stats.py#L217
+    # Inspired by Rapptz/RoboDanny
+    # https://github.com/Rapptz/RoboDanny
     @commands.command()
     @commands.guild_only()
     async def about(self, ctx):
@@ -120,7 +139,7 @@ class Miscellaneous(commands.Cog):
             )
             embed.add_field(name="Commands Runned", value=total_commands)
             embed.add_field(name="Lines of code", value=self.bot.total_lines)
-            embed.add_field(name="Uptime", value=self.bot.uptime)
+            embed.add_field(name="Uptime", value=self.bot.get_uptime)
             embed.set_footer(
                 text=f"Made with discord.py v{discord.__version__}",
                 icon_url=self.bot.config.python_logo,
