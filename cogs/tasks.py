@@ -49,7 +49,7 @@ class Tasks(commands.Cog):
                 "Members": total_members,
                 "Large Servers": large_servers,
                 "Total Commands": total_commands,
-                "Uptime": str(self.bot.uptime),
+                "Uptime": str(self.bot.get_uptime),
                 "Ping": f"{self.bot.ping}ms",
                 "Lines of Code": self.bot.total_lines,
             },
