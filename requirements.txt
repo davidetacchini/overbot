@@ -8,3 +8,4 @@ uvloop
 bs4
 pygit2
 speedtest-cli
+python-dateutil
