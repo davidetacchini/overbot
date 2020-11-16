@@ -24,31 +24,7 @@
   </a>
 </p>
 
-
-Self Hosting
-------
-I would appreciate if you don't host my bot.
-However, if you want to test it out, the installation steps are as follows:
-1. Setup the PostgreSQL database by running the `psql` command
-```sql
-CREATE DATABASE overbot;
-CREATE user [username] WITH PASSWORD [password]
-GRANT ALL PRIVILEGES ON DATABASE overbot TO [username]
-```
-Note: It is recommended to run the latest stable version of [postgresql](https://www.postgresql.org/docs/release/)
-
-2. Setup the bot and run it
-```sh
-git clone https://github.com/davidetacchini/overbot.git
-cd overbot
-python3 -m venv env
-source env/bin/activate
-./scripts/init.sh
-systemctl start overbot
-```
-Note: It is recommended to run the latest stable version of [python](https://www.python.org/doc/versions/)
-
-Code Style
+Contributing
 ------
 OverBot uses [black](https://pypi.org/project/black/), [isort](https://pypi.org/project/isort/) and [flake8](https://pypi.org/project/flake8/) as code style.
 If you want to contribute to OverBot, please run `make format` before submitting any pull request.
