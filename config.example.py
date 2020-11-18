@@ -18,6 +18,12 @@ webhook = {
     "token": "webhook_token STRING",
 }
 
+"""OverBot private API used to share bot information to its website."""
+obapi = {
+    "url": "url",
+    "token": "token",
+}
+
 """Discord Bot List (top.gg) authorization."""
 top_gg = {
     "url": "https://top.gg/api/bots/547546531666984961/stats",
