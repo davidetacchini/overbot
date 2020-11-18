@@ -97,24 +97,27 @@ class Tasks(commands.Cog):
         """POST bot statistics to private API."""
         await self.bot.wait_until_ready()
 
-        headers = {"Content-Type": "application/json"}
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": self.bot.config.obapi["token"],
+        }
 
         payload_statistics = await self.get_statistics()
         payload_commands = await self.get_commands()
         payload_servers = await self.get_servers()
 
         await self.bot.session.post(
-            f"{self.bot.config.obapi}/statistics",
+            f'{self.bot.config.obapi["url"]}/statistics',
             json=payload_statistics,
             headers=headers,
         )
         await self.bot.session.post(
-            f"{self.bot.config.obapi}/commands",
+            f'{self.bot.config.obapi["url"]}/commands',
             json=payload_commands,
             headers=headers,
         )
         await self.bot.session.post(
-            f"{self.bot.config.obapi}/servers",
+            f'{self.bot.config.obapi["url"]}/servers',
             json=payload_servers,
             headers=headers,
         )
@@ -163,6 +166,8 @@ class Tasks(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
+        if self.bot.is_beta:
+            return
         await self.bot.wait_until_ready()
         async with self.bot.session.get(self.bot.config.overwatch["news"]) as r:
             content = await r.read()
