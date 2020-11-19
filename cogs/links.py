@@ -20,10 +20,10 @@ class Links(commands.Cog):
         """Returns bot invite link."""
         await ctx.send(self.bot.config.invite)
 
-    @commands.command(aliases=["donate"])
-    async def patreon(self, ctx):
-        """Returns the patreon page of the bot."""
-        await ctx.send(self.bot.config.patreon)
+    @commands.command()
+    async def donate(self, ctx):
+        """Returns the PayPal of the developer."""
+        await ctx.send(self.bot.config.paypal)
 
     @commands.command(aliases=["git"])
     async def github(self, ctx):

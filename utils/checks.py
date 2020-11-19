@@ -14,36 +14,6 @@ class ProfileNotLinked(commands.CheckFailure):
     pass
 
 
-class UserIsNotDonator(commands.CheckFailure):
-    """Exception raised when a user is not a donator."""
-
-    pass
-
-
-def is_donator():
-    """Check for a user to be a patreon member."""
-
-    async def predicate(ctx):
-        guild = ctx.bot.get_guild(ctx.bot.config.support_server_id)
-        member = await guild.fetch_member(ctx.author.id)
-
-        if not member:
-            return False
-
-        role = (
-            discord.utils.get(member.roles, name="Sith") is not None
-            or discord.utils.get(member.roles, name="Jedi") is not None
-            or discord.utils.get(member.roles, name="Galaxy Lord") is not None
-            or discord.utils.get(member.roles, name="Admin") is not None
-        )
-
-        if role:
-            return True
-        raise UserIsNotDonator()
-
-    return commands.check(predicate)
-
-
 async def get_profile(ctx):
     return await ctx.bot.pool.fetchrow(
         "SELECT platform, name FROM profile WHERE id=$1;", ctx.author.id

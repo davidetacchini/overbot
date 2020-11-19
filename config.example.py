@@ -110,5 +110,5 @@ invite = "https://discord.com/api/oauth2/authorize?client_id=547546531666984961&
 """Vote link."""
 vote = "https://top.gg/bot/547546531666984961/vote"
 
-"""Patreon URL."""
-patreon = "https://www.patreon.com/overbot_"
+"""PayPal URL."""
+paypal = "https://www.paypal.com/paypalme/DavideTacchini"
