@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://github.com/davidetacchini/overbot/actions" traget="_blank">
-    <img src="https://github.com/davidetacchini/overbot/workflows/CI/badge.svg" alt="Build">
+    <img src="https://github.com/davidetacchini/overbot/workflows/Lint/badge.svg" alt="Lint Badge">
   </a>
   <a href="https://github.com/psf/black" traget="_blank">
     <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
