@@ -1,25 +1,25 @@
-name: CI
+name: Lint
 
 on:
   push:
     branches:
-      - next
+      - main
+    paths:
+      - '**.py'
 
 jobs:
-  lint:
-    name: Lint
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -r requirements-dev.txt
-    - name: Lint
-      run: |
-        make format
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Upgrade pip
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-dev.txt
+      - name: Lint
+        run: make format
