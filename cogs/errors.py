@@ -63,12 +63,6 @@ class ErrorHandler(commands.Cog):
                     f'You have already linked a profile. Head to "{ctx.prefix}profile info" to see its information.'
                 )
 
-            elif type(error) == checks.UserIsNotDonator:
-                await ctx.send(
-                    "Become a patron and unlock the pro features!"
-                    f"\nMore information at {self.bot.config.patreon}"
-                )
-
 
 def setup(bot):
     bot.add_cog(ErrorHandler(bot))
