@@ -147,45 +147,32 @@ class Miscellaneous(commands.Cog):
             await ctx.send(embed=embed)
 
     @staticmethod
-    def format_overbot_status(n, s):
-        status = s.lower()
-        if status == "operational":
-            return f"<:online:648186001361076243> {n}: {s}"
-        elif status == "under maintenance":
-            return f":tools: {n}: {s}"
-        elif status == "degraded Performance" or status == "partial outage":
-            return f"<:idle:648185977717915650> {n}: {s}"
-        return f"<:dnd:648185968209428490> {n}: {s}"
-
-    @staticmethod
     def format_overwatch_status(s):
-        if s == "No problems at Overwatch":
-            return f"<:online:648186001361076243> {s}"
-        return f"<:dnd:648185968209428490> {s}"
+        if s.lower() == "no problems at overwatch":
+            return (f"<:online:648186001361076243> {s}", discord.Color.green())
+        return (f"<:dnd:648185968209428490> {s}", discord.Color.red())
 
     @commands.command()
     @commands.cooldown(1, 60.0, commands.BucketType.user)
     async def status(self, ctx):
-        """Returns both OverBot and Overwatch servers status."""
-        embed = discord.Embed(color=discord.Color.blue())
+        """Returns the current Overwatch servers status."""
+        embed = discord.Embed()
         embed.title = "Status"
+        embed.url = self.bot.config.overwatch["status"]
         embed.timestamp = self.bot.timestamp
+        embed.set_footer(text="downdetector.com")
         try:
             overwatch = await self.bot.get_overwatch_status()
-            names, statuses = await self.bot.get_overbot_status()
         except Exception:
             embed.description = (
                 f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
             )
         else:
-            embed.description = f'[Overwatch]({self.bot.config.overwatch["status"]}) · [OverBot](https://overbot.statuspage.io/)'
-            fmt = ""
-            for name, status in zip(names, statuses):
-                fmt += f"{self.format_overbot_status(str(name).strip(), str(status).strip())}\n"
-            embed.add_field(name="OverBot", value=fmt)
+            status, color = self.format_overwatch_status(str(overwatch).strip())
+            embed.color = color
             embed.add_field(
                 name="Overwatch",
-                value=self.format_overwatch_status(str(overwatch).strip()),
+                value=status,
                 inline=False,
             )
         await ctx.send(embed=embed)

@@ -179,16 +179,6 @@ class Bot(commands.AutoShardedBot):
         embed.add_field(name=type(exc).__name__, value=exc)
         return embed
 
-    async def get_overbot_status(self):
-        async with self.session.get("https://overbot.statuspage.io/") as r:
-            content = await r.read()
-        page = BeautifulSoup(content, features="html.parser")
-        names = [n.get_text() for n in page.find_all("span", {"class": "name"})]
-        status = [
-            s.get_text() for s in page.find_all("span", {"class": "component-status"})
-        ]
-        return names, status
-
     async def get_overwatch_status(self):
         async with self.session.get(self.config.overwatch["status"]) as r:
             content = await r.read()
