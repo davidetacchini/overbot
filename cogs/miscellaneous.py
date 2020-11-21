@@ -32,7 +32,7 @@ class Miscellaneous(commands.Cog):
     @commands.command()
     async def uptime(self, ctx):
         """Shows how long the bot has been online."""
-        await ctx.send(f"Uptime: {self.bot.get_uptime}")
+        await ctx.send(f"Uptime: {self.bot.get_uptime()}")
 
     @commands.command(aliases=["feed"])
     @commands.cooldown(1, 60.0, commands.BucketType.user)
@@ -125,8 +125,8 @@ class Miscellaneous(commands.Cog):
                     elif isinstance(channel, discord.VoiceChannel):
                         voice += 1
 
-            embed.add_field(name="Activity Monitor", value=activity)
-            embed.add_field(name="Host Stats", value=host)
+            embed.add_field(name="Process", value=activity)
+            embed.add_field(name="Host", value=host)
             embed.add_field(
                 name="Channels",
                 value=f"{text + voice} total\n{text} text\n{voice} voice",
@@ -139,7 +139,7 @@ class Miscellaneous(commands.Cog):
             )
             embed.add_field(name="Commands Runned", value=total_commands)
             embed.add_field(name="Lines of code", value=self.bot.total_lines)
-            embed.add_field(name="Uptime", value=self.bot.get_uptime)
+            embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
             embed.set_footer(
                 text=f"Made with discord.py v{discord.__version__}",
                 icon_url=self.bot.config.python_logo,

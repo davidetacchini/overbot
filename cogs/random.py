@@ -119,7 +119,7 @@ class Random(commands.Cog):
 
         Available categories
         - Damage (dps)
-        - Support
+        - Support (heal, healear)
         - Tank
 
         If no category is passed, a random hero will be chosen from all the categories.
@@ -130,8 +130,8 @@ class Random(commands.Cog):
             await ctx.send(
                 f'Invalid category. Use "{ctx.prefix}help random hero" to see the available categories.'
             )
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
+        except Exception:
+            await ctx.send("Something bad happened. Please try again.")
         else:
             await ctx.send(embed=embed)
 
@@ -141,8 +141,8 @@ class Random(commands.Cog):
         """Returns a random role to play."""
         try:
             embed = self.random_role()
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
+        except Exception:
+            await ctx.send("Something bad happened. Please try again.")
         else:
             await ctx.send(embed=embed)
 
@@ -167,8 +167,8 @@ class Random(commands.Cog):
             await ctx.send(
                 f'Invalid category. Use "{ctx.prefix}help random map" to see the available categories.'
             )
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
+        except Exception:
+            await ctx.send("Something bad happened. Please try again.")
         else:
             await ctx.send(embed=embed)
 
