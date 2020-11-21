@@ -88,9 +88,8 @@ class Bot(commands.AutoShardedBot):
     def is_beta(self):
         return config.is_beta
 
-    @property
-    def get_uptime(self):
-        return human_timedelta(self.uptime, accuracy=None, brief=False, suffix=False)
+    def get_uptime(self, *, brief=False):
+        return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
 
     async def total_commands(self):
         return await self.pool.fetchval("SELECT total FROM command;")
