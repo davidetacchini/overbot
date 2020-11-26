@@ -86,7 +86,7 @@ class Log(commands.Cog):
         )
         embed.description = f"```py\n{exc}\n```"
         embed.timestamp = self.bot.timestamp
-        channel = await self.bot.get_channel(self.bot.config.errors_channel)
+        channel = self.bot.get_channel(self.bot.config.errors_channel)
 
         if not channel:
             return
