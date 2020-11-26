@@ -15,11 +15,6 @@ format:
 	black --exclude=env --line-length=88 .
 	flake8 .
 
-.PHONY: chlog
-chlog:
-	git-chglog
-	git-chglog -o CHANGELOG.md
-
 .PHONY: upgrade
 upgrade:
 	@pip install --upgrade pip
