@@ -1,5 +1,6 @@
 import textwrap
 from datetime import datetime
+from contextlib import suppress
 
 import discord
 from discord.ext import commands
@@ -51,6 +52,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
+        with suppress(KeyError):
+            del self.bot.prefixes[guild.id]
         await self.bot.pool.execute("DELETE FROM server WHERE id=$1;", guild.id)
 
 
