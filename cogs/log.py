@@ -27,7 +27,10 @@ class Log(commands.Cog):
             return
         embed = discord.Embed(color=self.bot.color, timestamp=self.bot.timestamp)
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
-        embed.set_footer(text=str(ctx.guild), icon_url=ctx.guild.icon_url)
+        try:
+            embed.set_footer(text=str(ctx.guild), icon_url=ctx.guild.icon_url)
+        except AttributeError:
+            embed.set_author(text="DMs", icon_url=self.bot.user.avatar_url)
         embed.add_field(name="Message", value=ctx.message.content)
         await self.webhook.send(embed=embed)
 
