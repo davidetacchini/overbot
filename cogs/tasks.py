@@ -20,7 +20,10 @@ class Tasks(commands.Cog):
         total_members = sum(guild.member_count for guild in self.bot.guilds)
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
         latencies = dict(s for s in self.bot.latencies)
-        shards = dict((k + 1, round(v * 1000)) for k, v in latencies.items())
+        try:
+            shards = dict((k + 1, round(v * 1000)) for k, v in latencies.items())
+        except Exception:
+            pass
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
         pg_version = f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
