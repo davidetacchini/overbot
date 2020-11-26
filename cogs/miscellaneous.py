@@ -243,7 +243,7 @@ class Miscellaneous(commands.Cog):
             4: "<:diamond:632281105571119105>",
             5: "<:platinum:632281092875091998>",
         }
-        return placements[place]
+        return placements.get(place)
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.user)
