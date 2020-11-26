@@ -22,7 +22,7 @@ class Log(commands.Cog):
         )
 
     async def send_command_log(self, ctx):
-        """Command logs on Overcord support server."""
+        """Command logs on OverBot support server."""
         if self.bot.debug:
             return
         embed = discord.Embed(color=self.bot.color, timestamp=self.bot.timestamp)

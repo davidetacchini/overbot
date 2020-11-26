@@ -13,14 +13,14 @@ if [ "$EUID" -ne 0 ]; then
  	echo "[${green}OK${reset}] root permissions"
 fi
 
-printf "Welcome to the Overcord Setup!\n\n"
+printf "Welcome to the OverBot Setup!\n\n"
 read -p "Enter the database name: " db_name
 read -p "Enter the database user: " db_user
 
-printf "Copying service file to /etc/systemd/system/overcord.service...\n\n"
-sed -i "s:/path/to/overcord/:$(pwd)/:" overcord.service
-sed -i "s:username:$(whoami):" overcord.service
-cp overcord.service /etc/systemd/system/overcord.service
+printf "Copying service file to /etc/systemd/system/overbot.service...\n\n"
+sed -i "s:/path/to/overbot/:$(pwd)/:" overbot.service
+sed -i "s:username:$(whoami):" overbot.service
+cp overbot.service /etc/systemd/system/overbot.service
 
 printf "Setting up the database...\n\n"
 printf "Replacing schema user to ${bold}$db_user${normal}\n"
@@ -44,4 +44,4 @@ printf "Reloading the daemon...\n"
 }
 
 printf "${green}${bold}Installation completed!${normal}${reset}\n"
-printf "Run ${bold}systemctl start overcord${normal}\n"
+printf "Run ${bold}systemctl start overbot${normal}\n"

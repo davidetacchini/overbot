@@ -68,7 +68,7 @@ class Miscellaneous(commands.Cog):
             commit_time.astimezone(datetime.timezone.utc).replace(tzinfo=None),
             accuracy=1,
         )
-        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overcord/commit/{commit.hex}) {message} ({offset})"
+        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {message} ({offset})"
 
     def get_latest_commits(self, count=3):
         repo = pygit2.Repository(".git")
