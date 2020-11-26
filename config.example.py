@@ -18,7 +18,7 @@ webhook = {
     "token": "webhook_token STRING",
 }
 
-"""OverBot private API used to share bot information to its website."""
+"""Overcord private API used to share bot information to its website."""
 obapi = {
     "url": "url",
     "token": "token",
@@ -63,7 +63,7 @@ feedback_channel = 581888563256229891
 """Channel ID for error logs."""
 errors_channel = 649188058574356481
 
-"""OverBot's server ID."""
+"""Overcord's server ID."""
 support_server_id = 550685823784321035
 
 """Overwatch news feed channel."""
@@ -78,7 +78,7 @@ base_url = "https://ow-api.com/v3/stats"
 """GitHub links."""
 github = {
     "profile": "https://github.com/davidetacchini/",
-    "repo": "https://github.com/davidetacchini/OverBot",
+    "repo": "https://github.com/davidetacchini/overcord",
 }
 
 """Random endpoints."""
@@ -99,7 +99,7 @@ overwatch = {
 python_logo = "https://i.imgur.com/6pg6Xv4.png"
 
 """Official website."""
-website = "https://overbot.netlify.app"
+website = "https://overcord.netlify.app"
 
 """Official support server invite."""
 support = "https://discord.gg/8g3jnxv"

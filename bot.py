@@ -48,7 +48,7 @@ else:
 
 
 class Bot(commands.AutoShardedBot):
-    """Custom bot class for OverBot."""
+    """Custom bot class for Overcord."""
 
     def __init__(self, **kwargs):
         super().__init__(command_prefix=config.default_prefix, **kwargs)

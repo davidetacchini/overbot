@@ -13,12 +13,12 @@ if [ "$EUID" -ne 0 ]; then
  	echo "[${green}OK${reset}] root permissions"
 fi
 
-printf "Welcome to the OverBot Setup!\n\n"
+printf "Welcome to the Overcord Setup!\n\n"
 read -p "Enter the database name: " db_name
 read -p "Enter the database user: " db_user
 
 printf "\n\nInstalling the configuration file...\n"
-curl https://raw.githubusercontent.com/davidetacchini/OverBot/master/config.example.py -o ./config.py
+curl https://raw.githubusercontent.com/davidetacchini/overcord/master/config.example.py -o ./config.py
 printf "[${green}OK${reset}] configuration file successfully installed!\n"
 
 if [ -f "./config.example.py" ]; then
@@ -26,10 +26,10 @@ if [ -f "./config.example.py" ]; then
 	rm -f ./config.example.py
 fi
 
-printf "Copying service file to /etc/systemd/system/overbot.service...\n\n"
-sed -i "s:/path/to/OverBot/:$(pwd)/:" overbot.service
-sed -i "s:username:$(whoami):" overbot.service
-cp overbot.service /etc/systemd/system/overbot.service
+printf "Copying service file to /etc/systemd/system/overcord.service...\n\n"
+sed -i "s:/path/to/Overcord/:$(pwd)/:" overcord.service
+sed -i "s:username:$(whoami):" overcord.service
+cp overcord.service /etc/systemd/system/overcord.service
 
 printf "Setting up the database...\n\n"
 printf "Replacing schema user to ${bold}$db_user${normal}\n"
@@ -54,4 +54,4 @@ printf "Reloading the daemon...\n"
 
 printf "${green}${bold}Installation completed!${normal}${reset}\n"
 printf "${red}Before running the bot you must configure the config.py file!${reset}\n"
-printf "Once you've edited the config.py file, run ${bold}systemctl start overbot${normal}\n"
+printf "Once you've edited the config.py file, run ${bold}systemctl start overcord${normal}\n"
