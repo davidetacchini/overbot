@@ -254,15 +254,14 @@ class Miscellaneous(commands.Cog):
         """
         async with ctx.typing():
             guilds = await self.bot.pool.fetch(
-                "SELECT id, commands_runned FROM server ORDER BY commands_runned DESC LIMIT 5;"
+                "SELECT id, commands_runned FROM server WHERE id NOT IN"
+                " (638339745117896745, 550685823784321035) ORDER BY commands_runned DESC LIMIT 5;"
             )
             embed = discord.Embed()
             embed.title = "Five Most Active Servers"
 
             board = ""
             for i, guild in enumerate(guilds, start=1):
-                if guild["id"] in [638339745117896745, 550685823784321035]:
-                    continue
                 g = self.bot.get_guild(guild["id"])
                 board += (
                     f"{self.get_placement(i)} **{str(g)}**"
