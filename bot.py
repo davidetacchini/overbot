@@ -85,8 +85,8 @@ class Bot(commands.AutoShardedBot):
         return config.main_color
 
     @property
-    def is_beta(self):
-        return config.is_beta
+    def debug(self):
+        return config.DEBUG
 
     def get_uptime(self, *, brief=False):
         return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
