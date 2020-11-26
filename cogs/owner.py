@@ -20,7 +20,9 @@ class Owner(commands.Cog):
         self.bot = bot
 
     async def cog_check(self, ctx):
-        return await self.bot.is_owner(ctx.author)
+        if await self.bot.is_owner(ctx.author):
+            return True
+        raise commands.NotOwner()
 
     @commands.command(hidden=True)
     async def clr(self, ctx, amount: int = 1):
