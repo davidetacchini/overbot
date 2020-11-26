@@ -261,6 +261,8 @@ class Miscellaneous(commands.Cog):
 
             board = ""
             for i, guild in enumerate(guilds, start=1):
+                if guild["id"] in [638339745117896745, 550685823784321035]:
+                    continue
                 g = self.bot.get_guild(guild["id"])
                 board += (
                     f"{self.get_placement(i)} **{str(g)}**"
