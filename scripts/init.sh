@@ -17,15 +17,6 @@ printf "Welcome to the Overcord Setup!\n\n"
 read -p "Enter the database name: " db_name
 read -p "Enter the database user: " db_user
 
-printf "\n\nInstalling the configuration file...\n"
-curl https://raw.githubusercontent.com/davidetacchini/overcord/master/config.example.py -o ./config.py
-printf "[${green}OK${reset}] configuration file successfully installed!\n"
-
-if [ -f "./config.example.py" ]; then
-	echo "Removing config.example.py..."
-	rm -f ./config.example.py
-fi
-
 printf "Copying service file to /etc/systemd/system/overcord.service...\n\n"
 sed -i "s:/path/to/overcord/:$(pwd)/:" overcord.service
 sed -i "s:username:$(whoami):" overcord.service
@@ -53,5 +44,4 @@ printf "Reloading the daemon...\n"
 }
 
 printf "${green}${bold}Installation completed!${normal}${reset}\n"
-printf "${red}Before running the bot you must configure the config.py file!${reset}\n"
-printf "Once you've edited the config.py file, run ${bold}systemctl start overcord${normal}\n"
+printf "Run ${bold}systemctl start overcord${normal}\n"
