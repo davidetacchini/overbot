@@ -80,7 +80,8 @@ class Tasks(commands.Cog):
 
     async def get_servers(self):
         guilds = await self.bot.pool.fetch(
-            "SELECT id, commands_runned FROM server ORDER BY commands_runned DESC LIMIT 5;"
+            "SELECT id, commands_runned FROM server WHERE id NOT IN"
+            " (638339745117896745, 550685823784321035) ORDER BY commands_runned DESC LIMIT 5;"
         )
         servers = []
         for guild in guilds:
