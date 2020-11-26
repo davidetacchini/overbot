@@ -125,7 +125,7 @@ class Tasks(commands.Cog):
     @tasks.loop(minutes=30.0)
     async def update(self):
         """Updates Bot stats on Discord portals."""
-        if self.bot.is_beta:
+        if self.bot.debug:
             return
 
         # POST stats on top.gg
@@ -166,7 +166,7 @@ class Tasks(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
-        if self.bot.is_beta:
+        if self.bot.debug:
             return
         await self.bot.wait_until_ready()
         async with self.bot.session.get(self.bot.config.overwatch["news"]) as r:
