@@ -95,6 +95,9 @@ class Tasks(commands.Cog):
     @tasks.loop(seconds=20.0)
     async def statistics(self):
         """POST bot statistics to private API."""
+        if self.bot.debug:
+            return
+
         await self.bot.wait_until_ready()
 
         headers = {
@@ -128,6 +131,8 @@ class Tasks(commands.Cog):
         if self.bot.debug:
             return
 
+        await self.bot.wait_until_ready()
+
         # POST stats on top.gg
         payload = {
             "server_count": len(self.bot.guilds),
@@ -141,7 +146,8 @@ class Tasks(commands.Cog):
         )
 
         # POST stats on discordbotlist.com
-        dbl_payload = {"guilds": len(self.bot.guilds), "users": len(self.bot.users)}
+        members = sum(guild.member_count for guild in self.bot.guilds)
+        dbl_payload = {"guilds": len(self.bot.guilds), "users": members}
 
         dbl_headers = {"Authorization": f'Bot {self.bot.config.dbl["token"]}'}
 
@@ -168,7 +174,9 @@ class Tasks(commands.Cog):
     async def send_overwatch_news(self):
         if self.bot.debug:
             return
+
         await self.bot.wait_until_ready()
+
         async with self.bot.session.get(self.bot.config.overwatch["news"]) as r:
             content = await r.read()
         page = BeautifulSoup(content, features="html.parser")
