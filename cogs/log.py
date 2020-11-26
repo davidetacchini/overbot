@@ -30,7 +30,7 @@ class Log(commands.Cog):
         try:
             embed.set_footer(text=str(ctx.guild), icon_url=ctx.guild.icon_url)
         except AttributeError:
-            embed.set_author(text="DMs", icon_url=self.bot.user.avatar_url)
+            embed.set_footer(text="DMs", icon_url=self.bot.user.avatar_url)
         embed.add_field(name="Message", value=ctx.message.content)
         await self.webhook.send(embed=embed)
 
