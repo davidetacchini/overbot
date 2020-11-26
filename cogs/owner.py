@@ -7,6 +7,7 @@ import asyncio
 import textwrap
 import importlib
 import traceback
+import subprocess
 from contextlib import suppress, redirect_stdout
 from subprocess import PIPE
 
@@ -60,7 +61,20 @@ class Owner(commands.Cog):
         else:
             await ctx.message.add_reaction("✅")
 
-    # Source: https://github.com/Rapptz/RoboDanny
+    async def run_process(self, command):
+        try:
+            process = await asyncio.create_subprocess_shell(
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            )
+            result = await process.communicate()
+        except NotImplementedError:
+            process = subprocess.Popen(
+                command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            )
+            result = await self.bot.loop.run_in_executor(None, process.communicate)
+
+        return [output.decode() for output in result]
+
     _GIT_PULL_REGEX = re.compile(r"\s*(?P<filename>.+?)\s*\|\s*[0-9]+\s*[+-]+")
 
     def find_modules_from_git(self, output):
@@ -86,6 +100,7 @@ class Owner(commands.Cog):
         except commands.ExtensionNotLoaded:
             self.bot.load_extension(module)
 
+    # Source: https://github.com/Rapptz/RoboDanny
     @_reload.command(name="all", hidden=True)
     async def _reload_all(self, ctx):
         """Reloads all modules, while pulling from git."""
