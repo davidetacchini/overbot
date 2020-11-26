@@ -23,10 +23,11 @@ class Log(commands.Cog):
 
     async def send_command_log(self, ctx):
         """Command logs on OverBot support server."""
-        if self.bot.debug:
+        if self.bot.debug or ctx.command.cog_name == "Owner":
             return
         embed = discord.Embed(color=self.bot.color, timestamp=self.bot.timestamp)
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=str(ctx.guild), icon_url=ctx.guild.icon_url)
         embed.add_field(name="Message", value=ctx.message.content)
         await self.webhook.send(embed=embed)
 
@@ -41,6 +42,7 @@ class Log(commands.Cog):
             embed.set_thumbnail(url=guild.icon_url)
         embed.add_field(name="Members", value=guild.member_count)
         embed.add_field(name="Region", value=guild.region)
+        embed.add_field(name="Shard ID", value=guild.shard_id + 1)
         embed.set_footer(text=f"ID: {guild.id}")
         await self.webhook.send(embed=embed)
 
