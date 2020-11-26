@@ -273,7 +273,7 @@ class Owner(commands.Cog):
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
 
     @commands.command(hidden=True)
-    async def insert_guild(self, ctx):
+    async def insert_guilds(self, ctx):
         async with ctx.typing():
             for guild in self.bot.guilds:
                 if not await self.bot.pool.fetchrow(
