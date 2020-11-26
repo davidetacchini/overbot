@@ -19,15 +19,16 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    async def cog_check(self, ctx):
+        return await self.bot.is_owner(ctx.author)
+
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def clr(self, ctx, amount: int = 1):
         """Remove the given amount of messages."""
         amount += 1
         await ctx.channel.purge(limit=amount)
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def load(self, ctx, *, module: str):
         """Loads a module."""
         try:
@@ -38,7 +39,6 @@ class Owner(commands.Cog):
             await ctx.message.add_reaction("✅")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def unload(self, ctx, *, module: str):
         """Unloads a module."""
         try:
@@ -143,14 +143,12 @@ class Owner(commands.Cog):
             await ctx.message.add_reaction("✅")
 
     @commands.command(aliases=["kys", "die"], hidden=True)
-    @commands.is_owner()
     async def shutdown(self, ctx):
         """Kills the bot session."""
         await ctx.send("Successfully gone offline.")
         await self.bot.logout()
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def runas(self, ctx, member: discord.Member, *, command: str):
         """Run a command as if you were the user."""
         msg = copy.copy(ctx.message)
@@ -169,7 +167,6 @@ class Owner(commands.Cog):
         return content.strip("` \n")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def exc(self, ctx, *, body: str):
         """Evaluates a code."""
         env = {
@@ -212,7 +209,6 @@ class Owner(commands.Cog):
                 await ctx.send(f"```py\n{value}{ret}\n```")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def speedtest(self, ctx):
         """Run a speedtest directly from Discord."""
         msg = await ctx.send("Running the speedtest...")
@@ -223,7 +219,6 @@ class Owner(commands.Cog):
         await msg.edit(content=f"""```prolog\n{ret}```""")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def sql(self, ctx, *, query: str):
         """Run a query."""
         query = self.cleanup_code(query)
@@ -240,7 +235,6 @@ class Owner(commands.Cog):
                 await ctx.send("There are no results.")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def admin(self, ctx):
         """Display an admin panel."""
         try:
@@ -262,7 +256,6 @@ class Owner(commands.Cog):
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def insert_guild(self, ctx):
         async with ctx.typing():
             for guild in self.bot.guilds:
@@ -277,7 +270,6 @@ class Owner(commands.Cog):
             await ctx.send("""```css\nGuilds successfully inserted.```""")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def insert_profiles(self, ctx):
         async with ctx.typing():
             async with aiosqlite.connect("main.sqlite") as conn:
@@ -293,7 +285,6 @@ class Owner(commands.Cog):
             await ctx.send("""```css\nProfiles successfully inserted.```""")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def insert_prefixes(self, ctx):
         async with ctx.typing():
             async with aiosqlite.connect("main.sqlite") as conn:
