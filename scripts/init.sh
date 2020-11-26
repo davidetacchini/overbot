@@ -27,7 +27,7 @@ if [ -f "./config.example.py" ]; then
 fi
 
 printf "Copying service file to /etc/systemd/system/overcord.service...\n\n"
-sed -i "s:/path/to/Overcord/:$(pwd)/:" overcord.service
+sed -i "s:/path/to/overcord/:$(pwd)/:" overcord.service
 sed -i "s:username:$(whoami):" overcord.service
 cp overcord.service /etc/systemd/system/overcord.service
 
