@@ -7,9 +7,9 @@ from config import main_color
 
 
 class Context(commands.Context):
-    async def prompt(self, message, timeout=30, user=None, cancel="❌", confirm="✅"):
+    async def prompt(self, message, timeout=30, user=None):
         user = user or self.author
-        reactions = (cancel, confirm)
+        reactions = ("❌", "✅")
 
         if user.id == self.bot.user.id:
             return False
@@ -36,3 +36,14 @@ class Context(commands.Context):
         await self.bot.cleanup(msg)
 
         return bool(reactions.index(str(reaction.emoji)))
+
+    def tick(self, opt, label=None):
+        lookup = {
+            True: "<:greenTick:330090705336664065>",
+            False: "<:redTick:330090723011592193>",
+            None: "<:greyTick:563231201280917524>",
+        }
+        emoji = lookup.get(opt, "<:redTick:330090723011592193>")
+        if label is not None:
+            return f"{emoji}: {label}"
+        return emoji
