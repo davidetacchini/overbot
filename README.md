@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://cdn.discordapp.com/attachments/646617232931160084/705411294596956293/overbot-banner_copy.png" alt="Overcord Banner" width="300"/>
+  <img src="https://cdn.discordapp.com/attachments/646617232931160084/705411294596956293/overbot-banner_copy.png" alt="OverBot Banner" width="300"/>
 </p>
 <h2 align="center">The best Overwatch bot for Discord.</h2>
 
 <p align="center">
-  <a href="https://github.com/davidetacchini/overcord/actions" traget="_blank">
-    <img src="https://github.com/davidetacchini/overcord/workflows/Lint/badge.svg" alt="Lint Badge">
+  <a href="https://github.com/davidetacchini/overbot/actions" traget="_blank">
+    <img src="https://github.com/davidetacchini/overbot/workflows/Lint/badge.svg" alt="Lint Badge">
   </a>
   <a href="https://github.com/psf/black" traget="_blank">
     <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
@@ -26,5 +26,5 @@
 
 Contributing
 ------
-Overcord uses [black](https://pypi.org/project/black/), [isort](https://pypi.org/project/isort/) and [flake8](https://pypi.org/project/flake8/) as code style.
-If you want to contribute to Overcord, please run `make format` before submitting any pull request.
+OverBot uses [black](https://pypi.org/project/black/), [isort](https://pypi.org/project/isort/) and [flake8](https://pypi.org/project/flake8/) as code style.
+If you want to contribute to OverBot, please run `make format` before submitting any pull request.

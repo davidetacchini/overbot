@@ -3,8 +3,8 @@ Description=The Overwatch bot for Discord
 
 [Service]
 Type=simple
-WorkingDirectory=/path/to/overcord/
-ExecStart=/usr/bin/python3 /path/to/overcord/bot.py
+WorkingDirectory=/path/to/overbot/
+ExecStart=/usr/bin/python3 /path/to/overbot/bot.py
 User=username
 Restart=always
 RestartSec=30
