@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import suppress
 
 import discord
 from discord.ext import commands
@@ -17,7 +18,7 @@ PLATFORMS = {
 
 
 class UserHasNoProfile(Exception):
-    """Exception raised when tagged user has no profile connected."""
+    """Exception raised when mentioned user has no profile connected."""
 
     def __init__(self, username):
         message = f"{username} hasn't linked a profile yet."
@@ -37,10 +38,13 @@ class Profile(commands.Cog):
 
     async def add_reactions(self, msg):
         for r in self.reactions:
-            await msg.add_reaction(r)
+            try:
+                await msg.add_reaction(r)
+            except Exception:
+                return
 
     async def get_platform(self, ctx, msg):
-        self.bot.loop.create_task(self.add_reactions(msg))
+        self.task = self.bot.loop.create_task(self.add_reactions(msg))
 
         def check(r, u):
             return (
@@ -96,8 +100,12 @@ class Profile(commands.Cog):
             await ctx.send("Enter your PSN ID:")
         elif platform == "xbl":
             await ctx.send("Enter your XBOX gamertag:")
-        else:
+        elif platform == "nintendo-switch":
             await ctx.send("Enter your Nintendo Switch ID:")
+        else:
+            with suppress(Exception):
+                self.task.cancel()
+            return
 
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
