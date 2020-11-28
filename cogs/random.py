@@ -37,6 +37,7 @@ class Random(commands.Cog):
         async with self.bot.session.get(url) as r:
             return await r.json()
 
+    @staticmethod
     def get_hero_color(hero):
         if hero["role"] == "tank":
             return 0xFAA528
@@ -44,6 +45,7 @@ class Random(commands.Cog):
             return 0xE61B23
         return 0x13A549
 
+    @staticmethod
     def get_by_category(items, path, category):
         return [i for i in items if i[path] == category]
 
@@ -70,7 +72,8 @@ class Random(commands.Cog):
         )
         return embed
 
-    def random_role(self):
+    @staticmethod
+    def random_role():
         rand = secrets.choice(ROLES)
         embed = discord.Embed(color=rand["color"])
         embed.title = str(rand["name"]).upper()
@@ -123,7 +126,8 @@ class Random(commands.Cog):
             await ctx.send(
                 f'Invalid category. Use "{ctx.prefix}help random hero" to see the available categories.'
             )
-        except Exception:
+        except Exception as exc:
+            await ctx.send(exc)
             await ctx.send("Something bad happened. Please try again.")
         else:
             await ctx.send(embed=embed)
