@@ -152,7 +152,7 @@ class Bot(commands.AutoShardedBot):
         subcommands = getattr(command, "commands")
         embed = discord.Embed(color=self.color)
         embed.title = f"{str(command).capitalize()} Commands"
-        embed.description = f'Use "{ctx.prefix}help {str(command)} [command]" for more information on a command'
+        embed.description = f'Use "{ctx.prefix}help {str(command)} [command]" for more info on a command'
         embed.set_footer(
             text="Replace [command] with one of the commands listed above."
         )
