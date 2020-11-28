@@ -12,7 +12,6 @@ from contextlib import suppress, redirect_stdout
 from subprocess import PIPE
 
 import discord
-import aiosqlite
 from discord.ext import commands
 
 
@@ -271,52 +270,6 @@ class Owner(commands.Cog):
             await ctx.send(embed=embed)
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
-
-    @commands.command(hidden=True)
-    async def insert_guilds(self, ctx):
-        async with ctx.typing():
-            for guild in self.bot.guilds:
-                if not await self.bot.pool.fetchrow(
-                    "SELECT * FROM server WHERE id=$1;", guild.id
-                ):
-                    await self.bot.pool.execute(
-                        'INSERT INTO server (id, "prefix") VALUES ($1, $2);',
-                        guild.id,
-                        self.bot.prefix,
-                    )
-            await ctx.send("""```css\nGuilds successfully inserted.```""")
-
-    @commands.command(hidden=True)
-    async def insert_profiles(self, ctx):
-        async with ctx.typing():
-            async with aiosqlite.connect("main.sqlite") as conn:
-                async with conn.execute("SELECT * FROM profiles") as pool:
-                    rows = await pool.fetchall()
-                    for row in rows:
-                        await self.bot.pool.execute(
-                            'INSERT INTO profile (id, "platform", "name") VALUES ($1, $2, $3)',
-                            row[0],
-                            row[1],
-                            row[2],
-                        )
-            await ctx.send("""```css\nProfiles successfully inserted.```""")
-
-    @commands.command(hidden=True)
-    async def insert_prefixes(self, ctx):
-        async with ctx.typing():
-            async with aiosqlite.connect("main.sqlite") as conn:
-                async with conn.execute("SELECT * FROM prefixes") as pool:
-                    rows = await pool.fetchall()
-                    for row in rows:
-                        try:
-                            await self.bot.pool.execute(
-                                "UPDATE server SET prefix=$1 WHERE id=$2",
-                                row[1],
-                                int(row[0]),
-                            )
-                        except Exception as exc:
-                            print(exc)
-            await ctx.send("""```css\nPrefixes successfully updated.```""")
 
 
 def setup(bot):
