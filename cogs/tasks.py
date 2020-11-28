@@ -91,6 +91,8 @@ class Tasks(commands.Cog):
                     id=g.id,
                     name=str(g),
                     icon=str(g.icon_url),
+                    region=str(g.region),
+                    members=g.member_count,
                     commands_runned=guild["commands_runned"],
                 )
             )
