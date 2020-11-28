@@ -33,17 +33,10 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def get_heroes(self):
-        url = self.bot.config.random["hero"]
+    async def get(self, url):
         async with self.bot.session.get(url) as r:
             return await r.json()
 
-    async def get_maps(self):
-        url = self.bot.config.random["map"]
-        async with self.bot.session.get(url) as r:
-            return await r.json()
-
-    @staticmethod
     def get_hero_color(hero):
         if hero["role"] == "tank":
             return 0xFAA528
@@ -51,17 +44,17 @@ class Random(commands.Cog):
             return 0xE61B23
         return 0x13A549
 
-    def get_by_category(self, items, path, category):
+    def get_by_category(items, path, category):
         return [i for i in items if i[path] == category]
 
     async def random_hero(self, category):
-        heroes = await self.get_heroes()
+        heroes = await self.get(self.bot.config.random["hero"])
 
         if not category:
             hero = secrets.choice(heroes)
         else:
-            category_heroes = self.get_by_category(heroes, "role", category)
-            hero = secrets.choice(category_heroes)
+            categorized_heroes = self.get_by_category(heroes, "role", category)
+            hero = secrets.choice(categorized_heroes)
 
         embed = discord.Embed(color=self.get_hero_color(hero))
         embed.title = hero["name"].upper()
@@ -85,13 +78,13 @@ class Random(commands.Cog):
         return embed
 
     async def random_map(self, category):
-        maps = await self.get_maps()
+        maps = await self.get(self.bot.config.random["map"])
 
         if not category:
             _map = secrets.choice(maps)
         else:
-            category_heroes = self.get_by_category(maps, "type", category)
-            _map = secrets.choice(category_heroes)
+            categorized_maps = self.get_by_category(maps, "type", category)
+            _map = secrets.choice(categorized_maps)
 
         embed = discord.Embed()
         embed.title = _map["name"]["en_US"]
