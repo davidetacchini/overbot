@@ -271,6 +271,25 @@ class Owner(commands.Cog):
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
 
+    @commands.command(hidden=True)
+    async def backup(self, ctx):
+        """Generate a backup file of the database."""
+        msg = await ctx.send("Generating backup file...")
+        username = self.bot.config.database.get("username")
+        database = self.bot.config.database.get("database")
+        try:
+            process = await asyncio.create_subprocess_shell(
+                f"pg_dump -U {username} {database} > backup.sql",
+                stdin=None,
+                stderr=PIPE,
+                stdout=PIPE,
+            )
+            await ctx.send(file=discord.File("./backup.sql"), delete_after=15)
+        except Exception as exc:
+            await msg.edit(content=f"""```prolog\n{exc}```""")
+        finally:
+            await process.terminate()
+
 
 def setup(bot):
     bot.add_cog(Owner(bot))
