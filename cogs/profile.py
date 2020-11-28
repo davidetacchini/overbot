@@ -20,7 +20,7 @@ class UserHasNoProfile(Exception):
     """Exception raised when tagged user has no profile connected."""
 
     def __init__(self, username):
-        message = f"{username} hasn't connected a profile yet."
+        message = f"{username} hasn't linked a profile yet."
         super().__init__(message)
 
 
