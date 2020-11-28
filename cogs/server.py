@@ -27,7 +27,7 @@ class Server(commands.Cog):
 
         `[prefix]` - The new server prefix to use.
 
-        You must have Manage Server permissions to change the prefix.
+        You must have Manage Server permission to use this command.
         """
         if prefix:
             if ctx.author.guild_permissions.manage_guild:
