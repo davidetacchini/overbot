@@ -28,7 +28,7 @@ class UserHasNoProfile(Exception):
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.reactions = {
+        self._reactions = {
             "<:battlenet:679469162724196387>": "pc",
             "<:psn:679468542541693128>": "psn",
             "<:xbl:679469487623503930>": "xbl",
@@ -37,7 +37,7 @@ class Profile(commands.Cog):
         }
 
     async def add_reactions(self, msg):
-        for r in self.reactions:
+        for r in self._reactions:
             try:
                 await msg.add_reaction(r)
             except Exception:
@@ -49,7 +49,7 @@ class Profile(commands.Cog):
         def check(r, u):
             return (
                 u == ctx.author
-                and str(r.emoji) in self.reactions
+                and str(r.emoji) in self._reactions
                 and r.message.id == msg.id
             )
 
@@ -63,7 +63,7 @@ class Profile(commands.Cog):
             return
             # return to avoid displaying an UnboundLocalError if no choice is given
 
-        return self.reactions.get(str(reaction.emoji))
+        return self._reactions.get(str(reaction.emoji))
 
     @commands.group(invoke_without_command=True)
     async def profile(self, ctx, command: str = None):
@@ -136,7 +136,6 @@ class Profile(commands.Cog):
         """Unlink your Overwatch profile from your Discord account."""
         if not await ctx.prompt(
             "Are you sure you want to unlink your Overwatch profile from your Discord account?"
-            f' You can always add a new one by running "{ctx.prefix}profile link".'
         ):
             return
 
@@ -210,10 +209,9 @@ class Profile(commands.Cog):
         profile = await self.bot.pool.fetchrow(
             "SELECT platform, name FROM profile WHERE id=$1", user.id
         )
-        if profile:
-            return profile
-        else:
+        if not profile:
             raise UserHasNoProfile(user)
+        return profile
 
     @has_profile()
     @profile.command(aliases=["rating"])
