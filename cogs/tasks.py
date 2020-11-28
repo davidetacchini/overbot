@@ -183,8 +183,12 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         title, link, img, date = await self.bot.get_overwatch_news(1)
+        # Get the latest news id from the URL
         news_id = re.search(r"\d+", link[0]).group(0)
 
+        # Return if news_id it's equals to the news_id stored
+        # in the database. If it's equals it means that we
+        # already sent that specific news.
         if int(news_id) == await self.bot.pool.fetchval(
             "SELECT news_id FROM news WHERE id=1;"
         ):
@@ -204,6 +208,8 @@ class Tasks(commands.Cog):
 
         await channel.send(embed=embed)
 
+        # Once the latest news has been sent, we update the older
+        # news_id stored on the database with the new one.
         await self.bot.pool.execute(
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
         )
