@@ -25,6 +25,8 @@ class Server(commands.Cog):
     ):
         """Either see the prefix or change it.
 
+        `[prefix]` - The new server prefix to use.
+
         You must have Manage Server permissions to change the prefix.
         """
         if prefix:
