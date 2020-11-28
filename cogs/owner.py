@@ -229,9 +229,12 @@ class Owner(commands.Cog):
         """Run a speedtest directly from Discord."""
         msg = await ctx.send("Running the speedtest...")
         process = await asyncio.create_subprocess_shell(
-            "speedtest-cli --simple", stdin=None, stderr=PIPE, stdout=PIPE
+            "speedtest-cli --simple",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
         )
-        ret = (await process.stdout.read()).decode("utf-8").strip()
+        ret = await process.stdout.read()
+        ret = ret.decode("utf-8").strip()
         await msg.edit(content=f"""```prolog\n{ret}```""")
 
     @commands.command(hidden=True)
