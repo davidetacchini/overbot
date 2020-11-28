@@ -181,32 +181,27 @@ class Tasks(commands.Cog):
 
         await self.bot.wait_until_ready()
 
-        async with self.bot.session.get(self.bot.config.overwatch["news"]) as r:
-            content = await r.read()
-        page = BeautifulSoup(content, features="html.parser")
-        news = page.find("section", {"class": "NewsHeader-featured"}).findChild()
-        # get the news ID from the URL
-        news_id = re.search(r"\d+", news["href"]).group(0)
+        title, link, img, date = await self.bot.get_overwatch_news(1)
+        news_id = re.search(r"\d+", link[0]).group(0)
 
         if int(news_id) == await self.bot.pool.fetchval(
             "SELECT news_id FROM news WHERE id=1;"
         ):
             return
 
-        title = news.find("h1", {"class": "Card-title"})
-        img = news.find("div", {"class", "Card-thumbnail"})
-        img_url = img["style"].split("url(")[1][:-1]
-        date = news.find("p", {"class": "Card-date"})
-
         embed = discord.Embed()
-        embed.title = title.get_text()
-        embed.url = "https://playoverwatch.com" + news["href"]
+        embed.title = title[0]
+        embed.url = link[0]
         embed.set_author(name="Blizzard Entertainment")
-        embed.set_footer(text=date.get_text())
-        embed.set_image(url=f"https:{img_url}")
+        embed.set_image(url=f"https:{img[0]}")
+        embed.set_footer(text=date[0])
 
-        c = self.bot.get_channel(self.bot.config.news_channel)
-        await c.send(embed=embed)
+        channel = self.bot.get_channel(self.bot.config.news_channel)
+
+        if not channel:
+            return
+
+        await channel.send(embed=embed)
 
         await self.bot.pool.execute(
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
