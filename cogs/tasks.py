@@ -4,7 +4,6 @@ import platform
 import distro
 import psutil
 import discord
-from bs4 import BeautifulSoup
 from discord.ext import tasks, commands
 
 
@@ -22,7 +21,7 @@ class Tasks(commands.Cog):
         latencies = dict(s for s in self.bot.latencies)
         try:
             shards = dict((k + 1, round(v * 1000)) for k, v in latencies.items())
-        except Exception:
+        except OverflowError:
             pass
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
