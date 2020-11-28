@@ -9,7 +9,6 @@ import importlib
 import traceback
 import subprocess
 from contextlib import suppress, redirect_stdout
-from subprocess import PIPE
 
 import discord
 from discord.ext import commands
@@ -278,18 +277,18 @@ class Owner(commands.Cog):
     async def backup(self, ctx):
         """Generate a backup file of the database."""
         msg = await ctx.send("Generating backup file...")
-        username = self.bot.config.database.get("username")
-        database = self.bot.config.database.get("database")
         try:
             process = await asyncio.create_subprocess_shell(
-                f"pg_dump -U {username} {database} > backup.sql",
-                stdin=None,
-                stderr=PIPE,
-                stdout=PIPE,
+                "pg_dump -U davide overbot > backup.sql",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
             )
-            await ctx.send(file=discord.File("./backup.sql"), delete_after=15)
+            await msg.add_reaction("✅")
         except Exception as exc:
             await msg.edit(content=f"""```prolog\n{exc}```""")
+        else:
+            await asyncio.sleep(2)  # wait for the file to be created or updated.
+            await ctx.send(file=discord.File("./backup.sql"), delete_after=15)
         finally:
             await process.terminate()
 
