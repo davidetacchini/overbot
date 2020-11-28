@@ -27,22 +27,26 @@ class UserHasNoProfile(Exception):
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.reactions = {
+            "<:battlenet:679469162724196387>": "pc",
+            "<:psn:679468542541693128>": "psn",
+            "<:xbl:679469487623503930>": "xbl",
+            "<:nsw:752653766377078817>": "nintendo-switch",
+            "❌": "close",
+        }
+
+    async def add_reactions(self, msg):
+        for r in self.reactions:
+            await msg.add_reaction(r)
 
     async def get_platform(self, ctx, msg):
-        reactions = [
-            "<:battlenet:679469162724196387>",
-            "<:psn:679468542541693128>",
-            "<:xbl:679469487623503930>",
-            "<:nsw:752653766377078817>",
-            "❌",
-        ]
-
-        for r in reactions:
-            await msg.add_reaction(r)
+        self.bot.loop.create_task(self.add_reactions(msg))
 
         def check(r, u):
             return (
-                u == ctx.author and str(r.emoji) in reactions and r.message.id == msg.id
+                u == ctx.author
+                and str(r.emoji) in self.reactions
+                and r.message.id == msg.id
             )
 
         try:
@@ -55,15 +59,7 @@ class Profile(commands.Cog):
             return
             # return to avoid displaying an UnboundLocalError if no choice is given
 
-        if str(reaction.emoji) == "<:battlenet:679469162724196387>":
-            return "pc"
-        elif str(reaction.emoji) == "<:psn:679468542541693128>":
-            return "psn"
-        elif str(reaction.emoji) == "<:xbl:679469487623503930>":
-            return "xbl"
-        elif str(reaction.emoji) == "<:nsw:752653766377078817>":
-            return "nintendo-switch"
-        return
+        return self.reactions.get(str(reaction.emoji))
 
     @commands.group(invoke_without_command=True)
     async def profile(self, ctx, command: str = None):
@@ -163,7 +159,7 @@ class Profile(commands.Cog):
                 f'Profile successfully updated. Run "{ctx.prefix}profile info" to see the changes.'
             )
 
-    def resolved_name(self, platform):
+    def resolved_platform_name(self, platform):
         if platform == "pc":
             return "Battletag"
         elif platform == "psn":
@@ -178,7 +174,7 @@ class Profile(commands.Cog):
         embed = discord.Embed(color=PLATFORMS[platform][1])
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         embed.add_field(name="Platform", value=f"{PLATFORMS[platform][0]} {platform}")
-        embed.add_field(name=self.resolved_name(platform), value=name)
+        embed.add_field(name=self.resolved_platform_name(platform), value=name)
         return embed
 
     @has_profile()
@@ -193,6 +189,8 @@ class Profile(commands.Cog):
             if profile["platform"] == "pc":
                 # Replace '-' with '#' only if the platform is PC. UI purpose only.
                 name = profile["name"].replace("-", "#")
+            else:
+                name = profile["name"]
             embed = self.profile_info(ctx, profile["platform"], name)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
