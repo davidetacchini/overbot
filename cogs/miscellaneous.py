@@ -203,11 +203,11 @@ class Miscellaneous(commands.Cog):
                     zip(titles, links, imgs, dates), start=1
                 ):
                     embed = discord.Embed()
-                    embed.set_author(name="Blizzard Entertainment")
                     embed.title = title
                     embed.url = link
+                    embed.set_author(name="Blizzard Entertainment")
                     embed.set_image(url=f"https:{img}")
-                    embed.set_footer(text=f"News {i}/{len(titles)} - {date}")
+                    embed.set_footer(text=f"News {i}/{len(titles)} • {date}")
                     pages.append(embed)
                 await self.bot.paginator.Paginator(pages=pages).paginate(ctx)
 
@@ -250,7 +250,7 @@ class Miscellaneous(commands.Cog):
     async def leaderboard(self, ctx):
         """Displays a leaderboard of the 5 most active servers.
 
-        The leaderboard is based on commands runned.
+        It is based on commands runned.
         """
         async with ctx.typing():
             guilds = await self.bot.pool.fetch(
@@ -259,6 +259,8 @@ class Miscellaneous(commands.Cog):
             )
             embed = discord.Embed()
             embed.title = "Five Most Active Servers"
+            embed.url = self.bot.config.website
+            embed.set_footer(text="Tracking command usage since • 11/26/2020")
 
             board = ""
             for i, guild in enumerate(guilds, start=1):
