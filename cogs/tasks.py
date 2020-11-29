@@ -15,14 +15,32 @@ class Tasks(commands.Cog):
         self.statistics.start()
         self.send_overwatch_news.start()
 
+    def get_shards(self):
+        # Looping from 0 to 9 since OverBot has 2 shards only.
+        # I could've done range(2) but this is just for more
+        # flexibility. An infinite loop could've been used.
+        shards = []
+        for i in range(10):
+            shard = self.bot.get_shard(i)
+            if not shard:
+                break
+            guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
+            shards.append(
+                dict(
+                    id=shard.id + 1,
+                    latency=round(shard.latency * 1000),
+                    guild_count=len(guilds),
+                )
+            )
+        return shards
+
     async def get_statistics(self):
         total_commands = await self.bot.total_commands()
         total_members = sum(guild.member_count for guild in self.bot.guilds)
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
 
-        latencies = dict(s for s in self.bot.latencies)
         with suppress(OverflowError):
-            shards = dict((k + 1, round(v * 1000)) for k, v in latencies.items())
+            shards = self.get_shards()
 
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
