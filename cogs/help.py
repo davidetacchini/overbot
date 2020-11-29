@@ -97,14 +97,14 @@ class BotHelp(menus.ListPageSource):
     async def format_page(self, menu, cogs):
         prefix = menu.ctx.prefix
         description = (
+            f"[Support server]({support}) • [View commands online]({website}/commands)\n"
             f'Use "{prefix}help [command]" for more info on a command\n'
-            f'Use "{prefix}help [category]" for more info on a category\n'
-            f"[Support Server]({support}) • [View commands online]({website}/commands)\n"
+            f'Use "{prefix}help [category]" for more info on a category'
         )
 
         embed = discord.Embed(color=main_color)
+        embed.title = "Help"
         embed.description = description
-        embed.set_author(name="Help", icon_url=self.bot.user.avatar_url)
 
         for cog in cogs:
             commands = self.commands.get(cog)
