@@ -97,12 +97,7 @@ class Random(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def random(self, ctx, command: str = None):
-        """Returns a random hero or role, based on your choice.
-
-        Choices
-        - Hero: random hero
-        - Role: random role
-        """
+        """Returns a random hero, role or map."""
         embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
@@ -113,7 +108,7 @@ class Random(commands.Cog):
 
         `[category]` - The category to get a random hero from.
 
-        Available categories
+        Categories
         - Damage (dps)
         - Support (heal, healear)
         - Tank
@@ -150,7 +145,7 @@ class Random(commands.Cog):
 
         `[category]` - The category to get a random map from.
 
-        Available categories
+        Categories
         - Assault
         - Control
         - Escort
