@@ -124,8 +124,8 @@ class Owner(commands.Cog):
             return
 
         statuses = []
-        for is_submodule, module in modules:
-            if is_submodule:
+        for to_do_first, module in modules:
+            if to_do_first:
                 try:
                     actual_module = sys.modules[module]
                 except KeyError:
