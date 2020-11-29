@@ -1,5 +1,3 @@
-import asyncio
-
 import aiohttp
 
 import config
@@ -67,7 +65,6 @@ class Data:
     def __init__(self, **kwargs):
         self.platform = kwargs.get("platform", None)
         self.name = kwargs.get("name", None)
-        self.loop = asyncio.get_event_loop()
 
     @property
     def account_url(self):
@@ -125,7 +122,7 @@ class Data:
     async def response(self):
         """Returns the aiohttp response."""
         url = await self.url()
-        async with aiohttp.ClientSession(loop=self.loop) as s:
+        async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
                 return await self.resolve_response(r)
 
