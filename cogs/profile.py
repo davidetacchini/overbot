@@ -60,15 +60,13 @@ class Profile(commands.Cog):
             await msg.delete()
         except asyncio.TimeoutError:
             await ctx.send("You didn't choose any platform.")
-            return
-            # return to avoid displaying an UnboundLocalError if no choice is given
 
         return self._reactions.get(str(reaction.emoji))
 
     @commands.group(invoke_without_command=True)
     async def profile(self, ctx, command: str = None):
         """Displays a list with all profile's subcommands."""
-        embed = self.bot.get_subcommands(ctx, self.bot.get_command(ctx.command.name))
+        embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @has_no_profile()
@@ -221,7 +219,7 @@ class Profile(commands.Cog):
 
         `[user]` - Must be a mention or the ID of a Discord member.
 
-        If no user is passed, the profile of the author of the message will be used.
+        If no user is passed, the profile of the author of the message is used.
         """
         async with ctx.typing():
             user = user or ctx.author
@@ -262,7 +260,7 @@ class Profile(commands.Cog):
 
         `[user]` - Must be a mention or the ID of a Discord member.
 
-        If no user is passed, the profile of the author of the message will be used.
+        If no user is passed, the profile of the author of the message is used.
         """
         async with ctx.typing():
             user = user or ctx.author
@@ -306,7 +304,7 @@ class Profile(commands.Cog):
         `<hero>` - The name of the hero you want to see stats for.
         `[user]` - Must be a mention or the ID of a Discord member.
 
-        If no user is passed, the profile of the author of the message will be used.
+        If no user is passed, the profile of the author of the message is used.
         """
         async with ctx.typing():
             user = user or ctx.author

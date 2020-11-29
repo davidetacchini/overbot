@@ -103,7 +103,7 @@ class Random(commands.Cog):
         - Hero: random hero
         - Role: random role
         """
-        embed = self.bot.get_subcommands(ctx, self.bot.get_command(ctx.command.name))
+        embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @random.command(invoke_without_command=True)
@@ -118,7 +118,7 @@ class Random(commands.Cog):
         - Support (heal, healear)
         - Tank
 
-        If no category is passed, a random hero will be chosen from all the categories.
+        If no category is passed, a random hero is chosen from all categories.
         """
         try:
             embed = await self.random_hero(category)
@@ -156,7 +156,7 @@ class Random(commands.Cog):
         - Escort
         - Hybrid
 
-        If no category is passed, a random map will be chosen from all the categories.
+        If no category is passed, a random map is chosen from all categories.
         """
         try:
             embed = await self.random_map(category)
