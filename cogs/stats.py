@@ -111,7 +111,7 @@ class Statistics(commands.Cog):
     ):
         """Returns player both quick play and competitive statistics for a given hero.
 
-        `<Hero>` - The name of the hero you want to see stats for.
+        `<hero>` - The name of the hero you want to see stats for.
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
 
