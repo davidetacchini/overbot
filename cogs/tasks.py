@@ -1,5 +1,6 @@
 import re
 import platform
+from contextlib import suppress
 
 import distro
 import psutil
@@ -18,15 +19,16 @@ class Tasks(commands.Cog):
         total_commands = await self.bot.total_commands()
         total_members = sum(guild.member_count for guild in self.bot.guilds)
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
+
         latencies = dict(s for s in self.bot.latencies)
-        try:
+        with suppress(OverflowError):
             shards = dict((k + 1, round(v * 1000)) for k, v in latencies.items())
-        except OverflowError:
-            pass
+
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
         pg_version = f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
         py_version = platform.python_version()
+
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
         cpu_perc = f"{psutil.cpu_percent()}%"
@@ -62,17 +64,16 @@ class Tasks(commands.Cog):
     async def get_commands(self):
         all_commands = []
         for command in self.bot.walk_commands():
-            current_command = self.bot.get_command(command.qualified_name)
-            if current_command.cog_name == "Owner":
+            if command.hidden:
                 continue
             all_commands.append(
                 dict(
-                    cog=current_command.cog_name,
-                    name=current_command.qualified_name,
-                    aliases=current_command.aliases or None,
-                    signature=current_command.signature or None,
-                    description=getattr(current_command.callback, "__doc__"),
-                    brief=current_command.brief,
+                    cog=command.cog_name,
+                    name=command.qualified_name,
+                    aliases=command.aliases or None,
+                    signature=command.signature or None,
+                    short_desc=command.short_doc or "No help found...",
+                    long_desc=command.help or "No help found...",
                 )
             )
         return all_commands
