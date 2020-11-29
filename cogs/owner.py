@@ -116,7 +116,7 @@ class Owner(commands.Cog):
 
         modules = self.find_modules_from_git(stdout)
         updated_modules = "\n".join(
-            f"{index}. `{module}`" for index, module in enumerate(modules, start=1)
+            f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
         if not await ctx.prompt(
             f"This will update the following modules, are you sure?\n{updated_modules}"
