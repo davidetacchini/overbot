@@ -7,7 +7,7 @@ class Links(commands.Cog):
 
     @commands.command()
     async def support(self, ctx):
-        """Returns the official support server."""
+        """Returns the official bot support server invite link."""
         await ctx.send(self.bot.config.support)
 
     @commands.command()
@@ -22,7 +22,7 @@ class Links(commands.Cog):
 
     @commands.command()
     async def donate(self, ctx):
-        """Returns the PayPal of the developer."""
+        """Returns the developer's PayPal."""
         await ctx.send(self.bot.config.paypal)
 
     @commands.command(aliases=["git"])
