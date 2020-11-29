@@ -280,7 +280,7 @@ class Owner(commands.Cog):
         msg = await ctx.send("Generating backup file...")
         try:
             process = await asyncio.create_subprocess_shell(
-                "pg_dump -U davide overbot > backup.sql",
+                "pg_dump -U davide overbot > ../backup.sql",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
@@ -289,7 +289,7 @@ class Owner(commands.Cog):
             await msg.edit(content=f"""```prolog\n{exc}```""")
         else:
             await asyncio.sleep(2)  # wait for the file to be created or updated.
-            await ctx.send(file=discord.File("./backup.sql"), delete_after=15)
+            await ctx.send(file=discord.File("../backup.sql"), delete_after=15)
         finally:
             await process.terminate()
 
