@@ -60,7 +60,7 @@ class TooManyAccounts(RequestError):
 
 
 class Data:
-    __slots__ = ("platform", "name", "loop")
+    __slots__ = ("platform", "name")
 
     def __init__(self, **kwargs):
         self.platform = kwargs.get("platform", None)
