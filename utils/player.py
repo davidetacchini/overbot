@@ -104,7 +104,6 @@ class Player:
             return "<:grandmaster:632281128966946826>"
 
     def rank(self):
-        """Returns players rank."""
         embed = discord.Embed(color=self.color)
         embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
 
@@ -158,7 +157,6 @@ class Player:
             embed.add_field(name="Competitive", value=self.add_space(c_t))
 
     def statistics(self, ctx):
-        """Returns competitive and/or quickplay player stats."""
         keys, quickplay, competitive = self.get_statistics()
 
         for i, key in enumerate(keys, start=1):
