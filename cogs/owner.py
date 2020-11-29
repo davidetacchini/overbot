@@ -84,11 +84,12 @@ class Owner(commands.Cog):
                 continue
 
             if root.startswith("cogs/"):
-                # A submodule is a directory inside the main cog directory for
-                # my purposes
-                ret.append((root.count("/") - 1, root.replace("/", ".")))
+                ret.append((False, root.replace("/", ".")))
 
-        # For reload order, the submodules should be reloaded first
+            if root.startswith("utils/") or root.startswith("classes/"):
+                ret.append((True, root.replace("/", ".")))
+
+        # Reload 'utils' and 'classes' modules before reloading 'cogs' ones.
         ret.sort(reverse=True)
         return ret
 
@@ -114,11 +115,11 @@ class Owner(commands.Cog):
             return await ctx.send(stdout)
 
         modules = self.find_modules_from_git(stdout)
-        mods_text = "\n".join(
-            f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
+        updated_modules = "\n".join(
+            f"{index}. `{module}`" for index, module in enumerate(modules, start=1)
         )
         if not await ctx.prompt(
-            f"This will update the following modules, are you sure?\n{mods_text}"
+            f"This will update the following modules, are you sure?\n{updated_modules}"
         ):
             return
 
