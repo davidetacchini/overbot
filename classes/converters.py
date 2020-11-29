@@ -3,7 +3,7 @@ from discord.ext import commands
 XBOX = ("xbl", "xbox")
 PLAYSTATION = ("ps", "psn", "play", "playstation")
 NINTENDO_SWITCH = ("nsw", "switch", "nintendo-switch")
-PLATFORMS = XBOX + PLAYSTATION + NINTENDO_SWITCH
+PLATFORMS = (XBOX + PLAYSTATION + NINTENDO_SWITCH, "pc")
 
 
 class InvalidPlatform(commands.BadArgument):
