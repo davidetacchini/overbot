@@ -9,13 +9,6 @@ from utils.checks import has_profile, has_no_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
 from classes.converters import Hero, Platform
 
-PLATFORMS = {
-    "pc": ("<:battlenet:679469162724196387>", discord.Color.blue()),
-    "psn": ("<:psn:679468542541693128>", discord.Color.blue()),
-    "xbl": ("<:xbl:679469487623503930>", discord.Color.green()),
-    "nintendo-switch": ("<:nsw:752653766377078817>", discord.Color.red()),
-}
-
 
 class UserHasNoProfile(Exception):
     """Exception raised when mentioned user has no profile connected."""
@@ -34,6 +27,28 @@ class Profile(commands.Cog):
             "<:xbl:679469487623503930>": "xbl",
             "<:nsw:752653766377078817>": "nintendo-switch",
             "❌": "close",
+        }
+        self.platforms = {
+            "pc": {
+                "emoji": "<:battlenet:679469162724196387>",
+                "color": discord.Color.blue(),
+                "format": "Battletag",
+            },
+            "psn": {
+                "emoji": "<:psn:679468542541693128>",
+                "color": discord.Color.blue(),
+                "format": "Online ID",
+            },
+            "xbl": {
+                "emoji": "<:xbl:679469487623503930>",
+                "color": discord.Color.green(),
+                "format": "Gamertag",
+            },
+            "nintendo-switch": {
+                "emoji": "<:nsw:752653766377078817>",
+                "color": discord.Color.red(),
+                "format": "Nintendo Switch ID",
+            },
         }
 
     async def add_reactions(self, msg):
@@ -164,22 +179,15 @@ class Profile(commands.Cog):
                 f'Profile successfully updated. Run "{ctx.prefix}profile info" to see the changes.'
             )
 
-    def resolved_platform_name(self, platform):
-        if platform == "pc":
-            return "Battletag"
-        elif platform == "psn":
-            return "Online ID"
-        elif platform == "xbl":
-            return "Gamertag"
-        else:
-            return "Nintendo Switch ID"
-
     def profile_info(self, ctx, platform, name):
         """Returns linked profile information."""
-        embed = discord.Embed(color=PLATFORMS[platform][1])
+        emoji = self.platforms.get(platform).get("emoji")
+        color = self.platforms.get(platform).get("color")
+        _format = self.platforms.get(platform).get("format")
+        embed = discord.Embed(color=color)
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-        embed.add_field(name="Platform", value=f"{PLATFORMS[platform][0]} {platform}")
-        embed.add_field(name=self.resolved_platform_name(platform), value=name)
+        embed.add_field(name="Platform", value=f"{emoji} {platform}")
+        embed.add_field(name=_format, value=name)
         return embed
 
     @has_profile()
