@@ -74,7 +74,8 @@ class HelpMenu(menus.MenuPages):
 
         async def go_back_to_current_page():
             await asyncio.sleep(30.0)
-            await self.show_page(self.current_page)
+            with suppress(discord.HTTPException, discord.NotFound):
+                await self.show_page(self.current_page)
 
         self.bot.loop.create_task(go_back_to_current_page())
 
