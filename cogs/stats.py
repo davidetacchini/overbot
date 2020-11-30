@@ -10,7 +10,7 @@ class Statistics(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=["rating"])
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def rank(self, ctx, platform: Platform, *, username):
         """Returns player ranks.
 
@@ -53,7 +53,7 @@ class Statistics(commands.Cog):
                 await message.edit(embed=embed)
 
     @commands.command(aliases=["stats"])
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def statistics(self, ctx, platform: Platform, *, username):
         """Returns player both quick play and competitive statistics.
 
@@ -100,7 +100,7 @@ class Statistics(commands.Cog):
                 await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
 
     @commands.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def hero(
         self,
         ctx,

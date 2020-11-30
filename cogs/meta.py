@@ -35,7 +35,7 @@ class Meta(commands.Cog):
         await ctx.send(f"Uptime: {self.bot.get_uptime()}")
 
     @commands.command(aliases=["feed"])
-    @commands.cooldown(1, 60.0, commands.BucketType.user)
+    @commands.cooldown(1, 60.0, commands.BucketType.member)
     async def feedback(self, ctx, *, message: str):
         """Leave a feedback about the bot.
 
