@@ -148,6 +148,8 @@ class Owner(commands.Cog):
         await ctx.send(
             "\n".join(f"{status}: `{module}`" for status, module in statuses)
         )
+        # Update total line count since we have made changes.
+        self.bot.get_line_count()
 
     @commands.command(hidden=True)
     async def rldconf(self, ctx):
