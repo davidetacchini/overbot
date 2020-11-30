@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+from utils.scrape import get_overwatch_news, get_overwatch_status
+
 
 class Overwatch(commands.Cog):
     def __init__(self, bot):
@@ -22,7 +24,7 @@ class Overwatch(commands.Cog):
         embed.timestamp = self.bot.timestamp
         embed.set_footer(text="downdetector.com")
         try:
-            overwatch = await self.bot.get_overwatch_status()
+            overwatch = await get_overwatch_status()
         except Exception:
             embed.description = (
                 f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
@@ -50,9 +52,7 @@ class Overwatch(commands.Cog):
             pages = []
             try:
                 amount = amount or 4
-                titles, links, imgs, dates = await self.bot.get_overwatch_news(
-                    abs(amount)
-                )
+                titles, links, imgs, dates = await get_overwatch_news(abs(amount))
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = "Latest Overwatch News"

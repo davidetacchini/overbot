@@ -7,6 +7,8 @@ import psutil
 import discord
 from discord.ext import tasks, commands
 
+from utils.scrape import get_overwatch_news
+
 
 class Tasks(commands.Cog):
     def __init__(self, bot):
@@ -201,7 +203,7 @@ class Tasks(commands.Cog):
 
         await self.bot.wait_until_ready()
 
-        title, link, img, date = await self.bot.get_overwatch_news(1)
+        title, link, img, date = await get_overwatch_news(1)
         # Get the latest news id from the URL
         news_id = re.search(r"\d+", link[0]).group(0)
 
