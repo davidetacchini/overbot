@@ -61,7 +61,7 @@ class Server(commands.Cog):
         return placements.get(place)
 
     @commands.command()
-    @commands.cooldown(1, 30.0, commands.BucketType.user)
+    @commands.cooldown(1, 30.0, commands.BucketType.member)
     async def leaderboard(self, ctx):
         """Displays a leaderboard of the 5 most active servers.
 
