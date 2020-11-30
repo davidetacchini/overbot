@@ -18,7 +18,7 @@ class Statistics(commands.Cog):
         `<username>` - The username of the player to get ranks for.
 
         Available platforms
-        - pc
+        - pc (bnet)
         - playstation (ps, psn, play)
         - xbox (xbl)
         - nintendo-switch (nsw, switch)
@@ -61,7 +61,7 @@ class Statistics(commands.Cog):
         `<username>` - The username of the player to get stats for.
 
         Available platforms
-        - pc
+        - pc (bnet)
         - playstation (ps, psn, play)
         - xbox (xbl)
         - nintendo-switch (nsw, switch)
@@ -116,7 +116,7 @@ class Statistics(commands.Cog):
         `<username>` - The username of the player to get stats for.
 
         Available platforms
-        - pc
+        - pc (bnet)
         - playstation (ps, psn, play)
         - xbox (xbl)
         - nintendo-switch (nsw, switch)
