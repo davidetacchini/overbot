@@ -124,7 +124,7 @@ class Profile(commands.Cog):
             return m.author == ctx.author and m.channel == ctx.channel
 
         try:
-            username = await self.bot.wait_for("message", check=check, timeout=30)
+            username = await self.bot.wait_for("message", check=check, timeout=30.0)
         except asyncio.TimeoutError:
             await ctx.send("You took too long to reply.")
         else:
