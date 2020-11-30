@@ -42,7 +42,7 @@ class ServiceUnavailable(RequestError):
 
 
 class TooManyAccounts(RequestError):
-    """Exception raise when the API found too many accounts under that name."""
+    """Exception raised when the API found too many accounts under that name."""
 
     def __init__(self, platform, name, names):
         if platform == "pc":
@@ -68,7 +68,7 @@ class Data:
 
     @property
     def account_url(self):
-        return f"{config.overwatch['account']}/{self.name}"
+        return config.overwatch["account"] + "/" + self.name + "/"
 
     async def resolve_name(self, names):
         if len(names) == 1:
