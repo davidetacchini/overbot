@@ -1,9 +1,10 @@
 from discord.ext import commands
 
+PC = ("pc", "bnet")
 XBOX = ("xbl", "xbox")
 PLAYSTATION = ("ps", "psn", "play", "playstation")
 NINTENDO_SWITCH = ("nsw", "switch", "nintendo-switch")
-PLATFORMS = (XBOX + PLAYSTATION + NINTENDO_SWITCH, "pc")
+PLATFORMS = XBOX + PLAYSTATION + NINTENDO_SWITCH + PC
 
 
 class InvalidPlatform(commands.BadArgument):
@@ -22,13 +23,14 @@ class Platform(commands.Converter):
         platform = arg.lower()
         if platform not in PLATFORMS:
             raise InvalidPlatform(ctx)
-        if platform in PLAYSTATION:
+        elif platform in PC:
+            return "pc"
+        elif platform in PLAYSTATION:
             return "psn"
-        if platform in XBOX:
+        elif platform in XBOX:
             return "xbl"
-        if platform in NINTENDO_SWITCH:
+        elif platform in NINTENDO_SWITCH:
             return "nintendo-switch"
-        return platform
 
 
 class Hero(commands.Converter):
