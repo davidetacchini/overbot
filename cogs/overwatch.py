@@ -13,7 +13,7 @@ class Overwatch(commands.Cog):
         return (f"<:dnd:648185968209428490> {s}", discord.Color.red())
 
     @commands.command()
-    @commands.cooldown(1, 60.0, commands.BucketType.user)
+    @commands.cooldown(1, 60.0, commands.BucketType.member)
     async def status(self, ctx):
         """Returns the current Overwatch servers status."""
         embed = discord.Embed()
@@ -38,7 +38,7 @@ class Overwatch(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 30.0, commands.BucketType.user)
+    @commands.cooldown(1, 30.0, commands.BucketType.member)
     async def news(self, ctx, amount: int = None):
         """Returns the latest Overwatch news.
 
@@ -72,7 +72,7 @@ class Overwatch(commands.Cog):
                 await self.bot.paginator.Paginator(pages=pages).paginate(ctx)
 
     @commands.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def patch(self, ctx):
         """Returns patch notes links."""
         embed = discord.Embed(color=self.bot.color)

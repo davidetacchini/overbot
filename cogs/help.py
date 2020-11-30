@@ -153,7 +153,7 @@ class GroupHelp(menus.ListPageSource):
 class CustomHelpCommand(commands.HelpCommand):
     def __init__(self):
         command_attrs = dict(
-            cooldown=commands.Cooldown(1, 3.0, commands.BucketType.user),
+            cooldown=commands.Cooldown(1, 3.0, commands.BucketType.member),
             help="Shows help about the bot, a command, or a category",
         )
         super().__init__(command_attrs=command_attrs)
