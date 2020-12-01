@@ -4,19 +4,19 @@ from bs4 import BeautifulSoup
 import config
 
 
-async def fetch(self, url):
+async def fetch(url):
     async with aiohttp.ClientSession() as s:
         async with s.get(url) as r:
             return await r.read()
 
 
-async def get_overwatch_status(self):
+async def get_overwatch_status():
     content = await fetch(config.overwatch["status"])
     page = BeautifulSoup(content, features="html.parser")
     return page.find(class_="entry-title").get_text()
 
 
-async def get_overwatch_news(self, a):
+async def get_overwatch_news(a):
     content = await fetch(config.overwatch["news"])
     page = BeautifulSoup(content, features="html.parser")
     news = page.find("section", {"class", "NewsHeader-featured"})
