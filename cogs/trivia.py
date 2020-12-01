@@ -95,14 +95,20 @@ class Trivia(commands.Cog):
             raise MemberHasNoStats(member)
         return member_stats
 
+    def get_player_ratio(self, won, lost):
+        if won >= 1 and lost == 0:
+            return won
+        else:
+            try:
+                return won / lost
+            except ZeroDivisionError:
+                return 0
+
     def embed_member_stats(self, member, stats):
         embed = discord.Embed(color=member.color)
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
-        try:
-            ratio = stats["won"] / stats["lost"]
-        except ZeroDivisionError:
-            ratio = 0
+        ratio = self.get_player_ratio(stats["won"], stats["lost"])
         embed.add_field(name="Total", value=stats["started"])
         embed.add_field(name="Won", value=stats["won"])
         embed.add_field(name="Lost", value=stats["lost"])
@@ -158,10 +164,7 @@ class Trivia(commands.Cog):
             for index, player in enumerate(players, start=1):
                 cur_player = await self.bot.fetch_user(player["id"])
                 placement = self.get_placement(index)
-                try:
-                    ratio = player["won"] / player["lost"]
-                except ZeroDivisionError:
-                    ratio = 0
+                ratio = self.get_player_ratio(player["won"], player["lost"])
                 board.append(
                     f'{placement} **{str(cur_player)}** Played: {player["started"]} '
                     f'| Won: {player["won"]} | Lost: {player["lost"]} | Ratio: {ratio:.2f}'
