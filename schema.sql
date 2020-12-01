@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.0
--- Dumped by pg_dump version 13.0
+-- Dumped from database version 13.1
+-- Dumped by pg_dump version 13.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -105,10 +105,33 @@ CREATE TABLE public.server (
 ALTER TABLE public.server OWNER TO davide;
 
 --
+-- Name: trivia; Type: TABLE; Schema: public; Owner: davide
+--
+
+CREATE TABLE public.trivia (
+    id bigint NOT NULL,
+    won integer DEFAULT 0 NOT NULL,
+    lost integer DEFAULT 0 NOT NULL,
+    started integer DEFAULT 0 NOT NULL,
+    contribs integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.trivia OWNER TO davide;
+
+--
 -- Name: command id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.command_id_seq'::regclass);
+
+
+--
+-- Name: trivia Trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.trivia
+    ADD CONSTRAINT "Trivia_pkey" PRIMARY KEY (id);
 
 
 --
