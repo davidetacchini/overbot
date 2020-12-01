@@ -142,7 +142,7 @@ class Trivia(commands.Cog):
     @trivia.command(aliases=["top"])
     @commands.cooldown(1, 60.0, commands.BucketType.member)
     async def best(self, ctx):
-        """Displays a leaderboard of the best trivia players.
+        """Shows the best OverBot's trivia players.
 
         It is based on games won.
 
