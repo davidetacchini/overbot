@@ -37,14 +37,14 @@ class BasePaginator:
         *,
         timeout: float = 30.0,
         title: Optional[str] = None,
-        footer: Optional[str] = None,
         image: Optional[str] = None,
+        footer: Optional[str] = None,
     ):
         self.entries = entries
         self.timeout = timeout
         self.title = title
-        self.footer = footer
         self.image = image
+        self.footer = footer
 
         self.color = main_color
         self.reactions = None
@@ -62,11 +62,11 @@ class BasePaginator:
         if self.title:
             embed.title = self.title
 
-        if self.footer:
-            embed.set_footer(text=self.footer)
-
         if self.image:
             embed.set_image(url=self.image)
+
+        if self.footer:
+            embed.set_footer(text=self.footer)
 
         return embed
 
@@ -143,10 +143,10 @@ class Link(BasePaginator):
 
 class Choose(BasePaginator):
 
-    __slots__ = ("entries", "title", "footer", "image")
+    __slots__ = ("entries", "title", "image", "footer")
 
-    def __init__(self, entries, title, footer, image):
-        super().__init__(entries, title=title, footer=footer, image=image)
+    def __init__(self, entries, title, image, footer):
+        super().__init__(entries, title=title, image=image, footer=footer)
         self.reactions = []
 
     async def paginator(self):
