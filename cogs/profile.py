@@ -1,5 +1,4 @@
 import asyncio
-from contextlib import suppress
 
 import discord
 from discord.ext import commands
@@ -7,27 +6,20 @@ from discord.ext import commands
 from utils.data import RequestError
 from utils.checks import has_profile, has_no_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
+from utils.paginator import Link
 from classes.converters import Hero, Platform
 
 
-class UserHasNoProfile(Exception):
-    """Exception raised when mentioned user has no profile connected."""
+class MemberHasNoProfile(Exception):
+    """Exception raised when mentioned member has no profile connected."""
 
-    def __init__(self, username):
-        message = f"{username} hasn't linked a profile yet."
-        super().__init__(message)
+    def __init__(self, member):
+        super().__init__(f"{member} hasn't linked a profile yet.")
 
 
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._reactions = {
-            "<:battlenet:679469162724196387>": "pc",
-            "<:psn:679468542541693128>": "psn",
-            "<:xbl:679469487623503930>": "xbl",
-            "<:nsw:752653766377078817>": "nintendo-switch",
-            "❌": "close",
-        }
         self.platforms = {
             "pc": {
                 "emoji": "<:battlenet:679469162724196387>",
@@ -51,33 +43,6 @@ class Profile(commands.Cog):
             },
         }
 
-    async def add_reactions(self, msg):
-        for r in self._reactions:
-            try:
-                await msg.add_reaction(r)
-            except Exception:
-                return
-
-    async def get_platform(self, ctx, msg):
-        self.task = self.bot.loop.create_task(self.add_reactions(msg))
-
-        def check(r, u):
-            return (
-                u == ctx.author
-                and str(r.emoji) in self._reactions
-                and r.message.id == msg.id
-            )
-
-        try:
-            reaction, _ = await self.bot.wait_for(
-                "reaction_add", check=check, timeout=30
-            )
-            await msg.delete()
-        except asyncio.TimeoutError:
-            await ctx.send("You didn't choose any platform.")
-
-        return self._reactions.get(str(reaction.emoji))
-
     @commands.group(invoke_without_command=True)
     async def profile(self, ctx, command: str = None):
         """Displays a list with all profile's subcommands."""
@@ -86,23 +51,12 @@ class Profile(commands.Cog):
 
     @has_no_profile()
     @profile.command(aliases=["bind"])
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def link(self, ctx):
         """Link your Overwatch profile to your Discord account."""
-        embed = discord.Embed(color=self.bot.color)
-        embed.title = "Link your Overwatch profile to your Discord ID"
-        embed.description = "React with the platform you play on"
-        embed.add_field(
-            name="Platforms",
-            value=(
-                "<:battlenet:679469162724196387> - PC\n"
-                "<:psn:679468542541693128> - PS\n"
-                "<:xbl:679469487623503930> - XBOX\n"
-                "<:nsw:752653766377078817> - NINTENDO SWITCH"
-            ),
-        )
-        msg = await ctx.send(embed=embed, delete_after=30)
-        platform = await self.get_platform(ctx, msg)
+        title = "Link your Overwatch profile to your Discord ID"
+        footer = "React with the platform you play on."
+        platform = await Link(title=title, footer=footer).paginate(ctx)
 
         if not platform:
             return
@@ -116,8 +70,6 @@ class Profile(commands.Cog):
         elif platform == "nintendo-switch":
             await ctx.send("Enter your Nintendo Switch ID:")
         else:
-            with suppress(Exception):
-                self.task.cancel()
             return
 
         def check(m):
@@ -144,7 +96,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["unbind"])
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def unlink(self, ctx):
         """Unlink your Overwatch profile from your Discord account."""
         if not await ctx.prompt(
@@ -162,7 +114,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def update(self, ctx, platform: Platform, *, username):
         """Update your Overwatch profile linked to your Discord account."""
         try:
@@ -192,7 +144,7 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def info(self, ctx):
         """Displays your linked profile information."""
         try:
@@ -210,30 +162,30 @@ class Profile(commands.Cog):
         else:
             await ctx.send(embed=embed)
 
-    async def get_profile(self, user):
+    async def get_profile(self, member):
         """Returns profile information."""
         profile = await self.bot.pool.fetchrow(
-            "SELECT platform, name FROM profile WHERE id=$1", user.id
+            "SELECT platform, name FROM profile WHERE id=$1", member.id
         )
         if not profile:
-            raise UserHasNoProfile(user)
+            raise MemberHasNoProfile(member)
         return profile
 
     @has_profile()
     @profile.command(aliases=["rating"])
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    async def rank(self, ctx, user: discord.Member = None):
-        """Returns linked profile ranks.
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    async def rank(self, ctx, member: discord.Member = None):
+        """Shows a member's Overwatch ranks.
 
-        `[user]` - Must be a mention or the ID of a Discord member.
+        `[member]` - The mention or the ID of a discord member of the current server.
 
-        If no user is passed, the profile of the author of the message is used.
+        If no member is given then the ranks returned will be yours.
         """
         async with ctx.typing():
-            user = user or ctx.author
+            member = member or ctx.author
             try:
-                profile = await self.get_profile(user)
-            except UserHasNoProfile as exc:
+                profile = await self.get_profile(member)
+            except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
                 try:
@@ -262,19 +214,19 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["stats"])
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    async def statistics(self, ctx, user: discord.Member = None):
-        """Returns linked profile both competitive and quick play statistics.
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    async def statistics(self, ctx, member: discord.Member = None):
+        """Shows a member's Overwatch both quick play and competitive statistics.
 
-        `[user]` - Must be a mention or the ID of a Discord member.
+        `[member]` - The mention or the ID of a discord member of the current server.
 
-        If no user is passed, the profile of the author of the message is used.
+        If no member is given then the statistics returned will be yours.
         """
         async with ctx.typing():
-            user = user or ctx.author
+            member = member or ctx.author
             try:
-                profile = await self.get_profile(user)
-            except UserHasNoProfile as exc:
+                profile = await self.get_profile(member)
+            except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
                 try:
@@ -305,20 +257,20 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.user)
-    async def hero(self, ctx, hero: Hero, user: discord.Member = None):
-        """Returns linked profile statistics for a given hero.
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    async def hero(self, ctx, hero: Hero, member: discord.Member = None):
+        """Shows a member's Overwatch both quick play and competitive statistics for a given hero.
 
         `<hero>` - The name of the hero you want to see stats for.
-        `[user]` - Must be a mention or the ID of a Discord member.
+        `[member]` - The mention or the ID of a discord member of the current server.
 
-        If no user is passed, the profile of the author of the message is used.
+        If no member is given then the statistics returned will be yours.
         """
         async with ctx.typing():
-            user = user or ctx.author
+            member = member or ctx.author
             try:
-                profile = await self.get_profile(user)
-            except UserHasNoProfile as exc:
+                profile = await self.get_profile(member)
+            except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
                 try:
