@@ -34,8 +34,8 @@ class Trivia(commands.Cog):
         answer = await Choose(
             shuffled,
             title=question["question"],
-            footer=footer,
             image=question["image_url"],
+            footer=footer,
         ).paginate(ctx)
         return answer == question["correct_answer"]
 
