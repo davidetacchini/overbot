@@ -4,7 +4,6 @@ import asyncio
 import secrets
 
 import discord
-from asyncpg import UniqueViolationError
 from discord.ext import commands
 
 from utils.paginator import Choose
@@ -42,23 +41,20 @@ class Trivia(commands.Cog):
         return answer == question["correct_answer"]
 
     async def update_member_games_started(self, member_id):
-        try:
-            await self.bot.pool.execute(
-                "INSERT INTO trivia (id, started) VALUES ($1, $2)", member_id, 1
-            )
-        except UniqueViolationError:
-            await self.bot.pool.execute(
-                "UPDATE trivia SET started=started+1 WHERE id=$1", member_id
-            )
+        await self.bot.pool.execute(
+            "INSERT INTO trivia(id, started) VALUES($1, 1) "
+            "ON CONFLICT (id) DO UPDATE SET started = trivia.started + 1;",
+            member_id,
+        )
 
     async def update_member_games_won(self, member_id):
         await self.bot.pool.execute(
-            "UPDATE trivia SET won=won+1 WHERE id=$1", member_id
+            "UPDATE trivia SET won = won + 1 WHERE id = $1;", member_id
         )
 
     async def update_member_games_lost(self, member_id):
         await self.bot.pool.execute(
-            "UPDATE trivia SET lost=lost+1 WHERE id=$1", member_id
+            "UPDATE trivia SET lost = lost + 1 WHERE id = $1;", member_id
         )
 
     async def update_member_stats(self, member_id, *, won=True):
@@ -93,7 +89,7 @@ class Trivia(commands.Cog):
 
     async def get_member_trivia_stats(self, member):
         member_stats = await self.bot.pool.fetchrow(
-            "SELECT * FROM trivia WHERE id=$1", member.id
+            "SELECT * FROM trivia WHERE id=$1;", member.id
         )
         if not member_stats:
             raise MemberHasNoStats(member)
@@ -153,21 +149,21 @@ class Trivia(commands.Cog):
         async with ctx.typing():
             players = await self.bot.pool.fetch(
                 "SELECT id, started, won, lost FROM trivia WHERE "
-                "id <> 285502621295312896 ORDER BY won DESC LIMIT 10"
+                "id <> 285502621295312896 ORDER BY won DESC LIMIT 10;"
             )
             embed = discord.Embed()
             embed.title = "Best Trivia Players"
 
             board = []
-            for i, player in enumerate(players, start=1):
-                p = await self.bot.fetch_user(player["id"])
-                placement = self.get_placement(i)
+            for index, player in enumerate(players, start=1):
+                cur_player = await self.bot.fetch_user(player["id"])
+                placement = self.get_placement(index)
                 try:
                     ratio = player["won"] / player["lost"]
                 except ZeroDivisionError:
                     ratio = 0
                 board.append(
-                    f'{placement} **{str(p)}** Played: {player["started"]} '
+                    f'{placement} **{str(cur_player)}** Played: {player["started"]} '
                     f'| Won: {player["won"]} | Lost: {player["lost"]} | Ratio: {ratio:.2f}'
                 )
             embed.description = "\n".join(board)
@@ -182,14 +178,11 @@ class Trivia(commands.Cog):
         )
 
     async def update_member_contribs_stats(self, member_id):
-        try:
-            await self.bot.pool.execute(
-                "INSERT INTO trivia (id, contribs) VALUES ($1, $2)", member_id, 1
-            )
-        except UniqueViolationError:
-            await self.bot.pool.execute(
-                "UPDATE trivia SET contribs=contribs+1 WHERE id=$1", member_id
-            )
+        await self.bot.pool.execute(
+            "INSERT INTO trivia(id, contribs) VALUES($1, 1) "
+            "ON CONFLICT (id) DO UPDATE contribs = trivia.contribs + 1;",
+            member_id,
+        )
 
     def format_content(self, content):
         """Automatically removes code blocks from the code."""
