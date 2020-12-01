@@ -230,7 +230,7 @@ class Tasks(commands.Cog):
         await channel.send(embed=embed)
 
         # Once the latest news has been sent, we update the older
-        # news_id stored on the database with the new one.
+        # news_id stored in the database with the new one.
         await self.bot.pool.execute(
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
         )
