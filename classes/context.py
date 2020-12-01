@@ -4,10 +4,11 @@ import discord
 from discord.ext import commands
 
 from config import main_color
+from utils.paginator import NoChoice
 
 
 class Context(commands.Context):
-    async def prompt(self, message, timeout=30, user=None):
+    async def prompt(self, message, timeout=30.0, user=None):
         user = user or self.author
         reactions = ("❌", "✅")
 
@@ -30,12 +31,11 @@ class Context(commands.Context):
                 "reaction_add", check=check, timeout=timeout
             )
         except asyncio.TimeoutError:
+            raise NoChoice("You took to long to confirm.")
+        else:
+            return bool(reactions.index(str(reaction.emoji)))
+        finally:
             await self.bot.cleanup(msg)
-            await self.send("You took too long to confirm.")
-
-        await self.bot.cleanup(msg)
-
-        return bool(reactions.index(str(reaction.emoji)))
 
     def tick(self, opt, label=None):
         lookup = {
