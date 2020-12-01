@@ -36,7 +36,7 @@ class Tasks(commands.Cog):
             )
         return shards
 
-    async def get_statistics(self):
+    async def get_bot_statistics(self):
         total_commands = await self.bot.total_commands()
         total_members = sum(guild.member_count for guild in self.bot.guilds)
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
@@ -81,7 +81,7 @@ class Tasks(commands.Cog):
         }
         return statistics
 
-    async def get_commands(self):
+    async def get_bot_commands(self):
         all_commands = []
         for command in self.bot.walk_commands():
             if command.hidden:
@@ -98,7 +98,7 @@ class Tasks(commands.Cog):
             )
         return all_commands
 
-    async def get_servers(self):
+    async def get_top_servers(self):
         guilds = await self.bot.pool.fetch(
             "SELECT id, commands_runned FROM server WHERE id NOT IN"
             " (638339745117896745, 550685823784321035) ORDER BY commands_runned DESC LIMIT 5;"
@@ -131,9 +131,9 @@ class Tasks(commands.Cog):
             "Authorization": self.bot.config.obapi["token"],
         }
 
-        payload_statistics = await self.get_statistics()
-        payload_commands = await self.get_commands()
-        payload_servers = await self.get_servers()
+        payload_statistics = await self.get_bot_statistics()
+        payload_commands = await self.get_bot_commands()
+        payload_servers = await self.get_top_servers()
 
         await self.bot.session.post(
             f'{self.bot.config.obapi["url"]}/statistics',
