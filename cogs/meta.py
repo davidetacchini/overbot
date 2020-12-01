@@ -89,7 +89,7 @@ class Meta(commands.Cog):
             commits = self.get_latest_commits()
             embed = discord.Embed(color=self.bot.color)
             embed.title = "Official Website"
-            embed.description = f"Latest Commits:\n{commits}"
+            embed.description = f"Latest Changes:\n{commits}"
             embed.url = self.bot.config.website
             embed.timestamp = self.bot.timestamp
 
