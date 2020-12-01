@@ -1,12 +1,12 @@
 import json
 import random
+import asyncio
 import secrets
 
 import discord
 from asyncpg import UniqueViolationError
 from discord.ext import commands
 
-import asyncio
 from utils.paginator import Choose
 
 
