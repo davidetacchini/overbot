@@ -45,7 +45,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         await self.bot.pool.execute(
-            'INSERT INTO server (id, "prefix") VALUES ($1, $2);',
+            "INSERT INTO server(id, prefix) VALUES($1, $2);",
             guild.id,
             self.bot.prefix,
         )
@@ -54,7 +54,7 @@ class Events(commands.Cog):
     async def on_guild_remove(self, guild):
         with suppress(KeyError):
             del self.bot.prefixes[guild.id]
-        await self.bot.pool.execute("DELETE FROM server WHERE id=$1;", guild.id)
+        await self.bot.pool.execute("DELETE FROM server WHERE id = $1;", guild.id)
 
 
 def setup(bot):
