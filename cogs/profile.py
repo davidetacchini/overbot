@@ -73,7 +73,11 @@ class Profile(commands.Cog):
             return
 
         def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel
+            if m.author.id != ctx.author.id:
+                return False
+            if m.channel.id != ctx.channel.id:
+                return False
+            return True
 
         try:
             username = await self.bot.wait_for("message", check=check, timeout=30.0)
