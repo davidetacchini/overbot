@@ -149,6 +149,7 @@ class Owner(commands.Cog):
             "\n".join(f"{status}: `{module}`" for status, module in statuses)
         )
         # Update total line count since we have made changes.
+        self.bot.total_lines = 0
         self.bot.get_line_count()
 
     @commands.command(hidden=True)
