@@ -261,18 +261,40 @@ class Owner(commands.Cog):
         """Display an admin panel."""
         try:
             profiles = await self.bot.pool.fetch("SELECT * FROM profile;")
-            prefixes = await self.bot.pool.fetch(
-                "SELECT * FROM server WHERE prefix <> '-';"
-            )
+            prefixes = self.bot.prefixes
             guilds = await self.bot.pool.fetch("SELECT * FROM server;")
             total_commands = await self.bot.total_commands()
+            played, won, lost, contribs = await self.bot.pool.fetchrow(
+                "SELECT SUM(started), SUM(won), SUM(lost), SUM(contribs) FROM trivia;"
+            )
+            # Bot entries
+            b_e = (
+                ("Total profiles linked", len(profiles)),
+                ("Total prefixes set", len(prefixes)),
+                ("Total guilds", len(guilds)),
+                ("Total commands runned", total_commands),
+            )
+            # Trivia entries
+            t_e = (
+                ("Total games played", played),
+                ("Total games won", won),
+                ("Total games lost", lost),
+                ("Total contributions", contribs),
+            )
 
-            embed = discord.Embed()
+            embed = discord.Embed(color=ctx.author.color)
             embed.title = "Admin Panel"
-            embed.add_field(name="Profiles", value=len(profiles))
-            embed.add_field(name="Prefixes", value=len(prefixes))
-            embed.add_field(name="Guilds", value=len(guilds))
-            embed.add_field(name="Commands Used", value=total_commands)
+            bot = []
+            trivia = []
+            # b_k = bot_key; b_v = bot_value
+            # t_k = trivia_key; t_v = trivia_value
+            for (b_k, b_v), (t_k, t_v) in zip(b_e, t_e):
+                trivia.append(f"{t_k}: **{t_v}**\n")
+                bot.append(f"{b_k}: **{b_v}**\n")
+
+            embed.add_field(name="Bot", value="".join(bot))
+            embed.add_field(name="Trivia", value="".join(trivia))
+
             await ctx.send(embed=embed)
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
