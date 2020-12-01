@@ -65,9 +65,17 @@ class Trivia(commands.Cog):
         else:
             await self.update_member_games_lost(member_id)
 
-    @commands.group()
+    @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def trivia(self, ctx):
+        """Displays a list with all trivia's subcommands."""
+        embed = self.bot.get_subcommands(ctx, ctx.command)
+        await ctx.send(embed=embed)
+
+    @trivia.command()
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    async def play(self, ctx):
+        """Play Overwatch trivia."""
         try:
             question = self.get_question()
         except Exception as exc:
@@ -134,7 +142,7 @@ class Trivia(commands.Cog):
     @trivia.command(aliases=["top"])
     @commands.cooldown(1, 60.0, commands.BucketType.member)
     async def best(self, ctx):
-        """Displays a leaderboard of the 10 trivia players.
+        """Displays a leaderboard of the best trivia players.
 
         It is based on games won.
 
@@ -157,7 +165,7 @@ class Trivia(commands.Cog):
                 except ZeroDivisionError:
                     ratio = 0
                 board.append(
-                    f'{placement} **{str(p)}** Played: {player["started"]}'
+                    f'{placement} **{str(p)}** Played: {player["started"]} '
                     f'| Won: {player["won"]} | Lost: {player["lost"]} | Ratio: {ratio:.2f}'
                 )
             embed.description = "\n".join(board)
