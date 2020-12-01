@@ -14,7 +14,7 @@ class Server(commands.Cog):
         else:
             self.bot.prefixes[ctx.guild.id] = prefix
         await self.bot.pool.execute(
-            'UPDATE server SET "prefix"=$1 WHERE id=$2;', prefix, ctx.guild.id
+            "UPDATE server SET prefix = $1 WHERE id = $2;", prefix, ctx.guild.id
         )
         await ctx.send(f"Prefix successfully set to `{prefix}`")
 
@@ -38,7 +38,7 @@ class Server(commands.Cog):
                 )
         else:
             pre = await self.bot.pool.fetchval(
-                "SELECT prefix FROM server WHERE id=$1;", ctx.guild.id
+                "SELECT prefix FROM server WHERE id = $1;", ctx.guild.id
             )
             embed = discord.Embed(color=discord.Color.blurple())
             embed.set_footer(
@@ -51,19 +51,13 @@ class Server(commands.Cog):
 
     @staticmethod
     def get_placement(place):
-        placements = {
-            1: "<:top500:632281138832080926>",
-            2: "<:grandmaster:632281128966946826>",
-            3: "<:master:632281117394993163>",
-            4: "<:diamond:632281105571119105>",
-            5: "<:platinum:632281092875091998>",
-        }
+        placements = {1: ":first_place:", 2: ":second_place:", 3: ":third_place:"}
         return placements.get(place)
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     async def leaderboard(self, ctx):
-        """Displays a leaderboard of the 5 most active servers.
+        """Shows OverBot's most active servers.
 
         It is based on commands runned.
         """
@@ -73,21 +67,26 @@ class Server(commands.Cog):
                 "(638339745117896745, 550685823784321035) ORDER BY commands_runned DESC LIMIT 5;"
             )
             embed = discord.Embed()
-            embed.title = "Five Most Active Servers"
+            embed.title = "Most Active Servers"
             embed.url = self.bot.config.website
             embed.set_footer(text="Tracking command usage since • 11/26/2020")
 
-            board = ""
-            for i, guild in enumerate(guilds, start=1):
-                g = self.bot.get_guild(guild["id"])
-                board += (
-                    f"{self.get_placement(i)} **{str(g)}**"
+            board = []
+            for index, guild in enumerate(guilds, start=1):
+                cur_guld = self.bot.get_guild(guild["id"])
+                placement = self.get_placement(index)
+                joined_on = str(cur_guld.me.joined_at).split(" ")[0]
+
+                board.append(
+                    f"{placement} **{str(cur_guld)}**"
                     f" runned a total of **{guild['commands_runned']}** commands\n"
-                    f"Joined on: **{str(g.me.joined_at).split(' ')[0]}**\n"
+                    f"Joined on: **{joined_on}**"
                 )
-                if i < 5:
-                    board += "-----------\n"
-            embed.description = board
+
+                if index < 5:
+                    board.append("-----------")
+
+            embed.description = "\n".join(board)
             await ctx.send(embed=embed)
 
 
