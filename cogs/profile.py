@@ -49,6 +49,16 @@ class Profile(commands.Cog):
         embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
+    async def insert_or_update_profile(self, member_id, platform, username):
+        username = str(username).replace("#", "-")
+        await self.bot.pool.execute(
+            "INSERT INTO profile(id, platform, name) VALUES($1, $2, $3) "
+            "ON CONFLICT (id) DO UPDATE SET platform = $2, name = $3;",
+            member_id,
+            platform,
+            username,
+        )
+
     @has_no_profile()
     @profile.command(aliases=["bind"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
@@ -85,17 +95,14 @@ class Profile(commands.Cog):
             await ctx.send("You took too long to reply.")
         else:
             try:
-                await self.bot.pool.execute(
-                    'INSERT INTO profile (id, "platform", "name") VALUES ($1, $2, $3);',
-                    ctx.author.id,
-                    platform,
-                    str(username.content).replace("#", "-"),
+                await self.insert_or_update_profile(
+                    ctx.author.id, platform, username.content
                 )
             except Exception as exc:
                 await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 await ctx.send(
-                    f'Profile successfully linked. Run "{ctx.prefix}profile info" to see your profile information.'
+                    f'Profile successfully linked. Use "{ctx.prefix}profile info" to see your profile information.'
                 )
 
     @has_profile()
@@ -110,7 +117,7 @@ class Profile(commands.Cog):
 
         try:
             await self.bot.pool.execute(
-                "DELETE FROM profile WHERE id=$1;", ctx.author.id
+                "DELETE FROM profile WHERE id = $1;", ctx.author.id
             )
             return await ctx.send("Profile successfully unlinked.")
         except Exception as exc:
@@ -122,17 +129,12 @@ class Profile(commands.Cog):
     async def update(self, ctx, platform: Platform, *, username):
         """Update your Overwatch profile linked to your Discord account."""
         try:
-            await self.bot.pool.execute(
-                'UPDATE profile SET "platform"=$1, "name"=$2 WHERE id=$3;',
-                platform,
-                username,
-                ctx.author.id,
-            )
+            await self.insert_or_update_profile(ctx.author.id, platform, username)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             await ctx.send(
-                f'Profile successfully updated. Run "{ctx.prefix}profile info" to see the changes.'
+                f'Profile successfully updated. Use "{ctx.prefix}profile info" to see the changes.'
             )
 
     def profile_info(self, ctx, platform, name):
@@ -153,7 +155,7 @@ class Profile(commands.Cog):
         """Displays your linked profile information."""
         try:
             profile = await self.bot.pool.fetchrow(
-                "SELECT platform, name FROM profile WHERE id=$1;", ctx.author.id
+                "SELECT platform, name FROM profile WHERE id = $1;", ctx.author.id
             )
             if profile["platform"] == "pc":
                 # Replace '-' with '#' only if the platform is PC. UI purpose only.
@@ -169,7 +171,7 @@ class Profile(commands.Cog):
     async def get_profile(self, member):
         """Returns profile information."""
         profile = await self.bot.pool.fetchrow(
-            "SELECT platform, name FROM profile WHERE id=$1", member.id
+            "SELECT platform, name FROM profile WHERE id = $1;", member.id
         )
         if not profile:
             raise MemberHasNoProfile(member)
