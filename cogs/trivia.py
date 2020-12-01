@@ -30,9 +30,11 @@ class Trivia(commands.Cog):
     async def get_result(self, ctx, question):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
-        footer = "You have 1 try and 30 seconds to respond."
+        timeout = 45.0
+        footer = f"You have 1 try and {timeout} seconds to respond."
         answer = await Choose(
             shuffled,
+            timeout=timeout,
             title=question["question"],
             image=question["image_url"],
             footer=footer,

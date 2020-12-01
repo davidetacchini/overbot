@@ -143,10 +143,12 @@ class Link(BasePaginator):
 
 class Choose(BasePaginator):
 
-    __slots__ = ("entries", "title", "image", "footer")
+    __slots__ = ("entries", "timeout", "title", "image", "footer")
 
-    def __init__(self, entries, title, image, footer):
-        super().__init__(entries, title=title, image=image, footer=footer)
+    def __init__(self, entries, timeout, title, image, footer):
+        super().__init__(
+            entries, timeout=timeout, title=title, image=image, footer=footer
+        )
         self.reactions = []
 
     async def paginator(self):
