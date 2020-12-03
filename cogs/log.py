@@ -67,13 +67,16 @@ class Log(commands.Cog):
     async def on_command_error(self, ctx, error):
         if self.bot.debug:
             return
+
         if not isinstance(
             error, (commands.CommandInvokeError, commands.ConversionError)
         ):
             return
+
         error = error.original
         if isinstance(error, (discord.Forbidden, discord.NotFound)):
             return
+
         embed = discord.Embed(title="Error", color=discord.Color.red())
         embed.add_field(name="Command", value=ctx.command.qualified_name)
         embed.add_field(name="Author", value=ctx.author)
