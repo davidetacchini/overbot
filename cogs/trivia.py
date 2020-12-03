@@ -37,7 +37,7 @@ class Trivia(commands.Cog):
             title=question["question"],
             image=question["image_url"],
             footer=footer,
-        ).paginate(ctx)
+        ).start(ctx)
         return answer == question["correct_answer"]
 
     async def update_member_games_started(self, member_id):
