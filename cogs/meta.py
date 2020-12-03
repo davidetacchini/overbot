@@ -19,7 +19,7 @@ class Meta(commands.Cog):
     @commands.command(aliases=["pong", "latency"])
     async def ping(self, ctx):
         """Displays the bot's current websocket latency and ACK."""
-        embed = discord.Embed(color=self.bot.color)
+        embed = discord.Embed(color=discord.Color.green())
         embed.title = "Pinging..."
         start = time.monotonic()
         msg = await ctx.send(embed=embed)
