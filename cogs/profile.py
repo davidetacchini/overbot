@@ -66,7 +66,7 @@ class Profile(commands.Cog):
         """Link your Overwatch profile to your Discord account."""
         title = "Link your Overwatch profile to your Discord ID"
         footer = "React with the platform you play on."
-        platform = await Link(title=title, footer=footer).paginate(ctx)
+        platform = await Link(title=title, footer=footer).start(ctx)
 
         if not platform:
             return
@@ -137,7 +137,7 @@ class Profile(commands.Cog):
                 f'Profile successfully updated. Use "{ctx.prefix}profile info" to see the changes.'
             )
 
-    def profile_info(self, ctx, platform, name):
+    def get_profile_info(self, ctx, platform, name):
         """Returns linked profile information."""
         emoji = self.platforms.get(platform).get("emoji")
         color = self.platforms.get(platform).get("color")
@@ -154,15 +154,13 @@ class Profile(commands.Cog):
     async def info(self, ctx):
         """Displays your linked profile information."""
         try:
-            profile = await self.bot.pool.fetchrow(
+            platform, name = await self.bot.pool.fetchrow(
                 "SELECT platform, name FROM profile WHERE id = $1;", ctx.author.id
             )
-            if profile["platform"] == "pc":
+            if platform == "pc":
                 # Replace '-' with '#' only if the platform is PC. UI purpose only.
-                name = profile["name"].replace("-", "#")
-            else:
-                name = profile["name"]
-            embed = self.profile_info(ctx, profile["platform"], name)
+                name = name.replace("-", "#")
+            embed = self.get_profile_info(ctx, platform, name)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
@@ -190,25 +188,19 @@ class Profile(commands.Cog):
         async with ctx.typing():
             member = member or ctx.author
             try:
-                profile = await self.get_profile(member)
+                platform, name = await self.get_profile(member)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
                 try:
-                    data = await self.bot.data.Data(
-                        platform=profile["platform"], name=profile["name"]
-                    ).get()
+                    data = await self.bot.data.Data(platform=platform, name=name).get()
                 except RequestError as exc:
                     await ctx.send(exc)
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
-                        profile = Player(
-                            data=data,
-                            platform=profile["platform"],
-                            name=profile["name"],
-                        )
+                        profile = Player(data=data, platform=platform, name=name)
                         if profile.is_private:
                             embed = profile.private(ctx)
                         else:
@@ -216,7 +208,7 @@ class Profile(commands.Cog):
                     except Exception as exc:
                         await ctx.send(exc)
                     else:
-                        await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
     @profile.command(aliases=["stats"])
@@ -231,25 +223,19 @@ class Profile(commands.Cog):
         async with ctx.typing():
             member = member or ctx.author
             try:
-                profile = await self.get_profile(member)
+                platform, name = await self.get_profile(member)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
                 try:
-                    data = await self.bot.data.Data(
-                        platform=profile["platform"], name=profile["name"]
-                    ).get()
+                    data = await self.bot.data.Data(platform=platform, name=name).get()
                 except RequestError as exc:
                     await ctx.send(exc)
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
-                        profile = Player(
-                            data=data,
-                            platform=profile["platform"],
-                            name=profile["name"],
-                        )
+                        profile = Player(data=data, platform=platform, name=name)
                         if profile.is_private:
                             embed = profile.private(ctx)
                         else:
@@ -259,7 +245,7 @@ class Profile(commands.Cog):
                     except Exception as exc:
                         await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
-                        await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
     @profile.command()
@@ -275,25 +261,19 @@ class Profile(commands.Cog):
         async with ctx.typing():
             member = member or ctx.author
             try:
-                profile = await self.get_profile(member)
+                platform, name = await self.get_profile(member)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
                 try:
-                    data = await self.bot.data.Data(
-                        platform=profile["platform"], name=profile["name"]
-                    ).get()
+                    data = await self.bot.data.Data(platform=platform, name=name).get()
                 except RequestError as exc:
                     await ctx.send(exc)
                 except Exception as exc:
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
-                        profile = Player(
-                            data=data,
-                            platform=profile["platform"],
-                            name=profile["name"],
-                        )
+                        profile = Player(data=data, platform=platform, name=name)
                         if profile.is_private:
                             embed = profile.private(ctx)
                         else:
@@ -303,7 +283,7 @@ class Profile(commands.Cog):
                     except Exception as exc:
                         await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
-                        await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
 
 def setup(bot):
