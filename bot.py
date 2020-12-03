@@ -52,9 +52,7 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, **kwargs):
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
-        self.total_lines = 0
         self.prefixes = {}
-        self.get_line_count()
 
         self.paginator = pygicord
         self.data = data
@@ -92,29 +90,18 @@ class Bot(commands.AutoShardedBot):
     async def total_commands(self):
         return await self.pool.fetchval("SELECT total FROM command;")
 
-    def get_line_count(self):
-        for root, dirs, files in os.walk(os.getcwd()):
-            [dirs.remove(d) for d in list(dirs) if d == "env"]
-            for name in files:
-                if name.endswith(".py"):
-                    with open(f"{root}/{name}") as f:
-                        self.total_lines += len(f.readlines())
-
     async def on_command(self, ctx):
-        await self.pool.execute("UPDATE command SET total=total+1 WHERE id=1;")
+        await self.pool.execute("UPDATE command SET total = total + 1 WHERE id = 1;")
         if ctx.guild:
             await self.pool.execute(
-                "UPDATE server SET commands_runned=commands_runned+1 WHERE id=$1;",
+                "INSERT INTO server(id, prefix) VALUES($1, $2) ON CONFLICT (id) DO "
+                "UPDATE SET commands_runned = server.commands_runned + 1;",
                 ctx.guild.id,
-            )
-        if not await self.pool.fetchrow(
-            "SELECT * FROM member WHERE id=$1;", ctx.author.id
-        ):
-            await self.pool.execute(
-                "INSERT INTO member (id) VALUES ($1);", ctx.author.id
+                self.prefix,
             )
         await self.pool.execute(
-            "UPDATE member SET commands_runned=commands_runned+1 WHERE id=$1;",
+            "INSERT INTO member(id) VALUES($1) ON CONFLICT (id) DO "
+            "UPDATE SET commands_runned = member.commands_runned + 1;",
             ctx.author.id,
         )
 
