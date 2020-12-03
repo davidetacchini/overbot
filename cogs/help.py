@@ -9,7 +9,7 @@ from config import support, website, main_color
 
 class HelpMenu(menus.MenuPages):
     def __init__(self, source):
-        super().__init__(source=source, timeout=90, check_embeds=True)
+        super().__init__(source=source, timeout=90.0, check_embeds=True)
 
     async def finalize(self, timed_out):
         with suppress(discord.HTTPException):
