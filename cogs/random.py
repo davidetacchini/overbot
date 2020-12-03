@@ -46,53 +46,53 @@ class Random(commands.Cog):
         return 0x13A549
 
     @staticmethod
-    def get_by_category(items, path, category):
+    def filter_by_category(items, path, category):
         return [i for i in items if i[path] == category]
 
-    async def random_hero(self, category):
+    async def get_random_hero(self, category):
         heroes = await self.get(self.bot.config.random["hero"])
 
         if not category:
-            hero = secrets.choice(heroes)
+            random_hero = secrets.choice(heroes)
         else:
-            categorized_heroes = self.get_by_category(heroes, "role", category)
-            hero = secrets.choice(categorized_heroes)
+            categorized_heroes = self.filter_by_category(heroes, "role", category)
+            random_hero = secrets.choice(categorized_heroes)
 
-        embed = discord.Embed(color=self.get_hero_color(hero))
-        embed.title = hero["name"].upper()
-        embed.set_thumbnail(url=hero["portrait"])
+        embed = discord.Embed(color=self.get_hero_color(random_hero))
+        embed.title = random_hero["name"].upper()
+        embed.set_thumbnail(url=random_hero["portrait"])
 
         for role in ROLES:
-            if role["name"] == hero["role"]:
+            if role["name"] == random_hero["role"]:
                 icon = role["icon"]
 
         embed.set_footer(
-            text=hero["role"].capitalize(),
+            text=random_hero["role"].capitalize(),
             icon_url=icon,
         )
         return embed
 
     @staticmethod
-    def random_role():
-        rand = secrets.choice(ROLES)
-        embed = discord.Embed(color=rand["color"])
-        embed.title = str(rand["name"]).upper()
-        embed.set_thumbnail(url=rand["icon"])
+    def get_random_role():
+        random_role = secrets.choice(ROLES)
+        embed = discord.Embed(color=random_role["color"])
+        embed.title = random_role["name"].upper()
+        embed.set_thumbnail(url=random_role["icon"])
         return embed
 
-    async def random_map(self, category):
+    async def get_random_map(self, category):
         maps = await self.get(self.bot.config.random["map"])
 
         if not category:
-            _map = secrets.choice(maps)
+            random_map = secrets.choice(maps)
         else:
-            categorized_maps = self.get_by_category(maps, "type", category)
-            _map = secrets.choice(categorized_maps)
+            categorized_maps = self.filter_by_category(maps, "type", category)
+            random_map = secrets.choice(categorized_maps)
 
         embed = discord.Embed()
-        embed.title = _map["name"]["en_US"]
-        embed.set_thumbnail(url=_map["thumbnail"])
-        embed.set_footer(text=f"Type: {_map['type'] or 'N/A'}")
+        embed.title = random_map["name"]["en_US"]
+        embed.set_thumbnail(url=random_map["thumbnail"])
+        embed.set_footer(text=f"Type: {random_map['type'] or 'N/A'}")
         return embed
 
     @commands.group(invoke_without_command=True)
@@ -116,10 +116,10 @@ class Random(commands.Cog):
         If no category is passed, a random hero is chosen from all categories.
         """
         try:
-            embed = await self.random_hero(category)
+            embed = await self.get_random_hero(category)
         except IndexError:
             await ctx.send(
-                f'Invalid category. Use "{ctx.prefix}help random hero" to see the available categories.'
+                f'Invalid category. Use "{ctx.prefix}help random hero" for more info.'
             )
         except Exception as exc:
             await ctx.send(exc)
@@ -132,7 +132,7 @@ class Random(commands.Cog):
     async def role(self, ctx):
         """Returns a random role to play."""
         try:
-            embed = self.random_role()
+            embed = self.get_random_role()
         except Exception:
             await ctx.send("Something bad happened. Please try again.")
         else:
@@ -154,10 +154,10 @@ class Random(commands.Cog):
         If no category is passed, a random map is chosen from all categories.
         """
         try:
-            embed = await self.random_map(category)
+            embed = await self.get_random_map(category)
         except IndexError:
             await ctx.send(
-                f'Invalid category. Use "{ctx.prefix}help random map" to see the available categories.'
+                f'Invalid category. Use "{ctx.prefix}help random map" for more info.'
             )
         except Exception:
             await ctx.send("Something bad happened. Please try again.")
