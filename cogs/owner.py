@@ -12,6 +12,12 @@ from contextlib import suppress, redirect_stdout
 
 import discord
 from discord.ext import commands
+from argparse import ArgumentParser
+
+
+class Arguments(ArgumentParser):
+    def error(self, message):
+        raise RuntimeError(message)
 
 
 class Owner(commands.Cog):
@@ -54,6 +60,15 @@ class Owner(commands.Cog):
         """Reloads a module."""
         try:
             self.bot.reload_extension(module)
+        except Exception as exc:
+            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        else:
+            await ctx.message.add_reaction("✅")
+
+    @commands.command(hidden=True)
+    async def rldconf(self, ctx):
+        try:
+            importlib.reload(self.bot.config)
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
         else:
@@ -124,8 +139,8 @@ class Owner(commands.Cog):
             return
 
         statuses = []
-        for to_do_first, module in modules:
-            if to_do_first:
+        for do_first, module in modules:
+            if do_first:
                 try:
                     actual_module = sys.modules[module]
                 except KeyError:
@@ -151,15 +166,6 @@ class Owner(commands.Cog):
         # Update total line count since we have made changes.
         self.bot.total_lines = 0
         self.bot.get_line_count()
-
-    @commands.command(hidden=True)
-    async def rldconf(self, ctx):
-        try:
-            importlib.reload(self.bot.config)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
-        else:
-            await ctx.message.add_reaction("✅")
 
     @commands.command(aliases=["kys", "die"], hidden=True)
     async def shutdown(self, ctx):
@@ -299,10 +305,26 @@ class Owner(commands.Cog):
         except Exception as exc:
             await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
 
+    def get_backup_arguments(self, args):
+        import shlex
+
+        parser = Arguments(add_help=False, allow_abbrev=False)
+        parser.add_argument("--file", action="store_true")
+        if args is not None:
+            return parser.parse_args(shlex.split(args))
+        else:
+            return parser.parse_args([])
+
     @commands.command(hidden=True)
-    async def backup(self, ctx):
+    async def backup(self, ctx, *, args: str = None):
         """Generate a backup file of the database."""
         msg = await ctx.send("Generating backup file...")
+
+        try:
+            args = self.get_backup_arguments(args)
+        except RuntimeError as exc:
+            return await ctx.send(exc)
+
         try:
             await asyncio.create_subprocess_shell(
                 "pg_dump -U davide overbot > ../backup.sql",
@@ -312,7 +334,8 @@ class Owner(commands.Cog):
             await msg.add_reaction("✅")
         except Exception as exc:
             await msg.edit(content=f"""```prolog\n{exc}```""")
-        else:
+
+        if args.file:
             await asyncio.sleep(2)  # wait for the file to be created or updated.
             await ctx.send(file=discord.File("../backup.sql"), delete_after=15)
 
