@@ -84,7 +84,7 @@ class BasePaginator:
     async def paginator(self):
         raise NotImplementedError
 
-    async def paginate(self, ctx):
+    async def start(self, ctx):
         raise NotImplementedError
 
 
@@ -128,7 +128,7 @@ class Link(BasePaginator):
         finally:
             await self.cleanup()
 
-    async def paginate(self, ctx):
+    async def start(self, ctx):
         self.ctx = ctx
         self.bot = ctx.bot
         self.author = ctx.author
@@ -177,7 +177,7 @@ class Choose(BasePaginator):
         finally:
             await self.cleanup()
 
-    async def paginate(self, ctx):
+    async def start(self, ctx):
         self.ctx = ctx
         self.bot = ctx.bot
         self.author = ctx.author

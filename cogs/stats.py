@@ -97,7 +97,7 @@ class Statistics(commands.Cog):
                 await message.edit(embed=self.bot.embed_exception(exc))
             else:
                 await self.bot.cleanup(message)
-                await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @commands.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
@@ -152,7 +152,7 @@ class Statistics(commands.Cog):
                 await message.edit(embed=self.bot.embed_exception(exc))
             else:
                 await self.bot.cleanup(message)
-                await self.bot.paginator.Paginator(pages=embed).paginate(ctx)
+                await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
 
 def setup(bot):
