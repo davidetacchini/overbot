@@ -18,9 +18,16 @@ class InvalidPlatform(commands.BadArgument):
         )
 
 
+class InvalidHero(commands.BadArgument):
+    """Exception raised when an invalid hero is given."""
+
+    def __init__(self, hero):
+        super().__init__(f"Hero **{hero}** doesn't exist.")
+
+
 class Platform(commands.Converter):
-    async def convert(self, ctx, arg):
-        platform = arg.lower()
+    async def convert(self, ctx, platform):
+        platform = platform.lower()
         if platform not in PLATFORMS:
             raise InvalidPlatform(ctx)
         elif platform in PC:
@@ -34,10 +41,12 @@ class Platform(commands.Converter):
 
 
 class Hero(commands.Converter):
-    async def convert(self, ctx, arg):
-        hero = arg.lower()
+    async def convert(self, ctx, hero):
+        hero = hero.lower()
+        if hero not in ctx.bot.heroes:
+            raise InvalidHero(hero)
         # Advanced A.I. implementation
-        if hero in ("soldier", "soldier-76"):
+        elif hero in ("soldier", "soldier-76"):
             return "soldier76"
         elif hero == "wreckingball":
             return "wreckingBall"
@@ -49,8 +58,8 @@ class Hero(commands.Converter):
 
 
 class HeroCategory(commands.Converter):
-    async def convert(self, ctx, arg):
-        category = arg.lower()
+    async def convert(self, ctx, category):
+        category = category.lower()
         if category in ("heal", "healer"):
             return "support"
         elif category == "dps":
