@@ -27,7 +27,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.send_log(discord.Color.blue(), "Bot is online.")
         print(
             textwrap.dedent(
                 f"""
@@ -54,6 +53,7 @@ class Events(commands.Cog):
             self.bot.heroes = await self.cache_heroes()
 
         await self.change_presence()
+        await self.send_log(discord.Color.blue(), "Bot is online.")
 
     @commands.Cog.listener()
     async def on_disconnect(self):
