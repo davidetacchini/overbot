@@ -16,6 +16,7 @@ class Events(commands.Cog):
             return
 
         embed = discord.Embed(color=color)
+        embed.timestamp = self.bot.timestamp
         embed.title = message
 
         channel = self.bot.get_channel(self.bot.config.status_channel)
