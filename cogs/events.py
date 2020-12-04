@@ -46,7 +46,7 @@ class Events(commands.Cog):
 
         if not hasattr(self.bot, "total_lines"):
             self.bot.total_lines = 0
-            self.get_line_count()
+            self.bot.get_line_count()
 
         # caching all Overwatch heroes at startup. Used in
         # classes/converters.py to check if the entered hero exists.
@@ -99,14 +99,6 @@ class Events(commands.Cog):
             ),
             status=discord.Status.idle,
         )
-
-    def get_line_count(self):
-        for root, dirs, files in os.walk(os.getcwd()):
-            [dirs.remove(d) for d in list(dirs) if d == "env"]
-            for name in files:
-                if name.endswith(".py"):
-                    with open(f"{root}/{name}") as f:
-                        self.bot.total_lines += len(f.readlines())
 
     async def cache_heroes(self):
         url = self.bot.config.random["hero"]

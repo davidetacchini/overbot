@@ -134,6 +134,14 @@ class Bot(commands.AutoShardedBot):
         with suppress(discord.HTTPException, discord.Forbidden):
             await message.delete()
 
+    def get_line_count(self):
+        for root, dirs, files in os.walk(os.getcwd()):
+            [dirs.remove(d) for d in list(dirs) if d == "env"]
+            for name in files:
+                if name.endswith(".py"):
+                    with open(f"{root}/{name}") as f:
+                        self.bot.total_lines += len(f.readlines())
+
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
         embed = discord.Embed(color=self.color)
