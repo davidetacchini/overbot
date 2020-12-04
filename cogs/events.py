@@ -1,4 +1,3 @@
-import os
 import textwrap
 from datetime import datetime
 from contextlib import suppress
