@@ -40,6 +40,9 @@ class ErrorHandler(commands.Cog):
                 )
             )
 
+        elif isinstance(error, commands.NoPrivateMessage):
+            await ctx.author.send("This command can't be used in direct messages.")
+
         elif isinstance(error, commands.NotOwner):
             await ctx.send("It seems you do not own this bot.")
 
