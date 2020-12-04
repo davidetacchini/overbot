@@ -1,6 +1,7 @@
 import discord
 from asyncpg import DataError
 from discord.ext import commands
+from discord.ext.menus import MenuError
 
 from utils import checks
 from utils.paginator import NoChoice
@@ -41,6 +42,9 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.NotOwner):
             await ctx.send("It seems you do not own this bot.")
+
+        elif hasattr(error, "original") and isinstance(error, MenuError):
+            return
 
         elif hasattr(error, "original") and isinstance(
             error.original, discord.HTTPException
