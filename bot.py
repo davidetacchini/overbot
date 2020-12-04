@@ -140,7 +140,7 @@ class Bot(commands.AutoShardedBot):
             for name in files:
                 if name.endswith(".py"):
                     with open(f"{root}/{name}") as f:
-                        self.bot.total_lines += len(f.readlines())
+                        self.total_lines += len(f.readlines())
 
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
