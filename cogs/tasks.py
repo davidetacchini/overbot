@@ -18,11 +18,8 @@ class Tasks(commands.Cog):
         self.send_overwatch_news.start()
 
     def get_shards(self):
-        # Looping from 0 to 9 since OverBot has 2 shards only.
-        # I could've done range(2) but this is just for more
-        # flexibility. An infinite loop could've been used.
         shards = []
-        for i in range(10):
+        for i in range(self.bot.shard_count):
             shard = self.bot.get_shard(i)
             if not shard:
                 break
