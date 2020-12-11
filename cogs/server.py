@@ -51,7 +51,13 @@ class Server(commands.Cog):
 
     @staticmethod
     def get_placement(place):
-        placements = {1: ":first_place:", 2: ":second_place:", 3: ":third_place:"}
+        placements = {
+            1: ":first_place:",
+            2: ":second_place:",
+            3: ":third_place:",
+            4: ":four:",
+            5: ":five:",
+        }
         return placements.get(place)
 
     @commands.command()
