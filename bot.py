@@ -65,10 +65,6 @@ class Bot(commands.AutoShardedBot):
         return datetime.datetime.utcnow()
 
     @property
-    def ping(self):
-        return round(self.latency * 1000)
-
-    @property
     def prefix(self):
         return config.default_prefix
 
