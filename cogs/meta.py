@@ -24,8 +24,8 @@ class Meta(commands.Cog):
         start = time.monotonic()
         msg = await ctx.send(embed=embed)
         embed.title = None
-        ack = round((time.monotonic() - start) * 1000)
-        embed.add_field(name="Latency", value=f"{self.bot.ping}ms")
+        ack = round((time.monotonic() - start) * 1000, 2)
+        embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000, 2)}ms")
         embed.add_field(name="ACK", value=f"{ack}ms")
         await msg.edit(embed=embed)
 
