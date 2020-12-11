@@ -27,7 +27,7 @@ class Tasks(commands.Cog):
             shards.append(
                 dict(
                     id=shard.id + 1,
-                    latency=round(shard.latency * 1000),
+                    latency=round(shard.latency * 1000, 2),
                     guild_count=len(guilds),
                 )
             )
@@ -40,6 +40,7 @@ class Tasks(commands.Cog):
 
         with suppress(OverflowError):
             shards = self.get_shards()
+            ping = f"{round(self.bot.latency * 1000, 2)}ms"
 
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
@@ -71,7 +72,7 @@ class Tasks(commands.Cog):
                 "Large Servers": large_servers,
                 "Total Commands": total_commands,
                 "Uptime": str(self.bot.get_uptime(brief=True)),
-                "Ping": f"{self.bot.ping}ms",
+                "Ping": ping,
                 "Lines of Code": self.bot.total_lines,
             },
             "shards": shards,
@@ -118,9 +119,6 @@ class Tasks(commands.Cog):
     @tasks.loop(seconds=30.0)
     async def statistics(self):
         """POST bot statistics to private API."""
-        if self.bot.debug:
-            return
-
         await self.bot.wait_until_ready()
 
         headers = {
