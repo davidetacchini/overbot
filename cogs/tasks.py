@@ -119,6 +119,9 @@ class Tasks(commands.Cog):
     @tasks.loop(seconds=30.0)
     async def statistics(self):
         """POST bot statistics to private API."""
+        if self.bot.debug:
+            return
+
         await self.bot.wait_until_ready()
 
         headers = {
