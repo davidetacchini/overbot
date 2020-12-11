@@ -44,7 +44,7 @@ class Overwatch(commands.Cog):
     async def news(self, ctx, amount: int = None):
         """Returns the latest Overwatch news.
 
-        `[amount]` - The amount of news to return. Default to 4.
+        `[amount]` - The amount of news to return. Defaults to 4.
 
         You can use this command once every 30 seconds.
         """
