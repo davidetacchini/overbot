@@ -79,17 +79,20 @@ class Overwatch(commands.Cog):
         embed.title = "Overwatch Patch Notes"
         embed.add_field(
             name="Live",
-            value=f"[Click here to view **live** patch notes]({self.bot.config.overwatch['patch'].format('live')})",
+            value="[Click here to view **live** patch notes]"
+            f"({self.bot.config.overwatch['patch'].format('live')})",
             inline=False,
         )
         embed.add_field(
             name="Ptr",
-            value=f"[Click here to view **ptr** patch notes]({self.bot.config.overwatch['patch'].format('ptr')})",
+            value="[Click here to view **ptr** patch notes]"
+            f"({self.bot.config.overwatch['patch'].format('ptr')})",
             inline=False,
         )
         embed.add_field(
             name="Experimental",
-            value=f"[Click here to view **experimental** patch notes]({self.bot.config.overwatch['patch'].format('experimental')})",
+            value="[Click here to view **experimental** patch notes]"
+            f"({self.bot.config.overwatch['patch'].format('experimental')})",
             inline=False,
         )
         await ctx.send(embed=embed)
