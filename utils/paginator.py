@@ -182,9 +182,9 @@ class Choose(BasePaginator):
         self.bot = ctx.bot
         self.author = ctx.author
 
-        for index, entry in enumerate(self.entries):
-            self.reactions.append(f"{index+1}\u20e3")
-            self.description.append(f"{index + 1}. {entry}")
+        for index, entry in enumerate(self.entries, start=1):
+            self.reactions.append(f"{index}\u20e3")
+            self.description.append(f"{index}. {entry}")
 
         self.embed = self.init_embed()
         self.embed.description = "\n".join(self.description)
