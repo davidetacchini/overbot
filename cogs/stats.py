@@ -42,7 +42,7 @@ class Statistics(commands.Cog):
             try:
                 await message.edit(embed=self.bot.embed_exception(exc))
             except Exception as exc:
-                await ctx.send(self.bot.embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             try:
                 profile = Player(data=data, platform=platform, username=username)
@@ -88,7 +88,7 @@ class Statistics(commands.Cog):
             try:
                 await message.edit(embed=self.bot.embed_exception(exc))
             except Exception as exc:
-                await ctx.send(self.bot.embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             try:
                 profile = Player(data=data, platform=platform, username=username)
@@ -146,7 +146,7 @@ class Statistics(commands.Cog):
             try:
                 await message.edit(embed=self.bot.embed_exception(exc))
             except Exception as exc:
-                await ctx.send(self.bot.embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             try:
                 profile = Player(data=data, platform=platform, username=username)
