@@ -14,9 +14,13 @@ class ProfileNotLinked(commands.CheckFailure):
 
 
 async def get_profile(ctx):
-    return await ctx.bot.pool.fetchrow(
-        "SELECT platform, name FROM profile WHERE id=$1;", ctx.author.id
-    )
+    query = """SELECT platform, username
+            FROM profile
+            INNER JOIN member
+                    ON member.id = profile.member_id
+            WHERE member.id = $1
+            """
+    return await ctx.bot.pool.fetchrow(query, ctx.author.id)
 
 
 def has_profile():
