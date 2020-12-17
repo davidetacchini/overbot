@@ -57,9 +57,6 @@ class Bot(commands.AutoShardedBot):
         self.paginator = pygicord
         self.data = data
 
-    def __repr__(self):
-        return "<Bot>"
-
     @property
     def timestamp(self):
         return datetime.datetime.utcnow()
