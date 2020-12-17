@@ -26,7 +26,7 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.command (
     id smallint NOT NULL,
-    total integer DEFAULT 0 NOT NULL
+    total integer DEFAULT 0
 );
 
 
@@ -60,7 +60,8 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 
 CREATE TABLE public.member (
     id bigint NOT NULL,
-    commands_runned integer DEFAULT 0 NOT NULL
+    commands_runned integer DEFAULT 0 NOT NULL,
+    custom_nick boolean DEFAULT false NOT NULL
 );
 
 
@@ -72,7 +73,7 @@ ALTER TABLE public.member OWNER TO davide;
 
 CREATE TABLE public.news (
     id smallint NOT NULL,
-    news_id bigint DEFAULT 0 NOT NULL
+    news_id bigint DEFAULT 0
 );
 
 
@@ -83,13 +84,36 @@ ALTER TABLE public.news OWNER TO davide;
 --
 
 CREATE TABLE public.profile (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     platform character varying(15) NOT NULL,
-    name character varying(100) NOT NULL
+    username character varying(100) NOT NULL,
+    member_id bigint NOT NULL
 );
 
 
 ALTER TABLE public.profile OWNER TO davide;
+
+--
+-- Name: profile_id_seq1; Type: SEQUENCE; Schema: public; Owner: davide
+--
+
+CREATE SEQUENCE public.profile_id_seq1
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.profile_id_seq1 OWNER TO davide;
+
+--
+-- Name: profile_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
+--
+
+ALTER SEQUENCE public.profile_id_seq1 OWNED BY public.profile.id;
+
 
 --
 -- Name: server; Type: TABLE; Schema: public; Owner: davide
@@ -127,11 +151,10 @@ ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.comm
 
 
 --
--- Name: trivia Trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+-- Name: profile id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
-ALTER TABLE ONLY public.trivia
-    ADD CONSTRAINT "Trivia_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.profile_id_seq1'::regclass);
 
 
 --
@@ -172,6 +195,22 @@ ALTER TABLE ONLY public.profile
 
 ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trivia trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.trivia
+    ADD CONSTRAINT trivia_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: profile profile_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.profile
+    ADD CONSTRAINT profile_fkey FOREIGN KEY (member_id) REFERENCES public.member(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
