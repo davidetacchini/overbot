@@ -68,5 +68,5 @@ class HeroCategory(commands.Converter):
 
 
 class MapCategory(commands.Converter):
-    async def convert(self, ctx, arg):
-        return arg.lower()
+    async def convert(self, ctx, category):
+        return category.lower()
