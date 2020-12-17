@@ -38,12 +38,12 @@ class NoHeroStatistics(PlayerException):
 
 class Player:
 
-    __slots__ = ("data", "platform", "name", "color", "pages")
+    __slots__ = ("data", "platform", "username", "color", "pages")
 
-    def __init__(self, **kwargs):
-        self.data = kwargs.get("data", None)
-        self.platform = kwargs.get("platform", None)
-        self.name = kwargs.get("name", None)
+    def __init__(self, *, data: dict, platform: str, username: str):
+        self.data = data
+        self.platform = platform
+        self.username = username
 
         self.color = config.main_color
         self.pages = []
@@ -64,9 +64,11 @@ class Player:
         return self.data["private"]
 
     @property
-    def url(self):
-        name = self.name.replace("#", "-").replace(" ", "%20")
-        return config.overwatch["player"].format(self.platform, name)
+    def has_statistics(self):
+        return (
+            self.data["quickPlayStats"]["careerStats"]
+            or self.data["competitiveStats"]["careerStats"]
+        )
 
     @staticmethod
     def add_space(key):
@@ -77,14 +79,6 @@ class Player:
             .replace(" Most In Game", "")
             .title()
         )
-
-    def format_key(self, key):
-        if key == "best":
-            return key.capitalize() + " (Most in game)"
-        elif key == "average":
-            return key.capitalize() + " (per 10 minutes)"
-        else:
-            return self.add_space(key)
 
     @staticmethod
     def get_rating_icon(rating):
@@ -103,31 +97,42 @@ class Player:
         else:
             return "<:grandmaster:632281128966946826>"
 
-    def rank(self):
-        embed = discord.Embed(color=self.color)
-        embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
+    def format_key(self, key):
+        if key == "best":
+            return key.capitalize() + " (Most in game)"
+        elif key == "average":
+            return key.capitalize() + " (per 10 minutes)"
+        else:
+            return self.add_space(key)
 
+    def resolve_ratings(self):
         if not self.data["ratings"]:
+            return None
+        return self.data["ratings"]
+
+    def get_ratings(self):
+        embed = discord.Embed(color=self.color)
+        embed.set_author(name=str(self), icon_url=self.avatar)
+
+        player_ratings = self.resolve_ratings()
+
+        if not player_ratings:
             embed.description = "This profile is unranked."
             return embed
 
-        for rate in self.data["ratings"].items():
+        for key, value in player_ratings.items():
             embed.add_field(
-                name=f"{ROLES[rate[0]]} **{rate[0].upper()}**",
-                value=f'{self.get_rating_icon(rate[1]["level"])} **{rate[1]["level"]}**{SR}',
+                name=f"{ROLES.get(key)} **{key.upper()}**",
+                value=f'{self.get_rating_icon(value["level"])} **{value["level"]}**{SR}',
             )
+        embed.set_footer(
+            text=f'Avarage: {self.data.get("rating")}',
+            icon_url=self.data.get("ratingIcon"),
+        )
         return embed
 
-    def has_statistics(self):
-        if (
-            self.data["quickPlayStats"]["careerStats"]
-            or self.data["competitiveStats"]["careerStats"]
-        ):
-            return True
-        return False
-
-    def get_statistics(self, hero="allHeroes"):
-        if not self.has_statistics():
+    def resolve_statistics(self, hero="allHeroes"):
+        if not self.has_statistics:
             raise NoStatistics()
 
         # quickplay statistics
@@ -156,26 +161,26 @@ class Player:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self.add_space(c_t))
 
-    def statistics(self, ctx):
-        keys, quickplay, competitive = self.get_statistics()
+    def get_statistics(self, ctx):
+        keys, quickplay, competitive = self.resolve_statistics()
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=self.color)
             embed.title = self.format_key(key)
-            embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
+            embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=self.level_icon)
             embed.set_footer(text=f"Page {i}/{len(keys)}")
             self.format_statistics(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
-    def hero(self, ctx, hero):
-        keys, quickplay, competitive = self.get_statistics(hero)
+    def get_hero(self, ctx, hero):
+        keys, quickplay, competitive = self.resolve_statistics(hero)
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=self.color)
             embed.title = self.format_key(key)
-            embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
+            embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
             embed.set_footer(text=f"Page {i}/{len(keys)}")
             self.format_statistics(embed, key, quickplay, competitive)
@@ -188,7 +193,7 @@ class Player:
         embed.description = (
             "Profiles are set to private by default."
             " You can modify this setting in Overwatch under `Options - Social`."
-            " Please Note that these changes may take effect after approximately 30 minutes."
+            " Please note that these changes may take effect after approximately 30 minutes."
         )
-        embed.set_author(name=str(self), icon_url=self.avatar, url=self.url)
+        embed.set_author(name=str(self), icon_url=self.avatar)
         return embed
