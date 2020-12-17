@@ -89,7 +89,7 @@ class Trivia(commands.Cog):
 
     async def get_member_trivia_stats(self, member):
         member_stats = await self.bot.pool.fetchrow(
-            "SELECT * FROM trivia WHERE id=$1;", member.id
+            "SELECT * FROM trivia WHERE id = $1;", member.id
         )
         if not member_stats:
             raise MemberHasNoStats(member)
