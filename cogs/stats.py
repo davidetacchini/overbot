@@ -17,7 +17,7 @@ class Statistics(commands.Cog):
         `<platform>` - The platform of the player to get ranks for.
         `<username>` - The username of the player to get ranks for.
 
-        Available platforms
+        Platforms
         - pc (bnet)
         - playstation (ps, psn, play)
         - xbox (xbl)
@@ -34,19 +34,22 @@ class Statistics(commands.Cog):
         """
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
-            data = await self.bot.data.Data(platform=platform, name=username).get()
+            data = await self.bot.data.Data(platform=platform, username=username).get()
         except RequestError as exc:
             await self.bot.cleanup(message)
             await ctx.send(exc)
         except Exception as exc:
-            await message.edit(embed=self.bot.embed_exception(exc))
+            try:
+                await message.edit(embed=self.bot.embed_exception(exc))
+            except Exception as exc:
+                await ctx.send(self.bot.embed_exception(exc))
         else:
             try:
-                profile = Player(data=data, platform=platform, name=username)
+                profile = Player(data=data, platform=platform, username=username)
                 if profile.is_private:
                     embed = profile.private(ctx)
                 else:
-                    embed = profile.rank()
+                    embed = profile.get_ratings()
             except Exception as exc:
                 await message.edit(embed=self.bot.embed_exception(exc))
             else:
@@ -60,7 +63,7 @@ class Statistics(commands.Cog):
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
 
-        Available platforms
+        Platforms
         - pc (bnet)
         - playstation (ps, psn, play)
         - xbox (xbl)
@@ -77,19 +80,22 @@ class Statistics(commands.Cog):
         """
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
-            data = await self.bot.data.Data(platform=platform, name=username).get()
+            data = await self.bot.data.Data(platform=platform, username=username).get()
         except RequestError as exc:
             await self.bot.cleanup(message)
             await ctx.send(exc)
         except Exception as exc:
-            await message.edit(embed=self.bot.embed_exception(exc))
+            try:
+                await message.edit(embed=self.bot.embed_exception(exc))
+            except Exception as exc:
+                await ctx.send(self.bot.embed_exception(exc))
         else:
             try:
-                profile = Player(data=data, platform=platform, name=username)
+                profile = Player(data=data, platform=platform, username=username)
                 if profile.is_private:
                     embed = profile.private(ctx)
                 else:
-                    embed = profile.statistics(ctx)
+                    embed = profile.get_statistics(ctx)
             except PlayerException as exc:
                 await self.bot.cleanup(message)
                 await ctx.send(exc)
@@ -115,7 +121,7 @@ class Statistics(commands.Cog):
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
 
-        Available platforms
+        Platforms
         - pc (bnet)
         - playstation (ps, psn, play)
         - xbox (xbl)
@@ -132,19 +138,22 @@ class Statistics(commands.Cog):
         """
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
-            data = await self.bot.data.Data(platform=platform, name=username).get()
+            data = await self.bot.data.Data(platform=platform, username=username).get()
         except RequestError as exc:
             await self.bot.cleanup(message)
             await ctx.send(exc)
         except Exception as exc:
-            await message.edit(embed=self.bot.embed_exception(exc))
+            try:
+                await message.edit(embed=self.bot.embed_exception(exc))
+            except Exception as exc:
+                await ctx.send(self.bot.embed_exception(exc))
         else:
             try:
-                profile = Player(data=data, platform=platform, name=username)
+                profile = Player(data=data, platform=platform, username=username)
                 if profile.is_private:
                     embed = profile.private(ctx)
                 else:
-                    embed = profile.hero(ctx, hero)
+                    embed = profile.get_hero(ctx, hero)
             except PlayerException as exc:
                 await self.bot.cleanup(message)
                 await ctx.send(exc)
