@@ -25,6 +25,17 @@ class InvalidHero(commands.BadArgument):
         super().__init__(f"Hero **{hero}** doesn't exist.")
 
 
+class InvalidMemeCategory(commands.BadArgument):
+    """Exception raised when an invalid meme category is given."""
+
+    def __init__(self, ctx):
+        prefix = ctx.prefix
+        command = ctx.command.qualified_name
+        super().__init__(
+            f'Invalid category. Use "{prefix}help {command}" for more info.'
+        )
+
+
 class Platform(commands.Converter):
     async def convert(self, ctx, platform):
         platform = platform.lower()
@@ -70,3 +81,11 @@ class HeroCategory(commands.Converter):
 class MapCategory(commands.Converter):
     async def convert(self, ctx, category):
         return category.lower()
+
+
+class MemeCategory(commands.Converter):
+    async def convert(self, ctx, category):
+        category = category.lower()
+        if category not in ("hot", "new", "top", "rising"):
+            raise InvalidMemeCategory(ctx)
+        return category
