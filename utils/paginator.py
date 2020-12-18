@@ -15,6 +15,7 @@ class NoChoice(CommandInvokeError):
 
 
 class BasePaginator:
+
     __slots__ = (
         "entries",
         "timeout",
