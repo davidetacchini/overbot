@@ -69,9 +69,9 @@ class ErrorHandler(commands.Cog):
                     f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile link" to do so.'
                 )
 
-            elif type(error) == checks.ProfileAlreadyLinked:
+            elif type(error) == checks.ProfileLimitReached:
                 await ctx.send(
-                    f'You have already linked a profile. Use "{ctx.prefix}profile info" for more info.'
+                    f'You have reached the maximum of linked profiles. Use "{ctx.prefix}profile list" for more info.'
                 )
 
 
