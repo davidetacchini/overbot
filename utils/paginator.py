@@ -91,9 +91,10 @@ class BasePaginator:
 
 class Link(BasePaginator):
 
-    __slots__ = ("title", "footer")
+    __slots__ = "title"
 
-    def __init__(self, *, title, footer):
+    def __init__(self, *, title):
+        footer = "React with the platform you play on..."
         super().__init__(title=title, footer=footer)
         self.reactions = {
             "<:battlenet:679469162724196387>": "pc",
@@ -142,11 +143,40 @@ class Link(BasePaginator):
         return await self.paginator()
 
 
+class Update(Link):
+
+    __slots__ = ("platform", "username", "title")
+
+    def __init__(self, platform, username, *, title):
+        super().__init__(title=title)
+        self.platform = platform
+        self.username = username
+
+    async def start(self, ctx):
+        self.ctx = ctx
+        self.bot = ctx.bot
+        self.author = ctx.author
+
+        self.embed = self.init_embed()
+        for key, value in self.reactions.items():
+            self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
+        self.embed.description = "\n".join(self.description)
+
+        self.embed.description = (
+            self.embed.description + "\n\nYou are going to update the following profile"
+        )
+
+        self.embed.add_field(name="Platform", value=self.platform)
+        self.embed.add_field(name="Username", value=self.username)
+
+        return await self.paginator()
+
+
 class Choose(BasePaginator):
 
     __slots__ = ("entries", "timeout", "title", "image", "footer")
 
-    def __init__(self, entries, timeout, title, image, footer):
+    def __init__(self, entries, *, timeout, title, image, footer):
         super().__init__(
             entries, timeout=timeout, title=title, image=image, footer=footer
         )
