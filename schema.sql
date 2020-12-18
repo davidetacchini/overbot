@@ -61,7 +61,8 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 CREATE TABLE public.member (
     id bigint NOT NULL,
     commands_runned integer DEFAULT 0 NOT NULL,
-    custom_nick boolean DEFAULT false NOT NULL
+    custom_nick boolean DEFAULT false NOT NULL,
+    main_profile integer
 );
 
 
@@ -203,6 +204,14 @@ ALTER TABLE ONLY public.server
 
 ALTER TABLE ONLY public.trivia
     ADD CONSTRAINT trivia_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: member member_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.member
+    ADD CONSTRAINT member_fkey FOREIGN KEY (main_profile) REFERENCES public.profile(id) ON UPDATE SET NULL ON DELETE SET NULL NOT VALID;
 
 
 --
