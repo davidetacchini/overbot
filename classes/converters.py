@@ -36,6 +36,13 @@ class InvalidMemeCategory(commands.BadArgument):
         )
 
 
+class InvalidIndex(commands.BadArgument):
+    """Exception raised when an invalid index is given."""
+
+    def __init__(self):
+        super().__init__("Index must be a number.")
+
+
 class Platform(commands.Converter):
     async def convert(self, ctx, platform):
         platform = platform.lower()
@@ -89,3 +96,10 @@ class MemeCategory(commands.Converter):
         if category not in ("hot", "new", "top", "rising"):
             raise InvalidMemeCategory(ctx)
         return category
+
+
+class Index(commands.Converter):
+    async def convert(self, ctx, index):
+        if not index.isdigit():
+            raise InvalidIndex()
+        return int(index)
