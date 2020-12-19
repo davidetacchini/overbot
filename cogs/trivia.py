@@ -216,7 +216,6 @@ class Trivia(commands.Cog):
         )
 
     def format_content(self, content):
-        """Automatically removes code blocks from the code."""
         if content.startswith("```") and content.endswith("```"):
             return content
         return "```json\n" + content + "```"
