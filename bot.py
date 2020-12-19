@@ -173,7 +173,7 @@ class Bot(commands.AutoShardedBot):
             **self.config.database, max_size=20, command_timeout=60.0
         )
         # Caching prefixes at startup
-        rows = await self.pool.fetch('SELECT id, "prefix" FROM server;')
+        rows = await self.pool.fetch("SELECT id, prefix FROM server;")
         for row in rows:
             if row["prefix"] != self.prefix:
                 self.prefixes[row["id"]] = row["prefix"]
