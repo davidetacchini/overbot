@@ -40,7 +40,7 @@ class Server(commands.Cog):
             pre = await self.bot.pool.fetchval(
                 "SELECT prefix FROM server WHERE id = $1;", ctx.guild.id
             )
-            embed = discord.Embed(color=discord.Color.blurple())
+            embed = discord.Embed(color=self.bot.color)
             embed.set_footer(
                 text=f'Use "{self.bot.clean_prefix(ctx)}prefix value" to change it.'
             )
