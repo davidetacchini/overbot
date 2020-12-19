@@ -63,6 +63,20 @@ class Trivia(commands.Cog):
         else:
             await self.update_member_games_lost(member_id)
 
+    def embed_result(self, member, *, won=True, correct_answer=None):
+        embed = discord.Embed()
+        embed.set_author(name=str(member), icon_url=member.avatar_url)
+        if won:
+            embed.color = discord.Color.green()
+            embed.title = "Correct!"
+            embed.set_footer(text="+1 win")
+        else:
+            embed.color = discord.Color.red()
+            embed.title = "Wrong!"
+            embed.set_footer(text="+1 loss")
+            embed.add_field(name="Correct answer", value=correct_answer)
+        return embed
+
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     async def trivia(self, ctx):
@@ -82,10 +96,13 @@ class Trivia(commands.Cog):
         result = await self.get_result(ctx, question)
         if result:
             await self.update_member_stats(ctx.author.id)
-            await ctx.send("Correct!")
+            await ctx.send(embed=self.embed_result(ctx.author))
         else:
             await self.update_member_stats(ctx.author.id, won=False)
-            await ctx.send(f"Wrong! Correct answer is: `{question['correct_answer']}`")
+            embed = self.embed_result(
+                ctx.author, won=False, correct_answer=question["correct_answer"]
+            )
+            await ctx.send(embed=embed)
 
     async def get_member_trivia_stats(self, member):
         member_stats = await self.bot.pool.fetchrow(
