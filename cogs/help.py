@@ -145,7 +145,7 @@ class GroupHelp(menus.ListPageSource):
             )
 
         embed.set_footer(
-            text=f'Use "{self.prefix}help command" for more info on a command.'
+            text=f'Use "{self.prefix}help [command]" for more info on a command.'
         )
         return embed
 
