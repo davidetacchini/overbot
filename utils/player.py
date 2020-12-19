@@ -140,9 +140,8 @@ class Player:
         # competitive statistics
         c = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
 
-        if hero != "allHeroes":
-            if not q and not c:
-                raise NoHeroStatistics(str(self), hero)
+        if hero != "allHeroes" and not q and not c:
+            raise NoHeroStatistics(str(self), hero)
 
         keys = list({*q, *c})
         keys.sort()
