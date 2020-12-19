@@ -57,7 +57,7 @@ class BasePaginator:
         self.message = None
 
     def init_embed(self):
-        embed = discord.Embed(color=main_color)
+        embed = discord.Embed(color=self.author.color)
         embed.set_author(name=str(self.author), icon_url=self.author.avatar_url)
 
         if self.title:
