@@ -1,6 +1,5 @@
 #!/bin/bash
-if [ -z "$1" ]
-  then
+if [ -z "$1" ]; then
     echo "Please provide a database name."
     exit 1
 fi
