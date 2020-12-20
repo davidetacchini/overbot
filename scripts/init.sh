@@ -40,7 +40,7 @@ printf "Reloading the daemon...\n"
 {
 	systemctl daemon-reload
 } || {
-	echo "[${red}ERROR${reset}] an error occured while reloading the deamon."
+	echo "[${red}ERROR${reset}] an error occured while reloading the daemon."
 }
 
 printf "${green}${bold}Installation completed!${normal}${reset}\n"
