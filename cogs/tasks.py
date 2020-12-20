@@ -206,9 +206,8 @@ class Tasks(commands.Cog):
         # Get the latest news id from the URL
         news_id = re.search(r"\d+", link[0]).group(0)
 
-        # Return if news_id it's equals to the news_id stored
-        # in the database. If it's equals it means that we
-        # already sent that specific news.
+        # Returns whether the news_id it's equals to the one stored in the database.
+        # If it's equals, that specific news has already been sent.
         if int(news_id) == await self.bot.pool.fetchval(
             "SELECT news_id FROM news WHERE id=1;"
         ):
