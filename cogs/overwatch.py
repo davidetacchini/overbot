@@ -1,6 +1,7 @@
+import secrets
+
 import discord
 from discord.ext import commands
-import secrets
 
 from utils.scrape import get_overwatch_news, get_overwatch_status
 from classes.converters import MemeCategory
