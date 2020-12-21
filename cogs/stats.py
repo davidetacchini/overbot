@@ -24,12 +24,12 @@ class Statistics(commands.Cog):
         - nintendo-switch (nsw, switch)
 
         Username formatting
-        - pc: Battletag (format: name#0000)
+        - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
 
-        Battletag example: Smyile#2825
+        BattleTag example: Smyile#2825
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
         try:
@@ -70,12 +70,12 @@ class Statistics(commands.Cog):
         - nintendo-switch (nsw, switch)
 
         Username formatting
-        - pc: Battletag (format: name#0000)
+        - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
 
-        Battletag example: Smyile#2825
+        BattleTag example: Smyile#2825
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
         try:
@@ -128,12 +128,12 @@ class Statistics(commands.Cog):
         - nintendo-switch (nsw, switch)
 
         Username formatting
-        - pc: Battletag (format: name#0000)
+        - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
 
-        Battletag example: Smyile#2825
+        BattleTag example: Smyile#2825
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
         try:
