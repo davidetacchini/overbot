@@ -1,7 +1,7 @@
 from discord.ext import commands
 
-from utils.request import Request, RequestError
 from utils.player import Player, PlayerException
+from utils.request import Request, RequestError
 from classes.converters import Hero, Platform
 
 
