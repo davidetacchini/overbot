@@ -306,7 +306,7 @@ class Profile(commands.Cog):
                     f'Invalid index. Use "{ctx.prefix}help rating" for more info.'
                 )
             except Exception as exc:
-                await ctx.send(embed=self.embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 try:
                     data = await Request(platform=platform, username=username).get()
@@ -407,7 +407,7 @@ class Profile(commands.Cog):
                     f'Invalid index. Use "{ctx.prefix}help hero" for more info.'
                 )
             except Exception as exc:
-                await ctx.send(embed=self.embed_exception(exc))
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 try:
                     data = await Request(platform=platform, username=username).get()
