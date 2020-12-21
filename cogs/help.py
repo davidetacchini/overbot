@@ -211,12 +211,11 @@ class CustomHelpCommand(commands.HelpCommand):
         if len(subcommands) == 0:
             return await self.send_command_help(group)
 
-        # NOT WORKING
-        # entries = await self.filter_commands(subcommands, sort=True)
-        # if len(entries) == 0:
-        #     return await self.send_command_help(group)
+        entries = await self.filter_commands(subcommands, sort=True)
+        if len(entries) == 0:
+            return await self.send_command_help(group)
 
-        source = GroupHelp(group, list(subcommands), prefix=self.clean_prefix)
+        source = GroupHelp(group, entries, prefix=self.clean_prefix)
         self.common_command_formatting(source, group)
         menu = HelpMenu(source)
         await menu.start(self.context)
