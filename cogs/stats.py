@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from utils.data import RequestError
+from utils.data import Data, RequestError
 from utils.player import Player, PlayerException
 from classes.converters import Hero, Platform
 
@@ -34,7 +34,7 @@ class Statistics(commands.Cog):
         """
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
-            data = await self.bot.data.Data(platform=platform, username=username).get()
+            data = await Data(platform=platform, username=username).get()
         except RequestError as exc:
             await self.bot.cleanup(message)
             await ctx.send(exc)
@@ -80,7 +80,7 @@ class Statistics(commands.Cog):
         """
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
-            data = await self.bot.data.Data(platform=platform, username=username).get()
+            data = await Data(platform=platform, username=username).get()
         except RequestError as exc:
             await self.bot.cleanup(message)
             await ctx.send(exc)
@@ -138,7 +138,7 @@ class Statistics(commands.Cog):
         """
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
-            data = await self.bot.data.Data(platform=platform, username=username).get()
+            data = await Data(platform=platform, username=username).get()
         except RequestError as exc:
             await self.bot.cleanup(message)
             await ctx.send(exc)
