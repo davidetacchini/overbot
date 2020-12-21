@@ -2,7 +2,6 @@ import re
 
 import discord
 
-
 SR = "<:sr:639897739920146437>"
 
 ROLES = {
