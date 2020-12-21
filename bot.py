@@ -34,7 +34,6 @@ from termcolor import colored
 from discord.ext import commands
 
 import config
-from utils import data
 from utils.time import human_timedelta
 from classes.context import Context
 
@@ -55,7 +54,6 @@ class Bot(commands.AutoShardedBot):
         self.prefixes = {}
 
         self.paginator = pygicord
-        self.data = data
 
     @property
     def timestamp(self):
