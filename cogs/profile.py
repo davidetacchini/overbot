@@ -96,7 +96,7 @@ class Profile(commands.Cog):
             if not await self.is_main_profile(member.id, id):
                 fmt = f"{index}. {platform} - {username}"
             else:
-                fmt = f"{index}. `{platform} - {username}`"
+                fmt = f"{index}. {platform} - {username} :star:"
             description.append(fmt)
         embed.description = "\n".join(description)
         return embed
@@ -190,8 +190,8 @@ class Profile(commands.Cog):
 
         if not await ctx.prompt(
             "Are you sure you want to unlink the following profile?\n"
-            f"Platform: {self.platforms.get(platform)} **{platform}**\n"
-            f"Username: **{username}**"
+            f"Platform: `{platform}`\n"
+            f"Username: `{username}`"
         ):
             return
         try:
@@ -301,6 +301,10 @@ class Profile(commands.Cog):
                 _, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
+            except IndexError:
+                await ctx.send(
+                    f'Invalid index. Use "{ctx.prefix}help rating" for more info.'
+                )
             except Exception as exc:
                 await ctx.send(embed=self.embed_exception(exc))
             else:
@@ -345,6 +349,12 @@ class Profile(commands.Cog):
                 _, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
+            except IndexError:
+                await ctx.send(
+                    f'Invalid index. Use "{ctx.prefix}help statistics" for more info.'
+                )
+            except Exception as exc:
+                await ctx.send(embed=self.bot.embed_exception(exc))
             else:
                 try:
                     data = await Request(platform=platform, username=username).get()
@@ -392,6 +402,12 @@ class Profile(commands.Cog):
                 _, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
+            except IndexError:
+                await ctx.send(
+                    f'Invalid index. Use "{ctx.prefix}help hero" for more info.'
+                )
+            except Exception as exc:
+                await ctx.send(embed=self.embed_exception(exc))
             else:
                 try:
                     data = await Request(platform=platform, username=username).get()
