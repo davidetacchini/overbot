@@ -9,9 +9,9 @@ class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["rating"])
+    @commands.command(aliases=["rank", "sr"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
-    async def rank(self, ctx, platform: Platform, *, username):
+    async def rating(self, ctx, platform: Platform, *, username):
         """Returns player ranks.
 
         `<platform>` - The platform of the player to get ranks for.
@@ -47,9 +47,9 @@ class Statistics(commands.Cog):
             try:
                 profile = Player(data=data, platform=platform, username=username)
                 if profile.is_private:
-                    embed = profile.private(ctx)
+                    embed = profile.private()
                 else:
-                    embed = profile.get_ratings()
+                    embed = profile.get_ratings(ctx)
             except Exception as exc:
                 await message.edit(embed=self.bot.embed_exception(exc))
             else:
@@ -93,7 +93,7 @@ class Statistics(commands.Cog):
             try:
                 profile = Player(data=data, platform=platform, username=username)
                 if profile.is_private:
-                    embed = profile.private(ctx)
+                    embed = profile.private()
                 else:
                     embed = profile.get_statistics(ctx)
             except PlayerException as exc:
@@ -151,7 +151,7 @@ class Statistics(commands.Cog):
             try:
                 profile = Player(data=data, platform=platform, username=username)
                 if profile.is_private:
-                    embed = profile.private(ctx)
+                    embed = profile.private()
                 else:
                     embed = profile.get_hero(ctx, hero)
             except PlayerException as exc:
