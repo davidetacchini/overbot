@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
+import secrets
 
 from utils.scrape import get_overwatch_news, get_overwatch_status
+from classes.converters import MemeCategory
 
 
 class Overwatch(commands.Cog):
@@ -13,6 +15,20 @@ class Overwatch(commands.Cog):
         if s.lower() == "no problems at overwatch":
             return (f"<:online:648186001361076243> {s}", discord.Color.green())
         return (f"<:dnd:648185968209428490> {s}", discord.Color.red())
+
+    # TODO: exclude .mp4 files
+    async def get_meme(self, category):
+        url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
+        async with self.bot.session.get(url) as r:
+            memes = await r.json()
+        return secrets.choice(memes.get("data").get("children"))
+
+    def embed_meme(self, ctx, meme):
+        embed = discord.Embed(color=ctx.author.color)
+        embed.title = meme.get("data").get("title")
+        embed.set_image(url=meme.get("data").get("url_overridden_by_dest"))
+        embed.set_footer(text=meme.get("data").get("subreddit_name_prefixed"))
+        return embed
 
     @commands.command()
     @commands.cooldown(1, 60.0, commands.BucketType.member)
@@ -96,6 +112,29 @@ class Overwatch(commands.Cog):
             inline=False,
         )
         await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.cooldown(1.0, 5.0, commands.BucketType.member)
+    async def meme(self, ctx, category: MemeCategory = "hot"):
+        """Returns a random Overwatch meme.
+
+        `[category]` - The category to get a random meme from.
+
+        Categories
+        - Hot
+        - New
+        - Top
+        - Rising
+
+        Defaults to `Hot`.
+
+        All memes are taken from the subreddit r/Overwatch_Memes.
+        """
+        try:
+            meme = await self.get_meme(category)
+            await ctx.send(embed=self.embed_meme(ctx, meme))
+        except Exception as exc:
+            await ctx.send(embed=self.bot.embed_exception(exc))
 
 
 def setup(bot):
