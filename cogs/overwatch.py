@@ -12,10 +12,10 @@ class Overwatch(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    def format_overwatch_status(s):
-        if s.lower() == "no problems at overwatch":
-            return (f"<:online:648186001361076243> {s}", discord.Color.green())
-        return (f"<:dnd:648185968209428490> {s}", discord.Color.red())
+    def format_overwatch_status(status):
+        if status.lower() == "no problems at overwatch":
+            return (f"<:online:648186001361076243> {status}", discord.Color.green())
+        return (f"<:dnd:648185968209428490> {status}", discord.Color.red())
 
     # TODO: exclude .mp4 files
     async def get_meme(self, category):
