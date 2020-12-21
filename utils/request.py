@@ -59,7 +59,7 @@ class TooManyAccounts(RequestError):
         super().__init__(message)
 
 
-class Data:
+class Request:
 
     __slots__ = ("platform", "username")
 
