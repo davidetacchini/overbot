@@ -10,7 +10,7 @@ from utils.paginator import NoChoice
 class Context(commands.Context):
     async def prompt(self, message, timeout=30.0, user=None):
         user = user or self.author
-        reactions = ("❌", "✅")
+        reactions = ("✅", "❌")
 
         if user.id == self.bot.user.id:
             return False
