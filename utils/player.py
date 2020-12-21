@@ -2,7 +2,6 @@ import re
 
 import discord
 
-import config
 
 SR = "<:sr:639897739920146437>"
 
@@ -45,7 +44,6 @@ class Player:
         self.platform = platform
         self.username = username
 
-        self.color = config.main_color
         self.pages = []
 
     def __str__(self):
@@ -110,17 +108,17 @@ class Player:
             return None
         return self.data["ratings"]
 
-    def get_ratings(self):
-        embed = discord.Embed(color=self.color)
+    def get_ratings(self, ctx):
+        embed = discord.Embed(color=ctx.author.color)
         embed.set_author(name=str(self), icon_url=self.avatar)
 
-        player_ratings = self.resolve_ratings()
+        ratings = self.resolve_ratings()
 
-        if not player_ratings:
+        if not ratings:
             embed.description = "This profile is unranked."
             return embed
 
-        for key, value in player_ratings.items():
+        for key, value in ratings.items():
             embed.add_field(
                 name=f"{ROLES.get(key)} **{key.upper()}**",
                 value=f'{self.get_rating_icon(value["level"])} **{value["level"]}**{SR}',
@@ -164,7 +162,7 @@ class Player:
         keys, quickplay, competitive = self.resolve_statistics()
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=self.color)
+            embed = discord.Embed(color=ctx.author.color)
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=self.level_icon)
@@ -177,7 +175,7 @@ class Player:
         keys, quickplay, competitive = self.resolve_statistics(hero)
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=self.color)
+            embed = discord.Embed(color=ctx.author.color)
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
@@ -186,7 +184,7 @@ class Player:
             self.pages.append(embed)
         return self.pages
 
-    def private(self, ctx):
+    def private(self):
         embed = discord.Embed(color=discord.Color.red())
         embed.title = "This profile is set to private"
         embed.description = (
