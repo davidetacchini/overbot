@@ -60,7 +60,7 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 
 CREATE TABLE public.member (
     id bigint NOT NULL,
-    commands_runned integer DEFAULT 0 NOT NULL,
+    commands_run integer DEFAULT 0 NOT NULL,
     custom_nick boolean DEFAULT false NOT NULL,
     main_profile integer
 );
@@ -123,7 +123,7 @@ ALTER SEQUENCE public.profile_id_seq1 OWNED BY public.profile.id;
 CREATE TABLE public.server (
     id bigint NOT NULL,
     prefix character varying(5) NOT NULL,
-    commands_runned integer DEFAULT 0 NOT NULL
+    commands_run integer DEFAULT 0 NOT NULL
 );
 
 

@@ -86,13 +86,13 @@ class Bot(commands.AutoShardedBot):
         if ctx.guild:
             await self.pool.execute(
                 "INSERT INTO server(id, prefix) VALUES($1, $2) ON CONFLICT (id) DO "
-                "UPDATE SET commands_runned = server.commands_runned + 1;",
+                "UPDATE SET commands_run = server.commands_run + 1;",
                 ctx.guild.id,
                 self.prefix,
             )
         await self.pool.execute(
             "INSERT INTO member(id) VALUES($1) ON CONFLICT (id) DO "
-            "UPDATE SET commands_runned = member.commands_runned + 1;",
+            "UPDATE SET commands_run = member.commands_run + 1;",
             ctx.author.id,
         )
 
