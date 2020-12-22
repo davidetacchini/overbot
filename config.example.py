@@ -23,7 +23,7 @@ webhook = {
 
 """OverBot private API used to share bot information to its website."""
 obapi = {
-    "url": "secret",
+    "url": "overbot api url",
     "token": "token",
 }
 
