@@ -69,8 +69,8 @@ class Server(commands.Cog):
         """
         async with ctx.typing():
             guilds = await self.bot.pool.fetch(
-                "SELECT id, commands_runned FROM server WHERE id <> "
-                "ALL($1::bigint[]) ORDER BY commands_runned DESC LIMIT 5;",
+                "SELECT id, commands_run FROM server WHERE id <> "
+                "ALL($1::bigint[]) ORDER BY commands_run DESC LIMIT 5;",
                 self.bot.config.ignored_guilds,
             )
             embed = discord.Embed()

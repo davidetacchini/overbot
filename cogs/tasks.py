@@ -98,8 +98,8 @@ class Tasks(commands.Cog):
 
     async def get_top_servers(self):
         guilds = await self.bot.pool.fetch(
-            "SELECT id, commands_runned FROM server WHERE id <> "
-            "ALL($1::bigint[]) ORDER BY commands_runned DESC LIMIT 5;",
+            "SELECT id, commands_run FROM server WHERE id <> "
+            "ALL($1::bigint[]) ORDER BY commands_run DESC LIMIT 5;",
             self.bot.config.ignored_guilds,
         )
         servers = []
@@ -112,7 +112,7 @@ class Tasks(commands.Cog):
                     icon=str(g.icon_url),
                     region=str(g.region),
                     members=g.member_count,
-                    commands_runned=guild["commands_runned"],
+                    commands_run=guild["commands_run"],
                 )
             )
         return servers
