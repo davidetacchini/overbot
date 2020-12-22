@@ -14,21 +14,27 @@ else
 fi
 
 printf "Welcome to the OverBot Setup!\n\n"
-read -p "Enter the database name: " db_name
-read -p "Enter the database user: " db_user
+
+printf "\n\nInstalling the configuration file...\n"
+curl https://raw.githubusercontent.com/davidetacchini/OverBot/master/config.example.py -o ./config.py
+printf "[${green}OK${reset}] configuration file successfully installed.\n"
+
+if [ ! -f "./config.example.py" ]; then
+	printf "\n\nInstalling the configuration file...\n"
+	curl https://raw.githubusercontent.com/davidetacchini/OverBot/master/config.example.py
+	printf "[${green}OK${reset}] configuration file successfully installed.\n"
+fi
+
+printf "\n\Moving config.example.py to config.py...\n"
+mv config.example.py config.py
 
 printf "Copying service file to /etc/systemd/system/overbot.service...\n\n"
 sed -i "s:/path/to/overbot/:$(pwd)/:" overbot.service
 sed -i "s:username:$(whoami):" overbot.service
 cp overbot.service /etc/systemd/system/overbot.service
 
-printf "Setting up the database...\n\n"
-printf "Replacing schema user to ${bold}$db_user${normal}\n"
-
-sed -i "s:davide:$db_user:" schema.sql
-
 printf "Loading database schema...\n"
-sudo -u $db_user psql $db_name < schema.sql
+sudo -u davide psql overbot < schema.sql
 
 printf "Checking for pip to be at the latest version available...\n"
 python3 -m pip install -U --upgrade pip
@@ -44,4 +50,4 @@ printf "Reloading the daemon...\n"
 }
 
 printf "${green}${bold}Installation completed!${normal}${reset}\n"
-printf "Run ${bold}systemctl start overbot${normal}\n"
+printf "${red}Checkout the README file to complete the installation.${reset}\n"
