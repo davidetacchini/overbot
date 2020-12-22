@@ -137,7 +137,7 @@ class Meta(commands.Cog):
                 name="Shards",
                 value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
             )
-            embed.add_field(name="Commands Runned", value=total_commands)
+            embed.add_field(name="Commands Run", value=total_commands)
             embed.add_field(name="Lines of code", value=self.bot.total_lines)
             embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
             embed.set_footer(

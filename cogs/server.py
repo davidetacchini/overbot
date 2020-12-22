@@ -86,7 +86,7 @@ class Server(commands.Cog):
 
                 board.append(
                     f"{placement} **{str(cur_guld)}**"
-                    f" runned a total of **{guild['commands_runned']}** commands\n"
+                    f" ran a total of **{guild['commands_run']}** commands\n"
                     f"Joined on: **{joined_on}**"
                 )
 
