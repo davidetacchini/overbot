@@ -32,7 +32,7 @@ Self Hosting
 I would appreciate if you don't host my bot.
 However, if you want to test it out, the installation steps are as follows:
 
-1. **Setup the PostgreSQL database by running the `psql` command**
+1. **Set up the PostgreSQL database by running the `psql` command**
 ```sql
 CREATE DATABASE overbot;
 CREATE user davide WITH PASSWORD 'password';
@@ -48,6 +48,7 @@ git clone https://github.com/davidetacchini/overbot.git
 cd overbot
 python3 -m venv env
 source env/bin/activate
+pip install -U -r requirements.txt
 ./scripts/init.sh
 python3 bot.py # or `systemctl start overbot`
 ```
