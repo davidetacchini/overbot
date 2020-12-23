@@ -48,6 +48,7 @@ git clone https://github.com/davidetacchini/overbot.git
 cd overbot
 python3 -m venv env
 source env/bin/activate
+pip install -U --upgrade pip setuptools # fix build failing
 pip install -U -r requirements.txt
 ./scripts/init.sh
 python3 bot.py # or `systemctl start overbot`
