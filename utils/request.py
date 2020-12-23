@@ -20,7 +20,7 @@ class BadRequest(RequestError):
     """Exception raised when a request sucks."""
 
     def __init__(self):
-        super().__init__("Wrong battletag format entered! Correct format: `name#0000`")
+        super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
 
 
 class InternalServerError(RequestError):
@@ -49,7 +49,7 @@ class TooManyAccounts(RequestError):
             message = (
                 f"**{players}** accounts found under the name of `{username}`"
                 f" playing on `{platform}`. Please be more specific by entering"
-                f" the full battletag in the following format: `name#0000`"
+                f" the full BattleTag in the following format: `name#0000`"
             )
         else:
             message = (
