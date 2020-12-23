@@ -17,18 +17,28 @@ class Overwatch(commands.Cog):
             return (f"<:online:648186001361076243> {status}", discord.Color.green())
         return (f"<:dnd:648185968209428490> {status}", discord.Color.red())
 
-    # TODO: exclude .mp4 files
     async def get_meme(self, category):
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
         async with self.bot.session.get(url) as r:
             memes = await r.json()
-        return secrets.choice(memes.get("data").get("children"))
+        # excluding .mp4 and files from other domains
+        memes = [
+            meme
+            for meme in memes["data"]["children"]
+            if not meme["data"]["secure_media"]
+            or not meme["data"]["is_reddit_media_domain"]
+        ]
+        return secrets.choice(memes)
 
     def embed_meme(self, ctx, meme):
-        embed = discord.Embed(color=ctx.author.color)
-        embed.title = meme.get("data").get("title")
-        embed.set_image(url=meme.get("data").get("url_overridden_by_dest"))
-        embed.set_footer(text=meme.get("data").get("subreddit_name_prefixed"))
+        embed = discord.Embed(color=0xFF5700)
+        embed.title = meme["data"]["title"]
+        embed.url = f'https://reddit.com/{meme["data"]["permalink"]}'
+        embed.set_image(url=meme["data"]["url"])
+        embed.set_footer(
+            text=meme["data"]["subreddit_name_prefixed"],
+            icon_url=self.bot.config.reddit_logo,
+        )
         return embed
 
     @commands.command()
