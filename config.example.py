@@ -114,6 +114,9 @@ overwatch = {
 """Python logo."""
 python_logo = "https://i.imgur.com/6pg6Xv4.png"
 
+"""Reddit logo."""
+reddit_logo = "https://i.imgur.com/ZBwI6VN.png"
+
 """Official website."""
 website = "https://overbot.netlify.app"
 
