@@ -6,10 +6,10 @@ token = "your_bot_token"
 
 """Database credentials."""
 database = {
-    "user": "username",
-    "password": "password",
-    "database": "database",
-    "host": "hostname",
+    "user": "davide",
+    "password": "your_password",
+    "database": "overbot",
+    "host": "localhost",
 }
 
 # IGNORE (you don't actually need them to run the bot)

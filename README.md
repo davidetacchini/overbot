@@ -27,11 +27,12 @@
   </a>
 </p>
 
-## Self Hosting
+Self Hosting
+------
 I would appreciate if you don't host my bot.
 However, if you want to test it out, the installation steps are as follows:
 
-#### Setup the PostgreSQL database by running the `psql` command
+1. **Setup the PostgreSQL database by running the `psql` command**
 ```sql
 CREATE DATABASE overbot;
 CREATE user davide WITH PASSWORD 'password';
@@ -39,7 +40,9 @@ GRANT ALL PRIVILEGES ON DATABASE overbot TO davide;
 ```
 Note: It is recommended to run the latest stable version of [PostgreSQL](https://www.postgresql.org/docs/release/)
 
-#### Linux
+2. **Set up OverBot and run it**
+
+**Linux**
 ```bash
 git clone https://github.com/davidetacchini/overbot.git
 cd overbot
@@ -49,14 +52,30 @@ source env/bin/activate
 systemctl start overbot
 ```
 
-#### MacOS and Windows
+**MacOS and Windows**
 ```bash
 git clone https://github.com/davidetacchini/overbot.git
 cd overbot
+python3 -m venv env
+source env/bin/activate
+python3 -m pip install -U -r requirements
 ```
-* rename `config.example.py` to `config.py`
-* edit `config.py`
-* use `python3 bot.py` to run the bot
+1. rename `config.example.py` to `config.py`
+2. edit `config.py`
+
+```py
+token = "your_bot_token"
+
+database = {
+  "user": "davide",
+  "password": "user_password",
+  # the password you created before for the user
+  # davide
+  "database": "overbot",
+  "host": "localhost",
+}
+```
+3. use `python3 bot.py` to run the bot
 
 Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
