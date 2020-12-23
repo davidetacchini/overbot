@@ -1,4 +1,5 @@
 import re
+from datetime import date
 
 import discord
 
@@ -102,12 +103,41 @@ class Player:
         else:
             return self.add_space(key)
 
+    async def save_ratings(self, ctx, *, profile_id, **kwargs):
+        tank = kwargs.get("tank", 0)
+        damage = kwargs.get("damage", 0)
+        support = kwargs.get("support", 0)
+
+        query = """SELECT tank, damage, support
+                   FROM rating
+                   INNER JOIN profile
+                           ON profile.id = rating.profile_id
+                   WHERE profile.id = $1
+                   AND rating.date = $2;
+                """
+
+        requested_at = date.today()
+        roles = await ctx.bot.pool.fetch(query, profile_id, requested_at)
+
+        if roles:
+            # Assuming a user uses `-profile rank` multiple times in the same day,
+            # we don't want duplicated ratings. If only 1 differs, it will be
+            # inserted into the database.
+            are_equals = False
+            for t, d, s in roles:
+                if t == tank and d == damage and s == support:
+                    are_equals = True
+
+        if not roles or not are_equals:
+            query = "INSERT INTO rating(tank, damage, support, profile_id) VALUES($1, $2, $3, $4);"
+            await ctx.bot.pool.execute(query, tank, damage, support, profile_id)
+
     def resolve_ratings(self):
         if not self.data["ratings"]:
             return None
         return self.data["ratings"]
 
-    def get_ratings(self, ctx):
+    async def get_ratings(self, ctx, *, save=False, profile_id=None):
         embed = discord.Embed(color=ctx.author.color)
         embed.set_author(name=str(self), icon_url=self.avatar)
 
@@ -117,15 +147,24 @@ class Player:
             embed.description = "This profile is unranked."
             return embed
 
+        if save:
+            to_save = {}
+
         for key, value in ratings.items():
             embed.add_field(
                 name=f"{ROLES.get(key)} **{key.upper()}**",
                 value=f'{self.get_rating_icon(value["level"])} **{value["level"]}**{SR}',
             )
+            if save:
+                to_save[key.lower()] = value["level"]
         embed.set_footer(
             text=f'Avarage: {self.data.get("rating")}',
             icon_url=self.data.get("ratingIcon"),
         )
+
+        if save:
+            await self.save_ratings(ctx, profile_id=profile_id, **to_save)
+
         return embed
 
     def resolve_statistics(self, hero="allHeroes"):
