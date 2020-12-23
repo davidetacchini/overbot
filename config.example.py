@@ -17,32 +17,32 @@ database = {
 
 """Webhook credentials."""
 webhook = {
-    "id": "your webhook id (integer)",
-    "token": "webhook_token",
+    "id": 0,
+    "token": "",
 }
 
 """OverBot private API used to share bot information to its website."""
 obapi = {
-    "url": "overbot api url",
-    "token": "token",
+    "url": "",
+    "token": "",
 }
 
 """Discord Bot List (top.gg) authorization."""
 top_gg = {
-    "url": "top.gg url",
-    "token": "top.gg_token",
+    "url": "",
+    "token": "",
 }
 
 """Discord Bot List (discordbotlist.gg) authorization."""
 dbl = {
-    "url": "dbl url",
-    "token": "dbl_token",
+    "url": "",
+    "token": "",
 }
 
 """discord.bots.gg authorization."""
 discord_bots = {
-    "url": "discord_bots url",
-    "token": "discord_bots_token",
+    "url": "",
+    "token": "",
 }
 
 # ENDIGNORE
