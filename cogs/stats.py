@@ -49,7 +49,7 @@ class Statistics(commands.Cog):
                 if profile.is_private:
                     embed = profile.private()
                 else:
-                    embed = profile.get_ratings(ctx)
+                    embed = await profile.get_ratings(ctx)
             except Exception as exc:
                 await message.edit(embed=self.bot.embed_exception(exc))
             else:

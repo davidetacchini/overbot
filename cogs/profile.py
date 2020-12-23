@@ -298,7 +298,7 @@ class Profile(commands.Cog):
         async with ctx.typing():
             member = member or ctx.author
             try:
-                _, platform, username = await self.get_profile(member, index=index)
+                id, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             except IndexError:
@@ -322,7 +322,9 @@ class Profile(commands.Cog):
                         if profile.is_private:
                             embed = profile.private()
                         else:
-                            embed = profile.get_ratings(ctx)
+                            embed = await profile.get_ratings(
+                                ctx, save=True, profile_id=id
+                            )
                     except Exception as exc:
                         await ctx.send(exc)
                     else:
