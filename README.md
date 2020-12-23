@@ -35,7 +35,7 @@ However, if you want to test it out, the installation steps are as follows:
 1. **Set up the PostgreSQL database by running the `psql` command**
 ```sql
 CREATE DATABASE overbot;
-CREATE user davide WITH PASSWORD 'password';
+CREATE USER davide WITH PASSWORD 'password';
 GRANT ALL PRIVILEGES ON DATABASE overbot TO davide;
 ```
 Note: It is recommended to run the latest stable version of [PostgreSQL](https://www.postgresql.org/docs/release/)
