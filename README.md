@@ -40,7 +40,7 @@ GRANT ALL PRIVILEGES ON DATABASE overbot TO davide;
 ```
 Note: It is recommended to run the latest stable version of [PostgreSQL](https://www.postgresql.org/docs/release/)
 
-2. **Set up OverBot and run it**
+2. **Set up the bot and run it**
 
 **Linux**
 ```bash
@@ -49,33 +49,32 @@ cd overbot
 python3 -m venv env
 source env/bin/activate
 ./scripts/init.sh
-systemctl start overbot
+python3 bot.py # or `systemctl start overbot`
 ```
 
 **MacOS and Windows**
+1. Clone the repository
 ```bash
 git clone https://github.com/davidetacchini/overbot.git
-cd overbot
-python3 -m venv env
-source env/bin/activate
-python3 -m pip install -U -r requirements
 ```
-1. rename `config.example.py` to `config.py`
-2. edit `config.py`
-
+2. Setup a virtual environment
+3. Install the dependencies
+```bash
+pip install -U -r requirements.txt
+```
+4. Rename `config.example.py` to `config.py`
+5. edit `config.py`
 ```py
 token = "your_bot_token"
 
 database = {
   "user": "davide",
-  "password": "user_password",
-  # the password you created before for the user
-  # davide
+  "password": "your_password", # the password you created for the user davide
   "database": "overbot",
   "host": "localhost",
 }
 ```
-3. use `python3 bot.py` to run the bot
+6. use `python3 bot.py` to run the bot
 
 Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
