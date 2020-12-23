@@ -115,7 +115,7 @@ class Overwatch(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1.0, 5.0, commands.BucketType.member)
+    @commands.cooldown(1, 3.0, commands.BucketType.member)
     async def meme(self, ctx, category: MemeCategory = "hot"):
         """Returns a random Overwatch meme.
 
