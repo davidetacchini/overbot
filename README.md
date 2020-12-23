@@ -63,17 +63,7 @@ git clone https://github.com/davidetacchini/overbot.git
 pip install -U -r requirements.txt
 ```
 4. Rename `config.example.py` to `config.py`
-5. edit `config.py`
-```py
-token = "your_bot_token"
-
-database = {
-  "user": "davide",
-  "password": "your_password", # the password you created for the user davide
-  "database": "overbot",
-  "host": "localhost",
-}
-```
+5. Edit the `config.py` file
 6. use `python3 bot.py` to run the bot
 
 Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
