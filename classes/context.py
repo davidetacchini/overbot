@@ -33,7 +33,10 @@ class Context(commands.Context):
         except asyncio.TimeoutError:
             raise NoChoice("You took to long to confirm.")
         else:
-            return bool(reactions.index(str(reaction.emoji)))
+            # return not bool since we want the checkmark to be the first
+            # reaction. Since it's the first reaction, its index is 0 which
+            # is equivalent to False, but we want it to return True.
+            return not bool(reactions.index(str(reaction.emoji)))
         finally:
             await self.bot.cleanup(msg)
 
