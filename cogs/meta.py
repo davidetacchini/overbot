@@ -39,7 +39,11 @@ class Meta(commands.Cog):
     async def feedback(self, ctx, *, message: str):
         """Leave a feedback about the bot.
 
-        You can leave a feedback once a minute"""
+        You can leave a feedback once a minute.
+        """
+        if self.bot.debug:
+            return
+
         channel = self.bot.get_channel(self.bot.config.feedback_channel)
 
         if not channel:
