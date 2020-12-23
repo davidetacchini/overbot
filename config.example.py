@@ -62,6 +62,8 @@ default_prefix = "-"
 """Default color used on most of the embeds"""
 main_color = 0xFA9C1D
 
+# IGNORE
+
 """Channel ID for feedback logs."""
 feedback_channel = 581888563256229891
 
@@ -79,6 +81,8 @@ status_channel = 784091607540039790
 
 """Channel ID for trivia submits."""
 trivia_channel = 783149071217065985
+
+# ENDIGNORE
 
 """Hero portrait URL."""
 hero_url = "https://d1u1mce87gyfbn.cloudfront.net/hero/{}/hero-select-portrait.png"
