@@ -244,8 +244,6 @@ class Profile(commands.Cog):
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
             await self.set_main_profile(ctx.author.id, id)
-        except MemberHasNoProfile as exc:
-            await ctx.send(exc)
         except IndexError:
             await ctx.send(f'Invalid index. Use "{ctx.prefix}help main" for more info.')
         except Exception as exc:
