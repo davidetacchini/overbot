@@ -160,9 +160,7 @@ class Owner(commands.Cog):
                 else:
                     statuses.append((ctx.tick(True), module))
 
-        await ctx.send(
-            "\n".join(f"{status}: `{module}`" for status, module in statuses)
-        )
+        await ctx.send("\n".join(f"{status} `{module}`" for status, module in statuses))
         # Update total line count since we have made changes.
         self.bot.total_lines = 0
         self.bot.get_line_count()
