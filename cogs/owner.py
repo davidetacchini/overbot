@@ -266,22 +266,25 @@ class Owner(commands.Cog):
     async def admin(self, ctx):
         """Display an admin panel."""
         try:
-            profiles = await self.bot.pool.fetch("SELECT * FROM profile;")
+            profiles = await self.bot.pool.fetchval("SELECT COUNT(*) FROM profile;")
             prefixes = self.bot.prefixes
-            guilds = await self.bot.pool.fetch("SELECT * FROM server;")
+            guilds = await self.bot.pool.fetchval("SELECT COUNT(*) FROM server;")
+            ratings = await self.bot.pool.fetchval("SELECT COUNT(*) FROM rating;")
+
             total_commands = await self.bot.total_commands()
             played, won, lost, contribs = await self.bot.pool.fetchrow(
                 "SELECT SUM(started), SUM(won), SUM(lost), SUM(contribs) FROM trivia;"
             )
             # Bot entries
-            b_e = (
-                ("Total profiles linked", len(profiles)),
+            bot_entries = (
+                ("Total profiles linked", profiles),
                 ("Total prefixes set", len(prefixes)),
-                ("Total guilds", len(guilds)),
+                ("Total profile ratings", ratings),
+                ("Total guilds", guilds),
                 ("Total commands runned", total_commands),
             )
             # Trivia entries
-            t_e = (
+            trivia_entries = (
                 ("Total games played", played),
                 ("Total games won", won),
                 ("Total games lost", lost),
@@ -292,11 +295,12 @@ class Owner(commands.Cog):
             embed.title = "Admin Panel"
             bot = []
             trivia = []
-            # b_k = bot_key; b_v = bot_value
-            # t_k = trivia_key; t_v = trivia_value
-            for (b_k, b_v), (t_k, t_v) in zip(b_e, t_e):
-                trivia.append(f"{t_k}: **{t_v}**\n")
-                bot.append(f"{b_k}: **{b_v}**\n")
+
+            for key, value in bot_entries:
+                bot.append(f"{key}: **{value}**\n")
+
+            for key, value in trivia_entries:
+                trivia.append(f"{key}: **{value}**\n")
 
             embed.add_field(name="Bot", value="".join(bot))
             embed.add_field(name="Trivia", value="".join(trivia))
