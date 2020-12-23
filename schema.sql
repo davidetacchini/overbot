@@ -117,6 +117,44 @@ ALTER SEQUENCE public.profile_id_seq1 OWNED BY public.profile.id;
 
 
 --
+-- Name: rating; Type: TABLE; Schema: public; Owner: davide
+--
+
+CREATE TABLE public.rating (
+    id integer NOT NULL,
+    tank smallint,
+    damage smallint,
+    support smallint,
+    date date DEFAULT CURRENT_DATE,
+    profile_id integer
+);
+
+
+ALTER TABLE public.rating OWNER TO davide;
+
+--
+-- Name: rating_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
+--
+
+CREATE SEQUENCE public.rating_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rating_id_seq OWNER TO davide;
+
+--
+-- Name: rating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
+--
+
+ALTER SEQUENCE public.rating_id_seq OWNED BY public.rating.id;
+
+
+--
 -- Name: server; Type: TABLE; Schema: public; Owner: davide
 --
 
@@ -159,6 +197,13 @@ ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.prof
 
 
 --
+-- Name: rating id; Type: DEFAULT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.rating ALTER COLUMN id SET DEFAULT nextval('public.rating_id_seq'::regclass);
+
+
+--
 -- Name: command command_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -191,6 +236,14 @@ ALTER TABLE ONLY public.profile
 
 
 --
+-- Name: rating rating_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.rating
+    ADD CONSTRAINT rating_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: server server_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -220,6 +273,14 @@ ALTER TABLE ONLY public.member
 
 ALTER TABLE ONLY public.profile
     ADD CONSTRAINT profile_fkey FOREIGN KEY (member_id) REFERENCES public.member(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: rating rating_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.rating
+    ADD CONSTRAINT rating_fkey FOREIGN KEY (profile_id) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
