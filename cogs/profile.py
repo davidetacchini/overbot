@@ -175,7 +175,7 @@ class Profile(commands.Cog):
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
             await ctx.send(
-                f'Invalid index. Use "{ctx.prefix}help unlink" for more info.'
+                f'Invalid index. Use "{ctx.prefix}help profile unlink" for more info.'
             )
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
@@ -213,7 +213,7 @@ class Profile(commands.Cog):
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
             await ctx.send(
-                f'Invalid index. Use "{ctx.prefix}help update" for more info.'
+                f'Invalid index. Use "{ctx.prefix}help profile update" for more info.'
             )
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
@@ -245,7 +245,9 @@ class Profile(commands.Cog):
             id, platform, username = await self.get_profile(ctx.author, index=index)
             await self.set_main_profile(ctx.author.id, id)
         except IndexError:
-            await ctx.send(f'Invalid index. Use "{ctx.prefix}help main" for more info.')
+            await ctx.send(
+                f'Invalid index. Use "{ctx.prefix}help profile main" for more info.'
+            )
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
@@ -301,7 +303,7 @@ class Profile(commands.Cog):
                 await ctx.send(exc)
             except IndexError:
                 await ctx.send(
-                    f'Invalid index. Use "{ctx.prefix}help rating" for more info.'
+                    f'Invalid index. Use "{ctx.prefix}help profile rating" for more info.'
                 )
             except Exception as exc:
                 await ctx.send(embed=self.bot.embed_exception(exc))
@@ -351,7 +353,7 @@ class Profile(commands.Cog):
                 await ctx.send(exc)
             except IndexError:
                 await ctx.send(
-                    f'Invalid index. Use "{ctx.prefix}help statistics" for more info.'
+                    f'Invalid index. Use "{ctx.prefix}help profile statistics" for more info.'
                 )
             except Exception as exc:
                 await ctx.send(embed=self.bot.embed_exception(exc))
@@ -404,7 +406,7 @@ class Profile(commands.Cog):
                 await ctx.send(exc)
             except IndexError:
                 await ctx.send(
-                    f'Invalid index. Use "{ctx.prefix}help hero" for more info.'
+                    f'Invalid index. Use "{ctx.prefix}help profile hero" for more info.'
                 )
             except Exception as exc:
                 await ctx.send(embed=self.bot.embed_exception(exc))
