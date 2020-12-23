@@ -274,7 +274,7 @@ class Profile(commands.Cog):
             except MemberHasNoProfile as exc:
                 await ctx.send(exc)
             else:
-                embed = await self.list_profiles(profiles, ctx.author)
+                embed = await self.list_profiles(profiles, member)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
