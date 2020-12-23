@@ -433,10 +433,6 @@ class Profile(commands.Cog):
                     else:
                         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
-    @commands.command()
-    async def insert(self, ctx):
-        pass
-
 
 def setup(bot):
     bot.add_cog(Profile(bot))

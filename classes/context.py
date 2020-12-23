@@ -24,7 +24,13 @@ class Context(commands.Context):
             await msg.add_reaction(emoji)
 
         def check(r, u):
-            return u == user and str(r.emoji) in reactions and r.message.id == msg.id
+            if u.id != user.id:
+                return False
+            if r.message.id != msg.id:
+                return False
+            if str(emoji) not in reactions:
+                return False
+            return True
 
         try:
             reaction, _ = await self.bot.wait_for(
