@@ -292,8 +292,7 @@ class Profile(commands.Cog):
         If no index is given then the profile used will be the main one.
         If no member is given then the ranks returned will be yours.
 
-        If you want to see a Discord member's stats, you must give both the index of its
-        profile and its mention.
+        If you want to see a member's stats, you must enter both the index and the member.
         """
         async with ctx.typing():
             member = member or ctx.author
@@ -342,8 +341,7 @@ class Profile(commands.Cog):
         If no index is given then the profile used will be the main one.
         If no member is given then the statistics returned will be yours.
 
-        If you want to see a Discord member's stats, you must give both the index of its
-        profile and its mention.
+        If you want to see a member's stats, you must enter both the index and the member.
         """
         async with ctx.typing():
             member = member or ctx.author
@@ -395,8 +393,7 @@ class Profile(commands.Cog):
         If no index is given then the profile used will be the main one.
         If no member is given then the statistics returned will be yours.
 
-        If you want to see a Discord member's stats, you must give both the index of its
-        profile and its mention.
+        If you want to see a member's stats, you must enter both the index and the member.
         """
         async with ctx.typing():
             member = member or ctx.author
