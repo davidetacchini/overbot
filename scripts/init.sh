@@ -15,9 +15,7 @@ fi
 
 printf "Welcome to the OverBot Setup!\n\n"
 
-printf "\n\nInstalling the configuration file...\n"
-curl https://raw.githubusercontent.com/davidetacchini/OverBot/master/config.example.py -o ./config.py
-printf "[${green}OK${reset}] configuration file successfully installed.\n"
+printf "Check for the config file to be installed..."
 
 if [ ! -f "./config.example.py" ]; then
 	printf "\n\nInstalling the configuration file...\n"
@@ -35,12 +33,6 @@ cp overbot.service /etc/systemd/system/overbot.service
 
 printf "Loading database schema...\n"
 sudo -u davide psql overbot < schema.sql
-
-printf "Checking for pip to be at the latest version available...\n"
-python3 -m pip install -U --upgrade pip
-
-printf "Installing dependencies...\n"
-python3 -m pip install -U -r ./requirements.txt
 
 printf "Reloading the daemon...\n"
 {
