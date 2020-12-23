@@ -31,15 +31,15 @@
 I would appreciate if you don't host my bot.
 However, if you want to test it out, the installation steps are as follows:
 
-### Setup the PostgreSQL database by running the `psql` command
+#### Setup the PostgreSQL database by running the `psql` command
 ```sql
 CREATE DATABASE overbot;
 CREATE user davide WITH PASSWORD 'password';
 GRANT ALL PRIVILEGES ON DATABASE overbot TO davide;
 ```
-Note: It is recommended to run the latest stable version of [postgresql](https://www.postgresql.org/docs/release/)
+Note: It is recommended to run the latest stable version of [PostgreSQL](https://www.postgresql.org/docs/release/)
 
-### Linux
+#### Linux
 ```bash
 git clone https://github.com/davidetacchini/overbot.git
 cd overbot
@@ -49,7 +49,7 @@ source env/bin/activate
 systemctl start overbot
 ```
 
-### MacOS and Windows
+#### MacOS and Windows
 ```bash
 git clone https://github.com/davidetacchini/overbot.git
 cd overbot
@@ -58,7 +58,7 @@ cd overbot
 * edit `config.py`
 * use `python3 bot.py` to run the bot
 
-Note: It is recommended to run the latest stable version of [python](https://www.python.org/doc/versions/)
+Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
 Contributing
 ------
