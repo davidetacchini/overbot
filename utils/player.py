@@ -121,8 +121,8 @@ class Player:
 
         if roles:
             # Assuming a user uses `-profile rank` multiple times in the same day,
-            # we don't want duplicated ratings. If only 1 differs, it will be
-            # inserted into the database.
+            # we don't want duplicate ratings. If only 1 rating differs, then we
+            # insert the new ratings into the database.
             are_equals = False
             for t, d, s in roles:
                 if t == tank and d == damage and s == support:
