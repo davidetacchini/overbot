@@ -71,7 +71,7 @@ class ErrorHandler(commands.Cog):
 
             elif type(error) == checks.ProfileLimitReached:
                 await ctx.send(
-                    f'You have reached the maximum of linked profiles. Use "{ctx.prefix}profile list" for more info.'
+                    f'You have reached the maximum number of profiles that can be added. Use "{ctx.prefix}profile list" for more info.'
                 )
 
 
