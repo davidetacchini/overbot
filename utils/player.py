@@ -135,7 +135,10 @@ class Player:
     def resolve_ratings(self):
         if not self.data["ratings"]:
             return None
-        return self.data["ratings"]
+        ratings = {}
+        for key, value in self.data["ratings"].items():
+            ratings[key.lower()] = value["level"]
+        return ratings
 
     async def get_ratings(self, ctx, *, save=False, profile_id=None):
         embed = discord.Embed(color=ctx.author.color)
@@ -147,23 +150,18 @@ class Player:
             embed.description = "This profile is unranked."
             return embed
 
-        if save:
-            to_save = {}
-
         for key, value in ratings.items():
             embed.add_field(
                 name=f"{ROLES.get(key)} **{key.upper()}**",
-                value=f'{self.get_rating_icon(value["level"])} **{value["level"]}**{SR}',
+                value=f"{self.get_rating_icon(value)} **{value}**{SR}",
             )
-            if save:
-                to_save[key.lower()] = value["level"]
         embed.set_footer(
             text=f'Avarage: {self.data.get("rating")}',
             icon_url=self.data.get("ratingIcon"),
         )
 
         if save:
-            await self.save_ratings(ctx, profile_id=profile_id, **to_save)
+            await self.save_ratings(ctx, profile_id=profile_id, **ratings)
 
         return embed
 
