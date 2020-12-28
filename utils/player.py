@@ -120,15 +120,15 @@ class Player:
         roles = await ctx.bot.pool.fetch(query, profile_id, requested_at)
 
         if roles:
-            # Assuming a user uses `-profile rank` multiple times in the same day,
+            # Assuming a user uses `-profile rating` multiple times in the same day,
             # we don't want duplicate ratings. If only 1 rating differs, then we
             # insert the new ratings into the database.
-            are_equals = False
+            all_equals = False
             for t, d, s in roles:
                 if t == tank and d == damage and s == support:
-                    are_equals = True
+                    all_equals = True
 
-        if not roles or not are_equals:
+        if not roles or not all_equals:
             query = "INSERT INTO rating(tank, damage, support, profile_id) VALUES($1, $2, $3, $4);"
             await ctx.bot.pool.execute(query, tank, damage, support, profile_id)
 
