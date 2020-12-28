@@ -25,12 +25,6 @@ class MemberHasNoProfile(Exception):
         super().__init__(f"{member} hasn't linked a profile yet.")
 
 
-class ProfilePrivate(Exception):
-    """Exception raised when a profile is set to private."""
-
-    pass
-
-
 class RoleHierarchyError(Exception):
     """Exception raised when the bot's role is lower than the member one."""
 
