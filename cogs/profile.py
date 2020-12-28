@@ -9,6 +9,8 @@ from utils.request import Request, RequestError
 from utils.paginator import Link, Update
 from classes.converters import Hero, Index
 
+MAX_NICKNAME_LENGTH = 32
+
 ROLES = {
     "tank": "\N{SHIELD}",
     "damage": "\N{CROSSED SWORDS}",
@@ -21,6 +23,24 @@ class MemberHasNoProfile(Exception):
 
     def __init__(self, member):
         super().__init__(f"{member} hasn't linked a profile yet.")
+
+
+class ProfilePrivate(Exception):
+    """Exception raised when a profile is set to private."""
+
+    pass
+
+
+class RoleHierarchyError(Exception):
+    """Exception raised when the bot's role is lower than the member one."""
+
+    def __init__(self):
+        message = (
+            "This server's owner needs to move the `OverBot` role higher, so I will "
+            "be able to update your nickname. If you are this server's owner, there's "
+            "no way for me to update your nickname, sorry!"
+        )
+        super().__init__(message)
 
 
 class Profile(commands.Cog):
@@ -61,16 +81,16 @@ class Profile(commands.Cog):
             raise MemberHasNoProfile(member)
         return profile
 
-    async def set_main_profile(self, member_id, profile_id):
+    async def set_main_profile(self, member_id, *, profile_id):
         query = "UPDATE member SET main_profile = $1 WHERE id = $2;"
         await self.bot.pool.execute(query, profile_id, member_id)
 
-    async def is_main_profile(self, member_id, profile_id):
+    async def is_main_profile(self, member_id, *, profile_id):
         query = "SELECT main_profile FROM member WHERE id = $1;"
         return await self.bot.pool.fetchval(query, member_id) == profile_id
 
     async def has_main_profile(self, member_id):
-        query = "SELECT main_profile FROM member WHERE id = $1"
+        query = "SELECT main_profile FROM member WHERE id = $1;"
         if await self.bot.pool.fetchval(query, member_id):
             return True
         return False
@@ -93,7 +113,7 @@ class Profile(commands.Cog):
         for index, (id, platform, username) in enumerate(profiles, start=1):
             if platform == "pc":
                 username = username.replace("-", "#")
-            if not await self.is_main_profile(member.id, id):
+            if not await self.is_main_profile(member.id, profile_id=id):
                 fmt = f"{index}. {platform} - {username}"
             else:
                 fmt = f"{index}. {platform} - {username} :star:"
@@ -127,6 +147,70 @@ class Profile(commands.Cog):
         else:
             return message.content.replace("#", "-")
 
+    async def has_nickname(self, member_id):
+        query = "SELECT id FROM nickname WHERE id = $1;"
+        return await self.bot.pool.fetchval(query, member_id)
+
+    async def make_nickname(self, member, *, profile):
+        ratings = profile.resolve_ratings()
+
+        if not ratings:
+            return f"{member.name[:21]} [Unranked]"
+
+        tmp = ""
+        for key, value in ratings.items():
+            tmp += f"{ROLES.get(key)}{value}/"
+
+        # tmp[:-1] removes the last slash
+        tmp = "[" + tmp[:-1] + "]"
+
+        # dinamically assign the nickname's length based on
+        # player's SR. -1 indicates the space between
+        # the member's name and the SR
+
+        x = MAX_NICKNAME_LENGTH - len(tmp) - 1
+        name = member.name[:x]
+        return name + " " + tmp
+
+    async def update_nickname_sr(self, member, *, profile):
+        if not await self.has_nickname(member.id):
+            return
+
+        nick = await self.make_nickname(member, profile=profile)
+        await member.edit(nick=nick)
+
+    async def set_or_remove_nickname(self, ctx, member, *, remove=False):
+        if ctx.guild.me.top_role < member.top_role:
+            raise RoleHierarchyError()
+        try:
+            _, platform, username = await self.get_profile(member, index=None)
+            data = await Request(platform=platform, username=username).get()
+            profile = Player(data, platform=platform, username=username)
+            if profile.is_private:
+                return await ctx.send(
+                    f"{str(profile)}'s profile is set to private. Profiles must be "
+                    "set to public in order for me to retrieve their data."
+                )
+            if not remove:
+                nick = await self.make_nickname(member, profile=profile)
+                message = "Nickname successfully set. Your SR will now be visible in your nickname within this server."
+            else:
+                nick = None
+                message = "Nickname successfully removed."
+            await member.edit(nick=nick)
+        except discord.Forbidden:
+            await ctx.send(
+                "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
+            )
+        except discord.HTTPException:
+            await ctx.send(
+                "Something bad happened while updating your nickname. Please try again."
+            )
+        except Exception as exc:
+            await ctx.send(embed=self.bot.embed_exception(exc))
+        else:
+            await ctx.send(message)
+
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 1.0, commands.BucketType.member)
     async def profile(self, ctx, command: str = None):
@@ -154,7 +238,7 @@ class Profile(commands.Cog):
                 # it means he/she only has 1 profile linked.
                 query = "SELECT id FROM profile WHERE member_id = $1"
                 profile_id = await self.bot.pool.fetchval(query, ctx.author.id)
-                await self.set_main_profile(ctx.author.id, profile_id)
+                await self.set_main_profile(ctx.author.id, profile_id=profile_id)
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
         else:
@@ -179,27 +263,31 @@ class Profile(commands.Cog):
             )
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
-
-        profiles = await self.get_profiles(ctx.author)
-        if await self.is_main_profile(ctx.author.id, id) and len(profiles) > 1:
-            message = (
-                "You can't unlink your main profile if you have multiple profiles set. "
-                f'Use "{ctx.prefix}help profile main" for more info.'
-            )
-            return await ctx.send(message)
-
-        if not await ctx.prompt(
-            "Are you sure you want to unlink the following profile?\n"
-            f"Platform: `{platform}`\n"
-            f"Username: `{username}`"
-        ):
-            return
-        try:
-            await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id)
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
-            await ctx.send("Profile successfully unlinked.")
+            profiles = await self.get_profiles(ctx.author)
+            if (
+                await self.is_main_profile(ctx.author.id, profile_id=id)
+                and len(profiles) > 1
+            ):
+                message = (
+                    "You can't unlink your main profile if you have multiple profiles set. "
+                    f'Use "{ctx.prefix}help profile main" for more info.'
+                )
+                return await ctx.send(message)
+            if platform == "pc":
+                username = username.replace("-", "#")
+            if not await ctx.prompt(
+                "Are you sure you want to unlink the following profile?\n"
+                f"Platform: `{platform}`\n"
+                f"Username: `{username}`"
+            ):
+                return
+            try:
+                await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id)
+            except Exception as exc:
+                await ctx.send(embed=self.bot.embed_exception(exc))
+            else:
+                await ctx.send("Profile successfully unlinked.")
 
     @has_profile()
     @profile.command()
@@ -217,19 +305,21 @@ class Profile(commands.Cog):
             )
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
-
-        title = "Update your Overwatch profile"
-        platform = await Update(platform, username, title=title).start(ctx)
-        username = await self.get_player_username(ctx, platform)
-        if not username:
-            return
-        try:
-            await self.update_profile(platform, username, profile_id=id)
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
         else:
-            message = f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
-            await ctx.send(message)
+            title = "Update your Overwatch profile"
+            platform = await Update(platform, username, title=title).start(ctx)
+            username = await self.get_player_username(ctx, platform)
+            if not username:
+                return
+            if platform == "pc":
+                username = username.replace("-", "#")
+            try:
+                await self.update_profile(platform, username, profile_id=id)
+            except Exception as exc:
+                await ctx.send(embed=self.bot.embed_exception(exc))
+            else:
+                message = f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
+                await ctx.send(message)
 
     @has_profile()
     @profile.command()
@@ -243,7 +333,7 @@ class Profile(commands.Cog):
         """
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
-            await self.set_main_profile(ctx.author.id, id)
+            await self.set_main_profile(ctx.author.id, profile_id=id)
         except IndexError:
             await ctx.send(
                 f'Invalid index. Use "{ctx.prefix}help profile main" for more info.'
@@ -315,15 +405,18 @@ class Profile(commands.Cog):
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
-                        profile = Player(
-                            data=data, platform=platform, username=username
-                        )
+                        profile = Player(data, platform=platform, username=username)
                         if profile.is_private:
                             embed = profile.private()
                         else:
                             embed = await profile.get_ratings(
                                 ctx, save=True, profile_id=id
                             )
+                            # if the index is None that means it's the main profile
+                            if not index and not member:
+                                await self.update_nickname_sr(
+                                    ctx.author, profile=profile
+                                )
                     except Exception as exc:
                         await ctx.send(exc)
                     else:
@@ -364,9 +457,7 @@ class Profile(commands.Cog):
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
-                        profile = Player(
-                            data=data, platform=platform, username=username
-                        )
+                        profile = Player(data, platform=platform, username=username)
                         if profile.is_private:
                             embed = profile.private()
                         else:
@@ -416,9 +507,7 @@ class Profile(commands.Cog):
                     await ctx.send(embed=self.bot.embed_exception(exc))
                 else:
                     try:
-                        profile = Player(
-                            data=data, platform=platform, username=username
-                        )
+                        profile = Player(data, platform=platform, username=username)
                         if profile.is_private:
                             embed = profile.private()
                         else:
@@ -429,6 +518,44 @@ class Profile(commands.Cog):
                         await ctx.send(embed=self.bot.embed_exception(exc))
                     else:
                         await self.bot.paginator.Paginator(pages=embed).start(ctx)
+
+    @has_profile()
+    @profile.command(aliases=["nick"])
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @commands.guild_only()
+    async def nickname(self, ctx):
+        """Update your server nickname and set it to your SR.
+
+        You can only set a custom nickname per server.
+
+        The nickname will automacally be updated everytime `-profile rating` is used
+        and the profile match the one you've used for your nickname.
+        """
+        if not await self.has_nickname(ctx.author.id):
+            if not await ctx.prompt("Do you want to display your SR in your nickname?"):
+                return
+            try:
+                profile_id, _, _ = await self.get_profile(ctx.author, index=None)
+                await self.set_or_remove_nickname(ctx, ctx.author)
+            except Exception as exc:
+                await ctx.send(exc)
+            else:
+                query = "INSERT INTO nickname(id, server_id, profile_id) VALUES($1, $2, $3);"
+                await self.bot.pool.execute(
+                    query, ctx.author.id, ctx.guild.id, profile_id
+                )
+        else:
+            if not await ctx.prompt(
+                "Do you want to **remove** your SR in your nickname?"
+            ):
+                return
+            try:
+                await self.set_or_remove_nickname(ctx, ctx.author, remove=True)
+            except Exception as exc:
+                await ctx.send(exc)
+            else:
+                query = "DELETE FROM nickname WHERE id = $1;"
+                await self.bot.pool.execute(query, ctx.author.id)
 
 
 def setup(bot):
