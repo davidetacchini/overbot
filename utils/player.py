@@ -39,7 +39,7 @@ class Player:
 
     __slots__ = ("data", "platform", "username", "color", "pages")
 
-    def __init__(self, *, data: dict, platform: str, username: str):
+    def __init__(self, data: dict, *, platform: str, username: str):
         self.data = data
         self.platform = platform
         self.username = username

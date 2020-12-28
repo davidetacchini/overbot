@@ -45,7 +45,7 @@ class Statistics(commands.Cog):
                 await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             try:
-                profile = Player(data=data, platform=platform, username=username)
+                profile = Player(data, platform=platform, username=username)
                 if profile.is_private:
                     embed = profile.private()
                 else:
@@ -91,7 +91,7 @@ class Statistics(commands.Cog):
                 await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             try:
-                profile = Player(data=data, platform=platform, username=username)
+                profile = Player(data, platform=platform, username=username)
                 if profile.is_private:
                     embed = profile.private()
                 else:
@@ -149,7 +149,7 @@ class Statistics(commands.Cog):
                 await ctx.send(embed=self.bot.embed_exception(exc))
         else:
             try:
-                profile = Player(data=data, platform=platform, username=username)
+                profile = Player(data, platform=platform, username=username)
                 if profile.is_private:
                     embed = profile.private()
                 else:
