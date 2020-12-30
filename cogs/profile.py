@@ -147,7 +147,6 @@ class Profile(commands.Cog):
 
     async def make_nickname(self, member, *, profile):
         ratings = profile.resolve_ratings()
-
         if not ratings:
             return f"{member.name[:21]} [Unranked]"
 
@@ -161,7 +160,6 @@ class Profile(commands.Cog):
         # dinamically assign the nickname's length based on
         # player's SR. -1 indicates the space between
         # the member's name and the SR
-
         x = MAX_NICKNAME_LENGTH - len(tmp) - 1
         name = member.name[:x]
         return name + " " + tmp
@@ -173,18 +171,10 @@ class Profile(commands.Cog):
         nick = await self.make_nickname(member, profile=profile)
         await member.edit(nick=nick)
 
-    async def set_or_remove_nickname(self, ctx, member, *, remove=False):
+    async def set_or_remove_nickname(self, ctx, member, *, profile=None, remove=False):
         if ctx.guild.me.top_role < member.top_role:
             raise RoleHierarchyError()
         try:
-            _, platform, username = await self.get_profile(member, index=None)
-            data = await Request(platform=platform, username=username).get()
-            profile = Player(data, platform=platform, username=username)
-            if profile.is_private:
-                return await ctx.send(
-                    f"{str(profile)}'s profile is set to private. Profiles must be "
-                    "set to public in order for me to retrieve their data."
-                )
             if not remove:
                 nick = await self.make_nickname(member, profile=profile)
                 message = "Nickname successfully set. Your SR will now be visible in your nickname within this server."
@@ -407,7 +397,7 @@ class Profile(commands.Cog):
                                 ctx, save=True, profile_id=id
                             )
                             # if the index is None that means it's the main profile
-                            if not index and not member:
+                            if not index and member.id == ctx.author.id:
                                 await self.update_nickname_sr(
                                     ctx.author, profile=profile
                                 )
@@ -523,14 +513,23 @@ class Profile(commands.Cog):
         You can only set a custom nickname per server.
 
         The nickname will automacally be updated everytime `-profile rating` is used
-        and the profile match the one you've used for your nickname.
+        and the profile is the main one.
         """
         if not await self.has_nickname(ctx.author.id):
             if not await ctx.prompt("Do you want to display your SR in your nickname?"):
                 return
             try:
-                profile_id, _, _ = await self.get_profile(ctx.author, index=None)
-                await self.set_or_remove_nickname(ctx, ctx.author)
+                profile_id, platform, username = await self.get_profile(
+                    ctx.author, index=None
+                )
+                data = await Request(platform=platform, username=username).get()
+                profile = Player(data, platform=platform, username=username)
+                if profile.is_private:
+                    return await ctx.send(
+                        f"{str(profile)}'s profile is set to private. Profiles must be "
+                        "set to public in order for me to retrieve their data."
+                    )
+                await self.set_or_remove_nickname(ctx, ctx.author, profile=profile)
             except Exception as exc:
                 await ctx.send(exc)
             else:
