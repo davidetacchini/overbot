@@ -90,8 +90,8 @@ class Trivia(commands.Cog):
         """Play Overwatch trivia."""
         try:
             question = self.get_question()
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
+        except Exception as e:
+            await ctx.send(embed=self.bot.embed_exception(e))
 
         await self.update_member_games_started(ctx.author.id)
 
@@ -148,13 +148,13 @@ class Trivia(commands.Cog):
         member = member or ctx.author
         try:
             stats = await self.get_member_trivia_stats(member)
-        except MemberHasNoStats as exc:
-            await ctx.send(exc)
+        except MemberHasNoStats as e:
+            await ctx.send(e)
 
         try:
             embed = self.embed_member_stats(member, stats)
-        except Exception as exc:
-            await ctx.send(exc)
+        except Exception as e:
+            await ctx.send(e)
 
         await ctx.send(embed=embed)
 
