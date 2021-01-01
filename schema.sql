@@ -213,11 +213,19 @@ ALTER TABLE ONLY public.member
 
 
 --
+-- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.news
+    ADD CONSTRAINT news_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: news news_unq; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.news
-    ADD CONSTRAINT news_unq PRIMARY KEY (id);
+    ADD CONSTRAINT news_unq UNIQUE (id);
 
 
 --
