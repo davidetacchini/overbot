@@ -25,34 +25,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.command (
-    id smallint NOT NULL,
-    total integer DEFAULT 0
+    id integer DEFAULT 1 NOT NULL,
+    total integer DEFAULT 0 NOT NULL,
+    CONSTRAINT command_chk CHECK ((id = 1))
 );
 
 
 ALTER TABLE public.command OWNER TO davide;
-
---
--- Name: command_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
---
-
-CREATE SEQUENCE public.command_id_seq
-    AS smallint
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.command_id_seq OWNER TO davide;
-
---
--- Name: command_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
---
-
-ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
-
 
 --
 -- Name: member; Type: TABLE; Schema: public; Owner: davide
@@ -61,7 +40,6 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 CREATE TABLE public.member (
     id bigint NOT NULL,
     commands_run integer DEFAULT 0 NOT NULL,
-    custom_nick boolean DEFAULT false NOT NULL,
     main_profile integer
 );
 
@@ -73,12 +51,26 @@ ALTER TABLE public.member OWNER TO davide;
 --
 
 CREATE TABLE public.news (
-    id smallint NOT NULL,
-    news_id bigint DEFAULT 0
+    id integer DEFAULT 1 NOT NULL,
+    news_id integer DEFAULT 0 NOT NULL,
+    CONSTRAINT news_chk CHECK ((id = 1))
 );
 
 
 ALTER TABLE public.news OWNER TO davide;
+
+--
+-- Name: nickname; Type: TABLE; Schema: public; Owner: davide
+--
+
+CREATE TABLE public.nickname (
+    id bigint NOT NULL,
+    server_id bigint NOT NULL,
+    profile_id integer NOT NULL
+);
+
+
+ALTER TABLE public.nickname OWNER TO davide;
 
 --
 -- Name: profile; Type: TABLE; Schema: public; Owner: davide
@@ -183,13 +175,6 @@ CREATE TABLE public.trivia (
 ALTER TABLE public.trivia OWNER TO davide;
 
 --
--- Name: command id; Type: DEFAULT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.command_id_seq'::regclass);
-
-
---
 -- Name: profile id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
@@ -212,6 +197,14 @@ ALTER TABLE ONLY public.command
 
 
 --
+-- Name: command command_unq; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.command
+    ADD CONSTRAINT command_unq UNIQUE (id);
+
+
+--
 -- Name: member member_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -220,11 +213,19 @@ ALTER TABLE ONLY public.member
 
 
 --
--- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+-- Name: news news_unq; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.news
-    ADD CONSTRAINT news_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT news_unq PRIMARY KEY (id);
+
+
+--
+-- Name: nickname nickname_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.nickname
+    ADD CONSTRAINT nickname_pkey PRIMARY KEY (id);
 
 
 --
@@ -276,11 +277,27 @@ ALTER TABLE ONLY public.profile
 
 
 --
+-- Name: nickname profile_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.nickname
+    ADD CONSTRAINT profile_fkey FOREIGN KEY (profile_id) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: rating rating_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.rating
     ADD CONSTRAINT rating_fkey FOREIGN KEY (profile_id) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: nickname server_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.nickname
+    ADD CONSTRAINT server_fkey FOREIGN KEY (server_id) REFERENCES public.server(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
