@@ -40,8 +40,8 @@ class Owner(commands.Cog):
         """Loads a module."""
         try:
             self.bot.load_extension(module)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        except Exception as e:
+            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
             await ctx.message.add_reaction("✅")
 
@@ -50,8 +50,8 @@ class Owner(commands.Cog):
         """Unloads a module."""
         try:
             self.bot.unload_extension(module)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        except Exception as e:
+            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
             await ctx.message.add_reaction("✅")
 
@@ -60,8 +60,8 @@ class Owner(commands.Cog):
         """Reloads a module."""
         try:
             self.bot.reload_extension(module)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        except Exception as e:
+            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
             await ctx.message.add_reaction("✅")
 
@@ -69,8 +69,8 @@ class Owner(commands.Cog):
     async def rldconf(self, ctx):
         try:
             importlib.reload(self.bot.config)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        except Exception as e:
+            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
             await ctx.message.add_reaction("✅")
 
@@ -180,8 +180,8 @@ class Owner(commands.Cog):
         new_ctx = await ctx.bot.get_context(msg)
         try:
             await ctx.bot.invoke(new_ctx)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        except Exception as e:
+            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
 
     def cleanup_code(self, content):
         """Automatically removes code blocks from the code."""
@@ -190,7 +190,7 @@ class Owner(commands.Cog):
         return content.strip("` \n")
 
     @commands.command(hidden=True)
-    async def exc(self, ctx, *, body: str):
+    async def e(self, ctx, *, body: str):
         """Evaluates a code."""
         env = {
             "bot": ctx.bot,
@@ -210,8 +210,8 @@ class Owner(commands.Cog):
 
         try:
             exec(to_compile, env)
-        except Exception as exc:
-            return await ctx.send(f"```py\n{type(exc).__name__}: {exc}\n```")
+        except Exception as e:
+            return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```")
 
         func = env["func"]
         try:
@@ -251,8 +251,8 @@ class Owner(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             try:
                 res = await conn.fetch(query)
-            except Exception as exc:
-                return await ctx.send(f"```prolog\n{exc}```")
+            except Exception as e:
+                return await ctx.send(f"```prolog\n{e}```")
             if res:
                 await ctx.send(
                     f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```"""
@@ -304,8 +304,8 @@ class Owner(commands.Cog):
             embed.add_field(name="Trivia", value="".join(trivia))
 
             await ctx.send(embed=embed)
-        except Exception as exc:
-            await ctx.send(f"""```prolog\n{type(exc).__name__}\n{exc}```""")
+        except Exception as e:
+            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
 
     def get_backup_arguments(self, args):
         import shlex
@@ -324,8 +324,8 @@ class Owner(commands.Cog):
 
         try:
             args = self.get_backup_arguments(args)
-        except RuntimeError as exc:
-            return await ctx.send(exc)
+        except RuntimeError as e:
+            return await ctx.send(e)
 
         try:
             await asyncio.create_subprocess_shell(
@@ -334,8 +334,8 @@ class Owner(commands.Cog):
                 stderr=asyncio.subprocess.PIPE,
             )
             await msg.add_reaction("✅")
-        except Exception as exc:
-            await msg.edit(content=f"""```prolog\n{exc}```""")
+        except Exception as e:
+            await msg.edit(content=f"""```prolog\n{e}```""")
 
         if args.file:
             await asyncio.sleep(2)  # wait for the file to be created or updated.

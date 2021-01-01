@@ -151,7 +151,7 @@ class Bot(commands.AutoShardedBot):
         )
         return embed
 
-    def embed_exception(self, exc):
+    def embed_exception(self, e):
         """Returns a custom embed for exceptions."""
         embed = discord.Embed(color=0xFF3232)
         embed.title = "An unknown error occured."
@@ -159,7 +159,7 @@ class Bot(commands.AutoShardedBot):
             "Please report the following error to the developer"
             " by joning the support server at https://discord.gg/eZU69EV"
         )
-        embed.add_field(name=type(exc).__name__, value=exc)
+        embed.add_field(name=type(e).__name__, value=e)
         return embed
 
     async def get_context(self, message, *, cls=None):
@@ -180,9 +180,9 @@ class Bot(commands.AutoShardedBot):
             if extension.endswith(".py"):
                 try:
                     self.load_extension(f"cogs.{extension[:-3]}")
-                except Exception as exc:
+                except Exception as e:
                     print(
-                        f"[{colored('ERROR', 'red')}] {extension:20} failed its loading!\n[{exc}]"
+                        f"[{colored('ERROR', 'red')}] {extension:20} failed its loading!\n[{e}]"
                     )
                 else:
                     print(
