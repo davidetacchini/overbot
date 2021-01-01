@@ -487,9 +487,9 @@ class Profile(commands.Cog):
     async def nickname(self, ctx):
         """Update your server nickname and set it to your SR.
 
-        You can only set a custom nickname per server.
+        The nickname can only be set in one server.
 
-        The nickname will automacally be updated everytime `-profile rating` is used
+        The nickname will automatically be updated everytime `-profile rating` is used
         and the profile is the main one.
         """
         if not await self.has_nickname(ctx.author.id):
