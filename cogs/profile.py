@@ -235,7 +235,7 @@ class Profile(commands.Cog):
     async def unlink(self, ctx, index: Index):
         """Unlink your Overwatch profile from your Discord account.
 
-        `[index]` - The profile's index you want to unlink.
+        `<index>` - The profile's index you want to unlink.
 
         You can't unlink your main profile if you have more than 1 profile linked.
         """
@@ -279,7 +279,7 @@ class Profile(commands.Cog):
     async def update(self, ctx, index: Index):
         """Update your Overwatch profile linked to your Discord account.
 
-        `[index]` - The profile's index you want to update.
+        `<index>` - The profile's index you want to update.
         """
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
@@ -311,7 +311,7 @@ class Profile(commands.Cog):
     async def main(self, ctx, index: Index):
         """Updates your main profile.
 
-        `[index]` - The profile's index you want to set as main.
+        `<index>` - The profile's index you want to set as main.
 
         Defaults to the first profile you have linked.
         """
