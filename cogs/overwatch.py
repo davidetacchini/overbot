@@ -50,20 +50,17 @@ class Overwatch(commands.Cog):
         embed.url = self.bot.config.overwatch["status"]
         embed.timestamp = self.bot.timestamp
         embed.set_footer(text="downdetector.com")
+
         try:
             overwatch = await get_overwatch_status()
         except Exception:
             embed.description = (
                 f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
             )
-        else:
-            status, color = self.format_overwatch_status(str(overwatch).strip())
-            embed.color = color
-            embed.add_field(
-                name="Overwatch",
-                value=status,
-                inline=False,
-            )
+
+        status, color = self.format_overwatch_status(str(overwatch).strip())
+        embed.color = color
+        embed.add_field(name="Overwatch", value=status)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -77,26 +74,28 @@ class Overwatch(commands.Cog):
         """
         async with ctx.typing():
             pages = []
+            amount = amount or 4
+
             try:
-                amount = amount or 4
                 titles, links, imgs, dates = await get_overwatch_news(abs(amount))
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = "Latest Overwatch News"
                 embed.description = f"[Click here]({self.bot.config.overwatch['news']})"
                 await ctx.send(embed=embed)
-            else:
-                for i, (title, link, img, date) in enumerate(
-                    zip(titles, links, imgs, dates), start=1
-                ):
-                    embed = discord.Embed()
-                    embed.title = title
-                    embed.url = link
-                    embed.set_author(name="Blizzard Entertainment")
-                    embed.set_image(url=f"https:{img}")
-                    embed.set_footer(text=f"News {i}/{len(titles)} • {date}")
-                    pages.append(embed)
-                await self.bot.paginator.Paginator(pages=pages).start(ctx)
+
+            for i, (title, link, img, date) in enumerate(
+                zip(titles, links, imgs, dates), start=1
+            ):
+                embed = discord.Embed()
+                embed.title = title
+                embed.url = link
+                embed.set_author(name="Blizzard Entertainment")
+                embed.set_image(url=f"https:{img}")
+                embed.set_footer(text=f"News {i}/{len(titles)} • {date}")
+                pages.append(embed)
+
+            await self.bot.paginator.Paginator(pages=pages).start(ctx)
 
     @commands.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
@@ -143,9 +142,11 @@ class Overwatch(commands.Cog):
         """
         try:
             meme = await self.get_meme(category)
-            await ctx.send(embed=self.embed_meme(ctx, meme))
-        except Exception as exc:
-            await ctx.send(embed=self.bot.embed_exception(exc))
+            embed = self.embed_meme(ctx, meme)
+        except Exception as e:
+            await ctx.send(embed=self.bot.embed_exception(e))
+
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

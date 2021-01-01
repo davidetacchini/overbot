@@ -35,25 +35,17 @@ class Statistics(commands.Cog):
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
             data = await Request(platform=platform, username=username).get()
-        except RequestError as exc:
+        except RequestError as e:
             await self.bot.cleanup(message)
-            await ctx.send(exc)
-        except Exception as exc:
-            try:
-                await message.edit(embed=self.bot.embed_exception(exc))
-            except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
+            await ctx.send(e)
+
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private:
+            embed = profile.private()
         else:
-            try:
-                profile = Player(data, platform=platform, username=username)
-                if profile.is_private:
-                    embed = profile.private()
-                else:
-                    embed = await profile.get_ratings(ctx)
-            except Exception as exc:
-                await message.edit(embed=self.bot.embed_exception(exc))
-            else:
-                await message.edit(embed=embed)
+            embed = await profile.get_ratings(ctx)
+
+        await message.edit(embed=embed)
 
     @commands.command(aliases=["stats"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
@@ -81,29 +73,22 @@ class Statistics(commands.Cog):
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
             data = await Request(platform=platform, username=username).get()
-        except RequestError as exc:
+        except RequestError as e:
             await self.bot.cleanup(message)
-            await ctx.send(exc)
-        except Exception as exc:
-            try:
-                await message.edit(embed=self.bot.embed_exception(exc))
-            except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
+            await ctx.send(e)
+
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private:
+            embed = profile.private()
         else:
             try:
-                profile = Player(data, platform=platform, username=username)
-                if profile.is_private:
-                    embed = profile.private()
-                else:
-                    embed = profile.get_statistics(ctx)
-            except PlayerException as exc:
+                embed = profile.get_statistics(ctx)
+            except PlayerException as e:
                 await self.bot.cleanup(message)
-                await ctx.send(exc)
-            except Exception as exc:
-                await message.edit(embed=self.bot.embed_exception(exc))
-            else:
-                await self.bot.cleanup(message)
-                await self.bot.paginator.Paginator(pages=embed).start(ctx)
+                await ctx.send(e)
+
+        await self.bot.cleanup(message)
+        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @commands.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
@@ -139,29 +124,22 @@ class Statistics(commands.Cog):
         try:
             message = await ctx.send(embed=self.bot.loading_embed())
             data = await Request(platform=platform, username=username).get()
-        except RequestError as exc:
+        except RequestError as e:
             await self.bot.cleanup(message)
-            await ctx.send(exc)
-        except Exception as exc:
-            try:
-                await message.edit(embed=self.bot.embed_exception(exc))
-            except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
+            await ctx.send(e)
+
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private:
+            embed = profile.private()
         else:
             try:
-                profile = Player(data, platform=platform, username=username)
-                if profile.is_private:
-                    embed = profile.private()
-                else:
-                    embed = profile.get_hero(ctx, hero)
-            except PlayerException as exc:
+                embed = profile.get_hero(ctx, hero)
+            except PlayerException as e:
                 await self.bot.cleanup(message)
-                await ctx.send(exc)
-            except Exception as exc:
-                await message.edit(embed=self.bot.embed_exception(exc))
-            else:
-                await self.bot.cleanup(message)
-                await self.bot.paginator.Paginator(pages=embed).start(ctx)
+                await ctx.send(e)
+
+        await self.bot.cleanup(message)
+        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
 
 def setup(bot):
