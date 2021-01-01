@@ -153,6 +153,40 @@ class Profile(commands.Cog):
         name = member.name[:x]
         return name + " " + tmp
 
+    async def set_or_remove_nickname(
+        self, ctx, *, profile=None, profile_id=None, remove=False
+    ):
+        member = ctx.author
+
+        if not remove:
+            nick = await self.make_nickname(member, profile=profile)
+        else:
+            nick = None
+
+        try:
+            await member.edit(nick=nick)
+        except discord.Forbidden:
+            await ctx.send(
+                "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
+            )
+        except discord.HTTPException:
+            await ctx.send(
+                "Something bad happened while updating your nickname. Please try again."
+            )
+
+        if not remove:
+            query = (
+                "INSERT INTO nickname(id, server_id, profile_id) VALUES($1, $2, $3);"
+            )
+            await self.bot.pool.execute(query, member.id, ctx.guild.id, profile_id)
+            await ctx.send(
+                "Nickname successfully set. Your SR will now be visible in your nickname within this server."
+            )
+        else:
+            query = "DELETE FROM nickname WHERE id = $1;"
+            await self.bot.pool.execute(query, member.id)
+            await ctx.send("Nickname successfully removed.")
+
     async def update_nickname_sr(self, member, *, profile):
         if not await self.has_nickname(member.id):
             return
@@ -445,40 +479,6 @@ class Profile(commands.Cog):
                 except NoHeroStatistics as e:
                     await ctx.send(e)
             await self.bot.paginator.Paginator(pages=embed).start(ctx)
-
-    async def set_or_remove_nickname(
-        self, ctx, *, profile=None, profile_id=None, remove=False
-    ):
-        member = ctx.author
-
-        if not remove:
-            nick = await self.make_nickname(member, profile=profile)
-        else:
-            nick = None
-
-        try:
-            await member.edit(nick=nick)
-        except discord.Forbidden:
-            await ctx.send(
-                "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
-            )
-        except discord.HTTPException:
-            await ctx.send(
-                "Something bad happened while updating your nickname. Please try again."
-            )
-
-        if not remove:
-            query = (
-                "INSERT INTO nickname(id, server_id, profile_id) VALUES($1, $2, $3);"
-            )
-            await self.bot.pool.execute(query, member.id, ctx.guild.id, profile_id)
-            await ctx.send(
-                "Nickname successfully set. Your SR will now be visible in your nickname within this server."
-            )
-        else:
-            query = "DELETE FROM nickname WHERE id = $1;"
-            await self.bot.pool.execute(query, member.id)
-            await ctx.send("Nickname successfully removed.")
 
     @has_profile()
     @profile.command(aliases=["nick"])
