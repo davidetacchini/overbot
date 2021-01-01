@@ -92,7 +92,9 @@ class Trivia(commands.Cog):
             question = self.get_question()
         except Exception as exc:
             await ctx.send(embed=self.bot.embed_exception(exc))
+
         await self.update_member_games_started(ctx.author.id)
+
         result = await self.get_result(ctx, question)
         if result:
             await self.update_member_stats(ctx.author.id)
@@ -148,13 +150,13 @@ class Trivia(commands.Cog):
             stats = await self.get_member_trivia_stats(member)
         except MemberHasNoStats as exc:
             await ctx.send(exc)
-        else:
-            try:
-                embed = self.embed_member_stats(member, stats)
-            except Exception as exc:
-                await ctx.send(exc)
-            else:
-                await ctx.send(embed=embed)
+
+        try:
+            embed = self.embed_member_stats(member, stats)
+        except Exception as exc:
+            await ctx.send(exc)
+
+        await ctx.send(embed=embed)
 
     def get_placement(self, place):
         placements = {
@@ -246,17 +248,13 @@ class Trivia(commands.Cog):
         except asyncio.TimeoutError:
             await ctx.send("You took too long to submit the request.")
         else:
-            try:
-                channel = self.bot.config.trivia_channel
-                content = self.format_content(message.content)
-                await self.bot.http.send_message(channel, content)
-            except Exception as exc:
-                await ctx.send(embed=self.bot.embed_exception(exc))
-            else:
-                await self.update_member_contribs_stats(ctx.author.id)
-                await ctx.send(
-                    f"{str(ctx.author)}, your request has been successfully sent. Thanks for the contribution!"
-                )
+            channel = self.bot.config.trivia_channel
+            content = self.format_content(message.content)
+            await self.bot.http.send_message(channel, content)
+            await self.update_member_contribs_stats(ctx.author.id)
+            await ctx.send(
+                f"{str(ctx.author)}, your request has been successfully sent. Thanks for the contribution!"
+            )
 
 
 def setup(bot):
