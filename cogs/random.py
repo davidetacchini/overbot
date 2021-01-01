@@ -125,8 +125,7 @@ class Random(commands.Cog):
             await ctx.send(
                 f'Invalid category. Use "{ctx.prefix}help random hero" for more info.'
             )
-        except Exception as exc:
-            await ctx.send(exc)
+        except Exception:
             await ctx.send("Something bad happened. Please try again.")
         else:
             await ctx.send(embed=embed)
