@@ -31,13 +31,14 @@ class NoHeroStatistics(PlayerException):
     """Exception raised when a player has no quick play nor competitive stats for a given hero."""
 
     def __init__(self, player, hero):
-        message = f"**{player}** has no quick play nor competitive statistics for **{hero}** to display."
-        super().__init__(message)
+        super().__init__(
+            f"**{player}** has no quick play nor competitive statistics for **{hero}** to display."
+        )
 
 
 class Player:
 
-    __slots__ = ("data", "platform", "username", "color", "pages")
+    __slots__ = ("data", "platform", "username", "pages")
 
     def __init__(self, data: dict, *, platform: str, username: str):
         self.data = data
