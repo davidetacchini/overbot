@@ -36,7 +36,8 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(
                 "You can't use `{command}` command for `{seconds}` seconds.".format(
-                    command=ctx.command.name, seconds=round(error.retry_after, 2)
+                    command=ctx.command.qualified_name,
+                    seconds=round(error.retry_after, 2),
                 )
             )
 
