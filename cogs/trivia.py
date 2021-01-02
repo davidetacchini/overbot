@@ -204,7 +204,7 @@ class Trivia(commands.Cog):
 
     def get_submit_message(self):
         return (
-            "Copy everything inside the code block below and hit enter."
+            "Copy everything inside the code block below and hit enter. "
             "NOTE: If your question is a true/false one, you should know what to do.\n"
             '```"question": "REPLACE",\n"image_url": "REAPLCE",\n"correct_answer": "REPLACE",\n'
             '"wrong_answers": [min 1 max 4]```'
