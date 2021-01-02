@@ -44,7 +44,6 @@ class Statistics(commands.Cog):
             embed = profile.private()
         else:
             embed = await profile.get_ratings(ctx)
-
         await message.edit(embed=embed)
 
     @commands.command(aliases=["stats"])
@@ -85,7 +84,7 @@ class Statistics(commands.Cog):
                 embed = profile.get_statistics(ctx)
             except PlayerException as e:
                 await self.bot.cleanup(message)
-                await ctx.send(e)
+                return await ctx.send(e)
 
         await self.bot.cleanup(message)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
@@ -136,7 +135,7 @@ class Statistics(commands.Cog):
                 embed = profile.get_hero(ctx, hero)
             except PlayerException as e:
                 await self.bot.cleanup(message)
-                await ctx.send(e)
+                return await ctx.send(e)
 
         await self.bot.cleanup(message)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
