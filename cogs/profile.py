@@ -392,7 +392,6 @@ class Profile(commands.Cog):
                 # if the index is None that means it's the main profile
                 if not index and member.id == ctx.author.id:
                     await self.update_nickname_sr(ctx.author, profile=profile)
-
             await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
@@ -433,7 +432,7 @@ class Profile(commands.Cog):
                 try:
                     embed = profile.get_statistics(ctx)
                 except NoStatistics as e:
-                    await ctx.send(e)
+                    return await ctx.send(e)
                 await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
@@ -477,7 +476,7 @@ class Profile(commands.Cog):
                 try:
                     embed = profile.get_hero(ctx, hero)
                 except NoHeroStatistics as e:
-                    await ctx.send(e)
+                    return await ctx.send(e)
             await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
