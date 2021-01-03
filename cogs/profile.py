@@ -382,7 +382,7 @@ class Profile(commands.Cog):
             try:
                 data = await Request(platform=platform, username=username).get()
             except RequestError as e:
-                await ctx.send(e)
+                return await ctx.send(e)
 
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
@@ -423,7 +423,7 @@ class Profile(commands.Cog):
             try:
                 data = await Request(platform=platform, username=username).get()
             except RequestError as e:
-                await ctx.send(e)
+                return await ctx.send(e)
 
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
@@ -467,7 +467,7 @@ class Profile(commands.Cog):
             try:
                 data = await Request(platform=platform, username=username).get()
             except RequestError as e:
-                await ctx.send(e)
+                return await ctx.send(e)
 
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
@@ -506,7 +506,7 @@ class Profile(commands.Cog):
             try:
                 data = await Request(platform=platform, username=username).get()
             except RequestError as e:
-                await ctx.send(e)
+                return await ctx.send(e)
 
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:

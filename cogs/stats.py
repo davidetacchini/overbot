@@ -37,7 +37,7 @@ class Statistics(commands.Cog):
             data = await Request(platform=platform, username=username).get()
         except RequestError as e:
             await self.bot.cleanup(message)
-            await ctx.send(e)
+            return await ctx.send(e)
 
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
@@ -74,7 +74,7 @@ class Statistics(commands.Cog):
             data = await Request(platform=platform, username=username).get()
         except RequestError as e:
             await self.bot.cleanup(message)
-            await ctx.send(e)
+            return await ctx.send(e)
 
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
@@ -125,7 +125,7 @@ class Statistics(commands.Cog):
             data = await Request(platform=platform, username=username).get()
         except RequestError as e:
             await self.bot.cleanup(message)
-            await ctx.send(e)
+            return await ctx.send(e)
 
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
