@@ -149,13 +149,12 @@ class Trivia(commands.Cog):
         try:
             stats = await self.get_member_trivia_stats(member)
         except MemberHasNoStats as e:
-            await ctx.send(e)
+            return await ctx.send(e)
 
         try:
             embed = self.embed_member_stats(member, stats)
         except Exception as e:
             await ctx.send(e)
-
         await ctx.send(embed=embed)
 
     def get_placement(self, place):
