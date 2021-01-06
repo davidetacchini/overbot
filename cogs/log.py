@@ -32,6 +32,7 @@ class Log(commands.Cog):
         except AttributeError:
             embed.set_footer(text="DMs", icon_url=self.bot.user.avatar_url)
         embed.add_field(name="Message", value=ctx.message.content)
+        embed.add_field(name="ID", value=ctx.author.id, inline=False)
         await self.webhook.send(embed=embed)
 
     @commands.Cog.listener()
