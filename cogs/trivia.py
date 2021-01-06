@@ -41,11 +41,11 @@ class Trivia(commands.Cog):
         return answer == question["correct_answer"]
 
     async def update_member_games_started(self, member_id):
-        await self.bot.pool.execute(
-            "INSERT INTO trivia(id, started) VALUES($1, 1) "
-            "ON CONFLICT (id) DO UPDATE SET started = trivia.started + 1;",
-            member_id,
-        )
+        query = """INSERT INTO trivia(id, started)
+                VALUES($1, 1)
+                ON CONFLICT (id) DO
+                UPDATE SET started = trivia.started + 1;"""
+        await self.bot.pool.execute(query, member_id)
 
     async def update_member_games_won(self, member_id):
         await self.bot.pool.execute(
@@ -155,7 +155,8 @@ class Trivia(commands.Cog):
             embed = self.embed_member_stats(member, stats)
         except Exception as e:
             await ctx.send(e)
-        await ctx.send(embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
     def get_placement(self, place):
         placements = {
@@ -210,11 +211,12 @@ class Trivia(commands.Cog):
         )
 
     async def update_member_contribs_stats(self, member_id):
-        await self.bot.pool.execute(
-            "INSERT INTO trivia(id, contribs) VALUES($1, 1) "
-            "ON CONFLICT (id) DO UPDATE contribs = trivia.contribs + 1;",
-            member_id,
-        )
+        query = """INSERT INTO trivia(id, contribs)
+                VALUES($1, 1)
+                ON CONFLICT (id) DO
+                UPDATE SET contribs = trivia.contribs + 1;
+                """
+        await self.bot.pool.execute(query, member_id)
 
     def format_content(self, content):
         if content.startswith("```") and content.endswith("```"):
@@ -247,9 +249,11 @@ class Trivia(commands.Cog):
         except asyncio.TimeoutError:
             await ctx.send("You took too long to submit the request.")
         else:
-            channel = self.bot.config.trivia_channel
+            channel = self.bot.get_channel(self.bot.config.trivia_channel)
+            if not channel:
+                return
             content = self.format_content(message.content)
-            await self.bot.http.send_message(channel, content)
+            await channel.send(content)
             await self.update_member_contribs_stats(ctx.author.id)
             await ctx.send(
                 f"{str(ctx.author)}, your request has been successfully sent. Thanks for the contribution!"
