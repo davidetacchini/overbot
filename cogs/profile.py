@@ -244,7 +244,7 @@ class Profile(commands.Cog):
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
-            await ctx.send(
+            return await ctx.send(
                 f'Invalid index. Use "{ctx.prefix}help profile unlink" for more info.'
             )
 
@@ -287,7 +287,7 @@ class Profile(commands.Cog):
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
-            await ctx.send(
+            return await ctx.send(
                 f'Invalid index. Use "{ctx.prefix}help profile update" for more info.'
             )
 
@@ -305,9 +305,9 @@ class Profile(commands.Cog):
             await self.update_profile(platform, username, profile_id=id)
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
-
-        message = f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
-        await ctx.send(message)
+        else:
+            message = f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
+            await ctx.send(message)
 
     @has_profile()
     @profile.command()
@@ -322,7 +322,7 @@ class Profile(commands.Cog):
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
-            await ctx.send(
+            return await ctx.send(
                 f'Invalid index. Use "{ctx.prefix}help profile main" for more info.'
             )
 
@@ -348,7 +348,7 @@ class Profile(commands.Cog):
         try:
             profiles = await self.get_profiles(member)
         except MemberHasNoProfile as e:
-            await ctx.send(e)
+            return await ctx.send(e)
 
         embed = await self.list_profiles(profiles, member)
         await ctx.send(embed=embed)
@@ -373,9 +373,9 @@ class Profile(commands.Cog):
             try:
                 id, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as e:
-                await ctx.send(e)
+                return await ctx.send(e)
             except IndexError:
-                await ctx.send(
+                return await ctx.send(
                     f'Invalid index. Use "{ctx.prefix}help profile rating" for more info.'
                 )
 
@@ -414,9 +414,9 @@ class Profile(commands.Cog):
             try:
                 _, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as e:
-                await ctx.send(e)
+                return await ctx.send(e)
             except IndexError:
-                await ctx.send(
+                return await ctx.send(
                     f'Invalid index. Use "{ctx.prefix}help profile statistics" for more info.'
                 )
 
@@ -458,9 +458,9 @@ class Profile(commands.Cog):
             try:
                 _, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as e:
-                await ctx.send(e)
+                return await ctx.send(e)
             except IndexError:
-                await ctx.send(
+                return await ctx.send(
                     f'Invalid index. Use "{ctx.prefix}help profile hero" for more info.'
                 )
 
