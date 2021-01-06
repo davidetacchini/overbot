@@ -29,7 +29,7 @@ class Statistics(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
 
-        BattleTag example: Smyile#2825
+        BattleTag example: Timmy#22340
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
         try:
@@ -66,7 +66,7 @@ class Statistics(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
 
-        BattleTag example: Smyile#2825
+        BattleTag example: Timmy#22340
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
         try:
@@ -117,7 +117,7 @@ class Statistics(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
 
-        BattleTag example: Smyile#2825
+        BattleTag example: Timmy#22340
         Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7
         """
         try:
