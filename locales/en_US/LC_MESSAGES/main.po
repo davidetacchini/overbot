@@ -1,0 +1,875 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-12 14:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: bot.py:123
+msgid "Fetching..."
+msgstr ""
+
+#: bot.py:142
+msgid "{str(command).capitalize()} Commands"
+msgstr ""
+
+#: bot.py:144
+msgid ""
+"Use \"{ctx.prefix}help {str(command)} [command]\" for more info on a command"
+msgstr ""
+
+#: bot.py:147
+msgid "Replace [command] with one of the commands listed above."
+msgstr ""
+
+#: bot.py:151
+msgid "Commands Available"
+msgstr ""
+
+#: bot.py:153
+msgid "Usage"
+msgstr ""
+
+#: bot.py:162
+msgid "An unknown error occured."
+msgstr ""
+
+#: bot.py:164
+msgid ""
+"Please report the following error to the developer by joning the support "
+"server at https://discord.gg/eZU69EV"
+msgstr ""
+
+#: cogs/errors.py:30
+#, python-brace-format
+msgid "You are missing a required argument: `{error.param.name}`"
+msgstr ""
+
+#: cogs/errors.py:35
+msgid "You are using a bad argument."
+msgstr ""
+
+#: cogs/errors.py:38
+msgid "You don't have enough permissions."
+msgstr ""
+
+#: cogs/errors.py:42
+#, python-brace-format
+msgid "You can't use `{command}` command for `{seconds}` seconds."
+msgstr ""
+
+#: cogs/errors.py:49
+msgid "This command can't be used in direct messages."
+msgstr ""
+
+#: cogs/errors.py:52
+msgid "It seems you do not own this bot."
+msgstr ""
+
+#: cogs/errors.py:63 cogs/profile.py:132
+msgid "You took too long to reply."
+msgstr ""
+
+#: cogs/errors.py:69
+msgid "The argument you entered cannot be handled."
+msgstr ""
+
+#: cogs/errors.py:75
+#, python-brace-format
+msgid ""
+"You haven't linked a profile yet. Use \"{ctx.prefix}profile link\" to do so."
+msgstr ""
+
+#: cogs/errors.py:82
+#, python-brace-format
+msgid ""
+"You have reached the maximum number of profiles that can be added. Use "
+"\"{ctx.prefix}profile list\" for more info."
+msgstr ""
+
+#: cogs/help.py:60
+msgid "Using the bot"
+msgstr ""
+
+#: cogs/help.py:61
+msgid "Welcome to the help page!"
+msgstr ""
+
+#: cogs/help.py:64
+msgid "<argument>"
+msgstr ""
+
+#: cogs/help.py:65
+msgid "[argument]"
+msgstr ""
+
+#: cogs/help.py:66
+msgid "Note"
+msgstr ""
+
+#: cogs/help.py:73
+msgid "We were on page {self.current_page + 1} before this message."
+msgstr ""
+
+#: cogs/help.py:103
+#, python-brace-format
+msgid ""
+"[Support server]({support}) • [View commands online]({website}/commands)\n"
+msgstr ""
+
+#: cogs/help.py:109
+msgid "Help"
+msgstr ""
+
+#: cogs/help.py:138
+#, python-brace-format
+msgid "{command.qualified_name} {command.signature}"
+msgstr ""
+
+#: cogs/help.py:141 cogs/help.py:186
+msgid "No help found..."
+msgstr ""
+
+#: cogs/help.py:149
+msgid "Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)"
+msgstr ""
+
+#: cogs/help.py:154
+#, python-brace-format
+msgid "Use \"{self.prefix}help [command]\" for more info on a command."
+msgstr ""
+
+#: cogs/help.py:164
+msgid "Shows help about the bot, a command, or a category"
+msgstr ""
+
+#: cogs/help.py:189
+msgid "Aliases"
+msgstr ""
+
+#: cogs/links.py:14
+msgid "Returns the official bot support server invite link."
+msgstr ""
+
+#: cogs/links.py:20
+msgid "Returns bot vote link."
+msgstr ""
+
+#: cogs/links.py:26
+msgid "Returns bot invite link."
+msgstr ""
+
+#: cogs/links.py:32
+msgid "Returns the developer's PayPal."
+msgstr ""
+
+#: cogs/links.py:34
+msgid "Support OverBot"
+msgstr ""
+
+#: cogs/links.py:39
+msgid "Maintaining OverBot and adding new features takes up a huge "
+msgstr ""
+
+#: cogs/links.py:49
+msgid "Returns the bot GitHub repository."
+msgstr ""
+
+#: cogs/meta.py:23
+msgid "Displays the bot's current websocket latency and ACK."
+msgstr ""
+
+#: cogs/meta.py:25
+msgid "Pinging..."
+msgstr ""
+
+#: cogs/meta.py:31
+msgid "Latency"
+msgstr ""
+
+#: cogs/meta.py:33
+msgid "ACK"
+msgstr ""
+
+#: cogs/meta.py:39
+msgid "Shows how long the bot has been online."
+msgstr ""
+
+#: cogs/meta.py:47
+msgid ""
+"Leave a feedback about the bot.\n"
+"\n"
+"        You can leave a feedback once a minute.\n"
+"        "
+msgstr ""
+
+#: cogs/meta.py:66
+msgid "{str(ctx.author)}, your feedback has been successfully sent, thanks!"
+msgstr ""
+
+#: cogs/meta.py:100
+msgid "Displays the bot information."
+msgstr ""
+
+#: cogs/meta.py:104
+msgid "Official Website"
+msgstr ""
+
+#: cogs/meta.py:105
+#, python-brace-format
+msgid ""
+"Latest Changes:\n"
+"{commits}"
+msgstr ""
+
+#: cogs/meta.py:141
+msgid "Process"
+msgstr ""
+
+#: cogs/meta.py:142
+msgid "Host"
+msgstr ""
+
+#: cogs/meta.py:144
+msgid "Channels"
+msgstr ""
+
+#: cogs/meta.py:147
+msgid "Members"
+msgstr ""
+
+#: cogs/meta.py:148
+msgid "Servers"
+msgstr ""
+
+#: cogs/meta.py:150
+msgid "Shards"
+msgstr ""
+
+#: cogs/meta.py:153
+msgid "Commands Run"
+msgstr ""
+
+#: cogs/meta.py:154
+msgid "Lines of code"
+msgstr ""
+
+#: cogs/meta.py:155
+msgid "Uptime"
+msgstr ""
+
+#: cogs/meta.py:157
+#, python-brace-format
+msgid "Made with discord.py v{discord.__version__}"
+msgstr ""
+
+#: cogs/overwatch.py:49
+msgid "Returns the current Overwatch servers status."
+msgstr ""
+
+#: cogs/overwatch.py:51
+msgid "Status"
+msgstr ""
+
+#: cogs/overwatch.py:73
+msgid ""
+"Returns the latest Overwatch news.\n"
+"\n"
+"        `[amount]` - The amount of news to return. Defaults to 4.\n"
+"\n"
+"        You can use this command once every 30 seconds.\n"
+"        "
+msgstr ""
+
+#: cogs/overwatch.py:88
+msgid "Latest Overwatch News"
+msgstr ""
+
+#: cogs/overwatch.py:109
+msgid "Returns patch notes links."
+msgstr ""
+
+#: cogs/overwatch.py:111
+msgid "Overwatch Patch Notes"
+msgstr ""
+
+#: cogs/overwatch.py:137
+msgid ""
+"Returns a random Overwatch meme.\n"
+"\n"
+"        `[category]` - The category to get a random meme from.\n"
+"\n"
+"        Categories\n"
+"        - Hot\n"
+"        - New\n"
+"        - Top\n"
+"        - Rising\n"
+"\n"
+"        Defaults to `Hot`.\n"
+"\n"
+"        All memes are taken from the subreddit r/Overwatch_Memes.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:95
+msgid "The star indicates the main profile - {len(profiles)}/5"
+msgstr ""
+
+#: cogs/profile.py:112
+msgid "Enter your BattleTag (format: name#0000):"
+msgstr ""
+
+#: cogs/profile.py:114
+msgid "Enter your Online ID:"
+msgstr ""
+
+#: cogs/profile.py:116
+msgid "Enter your Gamertag:"
+msgstr ""
+
+#: cogs/profile.py:118
+msgid "Enter your Nintendo Switch ID:"
+msgstr ""
+
+#: cogs/profile.py:175
+msgid ""
+"I can't change nicknames in this server. Grant me `Manage Nicknames` "
+"permission."
+msgstr ""
+
+#: cogs/profile.py:181
+msgid "Something bad happened while updating your nickname. Please try again."
+msgstr ""
+
+#: cogs/profile.py:192
+msgid ""
+"Nickname successfully set. Your SR will now be visible in your nickname "
+"within this server."
+msgstr ""
+
+#: cogs/profile.py:198
+msgid "Nickname successfully removed."
+msgstr ""
+
+#: cogs/profile.py:212
+msgid "Displays a list with all profile's subcommands."
+msgstr ""
+
+#: cogs/profile.py:221
+msgid "Link your Overwatch profile(s) to your Discord account."
+msgstr ""
+
+#: cogs/profile.py:222
+msgid "Link your Overwatch profile to your Discord ID"
+msgstr ""
+
+#: cogs/profile.py:242
+#, python-brace-format
+msgid ""
+"Profile successfully linked. Use \"{ctx.prefix}profile list\" to see your "
+"profile(s)."
+msgstr ""
+
+#: cogs/profile.py:252
+msgid ""
+"Unlink your Overwatch profile from your Discord account.\n"
+"\n"
+"        `<index>` - The profile's index you want to unlink.\n"
+"\n"
+"        You can't unlink your main profile if you have more than 1 profile "
+"linked.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:264
+#, python-brace-format
+msgid "Invalid index. Use \"{ctx.prefix}help profile unlink\" for more info."
+msgstr ""
+
+#: cogs/profile.py:274
+msgid "You can't unlink your main profile if you have multiple profiles set. "
+msgstr ""
+
+#: cogs/profile.py:284
+msgid "Are you sure you want to unlink the following profile?\n"
+msgstr ""
+
+#: cogs/profile.py:296
+msgid "Profile successfully unlinked."
+msgstr ""
+
+#: cogs/profile.py:304
+msgid ""
+"Update your Overwatch profile linked to your Discord account.\n"
+"\n"
+"        `<index>` - The profile's index you want to update.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:314
+#, python-brace-format
+msgid "Invalid index. Use \"{ctx.prefix}help profile update\" for more info."
+msgstr ""
+
+#: cogs/profile.py:318
+msgid "Update your Overwatch profile"
+msgstr ""
+
+#: cogs/profile.py:334
+#, python-brace-format
+msgid ""
+"Profile successfully updated. Use \"{ctx.prefix}profile list\" to see the "
+"changes."
+msgstr ""
+
+#: cogs/profile.py:344
+msgid ""
+"Updates your main profile.\n"
+"\n"
+"        `<index>` - The profile's index you want to set as main.\n"
+"\n"
+"        Defaults to the first profile you have linked.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:355
+#, python-brace-format
+msgid "Invalid index. Use \"{ctx.prefix}help profile main\" for more info."
+msgstr ""
+
+#: cogs/profile.py:360
+msgid "Main profile successfully set to:"
+msgstr ""
+
+#: cogs/profile.py:361
+msgid "Platform"
+msgstr ""
+
+#: cogs/profile.py:362
+msgid "Username"
+msgstr ""
+
+#: cogs/profile.py:371
+msgid ""
+"Displays all member's profiles.\n"
+"\n"
+"        `[member]` - The mention or the ID of a Discord member of the "
+"current server.\n"
+"\n"
+"        If no member is given then the information returned will be yours.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:394
+msgid ""
+"Shows a member's Overwatch ranks.\n"
+"\n"
+"        `[index]` - The profile's index you want to see the ranks for.\n"
+"        `[member]` - The mention or the ID of a Discord member of the "
+"current server.\n"
+"\n"
+"        If no index is given then the profile used will be the main one.\n"
+"        If no member is given then the ranks returned will be yours.\n"
+"\n"
+"        If you want to see a member's stats, you must enter both the index "
+"and the member.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:415
+#, python-brace-format
+msgid "Invalid index. Use \"{ctx.prefix}help profile rating\" for more info."
+msgstr ""
+
+#: cogs/profile.py:459
+#, python-brace-format
+msgid ""
+"Invalid index. Use \"{ctx.prefix}help profile statistics\" for more info."
+msgstr ""
+
+#: cogs/profile.py:506
+#, python-brace-format
+msgid "Invalid index. Use \"{ctx.prefix}help profile hero\" for more info."
+msgstr ""
+
+#: cogs/profile.py:532
+msgid ""
+"Update your server nickname and set it to your SR.\n"
+"\n"
+"        The nickname can only be set in one server.\n"
+"\n"
+"        The nickname will automatically be updated everytime `-profile "
+"rating` is used\n"
+"        and the profile is the main one.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:542
+msgid "Do you want to display your SR in your nickname?"
+msgstr ""
+
+#: cogs/profile.py:549
+msgid ""
+"This server's owner needs to move the `OverBot` role higher, so I will be "
+"able to update your nickname. If you are this server's owner, there's not "
+"way for me to change your nickname, sorry!"
+msgstr ""
+
+#: cogs/profile.py:565
+msgid ""
+"{str(profile)}'s profile is set to private. Profiles must be set to public "
+"in order for me to retrieve their data."
+msgstr ""
+
+#: cogs/profile.py:576
+msgid "Do you want to **remove** your SR in your nickname?"
+msgstr ""
+
+#: cogs/random.py:106
+msgid "Returns a random hero, role or map."
+msgstr ""
+
+#: cogs/random.py:115
+msgid ""
+"Returns a random hero to play.\n"
+"\n"
+"        `[category]` - The category to get a random hero from.\n"
+"\n"
+"        Categories\n"
+"        - Damage (dps)\n"
+"        - Support (heal, healear)\n"
+"        - Tank\n"
+"\n"
+"        If no category is passed, a random hero is chosen from all "
+"categories.\n"
+"        "
+msgstr ""
+
+#: cogs/random.py:132
+#, python-brace-format
+msgid "Invalid category. Use \"{ctx.prefix}help random hero\" for more info."
+msgstr ""
+
+#: cogs/random.py:136 cogs/random.py:148 cogs/random.py:177
+msgid "Something bad happened. Please try again."
+msgstr ""
+
+#: cogs/random.py:144
+msgid "Returns a random role to play."
+msgstr ""
+
+#: cogs/random.py:157
+msgid ""
+"Returns a random map.\n"
+"\n"
+"        `[category]` - The category to get a random map from.\n"
+"\n"
+"        Categories\n"
+"        - Assault\n"
+"        - Control\n"
+"        - Escort\n"
+"        - Hybrid\n"
+"\n"
+"        If no category is passed, a random map is chosen from all "
+"categories.\n"
+"        "
+msgstr ""
+
+#: cogs/random.py:174
+#, python-brace-format
+msgid "Invalid category. Use \"{ctx.prefix}help random map\" for more info."
+msgstr ""
+
+#: cogs/server.py:14
+msgid "Prefix may not be longer than 5 characters."
+msgstr ""
+
+#: cogs/server.py:22
+#, python-brace-format
+msgid "Prefix successfully set to `{prefix}`"
+msgstr ""
+
+#: cogs/server.py:31
+msgid ""
+"Either see the prefix or change it.\n"
+"\n"
+"        `[prefix]` - The new server prefix to use.\n"
+"\n"
+"        You must have Manage Server permission to use this command.\n"
+"        "
+msgstr ""
+
+#: cogs/server.py:43
+msgid "`Manage Server` permission is required to change the prefix."
+msgstr ""
+
+#: cogs/server.py:51
+msgid "Use \"{self.bot.clean_prefix(ctx)}prefix value\" to change it."
+msgstr ""
+
+#: cogs/server.py:54
+msgid "Prefixes"
+msgstr ""
+
+#: cogs/server.py:74
+msgid ""
+"Shows OverBot's most active servers.\n"
+"\n"
+"        It is based on commands runned.\n"
+"        "
+msgstr ""
+
+#: cogs/server.py:86
+msgid "Most Active Servers"
+msgstr ""
+
+#: cogs/server.py:88
+msgid "Tracking command usage since • 11/26/2020"
+msgstr ""
+
+#: cogs/stats.py:18
+msgid ""
+"Returns player ranks.\n"
+"\n"
+"        `<platform>` - The platform of the player to get ranks for.\n"
+"        `<username>` - The username of the player to get ranks for.\n"
+"\n"
+"        Platforms\n"
+"        - pc (bnet)\n"
+"        - playstation (ps, psn, play)\n"
+"        - xbox (xbl)\n"
+"        - nintendo-switch (nsw, switch)\n"
+"\n"
+"        Username formatting\n"
+"        - pc: BattleTag (format: name#0000)\n"
+"        - playstation: Online ID\n"
+"        - xbox: Gamertag\n"
+"        - nintendo-switch: Nintendo Switch ID (format: name-code)\n"
+"\n"
+"        BattleTag example: Timmy#22340\n"
+"        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7\n"
+"        "
+msgstr ""
+
+#: cogs/stats.py:58
+msgid ""
+"Returns player both quick play and competitive statistics.\n"
+"\n"
+"        `<platform>` - The platform of the player to get stats for.\n"
+"        `<username>` - The username of the player to get stats for.\n"
+"\n"
+"        Platforms\n"
+"        - pc (bnet)\n"
+"        - playstation (ps, psn, play)\n"
+"        - xbox (xbl)\n"
+"        - nintendo-switch (nsw, switch)\n"
+"\n"
+"        Username formatting\n"
+"        - pc: BattleTag (format: name#0000)\n"
+"        - playstation: Online ID\n"
+"        - xbox: Gamertag\n"
+"        - nintendo-switch: Nintendo Switch ID (format: name-code)\n"
+"\n"
+"        BattleTag example: Timmy#22340\n"
+"        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7\n"
+"        "
+msgstr ""
+
+#: cogs/stats.py:111
+msgid ""
+"Returns player both quick play and competitive statistics for a given hero.\n"
+"\n"
+"        `<hero>` - The name of the hero you want to see stats for.\n"
+"        `<platform>` - The platform of the player to get stats for.\n"
+"        `<username>` - The username of the player to get stats for.\n"
+"\n"
+"        Platforms\n"
+"        - pc (bnet)\n"
+"        - playstation (ps, psn, play)\n"
+"        - xbox (xbl)\n"
+"        - nintendo-switch (nsw, switch)\n"
+"\n"
+"        Username formatting\n"
+"        - pc: BattleTag (format: name#0000)\n"
+"        - playstation: Online ID\n"
+"        - xbox: Gamertag\n"
+"        - nintendo-switch: Nintendo Switch ID (format: name-code)\n"
+"\n"
+"        BattleTag example: Timmy#22340\n"
+"        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7\n"
+"        "
+msgstr ""
+
+#: cogs/trivia.py:18
+#, python-brace-format
+msgid "{member} hasn't played trivia yet."
+msgstr ""
+
+#: cogs/trivia.py:36
+#, python-brace-format
+msgid "You have 1 try and {timeout} seconds to respond."
+msgstr ""
+
+#: cogs/trivia.py:75
+msgid "Correct!"
+msgstr ""
+
+#: cogs/trivia.py:76
+msgid "+1 win"
+msgstr ""
+
+#: cogs/trivia.py:79
+msgid "Wrong!"
+msgstr ""
+
+#: cogs/trivia.py:80
+msgid "+1 loss"
+msgstr ""
+
+#: cogs/trivia.py:81
+msgid "Correct answer"
+msgstr ""
+
+#: cogs/trivia.py:88
+msgid "Displays a list with all trivia's subcommands."
+msgstr ""
+
+#: cogs/trivia.py:96
+msgid "Play Overwatch trivia."
+msgstr ""
+
+#: cogs/trivia.py:138
+msgid "Total"
+msgstr ""
+
+#: cogs/trivia.py:139
+msgid "Won"
+msgstr ""
+
+#: cogs/trivia.py:140
+msgid "Lost"
+msgstr ""
+
+#: cogs/trivia.py:141
+msgid "Ratio (W/L)"
+msgstr ""
+
+#: cogs/trivia.py:142
+msgid "Unanswered"
+msgstr ""
+
+#: cogs/trivia.py:143
+msgid "Contributions"
+msgstr ""
+
+#: cogs/trivia.py:151
+msgid ""
+"Shows trivia statistics.\n"
+"\n"
+"        `[member]` - The mention or the ID of a discord member of the "
+"current server.\n"
+"\n"
+"        If no member is given then the stats returned will be yours.\n"
+"        "
+msgstr ""
+
+#: cogs/trivia.py:191
+msgid ""
+"Shows the best OverBot's trivia players.\n"
+"\n"
+"        It is based on games won.\n"
+"\n"
+"        This command can be used once a minute.\n"
+"        "
+msgstr ""
+
+#: cogs/trivia.py:204
+msgid "Best Trivia Players"
+msgstr ""
+
+#: cogs/trivia.py:221
+msgid ""
+"Copy everything inside the code block below and hit enter. NOTE: If your "
+"question is a true/false one, you should know what to do.\n"
+"```\"question\": \"REPLACE\",\n"
+"\"image_url\": \"REAPLCE\",\n"
+"\"correct_answer\": \"REPLACE\",\n"
+"\"wrong_answers\": [min 1 max 4]```"
+msgstr ""
+
+#: cogs/trivia.py:245
+msgid ""
+"Submit a new question to be added to trivia.\n"
+"\n"
+"        You can submit a request once an hour.\n"
+"        "
+msgstr ""
+
+#: cogs/trivia.py:255
+msgid ""
+"Paste the code you copied before, replace everything and hit enter. You have "
+"60 seconds."
+msgstr ""
+
+#: cogs/trivia.py:269
+msgid "You took too long to submit the request."
+msgstr ""
+
+#: cogs/trivia.py:279
+msgid ""
+"{str(ctx.author)}, your request has been successfully sent. Thanks for the "
+"contribution!"
+msgstr ""
+
+#: utils/player.py:27
+msgid "This profile has no quick play nor competitive statistics to display."
+msgstr ""
+
+#: utils/player.py:37
+#, python-brace-format
+msgid ""
+"**{player}** has no quick play nor competitive statistics for **{hero}** to "
+"display."
+msgstr ""
+
+#: utils/player.py:229
+msgid "This profile is set to private"
+msgstr ""
+
+#: utils/player.py:231
+msgid ""
+"Profiles are set to private by default. You can modify this setting in "
+"Overwatch under `Options - Social`. Please note that these changes may take "
+"effect after approximately 30 minutes."
+msgstr ""
+
+#: utils/request.py:17
+msgid "Player not found."
+msgstr ""
+
+#: utils/request.py:25
+msgid "Wrong BattleTag format entered! Correct format: `name#0000`"
+msgstr ""
+
+#: utils/request.py:35
+msgid ""
+"The API is having internal server problems. Please be patient and try again "
+"later."
+msgstr ""
+
+#: utils/request.py:55 utils/request.py:61
+#, python-brace-format
+msgid "**{players}** accounts found under the name of `{username}`"
+msgstr ""
