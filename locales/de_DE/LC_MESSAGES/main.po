@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-12 14:33+0100\n"
+"POT-Creation-Date: 2021-01-12 14:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,36 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:123
+#: bot.py:122
 msgid "Fetching..."
 msgstr ""
 
-#: bot.py:142
+#: bot.py:140
 msgid "{str(command).capitalize()} Commands"
 msgstr ""
 
-#: bot.py:144
+#: bot.py:142
 msgid ""
 "Use \"{ctx.prefix}help {str(command)} [command]\" for more info on a command"
 msgstr ""
 
-#: bot.py:147
+#: bot.py:145
 msgid "Replace [command] with one of the commands listed above."
 msgstr ""
 
-#: bot.py:151
+#: bot.py:149
 msgid "Commands Available"
 msgstr ""
 
-#: bot.py:153
+#: bot.py:151
 msgid "Usage"
 msgstr ""
 
-#: bot.py:162
+#: bot.py:159
 msgid "An unknown error occured."
 msgstr ""
 
-#: bot.py:164
+#: bot.py:161
 msgid ""
 "Please report the following error to the developer by joning the support "
 "server at https://discord.gg/eZU69EV"
@@ -78,7 +78,7 @@ msgstr ""
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:63 cogs/profile.py:132
+#: cogs/errors.py:63 cogs/profile.py:130
 msgid "You took too long to reply."
 msgstr ""
 
@@ -99,63 +99,63 @@ msgid ""
 "\"{ctx.prefix}profile list\" for more info."
 msgstr ""
 
-#: cogs/help.py:60
+#: cogs/help.py:59
 msgid "Using the bot"
 msgstr ""
 
-#: cogs/help.py:61
+#: cogs/help.py:60
 msgid "Welcome to the help page!"
 msgstr ""
 
-#: cogs/help.py:64
+#: cogs/help.py:63
 msgid "<argument>"
 msgstr ""
 
-#: cogs/help.py:65
+#: cogs/help.py:64
 msgid "[argument]"
 msgstr ""
 
-#: cogs/help.py:66
+#: cogs/help.py:65
 msgid "Note"
 msgstr ""
 
-#: cogs/help.py:73
+#: cogs/help.py:72
 msgid "We were on page {self.current_page + 1} before this message."
 msgstr ""
 
-#: cogs/help.py:103
+#: cogs/help.py:101
 #, python-brace-format
 msgid ""
 "[Support server]({support}) • [View commands online]({website}/commands)\n"
 msgstr ""
 
-#: cogs/help.py:109
+#: cogs/help.py:107
 msgid "Help"
 msgstr ""
 
-#: cogs/help.py:138
+#: cogs/help.py:135
 #, python-brace-format
 msgid "{command.qualified_name} {command.signature}"
 msgstr ""
 
-#: cogs/help.py:141 cogs/help.py:186
+#: cogs/help.py:138 cogs/help.py:181
 msgid "No help found..."
 msgstr ""
 
-#: cogs/help.py:149
+#: cogs/help.py:146
 msgid "Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)"
 msgstr ""
 
-#: cogs/help.py:154
+#: cogs/help.py:151
 #, python-brace-format
 msgid "Use \"{self.prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:164
+#: cogs/help.py:160
 msgid "Shows help about the bot, a command, or a category"
 msgstr ""
 
-#: cogs/help.py:189
+#: cogs/help.py:184
 msgid "Aliases"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "Maintaining OverBot and adding new features takes up a huge "
 msgstr ""
 
-#: cogs/links.py:49
+#: cogs/links.py:50
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
@@ -323,66 +323,66 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:95
+#: cogs/profile.py:94
 msgid "The star indicates the main profile - {len(profiles)}/5"
 msgstr ""
 
-#: cogs/profile.py:112
+#: cogs/profile.py:110
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr ""
 
-#: cogs/profile.py:114
+#: cogs/profile.py:112
 msgid "Enter your Online ID:"
 msgstr ""
 
-#: cogs/profile.py:116
+#: cogs/profile.py:114
 msgid "Enter your Gamertag:"
 msgstr ""
 
-#: cogs/profile.py:118
+#: cogs/profile.py:116
 msgid "Enter your Nintendo Switch ID:"
 msgstr ""
 
-#: cogs/profile.py:175
+#: cogs/profile.py:172
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
 msgstr ""
 
-#: cogs/profile.py:181
+#: cogs/profile.py:178
 msgid "Something bad happened while updating your nickname. Please try again."
 msgstr ""
 
-#: cogs/profile.py:192
+#: cogs/profile.py:189
 msgid ""
 "Nickname successfully set. Your SR will now be visible in your nickname "
 "within this server."
 msgstr ""
 
-#: cogs/profile.py:198
+#: cogs/profile.py:195
 msgid "Nickname successfully removed."
 msgstr ""
 
-#: cogs/profile.py:212
+#: cogs/profile.py:209
 msgid "Displays a list with all profile's subcommands."
 msgstr ""
 
-#: cogs/profile.py:221
+#: cogs/profile.py:218
 msgid "Link your Overwatch profile(s) to your Discord account."
 msgstr ""
 
-#: cogs/profile.py:222
+#: cogs/profile.py:219
 msgid "Link your Overwatch profile to your Discord ID"
 msgstr ""
 
-#: cogs/profile.py:242
+#: cogs/profile.py:239
 #, python-brace-format
 msgid ""
 "Profile successfully linked. Use \"{ctx.prefix}profile list\" to see your "
 "profile(s)."
 msgstr ""
 
-#: cogs/profile.py:252
+#: cogs/profile.py:249
 msgid ""
 "Unlink your Overwatch profile from your Discord account.\n"
 "\n"
@@ -393,24 +393,24 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:264
+#: cogs/profile.py:261
 #, python-brace-format
 msgid "Invalid index. Use \"{ctx.prefix}help profile unlink\" for more info."
 msgstr ""
 
-#: cogs/profile.py:274
+#: cogs/profile.py:271
 msgid "You can't unlink your main profile if you have multiple profiles set. "
 msgstr ""
 
-#: cogs/profile.py:284
+#: cogs/profile.py:281
 msgid "Are you sure you want to unlink the following profile?\n"
 msgstr ""
 
-#: cogs/profile.py:296
+#: cogs/profile.py:293
 msgid "Profile successfully unlinked."
 msgstr ""
 
-#: cogs/profile.py:304
+#: cogs/profile.py:301
 msgid ""
 "Update your Overwatch profile linked to your Discord account.\n"
 "\n"
@@ -418,23 +418,23 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:314
+#: cogs/profile.py:311
 #, python-brace-format
 msgid "Invalid index. Use \"{ctx.prefix}help profile update\" for more info."
 msgstr ""
 
-#: cogs/profile.py:318
+#: cogs/profile.py:315
 msgid "Update your Overwatch profile"
 msgstr ""
 
-#: cogs/profile.py:334
+#: cogs/profile.py:331
 #, python-brace-format
 msgid ""
 "Profile successfully updated. Use \"{ctx.prefix}profile list\" to see the "
 "changes."
 msgstr ""
 
-#: cogs/profile.py:344
+#: cogs/profile.py:341
 msgid ""
 "Updates your main profile.\n"
 "\n"
@@ -444,24 +444,24 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:355
+#: cogs/profile.py:352
 #, python-brace-format
 msgid "Invalid index. Use \"{ctx.prefix}help profile main\" for more info."
 msgstr ""
 
-#: cogs/profile.py:360
+#: cogs/profile.py:357
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:361
+#: cogs/profile.py:358
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:362
+#: cogs/profile.py:359
 msgid "Username"
 msgstr ""
 
-#: cogs/profile.py:371
+#: cogs/profile.py:368
 msgid ""
 "Displays all member's profiles.\n"
 "\n"
@@ -472,7 +472,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:394
+#: cogs/profile.py:391
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -488,23 +488,23 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:415
+#: cogs/profile.py:412
 #, python-brace-format
 msgid "Invalid index. Use \"{ctx.prefix}help profile rating\" for more info."
 msgstr ""
 
-#: cogs/profile.py:459
+#: cogs/profile.py:456
 #, python-brace-format
 msgid ""
 "Invalid index. Use \"{ctx.prefix}help profile statistics\" for more info."
 msgstr ""
 
-#: cogs/profile.py:506
+#: cogs/profile.py:503
 #, python-brace-format
 msgid "Invalid index. Use \"{ctx.prefix}help profile hero\" for more info."
 msgstr ""
 
-#: cogs/profile.py:532
+#: cogs/profile.py:529
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -516,24 +516,24 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:542
+#: cogs/profile.py:539
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:549
+#: cogs/profile.py:546
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:565
+#: cogs/profile.py:562
 msgid ""
 "{str(profile)}'s profile is set to private. Profiles must be set to public "
 "in order for me to retrieve their data."
 msgstr ""
 
-#: cogs/profile.py:576
+#: cogs/profile.py:573
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
@@ -592,16 +592,16 @@ msgstr ""
 msgid "Invalid category. Use \"{ctx.prefix}help random map\" for more info."
 msgstr ""
 
-#: cogs/server.py:14
+#: cogs/server.py:13
 msgid "Prefix may not be longer than 5 characters."
 msgstr ""
 
-#: cogs/server.py:22
+#: cogs/server.py:21
 #, python-brace-format
 msgid "Prefix successfully set to `{prefix}`"
 msgstr ""
 
-#: cogs/server.py:31
+#: cogs/server.py:30
 msgid ""
 "Either see the prefix or change it.\n"
 "\n"
@@ -611,19 +611,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:43
+#: cogs/server.py:42
 msgid "`Manage Server` permission is required to change the prefix."
 msgstr ""
 
-#: cogs/server.py:51
+#: cogs/server.py:50
 msgid "Use \"{self.bot.clean_prefix(ctx)}prefix value\" to change it."
 msgstr ""
 
-#: cogs/server.py:54
+#: cogs/server.py:53
 msgid "Prefixes"
 msgstr ""
 
-#: cogs/server.py:74
+#: cogs/server.py:73
 msgid ""
 "Shows OverBot's most active servers.\n"
 "\n"
@@ -631,11 +631,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:86
+#: cogs/server.py:85
 msgid "Most Active Servers"
 msgstr ""
 
-#: cogs/server.py:88
+#: cogs/server.py:87
 msgid "Tracking command usage since • 11/26/2020"
 msgstr ""
 
@@ -712,69 +712,69 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:18
+#: cogs/trivia.py:17
 #, python-brace-format
 msgid "{member} hasn't played trivia yet."
 msgstr ""
 
-#: cogs/trivia.py:36
+#: cogs/trivia.py:34
 #, python-brace-format
 msgid "You have 1 try and {timeout} seconds to respond."
 msgstr ""
 
-#: cogs/trivia.py:75
+#: cogs/trivia.py:72
 msgid "Correct!"
 msgstr ""
 
-#: cogs/trivia.py:76
+#: cogs/trivia.py:73
 msgid "+1 win"
 msgstr ""
 
-#: cogs/trivia.py:79
+#: cogs/trivia.py:76
 msgid "Wrong!"
 msgstr ""
 
-#: cogs/trivia.py:80
+#: cogs/trivia.py:77
 msgid "+1 loss"
 msgstr ""
 
-#: cogs/trivia.py:81
+#: cogs/trivia.py:78
 msgid "Correct answer"
 msgstr ""
 
-#: cogs/trivia.py:88
+#: cogs/trivia.py:85
 msgid "Displays a list with all trivia's subcommands."
 msgstr ""
 
-#: cogs/trivia.py:96
+#: cogs/trivia.py:93
 msgid "Play Overwatch trivia."
 msgstr ""
 
-#: cogs/trivia.py:138
+#: cogs/trivia.py:134
 msgid "Total"
 msgstr ""
 
-#: cogs/trivia.py:139
+#: cogs/trivia.py:135
 msgid "Won"
 msgstr ""
 
-#: cogs/trivia.py:140
+#: cogs/trivia.py:136
 msgid "Lost"
 msgstr ""
 
-#: cogs/trivia.py:141
+#: cogs/trivia.py:137
 msgid "Ratio (W/L)"
 msgstr ""
 
-#: cogs/trivia.py:142
+#: cogs/trivia.py:138
 msgid "Unanswered"
 msgstr ""
 
-#: cogs/trivia.py:143
+#: cogs/trivia.py:139
 msgid "Contributions"
 msgstr ""
 
-#: cogs/trivia.py:151
+#: cogs/trivia.py:147
 msgid ""
 "Shows trivia statistics.\n"
 "\n"
@@ -785,7 +785,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:191
+#: cogs/trivia.py:187
 msgid ""
 "Shows the best OverBot's trivia players.\n"
 "\n"
@@ -795,11 +795,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:204
+#: cogs/trivia.py:200
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:221
+#: cogs/trivia.py:216
 msgid ""
 "Copy everything inside the code block below and hit enter. NOTE: If your "
 "question is a true/false one, you should know what to do.\n"
@@ -809,7 +809,7 @@ msgid ""
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
 
-#: cogs/trivia.py:245
+#: cogs/trivia.py:240
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -817,17 +817,17 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:255
+#: cogs/trivia.py:250
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
 msgstr ""
 
-#: cogs/trivia.py:269
+#: cogs/trivia.py:264
 msgid "You took too long to submit the request."
 msgstr ""
 
-#: cogs/trivia.py:279
+#: cogs/trivia.py:274
 msgid ""
 "{str(ctx.author)}, your request has been successfully sent. Thanks for the "
 "contribution!"
