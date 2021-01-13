@@ -4,6 +4,7 @@ from contextlib import suppress
 import discord
 from discord.ext import commands
 
+from utils.i18n import _, locale
 from utils.checks import has_profile, can_add_profile
 from utils.player import Player, NoStatistics, NoHeroStatistics
 from utils.request import Request, RequestError
@@ -90,7 +91,7 @@ class Profile(commands.Cog):
         embed = discord.Embed(color=member.color)
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         embed.set_footer(
-            text=f"The star indicates the main profile - {len(profiles)}/5"
+            text=_(f"The star indicates the main profile - {len(profiles)}/5")
         )
         description = []
         for index, (id, platform, username) in enumerate(profiles, start=1):
@@ -106,13 +107,13 @@ class Profile(commands.Cog):
 
     async def get_player_username(self, ctx, platform):
         if platform == "pc":
-            await ctx.send("Enter your BattleTag (format: name#0000):")
+            await ctx.send(_("Enter your BattleTag (format: name#0000):"))
         elif platform == "psn":
-            await ctx.send("Enter your Online ID:")
+            await ctx.send(_("Enter your Online ID:"))
         elif platform == "xbl":
-            await ctx.send("Enter your Gamertag:")
+            await ctx.send(_("Enter your Gamertag:"))
         elif platform == "nintendo-switch":
-            await ctx.send("Enter your Nintendo Switch ID:")
+            await ctx.send(_("Enter your Nintendo Switch ID:"))
         else:
             return
 
@@ -126,7 +127,7 @@ class Profile(commands.Cog):
         try:
             message = await self.bot.wait_for("message", check=check, timeout=30.0)
         except asyncio.TimeoutError:
-            await ctx.send("You took too long to reply.")
+            await ctx.send(_("You took too long to reply."))
         else:
             return message.content.replace("#", "-")
 
@@ -167,11 +168,15 @@ class Profile(commands.Cog):
             await member.edit(nick=nick)
         except discord.Forbidden:
             await ctx.send(
-                "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
+                _(
+                    "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
+                )
             )
         except discord.HTTPException:
             await ctx.send(
-                "Something bad happened while updating your nickname. Please try again."
+                _(
+                    "Something bad happened while updating your nickname. Please try again."
+                )
             )
 
         if not remove:
@@ -180,12 +185,14 @@ class Profile(commands.Cog):
             )
             await self.bot.pool.execute(query, member.id, ctx.guild.id, profile_id)
             await ctx.send(
-                "Nickname successfully set. Your SR will now be visible in your nickname within this server."
+                _(
+                    "Nickname successfully set. Your SR will now be visible in your nickname within this server."
+                )
             )
         else:
             query = "DELETE FROM nickname WHERE id = $1;"
             await self.bot.pool.execute(query, member.id)
-            await ctx.send("Nickname successfully removed.")
+            await ctx.send(_("Nickname successfully removed."))
 
     async def update_nickname_sr(self, member, *, profile):
         if not await self.has_nickname(member.id):
@@ -197,17 +204,19 @@ class Profile(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 1.0, commands.BucketType.member)
+    @locale
     async def profile(self, ctx, command: str = None):
-        """Displays a list with all profile's subcommands."""
+        _("""Displays a list with all profile's subcommands.""")
         embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @can_add_profile()
     @profile.command(aliases=["add", "bind"])
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def link(self, ctx):
-        """Link your Overwatch profile(s) to your Discord account."""
-        title = "Link your Overwatch profile to your Discord ID"
+        _("""Link your Overwatch profile(s) to your Discord account.""")
+        title = _("Link your Overwatch profile to your Discord ID")
         platform = await Link(title=title).start(ctx)
         username = await self.get_player_username(ctx, platform)
 
@@ -219,33 +228,38 @@ class Profile(commands.Cog):
             if not await self.has_main_profile(ctx.author.id):
                 # if the player has no profiles linked, that means he doesn't
                 # have a main_profile as well. Then we can just set the first
-                # profile linked as the main one. We also don't need to do an
-                # inner join, because once the player add his/her first profile,
-                # it means he/she only has 1 profile linked.
-                query = "SELECT id FROM profile WHERE member_id = $1"
+                # profile linked as the main one.
+                query = "SELECT id FROM profile WHERE member_id = $1;"
                 profile_id = await self.bot.pool.fetchval(query, ctx.author.id)
                 await self.set_main_profile(ctx.author.id, profile_id=profile_id)
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
-            message = f'Profile successfully linked. Use "{ctx.prefix}profile list" to see your profile(s).'
+            message = _(
+                f'Profile successfully linked. Use "{ctx.prefix}profile list" to see your profile(s).'
+            )
             await ctx.send(message)
 
     @has_profile()
     @profile.command(aliases=["remove", "unbind"])
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def unlink(self, ctx, index: Index):
-        """Unlink your Overwatch profile from your Discord account.
+        _(
+            """Unlink your Overwatch profile from your Discord account.
 
         `<index>` - The profile's index you want to unlink.
 
         You can't unlink your main profile if you have more than 1 profile linked.
         """
+        )
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
             return await ctx.send(
-                f'Invalid index. Use "{ctx.prefix}help profile unlink" for more info.'
+                _(
+                    f'Invalid index. Use "{ctx.prefix}help profile unlink" for more info.'
+                )
             )
 
         profiles = await self.get_profiles(ctx.author)
@@ -253,7 +267,7 @@ class Profile(commands.Cog):
             await self.is_main_profile(ctx.author.id, profile_id=id)
             and len(profiles) > 1
         ):
-            message = (
+            message = _(
                 "You can't unlink your main profile if you have multiple profiles set. "
                 f'Use "{ctx.prefix}help profile main" for more info.'
             )
@@ -263,9 +277,11 @@ class Profile(commands.Cog):
             username = username.replace("-", "#")
 
         if not await ctx.prompt(
-            "Are you sure you want to unlink the following profile?\n"
-            f"Platform: `{platform}`\n"
-            f"Username: `{username}`"
+            _(
+                "Are you sure you want to unlink the following profile?\n"
+                f"Platform: `{platform}`\n"
+                f"Username: `{username}`"
+            )
         ):
             return
 
@@ -274,24 +290,29 @@ class Profile(commands.Cog):
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
-            await ctx.send("Profile successfully unlinked.")
+            await ctx.send(_("Profile successfully unlinked."))
 
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def update(self, ctx, index: Index):
-        """Update your Overwatch profile linked to your Discord account.
+        _(
+            """Update your Overwatch profile linked to your Discord account.
 
         `<index>` - The profile's index you want to update.
         """
+        )
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
             return await ctx.send(
-                f'Invalid index. Use "{ctx.prefix}help profile update" for more info.'
+                _(
+                    f'Invalid index. Use "{ctx.prefix}help profile update" for more info.'
+                )
             )
 
-        title = "Update your Overwatch profile"
+        title = _("Update your Overwatch profile")
         platform = await Update(platform, username, title=title).start(ctx)
         username = await self.get_player_username(ctx, platform)
 
@@ -306,43 +327,51 @@ class Profile(commands.Cog):
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
-            message = f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
+            message = _(
+                f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
+            )
             await ctx.send(message)
 
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def main(self, ctx, index: Index):
-        """Updates your main profile.
+        _(
+            """Updates your main profile.
 
         `<index>` - The profile's index you want to set as main.
 
         Defaults to the first profile you have linked.
         """
+        )
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
             return await ctx.send(
-                f'Invalid index. Use "{ctx.prefix}help profile main" for more info.'
+                _(f'Invalid index. Use "{ctx.prefix}help profile main" for more info.')
             )
 
         await self.set_main_profile(ctx.author.id, profile_id=id)
         embed = discord.Embed(color=ctx.author.color)
-        embed.description = "Main profile successfully set to:"
-        embed.add_field(name="Platform", value=platform)
-        embed.add_field(name="Username", value=username)
+        embed.description = _("Main profile successfully set to:")
+        embed.add_field(name=_("Platform"), value=platform)
+        embed.add_field(name=_("Username"), value=username)
         await ctx.send(embed=embed)
 
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def list(self, ctx, member: discord.Member = None):
-        """Displays all member's profiles.
+        _(
+            """Displays all member's profiles.
 
         `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no member is given then the information returned will be yours.
         """
+        )
         member = member or ctx.author
 
         try:
@@ -356,8 +385,10 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command(aliases=["rank", "sr"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def rating(self, ctx, index: Index = None, member: discord.Member = None):
-        """Shows a member's Overwatch ranks.
+        _(
+            """Shows a member's Overwatch ranks.
 
         `[index]` - The profile's index you want to see the ranks for.
         `[member]` - The mention or the ID of a Discord member of the current server.
@@ -367,6 +398,7 @@ class Profile(commands.Cog):
 
         If you want to see a member's stats, you must enter both the index and the member.
         """
+        )
         async with ctx.typing():
             member = member or ctx.author
 
@@ -376,7 +408,9 @@ class Profile(commands.Cog):
                 return await ctx.send(e)
             except IndexError:
                 return await ctx.send(
-                    f'Invalid index. Use "{ctx.prefix}help profile rating" for more info.'
+                    _(
+                        f'Invalid index. Use "{ctx.prefix}help profile rating" for more info.'
+                    )
                 )
 
             try:
@@ -397,6 +431,7 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command(aliases=["stats"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def statistics(self, ctx, index: Index = None, member: discord.Member = None):
         """Shows a member's Overwatch both quick play and competitive statistics.
 
@@ -417,7 +452,9 @@ class Profile(commands.Cog):
                 return await ctx.send(e)
             except IndexError:
                 return await ctx.send(
-                    f'Invalid index. Use "{ctx.prefix}help profile statistics" for more info.'
+                    _(
+                        f'Invalid index. Use "{ctx.prefix}help profile statistics" for more info.'
+                    )
                 )
 
             try:
@@ -438,6 +475,7 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def hero(
         self, ctx, hero: Hero, index: Index = None, member: discord.Member = None
     ):
@@ -461,7 +499,9 @@ class Profile(commands.Cog):
                 return await ctx.send(e)
             except IndexError:
                 return await ctx.send(
-                    f'Invalid index. Use "{ctx.prefix}help profile hero" for more info.'
+                    _(
+                        f'Invalid index. Use "{ctx.prefix}help profile hero" for more info.'
+                    )
                 )
 
             try:
@@ -483,23 +523,30 @@ class Profile(commands.Cog):
     @profile.command(aliases=["nick"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     @commands.guild_only()
+    @locale
     async def nickname(self, ctx):
-        """Update your server nickname and set it to your SR.
+        _(
+            """Update your server nickname and set it to your SR.
 
         The nickname can only be set in one server.
 
         The nickname will automatically be updated everytime `-profile rating` is used
         and the profile is the main one.
         """
+        )
         if not await self.has_nickname(ctx.author.id):
-            if not await ctx.prompt("Do you want to display your SR in your nickname?"):
+            if not await ctx.prompt(
+                _("Do you want to display your SR in your nickname?")
+            ):
                 return
 
             if ctx.guild.me.top_role < ctx.author.top_role:
                 return await ctx.send(
-                    "This server's owner needs to move the `OverBot` role higher, so I will "
-                    "be able to update your nickname. If you are this server's owner, there's "
-                    "not way for me to change your nickname, sorry!"
+                    _(
+                        "This server's owner needs to move the `OverBot` role higher, so I will "
+                        "be able to update your nickname. If you are this server's owner, there's "
+                        "not way for me to change your nickname, sorry!"
+                    )
                 )
 
             id, platform, username = await self.get_profile(ctx.author, index=None)
@@ -511,8 +558,10 @@ class Profile(commands.Cog):
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
                 return await ctx.send(
-                    f"{str(profile)}'s profile is set to private. Profiles must be "
-                    "set to public in order for me to retrieve their data."
+                    _(
+                        f"{str(profile)}'s profile is set to private. Profiles must be "
+                        "set to public in order for me to retrieve their data."
+                    )
                 )
 
             try:
@@ -520,7 +569,9 @@ class Profile(commands.Cog):
             except Exception as e:
                 await ctx.send(e)
         else:
-            if await ctx.prompt("Do you want to **remove** your SR in your nickname?"):
+            if await ctx.prompt(
+                _("Do you want to **remove** your SR in your nickname?")
+            ):
                 try:
                     await self.set_or_remove_nickname(ctx, remove=True)
                 except Exception as e:

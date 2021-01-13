@@ -34,6 +34,7 @@ from termcolor import colored
 from discord.ext import commands
 
 import config
+from utils.i18n import _
 from utils.time import human_timedelta
 from classes.context import Context
 
@@ -118,7 +119,7 @@ class Bot(commands.AutoShardedBot):
 
     def loading_embed(self):
         embed = discord.Embed(color=discord.Color.dark_theme())
-        embed.set_author(name="Fetching...", icon_url=self.config.loading_gif)
+        embed.set_author(name=_("Fetching..."), icon_url=self.config.loading_gif)
         return embed
 
     async def cleanup(self, message):
@@ -136,26 +137,27 @@ class Bot(commands.AutoShardedBot):
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
         embed = discord.Embed(color=self.color)
-        embed.title = f"{str(command).capitalize()} Commands"
-        embed.description = f'Use "{ctx.prefix}help {str(command)} [command]" for more info on a command'
+        embed.title = _(f"{str(command).capitalize()} Commands")
+        embed.description = _(
+            f'Use "{ctx.prefix}help {str(command)} [command]" for more info on a command'
+        )
         embed.set_footer(
-            text="Replace [command] with one of the commands listed above."
+            text=_("Replace [command] with one of the commands listed above.")
         )
         sub = [f"`{subcommand.name}`" for subcommand in subcommands]
         value = ", ".join(sub)
-        embed.add_field(name="Commands Available", value=value)
+        embed.add_field(name=_("Commands Available"), value=value)
         embed.add_field(
-            name="Usage",
+            name=_("Usage"),
             value=f"{ctx.prefix}{str(command)} [command]",
             inline=False,
         )
         return embed
 
     def embed_exception(self, e):
-        """Returns a custom embed for exceptions."""
-        embed = discord.Embed(color=0xFF3232)
-        embed.title = "An unknown error occured."
-        embed.description = (
+        embed = discord.Embed(color=discord.Color.red())
+        embed.title = _("An unknown error occured.")
+        embed.description = _(
             "Please report the following error to the developer"
             " by joning the support server at https://discord.gg/eZU69EV"
         )

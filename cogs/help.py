@@ -5,6 +5,7 @@ import discord
 from discord.ext import menus, commands
 
 from config import support, website, main_color
+from utils.i18n import _
 
 
 class HelpMenu(menus.MenuPages):
@@ -55,20 +56,20 @@ class HelpMenu(menus.MenuPages):
     @menus.button("\N{WHITE QUESTION MARK ORNAMENT}", position=menus.Last(3))
     async def show_bot_help(self, payload):
         embed = discord.Embed(color=main_color)
-        embed.title = "Using the bot"
-        embed.description = "Welcome to the help page!"
+        embed.title = _("Using the bot")
+        embed.description = _("Welcome to the help page!")
 
         entries = (
-            ("<argument>", "This means the argument is **required**."),
-            ("[argument]", "This means the argument is **optional**."),
-            ("Note", "You **must not** include the brackets in the argument."),
+            _("<argument>", "This means the argument is **required**."),
+            _("[argument]", "This means the argument is **optional**."),
+            _("Note", "You **must not** include the brackets in the argument."),
         )
 
         for name, value in entries:
             embed.add_field(name=name, value=value, inline=False)
 
         embed.set_footer(
-            text=f"We were on page {self.current_page + 1} before this message."
+            text=_(f"We were on page {self.current_page + 1} before this message.")
         )
         await self.message.edit(embed=embed)
 
@@ -96,14 +97,14 @@ class BotHelp(menus.ListPageSource):
 
     async def format_page(self, menu, cogs):
         prefix = menu.ctx.prefix
-        description = (
+        description = _(
             f"[Support server]({support}) • [View commands online]({website}/commands)\n"
             f'Use "{prefix}help [command]" for more info on a command\n'
             f'Use "{prefix}help [category]" for more info on a category'
         )
 
         embed = discord.Embed(color=main_color)
-        embed.title = "Help"
+        embed.title = _("Help")
         embed.description = description
 
         for cog in cogs:
@@ -131,21 +132,23 @@ class GroupHelp(menus.ListPageSource):
         embed.description = self.description
 
         for command in commands:
-            signature = f"{command.qualified_name} {command.signature}"
+            signature = _(f"{command.qualified_name} {command.signature}")
             embed.add_field(
                 name=signature,
-                value=command.short_doc or "No help found...",
+                value=command.short_doc or _("No help found..."),
                 inline=False,
             )
 
         maximum = self.get_max_pages()
         if maximum > 1:
             embed.set_author(
-                name=f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)"
+                name=_(
+                    f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)"
+                )
             )
 
         embed.set_footer(
-            text=f'Use "{self.prefix}help [command]" for more info on a command.'
+            text=_(f'Use "{self.prefix}help [command]" for more info on a command.')
         )
         return embed
 
@@ -154,7 +157,7 @@ class CustomHelpCommand(commands.HelpCommand):
     def __init__(self):
         command_attrs = dict(
             cooldown=commands.Cooldown(1, 3.0, commands.BucketType.member),
-            help="Shows help about the bot, a command, or a category",
+            help=_("Shows help about the bot, a command, or a category"),
         )
         super().__init__(command_attrs=command_attrs)
 
@@ -175,10 +178,10 @@ class CustomHelpCommand(commands.HelpCommand):
         if command.help:
             embed.description = command.help
         else:
-            embed.description = "No help found..."
+            embed.description = _("No help found...")
         if command.aliases:
             aliases = self.get_command_aliases(command.aliases)
-            embed.add_field(name="Aliases", value=", ".join(aliases))
+            embed.add_field(name=_("Aliases"), value=", ".join(aliases))
 
     async def send_bot_help(self, mapping):
         bot = self.context.bot

@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+from utils.i18n import _, locale
+
 
 class Server(commands.Cog):
     def __init__(self, bot):
@@ -8,7 +10,7 @@ class Server(commands.Cog):
 
     async def set_prefix(self, ctx, prefix):
         if len(prefix) > 5:
-            return await ctx.send("Prefix may not be longer than 5 characters.")
+            return await ctx.send(_("Prefix may not be longer than 5 characters."))
         if prefix == self.bot.prefix:
             del self.bot.prefixes[ctx.guild.id]
         else:
@@ -16,25 +18,28 @@ class Server(commands.Cog):
         await self.bot.pool.execute(
             "UPDATE server SET prefix = $1 WHERE id = $2;", prefix, ctx.guild.id
         )
-        await ctx.send(f"Prefix successfully set to `{prefix}`")
+        await ctx.send(_(f"Prefix successfully set to `{prefix}`"))
 
     @commands.command()
     @commands.guild_only()
+    @locale
     async def prefix(
         self, ctx, prefix: commands.clean_content(escape_markdown=True) = None
     ):
-        """Either see the prefix or change it.
+        _(
+            """Either see the prefix or change it.
 
         `[prefix]` - The new server prefix to use.
 
         You must have Manage Server permission to use this command.
         """
+        )
         if prefix:
             if ctx.author.guild_permissions.manage_guild:
                 await self.set_prefix(ctx, prefix)
             else:
                 await ctx.send(
-                    "`Manage Server` permission is required to change the prefix."
+                    _("`Manage Server` permission is required to change the prefix.")
                 )
         else:
             pre = await self.bot.pool.fetchval(
@@ -42,10 +47,10 @@ class Server(commands.Cog):
             )
             embed = discord.Embed(color=self.bot.color)
             embed.set_footer(
-                text=f'Use "{self.bot.clean_prefix(ctx)}prefix value" to change it.'
+                text=_(f'Use "{self.bot.clean_prefix(ctx)}prefix value" to change it.')
             )
             embed.add_field(
-                name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`"
+                name=_("Prefixes"), value=f"1. {self.bot.user.mention}\n2. `{pre}`"
             )
             await ctx.send(embed=embed)
 
@@ -62,11 +67,14 @@ class Server(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
+    @locale
     async def leaderboard(self, ctx):
-        """Shows OverBot's most active servers.
+        _(
+            """Shows OverBot's most active servers.
 
         It is based on commands runned.
         """
+        )
         async with ctx.typing():
             guilds = await self.bot.pool.fetch(
                 "SELECT id, commands_run FROM server WHERE id <> "
@@ -74,9 +82,9 @@ class Server(commands.Cog):
                 self.bot.config.ignored_guilds,
             )
             embed = discord.Embed()
-            embed.title = "Most Active Servers"
+            embed.title = _("Most Active Servers")
             embed.url = self.bot.config.website
-            embed.set_footer(text="Tracking command usage since • 11/26/2020")
+            embed.set_footer(text=_("Tracking command usage since • 11/26/2020"))
 
             board = []
             for index, guild in enumerate(guilds, start=1):

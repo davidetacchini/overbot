@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext.menus import MenuError
 
 from utils import checks
+from utils.i18n import _, locale
 from utils.paginator import NoChoice
 
 
@@ -11,6 +12,7 @@ class ErrorHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @locale
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
@@ -24,28 +26,30 @@ class ErrorHandler(commands.Cog):
             return
 
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(f"You are missing a required argument: `{error.param.name}`")
+            await ctx.send(
+                _(f"You are missing a required argument: `{error.param.name}`")
+            )
 
         elif isinstance(error, commands.BadArgument):
             # print the message if given else printing the standard one
-            await ctx.send(error or "You are using a bad argument.")
+            await ctx.send(error or _("You are using a bad argument."))
 
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.send("You don't have enough permissions.")
+            await ctx.send(_("You don't have enough permissions."))
 
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(
-                "You can't use `{command}` command for `{seconds}` seconds.".format(
+                _("You can't use `{command}` command for `{seconds}` seconds.").format(
                     command=ctx.command.qualified_name,
                     seconds=round(error.retry_after, 2),
                 )
             )
 
         elif isinstance(error, commands.NoPrivateMessage):
-            await ctx.author.send("This command can't be used in direct messages.")
+            await ctx.author.send(_("This command can't be used in direct messages."))
 
         elif isinstance(error, commands.NotOwner):
-            await ctx.send("It seems you do not own this bot.")
+            await ctx.send(_("It seems you do not own this bot."))
 
         elif hasattr(error, "original") and isinstance(error, MenuError):
             return
@@ -56,23 +60,27 @@ class ErrorHandler(commands.Cog):
             return
 
         if isinstance(error, NoChoice):
-            await ctx.send("You took too long to reply.")
+            await ctx.send(_("You took too long to reply."))
 
         elif isinstance(error, commands.CommandInvokeError) and hasattr(
             error, "original"
         ):
             if isinstance(error.original, DataError):
-                await ctx.send("The argument you entered cannot be handled.")
+                await ctx.send(_("The argument you entered cannot be handled."))
 
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
-                    f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile link" to do so.'
+                    _(
+                        f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile link" to do so.'
+                    )
                 )
 
             elif type(error) == checks.ProfileLimitReached:
                 await ctx.send(
-                    f'You have reached the maximum number of profiles that can be added. Use "{ctx.prefix}profile list" for more info.'
+                    _(
+                        f'You have reached the maximum number of profiles that can be added. Use "{ctx.prefix}profile list" for more info.'
+                    )
                 )
 
 
