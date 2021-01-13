@@ -6,6 +6,7 @@ import secrets
 import discord
 from discord.ext import commands
 
+from utils.i18n import _, locale
 from utils.paginator import Choose
 
 
@@ -13,7 +14,7 @@ class MemberHasNoStats(Exception):
     """Exception raised when a member has no trivia statistics to display."""
 
     def __init__(self, member):
-        super().__init__(f"{member} hasn't played trivia yet.")
+        super().__init__(_(f"{member} hasn't played trivia yet."))
 
 
 class Trivia(commands.Cog):
@@ -30,7 +31,7 @@ class Trivia(commands.Cog):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
-        footer = f"You have 1 try and {timeout} seconds to respond."
+        footer = _(f"You have 1 try and {timeout} seconds to respond.")
         answer = await Choose(
             shuffled,
             timeout=timeout,
@@ -68,26 +69,28 @@ class Trivia(commands.Cog):
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         if won:
             embed.color = discord.Color.green()
-            embed.title = "Correct!"
-            embed.set_footer(text="+1 win")
+            embed.title = _("Correct!")
+            embed.set_footer(text=_("+1 win"))
         else:
             embed.color = discord.Color.red()
-            embed.title = "Wrong!"
-            embed.set_footer(text="+1 loss")
-            embed.add_field(name="Correct answer", value=correct_answer)
+            embed.title = _("Wrong!")
+            embed.set_footer(text=_("+1 loss"))
+            embed.add_field(name=_("Correct answer"), value=correct_answer)
         return embed
 
     @commands.group(invoke_without_command=True)
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def trivia(self, ctx):
-        """Displays a list with all trivia's subcommands."""
+        _("""Displays a list with all trivia's subcommands.""")
         embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @trivia.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def play(self, ctx):
-        """Play Overwatch trivia."""
+        _("""Play Overwatch trivia.""")
         try:
             question = self.get_question()
         except Exception as e:
@@ -128,23 +131,26 @@ class Trivia(commands.Cog):
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
         ratio = self.get_player_ratio(stats["won"], stats["lost"])
-        embed.add_field(name="Total", value=stats["started"])
-        embed.add_field(name="Won", value=stats["won"])
-        embed.add_field(name="Lost", value=stats["lost"])
-        embed.add_field(name="Ratio (W/L)", value="%.2f" % ratio)
-        embed.add_field(name="Unanswered", value=unanswered)
-        embed.add_field(name="Contributions", value=stats["contribs"])
+        embed.add_field(name=_("Total"), value=stats["started"])
+        embed.add_field(name=_("Won"), value=stats["won"])
+        embed.add_field(name=_("Lost"), value=stats["lost"])
+        embed.add_field(name=_("Ratio (W/L)"), value="%.2f" % ratio)
+        embed.add_field(name=_("Unanswered"), value=unanswered)
+        embed.add_field(name=_("Contributions"), value=stats["contribs"])
         return embed
 
     @trivia.command(aliases=["stats"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def statistics(self, ctx, member: discord.Member = None):
-        """Shows trivia statistics.
+        _(
+            """Shows trivia statistics.
 
         `[member]` - The mention or the ID of a discord member of the current server.
 
         If no member is given then the stats returned will be yours.
         """
+        )
         member = member or ctx.author
         try:
             stats = await self.get_member_trivia_stats(member)
@@ -175,20 +181,23 @@ class Trivia(commands.Cog):
 
     @trivia.command(aliases=["top"])
     @commands.cooldown(1, 60.0, commands.BucketType.member)
+    @locale
     async def best(self, ctx):
-        """Shows the best OverBot's trivia players.
+        _(
+            """Shows the best OverBot's trivia players.
 
         It is based on games won.
 
         This command can be used once a minute.
         """
+        )
         async with ctx.typing():
             players = await self.bot.pool.fetch(
                 "SELECT id, started, won, lost FROM trivia WHERE "
                 "id <> 285502621295312896 ORDER BY won DESC LIMIT 10;"
             )
             embed = discord.Embed()
-            embed.title = "Best Trivia Players"
+            embed.title = _("Best Trivia Players")
 
             board = []
             for index, player in enumerate(players, start=1):
@@ -203,7 +212,7 @@ class Trivia(commands.Cog):
             await ctx.send(embed=embed)
 
     def get_submit_message(self):
-        return (
+        return _(
             "Copy everything inside the code block below and hit enter. "
             "NOTE: If your question is a true/false one, you should know what to do.\n"
             '```"question": "REPLACE",\n"image_url": "REAPLCE",\n"correct_answer": "REPLACE",\n'
@@ -225,16 +234,21 @@ class Trivia(commands.Cog):
 
     @trivia.command(aliases=["contrib"])
     @commands.cooldown(1, 3600, commands.BucketType.member)
+    @locale
     async def submit(self, ctx):
-        """Submit a new question to be added to trivia.
+        _(
+            """Submit a new question to be added to trivia.
 
         You can submit a request once an hour.
         """
+        )
         if not await ctx.prompt(self.get_submit_message()):
             return
 
         await ctx.send(
-            "Paste the code you copied before, replace everything and hit enter. You have 60 seconds."
+            _(
+                "Paste the code you copied before, replace everything and hit enter. You have 60 seconds."
+            )
         )
 
         def check(m):
@@ -247,7 +261,7 @@ class Trivia(commands.Cog):
         try:
             message = await self.bot.wait_for("message", check=check, timeout=60.0)
         except asyncio.TimeoutError:
-            await ctx.send("You took too long to submit the request.")
+            await ctx.send(_("You took too long to submit the request."))
         else:
             channel = self.bot.get_channel(self.bot.config.trivia_channel)
             if not channel:
@@ -256,7 +270,9 @@ class Trivia(commands.Cog):
             await channel.send(content)
             await self.update_member_contribs_stats(ctx.author.id)
             await ctx.send(
-                f"{str(ctx.author)}, your request has been successfully sent. Thanks for the contribution!"
+                _(
+                    f"{str(ctx.author)}, your request has been successfully sent. Thanks for the contribution!"
+                )
             )
 
 

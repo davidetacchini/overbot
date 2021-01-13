@@ -3,6 +3,7 @@ import secrets
 import discord
 from discord.ext import commands
 
+from utils.i18n import _, locale
 from classes.converters import MapCategory, HeroCategory
 
 ROLES = [
@@ -100,15 +101,18 @@ class Random(commands.Cog):
         return embed
 
     @commands.group(invoke_without_command=True)
+    @locale
     async def random(self, ctx, command: str = None):
-        """Returns a random hero, role or map."""
+        _("""Returns a random hero, role or map.""")
         embed = self.bot.get_subcommands(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @random.command(invoke_without_command=True)
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def hero(self, ctx, category: HeroCategory = None):
-        """Returns a random hero to play.
+        _(
+            """Returns a random hero to play.
 
         `[category]` - The category to get a random hero from.
 
@@ -119,32 +123,38 @@ class Random(commands.Cog):
 
         If no category is passed, a random hero is chosen from all categories.
         """
+        )
         try:
             embed = await self.get_random_hero(category)
         except IndexError:
             await ctx.send(
-                f'Invalid category. Use "{ctx.prefix}help random hero" for more info.'
+                _(
+                    f'Invalid category. Use "{ctx.prefix}help random hero" for more info.'
+                )
             )
         except Exception:
-            await ctx.send("Something bad happened. Please try again.")
+            await ctx.send(_("Something bad happened. Please try again."))
         else:
             await ctx.send(embed=embed)
 
     @random.command()
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def role(self, ctx):
-        """Returns a random role to play."""
+        _("""Returns a random role to play.""")
         try:
             embed = self.get_random_role()
         except Exception:
-            await ctx.send("Something bad happened. Please try again.")
+            await ctx.send(_("Something bad happened. Please try again."))
         else:
             await ctx.send(embed=embed)
 
     @random.command(invoke_without_command=True)
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def map(self, ctx, category: MapCategory = None):
-        """Returns a random map.
+        _(
+            """Returns a random map.
 
         `[category]` - The category to get a random map from.
 
@@ -156,14 +166,15 @@ class Random(commands.Cog):
 
         If no category is passed, a random map is chosen from all categories.
         """
+        )
         try:
             embed = await self.get_random_map(category)
         except IndexError:
             await ctx.send(
-                f'Invalid category. Use "{ctx.prefix}help random map" for more info.'
+                _(f'Invalid category. Use "{ctx.prefix}help random map" for more info.')
             )
         except Exception:
-            await ctx.send("Something bad happened. Please try again.")
+            await ctx.send(_("Something bad happened. Please try again."))
         else:
             await ctx.send(embed=embed)
 

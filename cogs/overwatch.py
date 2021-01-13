@@ -3,6 +3,7 @@ import secrets
 import discord
 from discord.ext import commands
 
+from utils.i18n import _, locale
 from utils.scrape import get_overwatch_news, get_overwatch_status
 from classes.converters import MemeCategory
 
@@ -43,10 +44,11 @@ class Overwatch(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 60.0, commands.BucketType.member)
+    @locale
     async def status(self, ctx):
-        """Returns the current Overwatch servers status."""
+        _("""Returns the current Overwatch servers status.""")
         embed = discord.Embed()
-        embed.title = "Status"
+        embed.title = _("Status")
         embed.url = self.bot.config.overwatch["status"]
         embed.timestamp = self.bot.timestamp
         embed.set_footer(text="downdetector.com")
@@ -65,13 +67,16 @@ class Overwatch(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
+    @locale
     async def news(self, ctx, amount: int = None):
-        """Returns the latest Overwatch news.
+        _(
+            """Returns the latest Overwatch news.
 
         `[amount]` - The amount of news to return. Defaults to 4.
 
         You can use this command once every 30 seconds.
         """
+        )
         async with ctx.typing():
             pages = []
             amount = amount or 4
@@ -80,7 +85,7 @@ class Overwatch(commands.Cog):
                 titles, links, imgs, dates = await get_overwatch_news(abs(amount))
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
-                embed.title = "Latest Overwatch News"
+                embed.title = _("Latest Overwatch News")
                 embed.description = f"[Click here]({self.bot.config.overwatch['news']})"
                 await ctx.send(embed=embed)
 
@@ -99,10 +104,11 @@ class Overwatch(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
     async def patch(self, ctx):
-        """Returns patch notes links."""
+        _("""Returns patch notes links.""")
         embed = discord.Embed(color=self.bot.color)
-        embed.title = "Overwatch Patch Notes"
+        embed.title = _("Overwatch Patch Notes")
         embed.add_field(
             name="Live",
             value="[Click here to view **live** patch notes]"
@@ -125,8 +131,10 @@ class Overwatch(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 3.0, commands.BucketType.member)
+    @locale
     async def meme(self, ctx, category: MemeCategory = "hot"):
-        """Returns a random Overwatch meme.
+        _(
+            """Returns a random Overwatch meme.
 
         `[category]` - The category to get a random meme from.
 
@@ -140,6 +148,7 @@ class Overwatch(commands.Cog):
 
         All memes are taken from the subreddit r/Overwatch_Memes.
         """
+        )
         try:
             meme = await self.get_meme(category)
             embed = self.embed_meme(ctx, meme)

@@ -2,6 +2,7 @@ import re
 from datetime import date
 
 import discord
+from i18n import _
 
 SR = "<:sr:639897739920146437>"
 
@@ -23,7 +24,7 @@ class NoStatistics(PlayerException):
 
     def __init__(self):
         super().__init__(
-            "This profile has no quick play nor competitive statistics to display."
+            _("This profile has no quick play nor competitive statistics to display.")
         )
 
 
@@ -32,7 +33,9 @@ class NoHeroStatistics(PlayerException):
 
     def __init__(self, player, hero):
         super().__init__(
-            f"**{player}** has no quick play nor competitive statistics for **{hero}** to display."
+            _(
+                f"**{player}** has no quick play nor competitive statistics for **{hero}** to display."
+            )
         )
 
 
@@ -223,8 +226,8 @@ class Player:
 
     def private(self):
         embed = discord.Embed(color=discord.Color.red())
-        embed.title = "This profile is set to private"
-        embed.description = (
+        embed.title = _("This profile is set to private")
+        embed.description = _(
             "Profiles are set to private by default."
             " You can modify this setting in Overwatch under `Options - Social`."
             " Please note that these changes may take effect after approximately 30 minutes."

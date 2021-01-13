@@ -1,4 +1,5 @@
 import aiohttp
+from i18n import _
 
 import config
 
@@ -13,14 +14,16 @@ class NotFound(RequestError):
     """Exception raised when a profile is not found."""
 
     def __init__(self):
-        super().__init__("Player not found.")
+        super().__init__(_("Player not found."))
 
 
 class BadRequest(RequestError):
     """Exception raised when a request sucks."""
 
     def __init__(self):
-        super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
+        super().__init__(
+            _("Wrong BattleTag format entered! Correct format: `name#0000`")
+        )
 
 
 class InternalServerError(RequestError):
@@ -28,7 +31,9 @@ class InternalServerError(RequestError):
 
     def __init__(self):
         super().__init__(
-            "The API is having internal server problems. Please be patient and try again later."
+            _(
+                "The API is having internal server problems. Please be patient and try again later."
+            )
         )
 
 
@@ -46,13 +51,13 @@ class TooManyAccounts(RequestError):
 
     def __init__(self, platform, username, players):
         if platform == "pc":
-            message = (
+            message = _(
                 f"**{players}** accounts found under the name of `{username}`"
                 f" playing on `{platform}`. Please be more specific by entering"
                 f" the full BattleTag in the following format: `name#0000`"
             )
         else:
-            message = (
+            message = _(
                 f"**{players}** accounts found under the name of `{username}`"
                 f" playing on `{platform}`. Please be more specific."
             )

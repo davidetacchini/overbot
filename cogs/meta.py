@@ -9,6 +9,7 @@ import pygit2
 import discord
 from discord.ext import commands
 
+from utils.i18n import _, locale
 from utils.time import human_timedelta
 
 
@@ -17,30 +18,37 @@ class Meta(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=["pong", "latency"])
+    @locale
     async def ping(self, ctx):
-        """Displays the bot's current websocket latency and ACK."""
+        _("""Displays the bot's current websocket latency and ACK.""")
         embed = discord.Embed(color=discord.Color.green())
-        embed.title = "Pinging..."
+        embed.title = _("Pinging...")
         start = time.monotonic()
         msg = await ctx.send(embed=embed)
         embed.title = None
         ack = round((time.monotonic() - start) * 1000, 2)
-        embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000, 2)}ms")
-        embed.add_field(name="ACK", value=f"{ack}ms")
+        embed.add_field(
+            name=_("Latency"), value=f"{round(self.bot.latency * 1000, 2)}ms"
+        )
+        embed.add_field(name=_("ACK"), value=f"{ack}ms")
         await msg.edit(embed=embed)
 
     @commands.command()
+    @locale
     async def uptime(self, ctx):
-        """Shows how long the bot has been online."""
+        _("""Shows how long the bot has been online.""")
         await ctx.send(f"Uptime: {self.bot.get_uptime()}")
 
     @commands.command(aliases=["feed"])
     @commands.cooldown(1, 60.0, commands.BucketType.member)
+    @locale
     async def feedback(self, ctx, *, message: str):
-        """Leave a feedback about the bot.
+        _(
+            """Leave a feedback about the bot.
 
         You can leave a feedback once a minute.
         """
+        )
         if self.bot.debug:
             return
 
@@ -55,7 +63,7 @@ class Meta(commands.Cog):
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         await channel.send(embed=embed)
         await ctx.send(
-            f"{str(ctx.author)}, your feedback has been successfully sent, thanks!"
+            _(f"{str(ctx.author)}, your feedback has been successfully sent, thanks!")
         )
 
     @staticmethod
@@ -87,13 +95,14 @@ class Meta(commands.Cog):
     # https://github.com/Rapptz/RoboDanny
     @commands.command(aliases=["info"])
     @commands.guild_only()
+    @locale
     async def about(self, ctx):
-        """Displays the bot information."""
+        _("""Displays the bot information.""")
         async with ctx.typing():
             commits = self.get_latest_commits()
             embed = discord.Embed(color=self.bot.color)
-            embed.title = "Official Website"
-            embed.description = f"Latest Changes:\n{commits}"
+            embed.title = _("Official Website")
+            embed.description = _(f"Latest Changes:\n{commits}")
             embed.url = self.bot.config.website
             embed.timestamp = self.bot.timestamp
 
@@ -129,23 +138,23 @@ class Meta(commands.Cog):
                     elif isinstance(channel, discord.VoiceChannel):
                         voice += 1
 
-            embed.add_field(name="Process", value=activity)
-            embed.add_field(name="Host", value=host)
+            embed.add_field(name=_("Process"), value=activity)
+            embed.add_field(name=_("Host"), value=host)
             embed.add_field(
-                name="Channels",
+                name=_("Channels"),
                 value=f"{text + voice} total\n{text} text\n{voice} voice",
             )
-            embed.add_field(name="Members", value=total_members)
-            embed.add_field(name="Servers", value=len(self.bot.guilds))
+            embed.add_field(name=_("Members"), value=total_members)
+            embed.add_field(name=_("Servers"), value=len(self.bot.guilds))
             embed.add_field(
-                name="Shards",
+                name=_("Shards"),
                 value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
             )
-            embed.add_field(name="Commands Run", value=total_commands)
-            embed.add_field(name="Lines of code", value=self.bot.total_lines)
-            embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
+            embed.add_field(name=_("Commands Run"), value=total_commands)
+            embed.add_field(name=_("Lines of code"), value=self.bot.total_lines)
+            embed.add_field(name=_("Uptime"), value=self.bot.get_uptime(brief=True))
             embed.set_footer(
-                text=f"Made with discord.py v{discord.__version__}",
+                text=_(f"Made with discord.py v{discord.__version__}"),
                 icon_url=self.bot.config.python_logo,
             )
             await ctx.send(embed=embed)
