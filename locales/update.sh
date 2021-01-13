@@ -7,7 +7,6 @@ xgettext \
     --output main.pot
 
 for locale in */; do
-    printf "$locale\n"; done
     file="$locale/LC_MESSAGES/main"
 
     msgmerge \
@@ -17,5 +16,5 @@ for locale in */; do
         "$file.po" \
         main.pot
 
-    # msgfmt "$file.mo" --output-fil-output-file "$file.po"; done
+    msgfmt "$file.mo" --output-file "$file.po"; done
 
