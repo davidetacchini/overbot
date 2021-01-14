@@ -4,7 +4,7 @@ from contextlib import suppress
 import discord
 from discord.ext import menus, commands
 
-from config import support, website, main_color
+from config import main_color
 from utils.i18n import _
 
 
@@ -98,12 +98,15 @@ class BotHelp(menus.ListPageSource):
         return ", ".join(values)
 
     async def format_page(self, menu, cogs):
-        prefix = menu.ctx.prefix
         description = _(
             "[Support server]({support}) • [View commands online]({website})\n"
             'Use "{prefix}help [command]" for more info on a command\n'
             'Use "{prefix}help [category]" for more info on a category'
-        ).format(support=self.bot.config.support, website=self.bot.config.website + "/commands", prefix=self.prefix)
+        ).format(
+            support=self.bot.config.support,
+            website=self.bot.config.website + "/commands",
+            prefix=self.prefix,
+        )
 
         embed = discord.Embed(color=main_color)
         embed.title = _("Help")
