@@ -27,7 +27,9 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
-                _(f"You are missing a required argument: `{error.param.name}`")
+                _("You are missing a required argument: `{argument}`").format(
+                    argument=error.param.name
+                )
             )
 
         elif isinstance(error, commands.BadArgument):
@@ -72,15 +74,15 @@ class ErrorHandler(commands.Cog):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
                     _(
-                        f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile link" to do so.'
-                    )
+                        'You haven\'t linked a profile yet. Use "{prefix}profile link" to do so.'
+                    ).format(prefix=ctx.prefix)
                 )
 
             elif type(error) == checks.ProfileLimitReached:
                 await ctx.send(
                     _(
-                        f'You have reached the maximum number of profiles that can be added. Use "{ctx.prefix}profile list" for more info.'
-                    )
+                        'You have reached the maximum number of profiles that can be added. Use "{prefix}profile list" for more info.'
+                    ).format(prefix=ctx.prefix)
                 )
 
 

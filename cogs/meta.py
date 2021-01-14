@@ -30,7 +30,7 @@ class Meta(commands.Cog):
         embed.add_field(
             name=_("Latency"), value=f"{round(self.bot.latency * 1000, 2)}ms"
         )
-        embed.add_field(name=_("ACK"), value=f"{ack}ms")
+        embed.add_field(name="ACK", value=f"{ack}ms")
         await msg.edit(embed=embed)
 
     @commands.command()
@@ -63,7 +63,9 @@ class Meta(commands.Cog):
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         await channel.send(embed=embed)
         await ctx.send(
-            _(f"{str(ctx.author)}, your feedback has been successfully sent, thanks!")
+            _("{author}, your feedback has been successfully sent, thanks!").format(
+                author=str(ctx.author)
+            )
         )
 
     @staticmethod
@@ -142,7 +144,9 @@ class Meta(commands.Cog):
             embed.add_field(name=_("Host"), value=host)
             embed.add_field(
                 name=_("Channels"),
-                value=f"{text + voice} total\n{text} text\n{voice} voice",
+                value=_(
+                    "{text + voice} total\n{text} text\n{voice} voice",
+                ),
             )
             embed.add_field(name=_("Members"), value=total_members)
             embed.add_field(name=_("Servers"), value=len(self.bot.guilds))
@@ -154,7 +158,9 @@ class Meta(commands.Cog):
             embed.add_field(name=_("Lines of code"), value=self.bot.total_lines)
             embed.add_field(name=_("Uptime"), value=self.bot.get_uptime(brief=True))
             embed.set_footer(
-                text=_(f"Made with discord.py v{discord.__version__}"),
+                text=_("Made with discord.py v{discord_version}").format(
+                    discord_version=discord.__version__
+                ),
                 icon_url=self.bot.config.python_logo,
             )
             await ctx.send(embed=embed)

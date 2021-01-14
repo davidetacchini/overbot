@@ -24,7 +24,7 @@ class MemberHasNoProfile(Exception):
     """Exception raised when mentioned member has no profile connected."""
 
     def __init__(self, member):
-        super().__init__(f"{member} hasn't linked a profile yet.")
+        super().__init__(_(f"{member} hasn't linked a profile yet."))
 
 
 class Profile(commands.Cog):
@@ -91,7 +91,7 @@ class Profile(commands.Cog):
         embed = discord.Embed(color=member.color)
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         embed.set_footer(
-            text=_(f"The star indicates the main profile - {len(profiles)}/5")
+            text=_(f"The star indicates the main profile - {profiles}/5").format(profiles=len(profiles))
         )
         description = []
         for index, (id, platform, username) in enumerate(profiles, start=1):
@@ -236,8 +236,8 @@ class Profile(commands.Cog):
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
             message = _(
-                f'Profile successfully linked. Use "{ctx.prefix}profile list" to see your profile(s).'
-            )
+                'Profile successfully linked. Use "{prefix}profile list" to see your profile(s).'
+            ).format(prefix=ctx.prefix)
             await ctx.send(message)
 
     @has_profile()
@@ -258,8 +258,8 @@ class Profile(commands.Cog):
         except IndexError:
             return await ctx.send(
                 _(
-                    f'Invalid index. Use "{ctx.prefix}help profile unlink" for more info.'
-                )
+                    'Invalid index. Use "{prefix}help profile unlink" for more info.'
+                ).format(prefix=ctx.prefix)
             )
 
         profiles = await self.get_profiles(ctx.author)
@@ -269,8 +269,8 @@ class Profile(commands.Cog):
         ):
             message = _(
                 "You can't unlink your main profile if you have multiple profiles set. "
-                f'Use "{ctx.prefix}help profile main" for more info.'
-            )
+                'Use "{prefix}help profile main" for more info.'
+            ).format(prefix=ctx.prefix)
             return await ctx.send(message)
 
         if platform == "pc":
@@ -308,8 +308,8 @@ class Profile(commands.Cog):
         except IndexError:
             return await ctx.send(
                 _(
-                    f'Invalid index. Use "{ctx.prefix}help profile update" for more info.'
-                )
+                    'Invalid index. Use "{prefix}help profile update" for more info.'
+                ).format(prefix=ctx.prefix)
             )
 
         title = _("Update your Overwatch profile")
@@ -328,8 +328,8 @@ class Profile(commands.Cog):
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
             message = _(
-                f'Profile successfully updated. Use "{ctx.prefix}profile list" to see the changes.'
-            )
+                'Profile successfully updated. Use "{prefix}profile list" to see the changes.'
+            ).format(prefix=ctx.prefix)
             await ctx.send(message)
 
     @has_profile()
@@ -349,7 +349,9 @@ class Profile(commands.Cog):
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
             return await ctx.send(
-                _(f'Invalid index. Use "{ctx.prefix}help profile main" for more info.')
+                _(
+                    'Invalid index. Use "{prefix}help profile main" for more info.'
+                ).format(prefix=ctx.prefix)
             )
 
         await self.set_main_profile(ctx.author.id, profile_id=id)
@@ -409,8 +411,8 @@ class Profile(commands.Cog):
             except IndexError:
                 return await ctx.send(
                     _(
-                        f'Invalid index. Use "{ctx.prefix}help profile rating" for more info.'
-                    )
+                        'Invalid index. Use "{prefix}help profile rating" for more info.'
+                    ).format(prefix=ctx.prefix)
                 )
 
             try:
@@ -433,7 +435,8 @@ class Profile(commands.Cog):
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def statistics(self, ctx, index: Index = None, member: discord.Member = None):
-        """Shows a member's Overwatch both quick play and competitive statistics.
+        _(
+            """Shows a member's Overwatch both quick play and competitive statistics.
 
         `[index]` - The profile's index you want to see the statistics for.
         `[member]` - The mention or the ID of a Discord member of the current server.
@@ -443,18 +446,20 @@ class Profile(commands.Cog):
 
         If you want to see a member's stats, you must enter both the index and the member.
         """
+        )
         async with ctx.typing():
             member = member or ctx.author
 
             try:
-                _, platform, username = await self.get_profile(member, index=index)
+                # using 'unused' instead of '_' since it conflicts with gettext _()
+                unused, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
                 return await ctx.send(
                     _(
-                        f'Invalid index. Use "{ctx.prefix}help profile statistics" for more info.'
-                    )
+                        'Invalid index. Use "{prefix}help profile statistics" for more info.'
+                    ).format(prefix=ctx.prefix)
                 )
 
             try:
@@ -479,7 +484,8 @@ class Profile(commands.Cog):
     async def hero(
         self, ctx, hero: Hero, index: Index = None, member: discord.Member = None
     ):
-        """Shows a member's Overwatch both quick play and competitive statistics for a given hero.
+        _(
+            """Shows a member's Overwatch both quick play and competitive statistics for a given hero.
 
         `<hero>` - The name of the hero you want to see stats for.
         `[index]` - The profile's index you want to see the ranks for.
@@ -490,18 +496,19 @@ class Profile(commands.Cog):
 
         If you want to see a member's stats, you must enter both the index and the member.
         """
+        )
         async with ctx.typing():
             member = member or ctx.author
 
             try:
-                _, platform, username = await self.get_profile(member, index=index)
+                unused, platform, username = await self.get_profile(member, index=index)
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
                 return await ctx.send(
                     _(
-                        f'Invalid index. Use "{ctx.prefix}help profile hero" for more info.'
-                    )
+                        'Invalid index. Use "{prefix}help profile hero" for more info.'
+                    ).format(prefix=ctx.prefix)
                 )
 
             try:
@@ -557,12 +564,7 @@ class Profile(commands.Cog):
 
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
-                return await ctx.send(
-                    _(
-                        f"{str(profile)}'s profile is set to private. Profiles must be "
-                        "set to public in order for me to retrieve their data."
-                    )
-                )
+                return await ctx.send(embed=profile.private())
 
             try:
                 await self.set_or_remove_nickname(ctx, profile=profile, profile_id=id)

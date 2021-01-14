@@ -2,7 +2,8 @@ import re
 from datetime import date
 
 import discord
-from i18n import _
+
+from utils.i18n import _
 
 SR = "<:sr:639897739920146437>"
 
@@ -151,7 +152,7 @@ class Player:
         ratings = self.resolve_ratings()
 
         if not ratings:
-            embed.description = "This profile is unranked."
+            embed.description = _("This profile is unranked.")
             return embed
 
         for key, value in ratings.items():
@@ -160,7 +161,7 @@ class Player:
                 value=f"{self.get_rating_icon(value)} **{value}**{SR}",
             )
         embed.set_footer(
-            text=f'Avarage: {self.data.get("rating")}',
+            text=_("Avarage: {average}").format(average=self.data.get("rating")),
             icon_url=self.data.get("ratingIcon"),
         )
 
@@ -193,10 +194,10 @@ class Player:
     def format_statistics(self, embed, key, quickplay, competitive):
         if quickplay and quickplay[key]:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-            embed.add_field(name="Quickplay", value=self.add_space(q_t))
+            embed.add_field(name=_("Quickplay"), value=self.add_space(q_t))
         if competitive and competitive[key]:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
-            embed.add_field(name="Competitive", value=self.add_space(c_t))
+            embed.add_field(name=_("Competitive"), value=self.add_space(c_t))
 
     def get_statistics(self, ctx):
         keys, quickplay, competitive = self.resolve_statistics()
@@ -206,7 +207,9 @@ class Player:
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=self.level_icon)
-            embed.set_footer(text=f"Page {i}/{len(keys)}")
+            embed.set_footer(
+                text=_("Page {current}/{total}").format(current=i, total=len(keys))
+            )
             self.format_statistics(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
@@ -219,7 +222,9 @@ class Player:
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
-            embed.set_footer(text=f"Page {i}/{len(keys)}")
+            embed.set_footer(
+                text=_("Page {current}/{total}").format(current=i, total=len(keys))
+            )
             self.format_statistics(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages

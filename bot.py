@@ -34,6 +34,7 @@ from termcolor import colored
 from discord.ext import commands
 
 import config
+from utils import i18n
 from utils.i18n import _
 from utils.time import human_timedelta
 from classes.context import Context
@@ -102,6 +103,12 @@ class Bot(commands.AutoShardedBot):
             return
         await self.process_commands(message)
 
+    async def invoke(self, ctx):
+        member_id = ctx.message.author.id
+        locale = await self.get_cog("Locale").update_locale(member_id)
+        i18n.current_locale.set(locale)
+        await super().invoke(ctx)
+
     async def _get_prefix(self, bot, message):
         if not message.guild:
             return self.prefix
@@ -137,10 +144,10 @@ class Bot(commands.AutoShardedBot):
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
         embed = discord.Embed(color=self.color)
-        embed.title = _(f"{str(command).capitalize()} Commands")
+        embed.title = _("{command} Commands").format(command=str(command).capitalize())
         embed.description = _(
-            f'Use "{ctx.prefix}help {str(command)} [command]" for more info on a command'
-        )
+            'Use "{prefix}help {command} [command]" for more info on a command'
+        ).format(prefix=ctx.prefix, command=str(command))
         embed.set_footer(
             text=_("Replace [command] with one of the commands listed above.")
         )

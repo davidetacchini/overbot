@@ -1,7 +1,7 @@
 import aiohttp
-from i18n import _
 
 import config
+from utils.i18n import _
 
 
 class RequestError(Exception):
