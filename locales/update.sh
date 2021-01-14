@@ -16,5 +16,5 @@ for locale in */; do
         "$file.po" \
         main.pot
 
-    msgfmt "$file.mo" --output-file "$file.po"; done
+    msgfmt "$file.po" --output-file "$file.mo"; done
 

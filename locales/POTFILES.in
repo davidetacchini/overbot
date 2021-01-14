@@ -2,6 +2,7 @@ bot.py
 cogs/errors.py
 cogs/help.py
 cogs/links.py
+cogs/locale.py
 cogs/meta.py
 cogs/overwatch.py
 cogs/profile.py
