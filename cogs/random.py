@@ -97,7 +97,9 @@ class Random(commands.Cog):
         embed = discord.Embed()
         embed.title = random_map["name"]["en_US"]
         embed.set_thumbnail(url=random_map["thumbnail"])
-        embed.set_footer(text=f"Type: {random_map['type'] or 'N/A'}")
+        embed.set_footer(
+            text=_("Type: {type}").format(type=random_map["type"] or "N/A")
+        )
         return embed
 
     @commands.group(invoke_without_command=True)
@@ -129,8 +131,8 @@ class Random(commands.Cog):
         except IndexError:
             await ctx.send(
                 _(
-                    f'Invalid category. Use "{ctx.prefix}help random hero" for more info.'
-                )
+                    'Invalid category. Use "{prefix}help random hero" for more info.'
+                ).format(prefix=ctx.prefix)
             )
         except Exception:
             await ctx.send(_("Something bad happened. Please try again."))
@@ -171,7 +173,9 @@ class Random(commands.Cog):
             embed = await self.get_random_map(category)
         except IndexError:
             await ctx.send(
-                _(f'Invalid category. Use "{ctx.prefix}help random map" for more info.')
+                _(
+                    'Invalid category. Use "{prefix}help random map" for more info.'
+                ).format(prefix=ctx.prefix)
             )
         except Exception:
             await ctx.send(_("Something bad happened. Please try again."))

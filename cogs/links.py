@@ -37,10 +37,14 @@ class Links(commands.Cog):
         owner = await guild.fetch_member(self.bot.config.owner_id)
         embed.description = _(
             "Maintaining OverBot and adding new features takes up a huge "
-            f'portion of [{str(owner)}]({self.bot.config.github["profile"]})\'s spare time. '
-            f"If you enjoy using OverBot you can donate a small amount "
+            "portion of [{owner}]({github_profile})'s spare time. "
+            "If you enjoy using OverBot you can donate a small amount "
             "to keep the project alive or just support me. **Thank you!**\n\n"
-            f"{self.bot.config.paypal}"
+            "{paypal}"
+        ).format(
+            owner=str(owner),
+            github_profile=self.bot.config.github["profile"],
+            paypal=self.bot.config.paypal,
         )
         await ctx.send(embed=embed)
 

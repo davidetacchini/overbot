@@ -60,16 +60,18 @@ class HelpMenu(menus.MenuPages):
         embed.description = _("Welcome to the help page!")
 
         entries = (
-            _("<argument>", "This means the argument is **required**."),
-            _("[argument]", "This means the argument is **optional**."),
-            _("Note", "You **must not** include the brackets in the argument."),
+            (_("<argument>"), _("This means the argument is **required**.")),
+            (_("[argument]"), _("This means the argument is **optional**.")),
+            (_("Note"), _("You **must not** include the brackets in the argument.")),
         )
 
         for name, value in entries:
             embed.add_field(name=name, value=value, inline=False)
 
         embed.set_footer(
-            text=_(f"We were on page {self.current_page + 1} before this message.")
+            text=_("We were on page {current_page} before this message.").format(
+                current_page=self.current_page + 1
+            )
         )
         await self.message.edit(embed=embed)
 
@@ -98,10 +100,10 @@ class BotHelp(menus.ListPageSource):
     async def format_page(self, menu, cogs):
         prefix = menu.ctx.prefix
         description = _(
-            f"[Support server]({support}) • [View commands online]({website}/commands)\n"
-            f'Use "{prefix}help [command]" for more info on a command\n'
-            f'Use "{prefix}help [category]" for more info on a category'
-        )
+            "[Support server]({support}) • [View commands online]({website})\n"
+            'Use "{prefix}help [command]" for more info on a command\n'
+            'Use "{prefix}help [category]" for more info on a category'
+        ).format(support=self.bot.config.support, website=self.bot.config.website + "/commands", prefix=self.prefix)
 
         embed = discord.Embed(color=main_color)
         embed.title = _("Help")
@@ -114,7 +116,11 @@ class BotHelp(menus.ListPageSource):
                 embed.add_field(name=cog.qualified_name, value=value)
 
         maximum = self.get_max_pages()
-        embed.set_footer(text=f"Page {menu.current_page + 1}/{maximum}")
+        embed.set_footer(
+            text=_("Page {current_page}/{maximum}").format(
+                current_page=menu.current_page + 1, maximum=maximum
+            )
+        )
         return embed
 
 
@@ -123,7 +129,7 @@ class GroupHelp(menus.ListPageSource):
         super().__init__(entries=commands, per_page=5)
         self.group = group
         self.prefix = prefix
-        self.title = f"{self.group.qualified_name} Commands"
+        self.title = _("{command} Commands").format(command=self.group.qualified_name)
         self.description = self.group.description
 
     async def format_page(self, menu, commands):
@@ -132,7 +138,7 @@ class GroupHelp(menus.ListPageSource):
         embed.description = self.description
 
         for command in commands:
-            signature = _(f"{command.qualified_name} {command.signature}")
+            signature = f"{command.qualified_name} {command.signature}"
             embed.add_field(
                 name=signature,
                 value=command.short_doc or _("No help found..."),
@@ -143,7 +149,11 @@ class GroupHelp(menus.ListPageSource):
         if maximum > 1:
             embed.set_author(
                 name=_(
-                    f"Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)"
+                    "Page {current_page}/{maximum} ({total_entries} commands)".format(
+                        current_page=menu.current_page + 1,
+                        maximum=maximum,
+                        total_entries=len(self.entries),
+                    )
                 )
             )
 

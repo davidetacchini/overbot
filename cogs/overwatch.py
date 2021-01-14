@@ -86,7 +86,9 @@ class Overwatch(commands.Cog):
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = _("Latest Overwatch News")
-                embed.description = f"[Click here]({self.bot.config.overwatch['news']})"
+                embed.description = _("[Click here]({news})").format(
+                    news=self.bot.config.overwatch["news"]
+                )
                 await ctx.send(embed=embed)
 
             for i, (title, link, img, date) in enumerate(
@@ -97,7 +99,11 @@ class Overwatch(commands.Cog):
                 embed.url = link
                 embed.set_author(name="Blizzard Entertainment")
                 embed.set_image(url=f"https:{img}")
-                embed.set_footer(text=f"News {i}/{len(titles)} • {date}")
+                embed.set_footer(
+                    text=_("News {current}/{total} • {date}").format(
+                        current=i, total=len(titles)
+                    )
+                )
                 pages.append(embed)
 
             await self.bot.paginator.Paginator(pages=pages).start(ctx)
@@ -111,20 +117,25 @@ class Overwatch(commands.Cog):
         embed.title = _("Overwatch Patch Notes")
         embed.add_field(
             name="Live",
-            value="[Click here to view **live** patch notes]"
-            f"({self.bot.config.overwatch['patch'].format('live')})",
+            value=_("[Click here to view **live** patch notes]({live})").format(
+                live=self.bot.config.overwatch["patch"].format("live")
+            ),
             inline=False,
         )
         embed.add_field(
             name="Ptr",
-            value="[Click here to view **ptr** patch notes]"
-            f"({self.bot.config.overwatch['patch'].format('ptr')})",
+            value=_("[Click here to view **ptr** patch notes]({ptr})").format(
+                ptr=self.bot.config.overwatch["patch"].format("ptr")
+            ),
             inline=False,
         )
         embed.add_field(
             name="Experimental",
-            value="[Click here to view **experimental** patch notes]"
-            f"({self.bot.config.overwatch['patch'].format('experimental')})",
+            value=_(
+                "[Click here to view **experimental** patch notes]({experimental})"
+            ).format(
+                experimental=self.bot.config.overwatch["patch"].format("experimental")
+            ),
             inline=False,
         )
         await ctx.send(embed=embed)
