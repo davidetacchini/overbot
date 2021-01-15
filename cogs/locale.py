@@ -35,7 +35,7 @@ class Locale(commands.Cog):
         pass
 
     @commands.group(invoke_without_command=True, aliases=["locale", "lang"])
-    # @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def language(self, ctx):
         _("""Show your current language set and all the available languages.""")
@@ -46,7 +46,7 @@ class Locale(commands.Cog):
         )
 
     @language.command()
-    # @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def set(self, ctx):
         _("""Update the bot language.""")
@@ -59,7 +59,7 @@ class Locale(commands.Cog):
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
-            await ctx.send(_(f"Language successfully changed to: `{locale}`"))
+            await ctx.send(_("Language successfully changed to: `{locale}`").format(locale=locale))
 
 
 def setup(bot):
