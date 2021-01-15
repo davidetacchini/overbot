@@ -53,6 +53,10 @@ class Locale(commands.Cog):
         try:
             title = _("Select which language you would like the bot to use")
             locale = await ChooseLocale(title=title).start(ctx)
+
+            if not locale:
+                return
+
             await self.set_locale(ctx.author.id, locale)
             i18n.current_locale.set(locale)
             self.bot.locales[ctx.author.id] = locale
