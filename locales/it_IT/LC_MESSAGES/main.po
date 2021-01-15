@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 17:28+0100\n"
+"POT-Creation-Date: 2021-01-15 17:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,7 +253,7 @@ msgstr ""
 msgid "Select which language you would like the bot to use"
 msgstr ""
 
-#: cogs/locale.py:63
+#: cogs/locale.py:62
 #, python-brace-format
 msgid "Language successfully changed to: `{locale}`"
 msgstr "La lingua è stata cambiata con successo a: `{locale}`"
@@ -1175,7 +1175,7 @@ msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
 
 #: utils/paginator.py:126
 msgid "React with the platform you play on..."
-msgstr ""
+msgstr "Reagisci con la piattaforma sulla quale giochi"
 
 #: utils/paginator.py:172
 msgid ""
@@ -1183,6 +1183,9 @@ msgid ""
 "\n"
 "You are going to update the following profile"
 msgstr ""
+"\n"
+"\n"
+"Aggiornerai le informazini del seguente profilo"
 
 #~ msgid ""
 #~ "Show or update the bot language.\n"
