@@ -91,7 +91,7 @@ class Profile(commands.Cog):
         embed = discord.Embed(color=member.color)
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         embed.set_footer(
-            text=_(f"The star indicates the main profile - {profiles}/5").format(
+            text=_("The star indicates the main profile - {profiles}/5").format(
                 profiles=len(profiles)
             )
         )
