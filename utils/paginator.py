@@ -6,6 +6,7 @@ import discord
 from discord.ext.commands import CommandInvokeError
 
 from config import main_color
+from utils.i18n import _
 
 
 class NoChoice(CommandInvokeError):
@@ -73,6 +74,9 @@ class BasePaginator:
 
         return embed
 
+    def result(self, reaction):
+        raise NotImplementedError
+
     async def add_reactions(self):
         for reaction in self.reactions:
             try:
@@ -83,28 +87,6 @@ class BasePaginator:
     async def cleanup(self):
         with suppress(discord.HTTPException, discord.Forbidden):
             await self.message.delete()
-
-    async def paginator(self):
-        raise NotImplementedError
-
-    async def start(self, ctx):
-        raise NotImplementedError
-
-
-class Link(BasePaginator):
-
-    __slots__ = "title"
-
-    def __init__(self, *, title):
-        footer = "React with the platform you play on..."
-        super().__init__(title=title, footer=footer)
-        self.reactions = {
-            "<:battlenet:679469162724196387>": "pc",
-            "<:psn:679468542541693128>": "psn",
-            "<:xbl:679469487623503930>": "xbl",
-            "<:nsw:752653766377078817>": "nintendo-switch",
-            "❌": "close",
-        }
 
     async def paginator(self):
         self.message = await self.ctx.send(embed=self.embed)
@@ -128,16 +110,38 @@ class Link(BasePaginator):
         except asyncio.TimeoutError:
             raise NoChoice("You took too long to reply.")
         else:
-            return self.reactions.get(str(reaction.emoji))
+            return self.result(reaction)
         finally:
             await self.cleanup()
+
+    async def start(self, ctx):
+        raise NotImplementedError
+
+
+class Link(BasePaginator):
+
+    __slots__ = "title"
+
+    def __init__(self, *, title):
+        footer = _("React with the platform you play on...")
+        super().__init__(title=title, footer=footer)
+        self.reactions = {
+            "<:battlenet:679469162724196387>": "pc",
+            "<:psn:679468542541693128>": "psn",
+            "<:xbl:679469487623503930>": "xbl",
+            "<:nsw:752653766377078817>": "nintendo-switch",
+            "❌": "close",
+        }
+
+    def result(self, reaction):
+        return self.reactions.get(str(reaction.emoji))
 
     async def start(self, ctx):
         self.ctx = ctx
         self.bot = ctx.bot
         self.author = ctx.author
-
         self.embed = self.init_embed()
+
         for key, value in self.reactions.items():
             self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
         self.embed.description = "\n".join(self.description)
@@ -158,18 +162,18 @@ class Update(Link):
         self.ctx = ctx
         self.bot = ctx.bot
         self.author = ctx.author
-
         self.embed = self.init_embed()
+
         for key, value in self.reactions.items():
             self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
         self.embed.description = "\n".join(self.description)
 
-        self.embed.description = (
-            self.embed.description + "\n\nYou are going to update the following profile"
+        self.embed.description = self.embed.description + _(
+            "\n\nYou are going to update the following profile"
         )
 
-        self.embed.add_field(name="Platform", value=self.platform)
-        self.embed.add_field(name="Username", value=self.username)
+        self.embed.add_field(name=_("Platform"), value=self.platform)
+        self.embed.add_field(name=_("Username"), value=self.username)
 
         return await self.paginator()
 
@@ -184,42 +188,53 @@ class Choose(BasePaginator):
         )
         self.reactions = []
 
-    async def paginator(self):
-        self.message = await self.ctx.send(embed=self.embed)
-        self.bot.loop.create_task(self.add_reactions())
-
-        def check(r, u):
-            if u.id != self.author.id:
-                return False
-            if u.id == self.bot.user.id:
-                return False
-            if r.message.id != self.message.id:
-                return False
-            if str(r.emoji) not in self.reactions:
-                return False
-            return True
-
-        try:
-            reaction, _ = await self.bot.wait_for(
-                "reaction_add", check=check, timeout=self.timeout
-            )
-        except asyncio.TimeoutError:
-            raise NoChoice("You took too long to reply.")
-        else:
-            return self.entries[self.reactions.index(str(reaction))]
-        finally:
-            await self.cleanup()
+    def result(self, reaction):
+        return self.entries[self.reactions.index(str(reaction))]
 
     async def start(self, ctx):
         self.ctx = ctx
         self.bot = ctx.bot
         self.author = ctx.author
+        self.embed = self.init_embed()
 
         for index, entry in enumerate(self.entries, start=1):
             self.reactions.append(f"{index}\u20e3")
             self.description.append(f"{index}. {entry}")
 
-        self.embed = self.init_embed()
         self.embed.description = "\n".join(self.description)
+
+        return await self.paginator()
+
+
+class ChooseLocale(BasePaginator):
+
+    __slots__ = "title"
+
+    def __init__(self, *, title):
+        super().__init__(title=title)
+        self.reactions = {
+            "🇩🇪": "de_DE",
+            "🇺🇸": "en_US",
+            "🇫🇷": "fr_FR",
+            "🇮🇹": "it_IT",
+            "🇯🇵": "ja_JP",
+            "🇰🇷": "ko_KR",
+            "🇷🇺": "ru_RU",
+            "❌": "close",
+        }
+
+    def result(self, reaction):
+        return self.reactions.get(str(reaction.emoji))
+
+    async def start(self, ctx):
+        self.ctx = ctx
+        self.bot = ctx.bot
+        self.author = ctx.author
+        self.embed = self.init_embed()
+
+        for key, value in self.reactions.items():
+            self.description.append(key)
+
+        self.embed.description = ", ".join(self.description)
 
         return await self.paginator()
