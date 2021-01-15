@@ -4,7 +4,11 @@ import discord
 from discord.ext import commands
 
 from utils.i18n import _, locale
-from utils.scrape import get_overwatch_news, get_overwatch_status
+from utils.scrape import (
+    get_overwatch_news,
+    get_overwatch_status,
+    get_overwatch_patch_notes,
+)
 from classes.converters import MemeCategory
 
 
@@ -82,7 +86,9 @@ class Overwatch(commands.Cog):
             amount = amount or 4
 
             try:
-                titles, links, imgs, dates = await get_overwatch_news(abs(amount))
+                titles, links, imgs, dates = await get_overwatch_news(
+                    ctx, amount=abs(amount)
+                )
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
                 embed.title = _("Latest Overwatch News")
@@ -101,7 +107,7 @@ class Overwatch(commands.Cog):
                 embed.set_image(url=f"https:{img}")
                 embed.set_footer(
                     text=_("News {current}/{total} • {date}").format(
-                        current=i, total=len(titles)
+                        current=i, total=len(titles), date=date
                     )
                 )
                 pages.append(embed)
@@ -113,31 +119,17 @@ class Overwatch(commands.Cog):
     @locale
     async def patch(self, ctx):
         _("""Returns patch notes links.""")
+        locale = self.bot.locales[ctx.author.id].lower()
         embed = discord.Embed(color=self.bot.color)
         embed.title = _("Overwatch Patch Notes")
-        embed.add_field(
-            name="Live",
-            value=_("[Click here to view **live** patch notes]({live})").format(
-                live=self.bot.config.overwatch["patch"].format("live")
-            ),
-            inline=False,
-        )
-        embed.add_field(
-            name="Ptr",
-            value=_("[Click here to view **ptr** patch notes]({ptr})").format(
-                ptr=self.bot.config.overwatch["patch"].format("ptr")
-            ),
-            inline=False,
-        )
-        embed.add_field(
-            name="Experimental",
-            value=_(
-                "[Click here to view **experimental** patch notes]({experimental})"
-            ).format(
-                experimental=self.bot.config.overwatch["patch"].format("experimental")
-            ),
-            inline=False,
-        )
+        live, ptr, experimental = await get_overwatch_patch_notes(ctx)
+        categories = {"live": live, "ptr": ptr, "experimental": experimental}
+        for key, value in categories.items():
+            text = _("[Click here to view **{category}** patch notes]({link})").format(
+                category=value,
+                link=self.bot.config.overwatch["patch"].format(locale, key),
+            )
+            embed.add_field(name=value, value=text, inline=False)
         await ctx.send(embed=embed)
 
     @commands.command()
