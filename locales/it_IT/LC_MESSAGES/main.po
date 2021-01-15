@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-14 18:20+0100\n"
+"POT-Creation-Date: 2021-01-15 17:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,7 @@ msgstr "Non hai abbastanza permessi."
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}` seconds."
 msgstr ""
-"Non puoi utilizzare il comando `{command}` per altri `{seconds`} secondi."
+"Non puoi utilizzare il comando `{command}` per altri `{seconds}` secondi."
 
 #: cogs/errors.py:51
 msgid "This command can't be used in direct messages."
@@ -230,19 +230,11 @@ msgstr ""
 msgid "Returns the bot GitHub repository."
 msgstr "Ritorna la repository GitHub del bot."
 
-#: cogs/locale.py:38
-msgid ""
-"Show or update the bot language.\n"
-"\n"
-"        `[locale] - The language you want the bot to use.\n"
-"        "
+#: cogs/locale.py:41
+msgid "Show your current language set and all the available languages."
 msgstr ""
-"Mostra o aggiorna la lingua del bot.\n"
-"\n"
-"        `[locale] - La lingua che vuoi che il bot utilizzi.\n"
-"        "
 
-#: cogs/locale.py:47
+#: cogs/locale.py:45
 #, python-brace-format
 msgid ""
 "Current locale `{current_locale}`.\n"
@@ -253,11 +245,15 @@ msgstr ""
 "Lingue disponibili:\n"
 "{locales}"
 
-#: cogs/locale.py:50
-msgid "Invalid language entered."
-msgstr "Lingua non valida inserita."
+#: cogs/locale.py:52
+msgid "Update the bot language."
+msgstr ""
 
-#: cogs/locale.py:58
+#: cogs/locale.py:54
+msgid "Select which language you would like the bot to use"
+msgstr ""
+
+#: cogs/locale.py:63
 #, python-brace-format
 msgid "Language successfully changed to: `{locale}`"
 msgstr "La lingua è stata cambiata con successo a: `{locale}`"
@@ -325,14 +321,15 @@ msgid "Channels"
 msgstr "Canali"
 
 #: cogs/meta.py:148
+#, python-brace-format
 msgid ""
-"{text + voice} total\n"
+"{total} total\n"
 "{text} text\n"
 "{voice} voice"
 msgstr ""
-"{text + voice} totali\n"
+"{total} totali\n"
 "{text} testuali\n"
-"{voice} vocali"
+"{voice} vocali1"
 
 #: cogs/meta.py:151
 msgid "Members"
@@ -363,15 +360,15 @@ msgstr "Tempo Online"
 msgid "Made with discord.py v{discord_version}"
 msgstr "Creato con discord.py v{discord_version}"
 
-#: cogs/overwatch.py:49
+#: cogs/overwatch.py:53
 msgid "Returns the current Overwatch servers status."
 msgstr "Ritorna lo status corrente dei server di Overwatch."
 
-#: cogs/overwatch.py:51
+#: cogs/overwatch.py:55
 msgid "Status"
 msgstr "Stato"
 
-#: cogs/overwatch.py:73
+#: cogs/overwatch.py:77
 msgid ""
 "Returns the latest Overwatch news.\n"
 "\n"
@@ -380,51 +377,40 @@ msgid ""
 "        You can use this command once every 30 seconds.\n"
 "        "
 msgstr ""
-"Ritorna le ultime notizione di Overwatch.\n"
-"        `[amount]` - La quantità di notizione da mostrare. Predefinito a 4.\n"
+"Ritorna le ultime notizie di Overwatch.\n"
+"        `[amount]` - La quantità di notizie da mostrare. Predefinito a 4.\n"
 "\n"
 "        Puoi usare questo comando una volta ogni 30 secondi.\n"
 "        "
 
-#: cogs/overwatch.py:88
+#: cogs/overwatch.py:94
 msgid "Latest Overwatch News"
-msgstr "Ultime notizione di Overwatch"
+msgstr "Ultime notizie di Overwatch"
 
-#: cogs/overwatch.py:89
+#: cogs/overwatch.py:95
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr "[Clicca qui]({news})"
 
-#: cogs/overwatch.py:103
+#: cogs/overwatch.py:109
 #, python-brace-format
 msgid "News {current}/{total} • {date}"
-msgstr "Notizia {current}/{tota} • {date}"
+msgstr "Notizia {current}/{total} • {date}"
 
-#: cogs/overwatch.py:115
+#: cogs/overwatch.py:121
 msgid "Returns patch notes links."
 msgstr "Ritorna il link per le patch notes."
 
-#: cogs/overwatch.py:117
+#: cogs/overwatch.py:124
 msgid "Overwatch Patch Notes"
 msgstr "Overwatch Patch Notes"
 
-#: cogs/overwatch.py:120
+#: cogs/overwatch.py:128
 #, python-brace-format
-msgid "[Click here to view **live** patch notes]({live})"
-msgstr "[Clicca qui per vedere le patch notes **live**]({live})"
+msgid "[Click here to view **{category}** patch notes]({link})"
+msgstr "[Clicca qui per vedere le note della patch **{category}**]({link})"
 
-#: cogs/overwatch.py:127
-#, python-brace-format
-msgid "[Click here to view **ptr** patch notes]({ptr})"
-msgstr "[Clicca qui per vedere le patch notes **ptr**]({ptr})"
-
-#: cogs/overwatch.py:135
-#, python-brace-format
-msgid "[Click here to view **experimental** patch notes]({experimental})"
-msgstr ""
-"[Clicca qui per vedere le patch notes **experimental**]({experimental})"
-
-#: cogs/overwatch.py:148
+#: cogs/overwatch.py:140
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -441,7 +427,7 @@ msgid ""
 "        All memes are taken from the subreddit r/Overwatch_Memes.\n"
 "        "
 msgstr ""
-"Ritorna un meme random riguardante Overwatch.\n"
+"Ritorna un meme casuale riguardante Overwatch.\n"
 "        `[category]` - La categoria da cui prendere il meme.\n"
 "\n"
 "        Categories\n"
@@ -512,11 +498,11 @@ msgstr "Mostra una lista contente tutti i sotto comandi di profile."
 
 #: cogs/profile.py:220
 msgid "Link your Overwatch profile(s) to your Discord account."
-msgstr "Collega i tuoi account di Overwatch al tuo profilo Discord."
+msgstr "Collega i tuoi profili Overwatch al tuo account Discord."
 
 #: cogs/profile.py:221
 msgid "Link your Overwatch profile to your Discord ID"
-msgstr "Collega il tou account di Overwatch al tuo Discord ID."
+msgstr "Collega il tou profilo Overwatch al tuo Discord ID"
 
 #: cogs/profile.py:241
 #, python-brace-format
@@ -537,11 +523,11 @@ msgid ""
 "linked.\n"
 "        "
 msgstr ""
-"Rimuovi un tuo account Overwatch dal tuo Discord account.\n"
-"        `<index>` - L'indice dell'account che desideri rimuovere.\n"
+"Rimuovi un profilo Overwatch dal tuo account Discord.\n"
+"        `<index>` - L'indice del profilo che desideri rimuovere.\n"
 "\n"
-"        Non puoi rimuovi il tuo account principale se possiedi più di 1 "
-"account collegato.\n"
+"        Non puoi rimuovere il tuo profilo principale se possiedi più di 1 "
+"profilo collegato.\n"
 "        "
 
 #: cogs/profile.py:263
@@ -575,10 +561,9 @@ msgid ""
 "        `<index>` - The profile's index you want to update.\n"
 "        "
 msgstr ""
-"Aggiorna le informazioni di un tuo account Overwatch collegato al tuo Discord account."
-"\n"
-"        `<index>` - L'indice dell'account che vuoi aggiornare."
-"        "
+"Aggiorna le informazioni di un profilo Overwatch collegato al tuo Discord "
+"account.\n"
+"        `<index>` - L'indice dell'account che vuoi aggiornare.        "
 
 #: cogs/profile.py:313
 #, python-brace-format
@@ -589,7 +574,7 @@ msgstr ""
 
 #: cogs/profile.py:317
 msgid "Update your Overwatch profile"
-msgstr "Aggiorna le informazioni del tuo account Overwatch."
+msgstr "Aggiorna le informazioni di un profilo Overwatch."
 
 #: cogs/profile.py:333
 #, python-brace-format
@@ -609,6 +594,13 @@ msgid ""
 "        Defaults to the first profile you have linked.\n"
 "        "
 msgstr ""
+"Aggiorna il tuo profilo principale.\n"
+"\n"
+"        `<index>` - L'indice dell'account che vuoi impostare come "
+"principale.\n"
+"\n"
+"        Predefinito al primo profilo che hai collegato.\n"
+"        "
 
 #: cogs/profile.py:355
 #, python-brace-format
@@ -621,11 +613,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr "Profilo principale impostato correttamente su:"
 
-#: cogs/profile.py:362
+#: cogs/profile.py:362 utils/paginator.py:175
 msgid "Platform"
 msgstr "Piattaforma"
 
-#: cogs/profile.py:363
+#: cogs/profile.py:363 utils/paginator.py:176
 msgid "Username"
 msgstr "Nome Utente"
 
@@ -639,6 +631,13 @@ msgid ""
 "        If no member is given then the information returned will be yours.\n"
 "        "
 msgstr ""
+"Mostra tutti i profili di un membro.\n"
+"\n"
+"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"\n"
+"        Se nessun membro viene specificato, le informazioni ritornate "
+"saranno le tue.\n"
+"        "
 
 #: cogs/profile.py:395
 msgid ""
@@ -655,6 +654,18 @@ msgid ""
 "and the member.\n"
 "        "
 msgstr ""
+"Mostra le statistiche di Overwatch di un membro.\n"
+"\n"
+"        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
+"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"\n"
+"        Se nessun indice viene dato, il profilo utilizzato sarà quello "
+"principale.\n"
+"        Se nessun membro viene dato, l'SR visualizzato sarà il tuo.\n"
+"\n"
+"        In caso volessi vedere l'SR di un altro membro, sia l'index che il "
+"membro sono richiesti.\n"
+"        "
 
 #: cogs/profile.py:416
 #, python-brace-format
@@ -676,6 +687,18 @@ msgid ""
 "and the member.\n"
 "        "
 msgstr ""
+"Mostra le statistiche rapide e competitive di Overwatch di un membro.\n"
+"\n"
+"        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
+"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"\n"
+"        Se nessun indice viene dato, il profilo utilizzato sarà quello "
+"principale.\n"
+"        Se nessun membro viene dato, l'SR visualizzato sarà il tuo.\n"
+"\n"
+"        In caso volessi vedere l'SR di un altro membro, sia l'index che il "
+"membro sono richiesti.\n"
+"        "
 
 #: cogs/profile.py:463
 #, python-brace-format
@@ -701,6 +724,18 @@ msgid ""
 "and the member.\n"
 "        "
 msgstr ""
+"Mostra le statistiche rapide e competitive di un membro per un dato eroe.\n"
+"\n"
+"        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
+"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"\n"
+"        Se nessun indice viene dato, il profilo utilizzato sarà quello "
+"principale.\n"
+"        Se nessun membro viene dato, l'SR visualizzato sarà il tuo.\n"
+"\n"
+"        In caso volessi vedere l'SR di un altro membro, sia l'index che il "
+"membro sono richiesti.\n"
+"        "
 
 #: cogs/profile.py:512
 #, python-brace-format
@@ -718,6 +753,14 @@ msgid ""
 "        and the profile is the main one.\n"
 "        "
 msgstr ""
+"Visualizza il tuo SR nel tuo soprannome.\n"
+"\n"
+"        Il soprannome può essere impostato in un solo server alla volta.\n"
+"\n"
+"        Il soprannome verrà automaticamente aggiornato ogni qualvolta `-"
+"profile rating` viene utilizzato e il profilo corrisponde allo stesso che è "
+"stato utilizzato per il soprannome.\n"
+"        "
 
 #: cogs/profile.py:548
 msgid "Do you want to display your SR in your nickname?"
@@ -745,7 +788,7 @@ msgstr "Tipo: {type}"
 
 #: cogs/random.py:108
 msgid "Returns a random hero, role or map."
-msgstr "Ritorna un eroe, un ruolo o una mappa random."
+msgstr "Ritorna un eroe, un ruolo o una mappa casuale."
 
 #: cogs/random.py:117
 msgid ""
@@ -762,6 +805,18 @@ msgid ""
 "categories.\n"
 "        "
 msgstr ""
+"Ritorna un eroe casuale.\n"
+"\n"
+"        `[category]` - La categoria dall quale prendere l'eroe.\n"
+"\n"
+"        Categorie\n"
+"        - Damage (dps)\n"
+"        - Support (heal, healear)\n"
+"        - Tank\n"
+"\n"
+"        Se nessun categoria viene data, un eroe casuale verrà selezione tra "
+"tutte le categorie.\n"
+"        "
 
 #: cogs/random.py:134
 #, python-brace-format
@@ -776,7 +831,7 @@ msgstr "Qualcosa è andato storto. Riprova ancora."
 
 #: cogs/random.py:146
 msgid "Returns a random role to play."
-msgstr "Ritorna un ruolo random da giocare."
+msgstr "Ritorna un ruolo casuale da giocare."
 
 #: cogs/random.py:159
 msgid ""
@@ -1049,9 +1104,7 @@ msgstr ""
 
 #: utils/player.py:28
 msgid "This profile has no quick play nor competitive statistics to display."
-msgstr ""
-"Questo profilo non possiede ne statistiche delle partite veloci ne "
-"statistiche competitive."
+msgstr "Questo profilo non possiede statistiche ne rapide ne competitive."
 
 #: utils/player.py:38
 #, python-brace-format
@@ -1059,8 +1112,8 @@ msgid ""
 "**{player}** has no quick play nor competitive statistics for **{hero}** to "
 "display."
 msgstr ""
-"**{player}** non possiede ne statistiche delle partite veloci ne statistiche "
-"competitive per l'eroe **{hero}**"
+"**{player}** non possiede statistiche ne rapide ne competitive per l'eroe "
+"**{hero}**"
 
 #: utils/player.py:155
 msgid "This profile is unranked."
@@ -1119,6 +1172,53 @@ msgstr ""
 #, python-brace-format
 msgid "**{players}** accounts found under the name of `{username}`"
 msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
+
+#: utils/paginator.py:126
+msgid "React with the platform you play on..."
+msgstr ""
+
+#: utils/paginator.py:172
+msgid ""
+"\n"
+"\n"
+"You are going to update the following profile"
+msgstr ""
+
+#~ msgid ""
+#~ "Show or update the bot language.\n"
+#~ "\n"
+#~ "        `[locale] - The language you want the bot to use.\n"
+#~ "        "
+#~ msgstr ""
+#~ "Mostra o aggiorna la lingua del bot.\n"
+#~ "\n"
+#~ "        `[locale] - La lingua che vuoi che il bot utilizzi.\n"
+#~ "        "
+
+#~ msgid "Invalid language entered."
+#~ msgstr "Lingua non valida inserita."
+
+#, python-brace-format
+#~ msgid "[Click here to view **live** patch notes]({live})"
+#~ msgstr "[Clicca qui per vedere le patch notes **live**]({live})"
+
+#, python-brace-format
+#~ msgid "[Click here to view **ptr** patch notes]({ptr})"
+#~ msgstr "[Clicca qui per vedere le patch notes **ptr**]({ptr})"
+
+#, python-brace-format
+#~ msgid "[Click here to view **experimental** patch notes]({experimental})"
+#~ msgstr ""
+#~ "[Clicca qui per vedere le patch notes **experimental**]({experimental})"
+
+#~ msgid ""
+#~ "{text + voice} total\n"
+#~ "{text} text\n"
+#~ "{voice} voice"
+#~ msgstr ""
+#~ "{text + voice} totali\n"
+#~ "{text} testuali\n"
+#~ "{voice} vocali"
 
 #, python-brace-format
 #~ msgid ""
