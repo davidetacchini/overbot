@@ -2,6 +2,7 @@ from discord.ext import commands
 
 from utils import i18n
 from utils.i18n import _, locale
+from utils.paginator import ChooseLocale
 
 
 class Locale(commands.Cog):
@@ -30,25 +31,28 @@ class Locale(commands.Cog):
             self.bot.locales[member_id] = locale
         return locale
 
-    @commands.command(aliases=["locale", "lang"])
+    def show_locales(self):
+        pass
+
+    @commands.group(invoke_without_command=True, aliases=["locale", "lang"])
     # @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
-    async def language(self, ctx, locale=None):
-        _(
-            """Show or update the bot language.
-
-        `[locale] - The language you want the bot to use.
-        """
+    async def language(self, ctx):
+        _("""Show your current language set and all the available languages.""")
+        locales = ", ".join(i18n.locales)
+        current_locale = self.bot.locales.get(ctx.author.id) or i18n.current_locale
+        return await ctx.send(
+            _(f"Current locale `{current_locale}`.\nAvailable locales:\n{locales}")
         )
-        if not locale:
-            locales = ", ".join(i18n.locales)
-            current_locale = self.bot.locales.get(ctx.author.id) or i18n.current_locale
-            return await ctx.send(
-                _(f"Current locale `{current_locale}`.\nAvailable locales:\n{locales}")
-            )
-        if locale not in i18n.locales:
-            return await ctx.send(_("Invalid language entered."))
+
+    @language.command()
+    # @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
+    async def set(self, ctx):
+        _("""Update the bot language.""")
         try:
+            title = _("Select which language you would like the bot to use")
+            locale = await ChooseLocale(title=title).start(ctx)
             await self.set_locale(ctx.author.id, locale)
             i18n.current_locale.set(locale)
             self.bot.locales[ctx.author.id] = locale
