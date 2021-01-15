@@ -190,7 +190,7 @@ class Owner(commands.Cog):
         return content.strip("` \n")
 
     @commands.command(hidden=True)
-    async def e(self, ctx, *, body: str):
+    async def exc(self, ctx, *, body: str):
         """Evaluates a code."""
         env = {
             "bot": ctx.bot,
