@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-14 18:20+0100\n"
+"POT-Creation-Date: 2021-01-15 17:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -211,15 +211,11 @@ msgstr ""
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
-#: cogs/locale.py:38
-msgid ""
-"Show or update the bot language.\n"
-"\n"
-"        `[locale] - The language you want the bot to use.\n"
-"        "
+#: cogs/locale.py:41
+msgid "Show your current language set and all the available languages."
 msgstr ""
 
-#: cogs/locale.py:47
+#: cogs/locale.py:45
 #, python-brace-format
 msgid ""
 "Current locale `{current_locale}`.\n"
@@ -227,11 +223,15 @@ msgid ""
 "{locales}"
 msgstr ""
 
-#: cogs/locale.py:50
-msgid "Invalid language entered."
+#: cogs/locale.py:52
+msgid "Update the bot language."
 msgstr ""
 
-#: cogs/locale.py:58
+#: cogs/locale.py:54
+msgid "Select which language you would like the bot to use"
+msgstr ""
+
+#: cogs/locale.py:63
 #, python-brace-format
 msgid "Language successfully changed to: `{locale}`"
 msgstr ""
@@ -293,8 +293,9 @@ msgid "Channels"
 msgstr ""
 
 #: cogs/meta.py:148
+#, python-brace-format
 msgid ""
-"{text + voice} total\n"
+"{total} total\n"
 "{text} text\n"
 "{voice} voice"
 msgstr ""
@@ -328,15 +329,15 @@ msgstr ""
 msgid "Made with discord.py v{discord_version}"
 msgstr ""
 
-#: cogs/overwatch.py:49
+#: cogs/overwatch.py:53
 msgid "Returns the current Overwatch servers status."
 msgstr ""
 
-#: cogs/overwatch.py:51
+#: cogs/overwatch.py:55
 msgid "Status"
 msgstr ""
 
-#: cogs/overwatch.py:73
+#: cogs/overwatch.py:77
 msgid ""
 "Returns the latest Overwatch news.\n"
 "\n"
@@ -346,44 +347,34 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:88
+#: cogs/overwatch.py:94
 msgid "Latest Overwatch News"
 msgstr ""
 
-#: cogs/overwatch.py:89
+#: cogs/overwatch.py:95
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr ""
 
-#: cogs/overwatch.py:103
+#: cogs/overwatch.py:109
 #, python-brace-format
 msgid "News {current}/{total} • {date}"
 msgstr ""
 
-#: cogs/overwatch.py:115
+#: cogs/overwatch.py:121
 msgid "Returns patch notes links."
 msgstr ""
 
-#: cogs/overwatch.py:117
+#: cogs/overwatch.py:124
 msgid "Overwatch Patch Notes"
 msgstr ""
 
-#: cogs/overwatch.py:120
+#: cogs/overwatch.py:128
 #, python-brace-format
-msgid "[Click here to view **live** patch notes]({live})"
+msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr ""
 
-#: cogs/overwatch.py:127
-#, python-brace-format
-msgid "[Click here to view **ptr** patch notes]({ptr})"
-msgstr ""
-
-#: cogs/overwatch.py:135
-#, python-brace-format
-msgid "[Click here to view **experimental** patch notes]({experimental})"
-msgstr ""
-
-#: cogs/overwatch.py:148
+#: cogs/overwatch.py:140
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -540,11 +531,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:362
+#: cogs/profile.py:362 utils/paginator.py:175
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:363
+#: cogs/profile.py:363 utils/paginator.py:176
 msgid "Username"
 msgstr ""
 
@@ -1013,4 +1004,15 @@ msgstr ""
 #: utils/request.py:55 utils/request.py:61
 #, python-brace-format
 msgid "**{players}** accounts found under the name of `{username}`"
+msgstr ""
+
+#: utils/paginator.py:126
+msgid "React with the platform you play on..."
+msgstr ""
+
+#: utils/paginator.py:172
+msgid ""
+"\n"
+"\n"
+"You are going to update the following profile"
 msgstr ""
