@@ -12,4 +12,5 @@ cogs/stats.py
 cogs/trivia.py
 utils/player.py
 utils/request.py
+utils/paginator.py
 
