@@ -145,8 +145,8 @@ class Meta(commands.Cog):
             embed.add_field(
                 name=_("Channels"),
                 value=_(
-                    "{text + voice} total\n{text} text\n{voice} voice",
-                ),
+                    "{total} total\n{text} text\n{voice} voice",
+                ).format(total=text + voice, text=text, voice=voice),
             )
             embed.add_field(name=_("Members"), value=total_members)
             embed.add_field(name=_("Servers"), value=len(self.bot.guilds))
