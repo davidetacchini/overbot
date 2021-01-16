@@ -35,7 +35,10 @@ class Tasks(commands.Cog):
 
     async def get_bot_statistics(self):
         total_commands = await self.bot.total_commands()
-        total_members = sum(guild.member_count for guild in self.bot.guilds)
+        try:
+            total_members = sum(guild.member_count for guild in self.bot.guilds)
+        except AttributeError:
+            total_member = 0
         large_servers = sum(1 for guild in self.bot.guilds if guild.large)
 
         with suppress(OverflowError):
@@ -171,7 +174,10 @@ class Tasks(commands.Cog):
         )
 
         # POST stats on discordbotlist.com
-        members = sum(guild.member_count for guild in self.bot.guilds)
+        try:
+            members = sum(guild.member_count for guild in self.bot.guilds)
+        except AttributeError:
+            member = 0
         dbl_payload = {"guilds": len(self.bot.guilds), "users": members}
 
         dbl_headers = {"Authorization": f'Bot {self.bot.config.dbl["token"]}'}
