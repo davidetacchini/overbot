@@ -130,7 +130,7 @@ class Link(BasePaginator):
             "<:psn:679468542541693128>": "psn",
             "<:xbl:679469487623503930>": "xbl",
             "<:nsw:752653766377078817>": "nintendo-switch",
-            "❌": "close",
+            "❌": None,
         }
 
     def result(self, reaction):
@@ -143,7 +143,10 @@ class Link(BasePaginator):
         self.embed = self.init_embed()
 
         for key, value in self.reactions.items():
-            self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
+            try:
+                self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
+            except AttributeError:
+                self.description.append(f"{key} - CLOSE")
         self.embed.description = "\n".join(self.description)
 
         return await self.paginator()
@@ -165,7 +168,10 @@ class Update(Link):
         self.embed = self.init_embed()
 
         for key, value in self.reactions.items():
-            self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
+            try:
+                self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
+            except AttributeError:
+                self.description.append(f"{key} - CLOSE")
         self.embed.description = "\n".join(self.description)
 
         self.embed.description = self.embed.description + _(
@@ -220,7 +226,7 @@ class ChooseLocale(BasePaginator):
             "🇯🇵": "ja_JP",
             "🇰🇷": "ko_KR",
             "🇷🇺": "ru_RU",
-            "❌": "close",
+            "❌": None,
         }
 
     def result(self, reaction):
@@ -233,8 +239,8 @@ class ChooseLocale(BasePaginator):
         self.embed = self.init_embed()
 
         for key, value in self.reactions.items():
-            self.description.append(key)
+            self.description.append(f"{key} - `{value}`")
 
-        self.embed.description = ", ".join(self.description)
+        self.embed.description = "\n".join(self.description)
 
         return await self.paginator()
