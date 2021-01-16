@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 16:24+0100\n"
+"POT-Creation-Date: 2021-01-16 16:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1098,7 +1098,7 @@ msgstr "Errato!"
 
 #: cogs/trivia.py:77
 msgid "+1 loss"
-msgstr "+1 perdita"
+msgstr "+1 sconfitta"
 
 #: cogs/trivia.py:78
 msgid "Correct answer"
@@ -1122,7 +1122,7 @@ msgstr "Vittorie"
 
 #: cogs/trivia.py:136
 msgid "Lost"
-msgstr "Perdite"
+msgstr "Sconfitte"
 
 #: cogs/trivia.py:137
 msgid "Ratio (W/L)"
@@ -1167,7 +1167,15 @@ msgstr ""
 msgid "Best Trivia Players"
 msgstr "Migliori Giocatori di Trivia"
 
-#: cogs/trivia.py:216
+#: cogs/trivia.py:209
+#, python-brace-format
+msgid ""
+"{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
+"Ratio: {ratio}"
+msgstr ""
+"{placement} **{player}** Giocate: {played} | Vittorie: {won} | Sconfitte: {lost} | Rateo: {ratio}"
+
+#: cogs/trivia.py:224
 msgid ""
 "Copy everything inside the code block below and hit enter. NOTE: If your "
 "question is a true/false one, you should know what to do.\n"
@@ -1177,7 +1185,7 @@ msgid ""
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
 
-#: cogs/trivia.py:240
+#: cogs/trivia.py:248
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -1185,7 +1193,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:250
+#: cogs/trivia.py:258
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
@@ -1193,17 +1201,16 @@ msgstr ""
 "Incolla il codice che hai copiato poco fa, sostituisci tutto e clicca invio. "
 "Hai 60 secondi."
 
-#: cogs/trivia.py:264
+#: cogs/trivia.py:272
 msgid "You took too long to submit the request."
 msgstr "Hai impiegato troppo tempo per inviare la richiesto."
 
-#: cogs/trivia.py:274
+#: cogs/trivia.py:282
+#, python-brace-format
 msgid ""
-"{str(ctx.author)}, your request has been successfully sent. Thanks for the "
+"{author}, your request has been successfully sent. Thanks for the "
 "contribution!"
 msgstr ""
-"{author}, la tua richiesto è stats inviata con successo. Grazie per il "
-"contributo!"
 
 #: utils/player.py:28
 msgid "This profile has no quick play nor competitive statistics to display."
@@ -1320,6 +1327,13 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#~ msgid ""
+#~ "{str(ctx.author)}, your request has been successfully sent. Thanks for "
+#~ "the contribution!"
+#~ msgstr ""
+#~ "{author}, la tua richiesto è stats inviata con successo. Grazie per il "
+#~ "contributo!"
 
 #~ msgid "Are you sure you want to unlink the following profile?\n"
 #~ msgstr "Sei sicuro di volere rimuovere il seguente profilo?\n"
