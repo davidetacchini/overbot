@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 16:24+0100\n"
+"POT-Creation-Date: 2021-01-16 16:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -922,7 +922,14 @@ msgstr ""
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:216
+#: cogs/trivia.py:209
+#, python-brace-format
+msgid ""
+"{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
+"Ratio: {ratio}"
+msgstr ""
+
+#: cogs/trivia.py:224
 msgid ""
 "Copy everything inside the code block below and hit enter. NOTE: If your "
 "question is a true/false one, you should know what to do.\n"
@@ -932,7 +939,7 @@ msgid ""
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
 
-#: cogs/trivia.py:240
+#: cogs/trivia.py:248
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -940,19 +947,20 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:250
+#: cogs/trivia.py:258
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
 msgstr ""
 
-#: cogs/trivia.py:264
+#: cogs/trivia.py:272
 msgid "You took too long to submit the request."
 msgstr ""
 
-#: cogs/trivia.py:274
+#: cogs/trivia.py:282
+#, python-brace-format
 msgid ""
-"{str(ctx.author)}, your request has been successfully sent. Thanks for the "
+"{author}, your request has been successfully sent. Thanks for the "
 "contribution!"
 msgstr ""
 
