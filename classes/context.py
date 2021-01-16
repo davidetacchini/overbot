@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from config import main_color
+from utils.i18n import _
 from utils.paginator import NoChoice
 
 
@@ -16,7 +17,7 @@ class Context(commands.Context):
             return False
 
         embed = discord.Embed(color=main_color)
-        embed.title = "Confirmation"
+        embed.title = _("Confirmation")
         embed.description = message
         msg = await self.send(embed=embed)
 
@@ -33,11 +34,11 @@ class Context(commands.Context):
             return True
 
         try:
-            reaction, _ = await self.bot.wait_for(
+            reaction, unused = await self.bot.wait_for(
                 "reaction_add", check=check, timeout=timeout
             )
         except asyncio.TimeoutError:
-            raise NoChoice("You took to long to confirm.")
+            raise NoChoice(_("You took to long to confirm."))
         else:
             # return not bool since we want the checkmark to be the first
             # reaction. Since it's the first reaction, its index is 0 which

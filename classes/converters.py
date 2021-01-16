@@ -1,5 +1,7 @@
 from discord.ext import commands
 
+from utils.i18n import _
+
 PC = ("pc", "bnet")
 XBOX = ("xbl", "xbox")
 PLAYSTATION = ("ps", "psn", "play", "playstation")
@@ -11,10 +13,10 @@ class InvalidPlatform(commands.BadArgument):
     """Exception raised when an invalid platform is given."""
 
     def __init__(self, ctx):
-        prefix = ctx.prefix
-        command = ctx.command.qualified_name
         super().__init__(
-            f'Invalid platform. Use "{prefix}help {command}" for more info.'
+            _('Invalid platform. Use "{prefix}help {command}" for more info.').format(
+                prefix=ctx.prefix, command=ctx.command.qualified_name
+            )
         )
 
 
@@ -22,17 +24,17 @@ class InvalidHero(commands.BadArgument):
     """Exception raised when an invalid hero is given."""
 
     def __init__(self, hero):
-        super().__init__(f"Hero **{hero}** doesn't exist.")
+        super().__init__(_("Hero **{hero}** doesn't exist.").format(hero=hero))
 
 
 class InvalidMemeCategory(commands.BadArgument):
     """Exception raised when an invalid meme category is given."""
 
     def __init__(self, ctx):
-        prefix = ctx.prefix
-        command = ctx.command.qualified_name
         super().__init__(
-            f'Invalid category. Use "{prefix}help {command}" for more info.'
+            _('Invalid category. Use "{prefix}help {command}" for more info.').format(
+                prefix=ctx.prefix, command=ctx.command.qualified_name
+            )
         )
 
 
@@ -40,7 +42,7 @@ class InvalidIndex(commands.BadArgument):
     """Exception raised when an invalid index is given."""
 
     def __init__(self):
-        super().__init__("Index must be a number.")
+        super().__init__(_("Index must be a number."))
 
 
 class Platform(commands.Converter):
