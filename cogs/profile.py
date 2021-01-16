@@ -24,7 +24,9 @@ class MemberHasNoProfile(Exception):
     """Exception raised when mentioned member has no profile connected."""
 
     def __init__(self, member):
-        super().__init__(_(f"{member} hasn't linked a profile yet."))
+        super().__init__(
+            _("{member} hasn't linked a profile yet.").format(member=member)
+        )
 
 
 class Profile(commands.Cog):
@@ -281,9 +283,9 @@ class Profile(commands.Cog):
         if not await ctx.prompt(
             _(
                 "Are you sure you want to unlink the following profile?\n"
-                f"Platform: `{platform}`\n"
-                f"Username: `{username}`"
-            )
+                "Platform: `{platform}`\n"
+                "Username: `{username}`"
+            ).format(platform=platform, username=username)
         ):
             return
 
@@ -306,33 +308,36 @@ class Profile(commands.Cog):
         """
         )
         try:
-            id, platform, username = await self.get_profile(ctx.author, index=index)
-        except IndexError:
-            return await ctx.send(
-                _(
-                    'Invalid index. Use "{prefix}help profile update" for more info.'
+            try:
+                id, platform, username = await self.get_profile(ctx.author, index=index)
+            except IndexError:
+                return await ctx.send(
+                    _(
+                        'Invalid index. Use "{prefix}help profile update" for more info.'
+                    ).format(prefix=ctx.prefix)
+                )
+
+            title = _("Update your Overwatch profile")
+            platform = await Update(platform, username, title=title).start(ctx)
+            username = await self.get_player_username(ctx, platform)
+
+            if not username:
+                return
+
+            if platform == "pc":
+                username = username.replace("-", "#")
+
+            try:
+                await self.update_profile(platform, username, profile_id=id)
+            except Exception as e:
+                await ctx.send(embed=self.bot.embed_exception(e))
+            else:
+                message = _(
+                    'Profile successfully updated. Use "{prefix}profile list" to see the changes.'
                 ).format(prefix=ctx.prefix)
-            )
-
-        title = _("Update your Overwatch profile")
-        platform = await Update(platform, username, title=title).start(ctx)
-        username = await self.get_player_username(ctx, platform)
-
-        if not username:
-            return
-
-        if platform == "pc":
-            username = username.replace("-", "#")
-
-        try:
-            await self.update_profile(platform, username, profile_id=id)
+                await ctx.send(message)
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            message = _(
-                'Profile successfully updated. Use "{prefix}profile list" to see the changes.'
-            ).format(prefix=ctx.prefix)
-            await ctx.send(message)
 
     @has_profile()
     @profile.command()
