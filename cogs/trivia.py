@@ -205,8 +205,16 @@ class Trivia(commands.Cog):
                 placement = self.get_placement(index)
                 ratio = self.get_player_ratio(player["won"], player["lost"])
                 board.append(
-                    f'{placement} **{str(cur_player)}** Played: {player["started"]} '
-                    f'| Won: {player["won"]} | Lost: {player["lost"]} | Ratio: {ratio:.2f}'
+                    _(
+                        "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}"
+                    ).format(
+                        placement=placement,
+                        player=str(cur_player),
+                        played=player["started"],
+                        won=player["won"],
+                        lost=player["lost"],
+                        ratio=round(ratio, 2),
+                    )
                 )
             embed.description = "\n".join(board)
             await ctx.send(embed=embed)
@@ -271,8 +279,8 @@ class Trivia(commands.Cog):
             await self.update_member_contribs_stats(ctx.author.id)
             await ctx.send(
                 _(
-                    f"{str(ctx.author)}, your request has been successfully sent. Thanks for the contribution!"
-                )
+                    "{author}, your request has been successfully sent. Thanks for the contribution!"
+                ).format(author=str(ctx.author))
             )
 
 
