@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 
 from utils import i18n
@@ -31,39 +32,45 @@ class Locale(commands.Cog):
             self.bot.locales[member_id] = locale
         return locale
 
-    def show_locales(self):
-        pass
-
     @commands.group(invoke_without_command=True, aliases=["locale", "lang"])
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def language(self, ctx):
-        _("""Show your current language set and all the available languages.""")
-        locales = ", ".join(i18n.locales)
-        current_locale = self.bot.locales.get(ctx.author.id) or i18n.current_locale
-        return await ctx.send(
-            _(f"Current locale `{current_locale}`.\nAvailable locales:\n{locales}")
+        _("""Displays your current language set and all the available languages.""")
+        embed = discord.Embed(color=self.bot.color)
+        embed.title = _("Available Languages")
+        current_locale = self.bot.locales[ctx.author.id] or i18n.current_locale
+        embed.set_footer(
+            text=_("Current language set: {locale}").format(locale=current_locale)
         )
+
+        description = []
+        for _locale in i18n.locales:
+            description.append(f"`{_locale}`")
+
+        embed.description = ", ".join(description)
+        await ctx.send(embed=embed)
 
     @language.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def set(self, ctx):
         _("""Update the bot language.""")
+        title = _("Select which language you would like the bot to use")
+        locale = await ChooseLocale(title=title).start(ctx)
+
+        if not locale:
+            return
         try:
-            title = _("Select which language you would like the bot to use")
-            locale = await ChooseLocale(title=title).start(ctx)
-
-            if not locale:
-                return
-
             await self.set_locale(ctx.author.id, locale)
             i18n.current_locale.set(locale)
             self.bot.locales[ctx.author.id] = locale
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
-            await ctx.send(_("Language successfully changed to: `{locale}`").format(locale=locale))
+            await ctx.send(
+                _("Language successfully changed to: `{locale}`").format(locale=locale)
+            )
 
 
 def setup(bot):
