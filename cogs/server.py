@@ -18,7 +18,7 @@ class Server(commands.Cog):
         await self.bot.pool.execute(
             "UPDATE server SET prefix = $1 WHERE id = $2;", prefix, ctx.guild.id
         )
-        await ctx.send(_(f"Prefix successfully set to `{prefix}`"))
+        await ctx.send(_("Prefix successfully set to `{prefix}`").format(prefix=prefix))
 
     @commands.command()
     @commands.guild_only()
@@ -47,7 +47,9 @@ class Server(commands.Cog):
             )
             embed = discord.Embed(color=self.bot.color)
             embed.set_footer(
-                text=_(f'Use "{self.bot.clean_prefix(ctx)}prefix value" to change it.')
+                text=_('Use "{prefix}prefix value" to change it.').format(
+                    prefix=self.bot.clean_prefix(ctx)
+                )
             )
             embed.add_field(
                 name=_("Prefixes"), value=f"1. {self.bot.user.mention}\n2. `{pre}`"
@@ -76,33 +78,47 @@ class Server(commands.Cog):
         """
         )
         async with ctx.typing():
-            guilds = await self.bot.pool.fetch(
-                "SELECT id, commands_run FROM server WHERE id <> "
-                "ALL($1::bigint[]) ORDER BY commands_run DESC LIMIT 5;",
-                self.bot.config.ignored_guilds,
-            )
-            embed = discord.Embed()
-            embed.title = _("Most Active Servers")
-            embed.url = self.bot.config.website
-            embed.set_footer(text=_("Tracking command usage since • 11/26/2020"))
-
-            board = []
-            for index, guild in enumerate(guilds, start=1):
-                cur_guld = self.bot.get_guild(guild["id"])
-                placement = self.get_placement(index)
-                joined_on = str(cur_guld.me.joined_at).split(" ")[0]
-
-                board.append(
-                    f"{placement} **{str(cur_guld)}**"
-                    f" ran a total of **{guild['commands_run']}** commands\n"
-                    f"Joined on: **{joined_on}**"
+            try:
+                query = """SELECT id, commands_run
+                        FROM server
+                        WHERE id <> ALL($1::bigint[])
+                        ORDER BY commands_run DESC LIMIT 5;
+                        """
+                guilds = await self.bot.pool.fetch(
+                    query, self.bot.config.ignored_guilds
                 )
+                embed = discord.Embed()
+                embed.title = _("Most Active Servers")
+                embed.url = self.bot.config.website
+                embed.set_footer(text=_("Tracking command usage since • 11/26/2020"))
 
-                if index < 5:
-                    board.append("-----------")
+                board = []
+                for index, guild in enumerate(guilds, start=1):
+                    cur_guild = self.bot.get_guild(guild["id"])
+                    placement = self.get_placement(index)
+                    joined_on = str(cur_guild.me.joined_at).split(" ")[0]
 
-            embed.description = "\n".join(board)
-            await ctx.send(embed=embed)
+                    board.append(
+                        _(
+                            "{placement} **{guild}**"
+                            " ran a total of **{commands}** commands\n"
+                            "Joined on: **{joined_on}**"
+                        )
+                    ).format(
+                        placement=placement,
+                        guild=str(cur_guild),
+                        commands=guild["commands_run"],
+                        joined_on=joined_on,
+                    )
+
+                    if index < 5:
+                        board.append("-----------")
+
+                embed.description = "\n".join(board)
+            except Exception as e:
+                await ctx.send(embed=self.bot.embed_exception(e))
+            else:
+                await ctx.send(embed=embed)
 
 
 def setup(bot):
