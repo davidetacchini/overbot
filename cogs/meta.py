@@ -133,7 +133,10 @@ class Meta(commands.Cog):
             guilds = 0
             for guild in self.bot.guilds:
                 guilds += 1
-                total_members += guild.member_count
+                try:
+                    total_members += guild.member_count
+                except AttributeError:
+                    pass
                 for channel in guild.channels:
                     if isinstance(channel, discord.TextChannel):
                         text += 1
