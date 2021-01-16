@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 17:38+0100\n"
+"POT-Creation-Date: 2021-01-16 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,9 +84,9 @@ msgstr "Questo comando non può essere utilizzato nei messaggi privati."
 msgid "It seems you do not own this bot."
 msgstr "Sembra che tu non sia lo sviluppatore del bot."
 
-#: cogs/errors.py:65 cogs/profile.py:132
+#: cogs/errors.py:65 cogs/profile.py:134
 msgid "You took too long to reply."
-msgstr "Hai impegato troppo tempo per rispondere."
+msgstr "Hai impiegato troppo tempo per rispondere."
 
 #: cogs/errors.py:71
 msgid "The argument you entered cannot be handled."
@@ -154,8 +154,8 @@ msgid ""
 "Use \"{prefix}help [category]\" for more info on a category"
 msgstr ""
 "[Server di supporto]({support}) • [Vedi i comandi online]({website})\n"
-"Usa \"{prefix}help [commando]\" per maggiori informazioni su un comando\n"
-"USa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
+"Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
+"Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
 
 #: cogs/help.py:112
 msgid "Help"
@@ -219,10 +219,10 @@ msgid ""
 "\n"
 "{paypal}"
 msgstr ""
-"Mantere OverBot e aggiungere nuove features ad esso richiede una gran parte "
-"del tempo libero di [{owner}]({github_profile}). Se ti piace il bot, puoi "
-"donare una piccola somma di denaro utile a mantenere il progetto in vita e "
-"supportarmi. **Grazie mille!**\n"
+"Mantenere OverBot e aggiungere nuove features ad esso richiede una gran "
+"parte del tempo libero di [{owner}]({github_profile}). Se ti piace il bot, "
+"puoi donare una piccola somma di denaro utile a mantenere il progetto in "
+"vita e supportarmi. **Grazie mille!**\n"
 "\n"
 "{paypal}"
 
@@ -230,30 +230,28 @@ msgstr ""
 msgid "Returns the bot GitHub repository."
 msgstr "Ritorna la repository GitHub del bot."
 
+#: cogs/locale.py:39
+msgid "Displays your current language set and all the available languages."
+msgstr "Mostra le lingue disponibili e la lingua che hai impostato."
+
 #: cogs/locale.py:41
-msgid "Show your current language set and all the available languages."
-msgstr ""
+msgid "Available Languages"
+msgstr "Lingue Disponibili"
 
-#: cogs/locale.py:45
+#: cogs/locale.py:44
 #, python-brace-format
-msgid ""
-"Current locale `{current_locale}`.\n"
-"Available locales:\n"
-"{locales}"
-msgstr ""
-"Lingua corrente `{current_locale}`.\n"
-"Lingue disponibili:\n"
-"{locales}"
+msgid "Current language set: {locale}"
+msgstr "Lingua corrente: {locale}"
 
-#: cogs/locale.py:52
+#: cogs/locale.py:58
 msgid "Update the bot language."
-msgstr ""
+msgstr "Aggiorna la lingua del bot."
 
-#: cogs/locale.py:54
+#: cogs/locale.py:59
 msgid "Select which language you would like the bot to use"
-msgstr ""
+msgstr "Selezione la lingua che vorresti che il bot utilizzasse"
 
-#: cogs/locale.py:62
+#: cogs/locale.py:72
 #, python-brace-format
 msgid "Language successfully changed to: `{locale}`"
 msgstr "La lingua è stata cambiata con successo a: `{locale}`"
@@ -305,7 +303,7 @@ msgid ""
 "Latest Changes:\n"
 "{commits}"
 msgstr ""
-"Ultimi cambiamenti:\n"
+"Ultimi Cambiamenti:\n"
 "{commits}"
 
 #: cogs/meta.py:143
@@ -329,7 +327,7 @@ msgid ""
 msgstr ""
 "{total} totali\n"
 "{text} testuali\n"
-"{voice} vocali1"
+"{voice} vocali"
 
 #: cogs/meta.py:151
 msgid "Members"
@@ -441,33 +439,33 @@ msgstr ""
 "        Tutti i meme sono presi dal subreddit r/Overwatch_Memes.\n"
 "        "
 
-#: cogs/profile.py:27
+#: cogs/profile.py:28
 #, python-brace-format
 msgid "{member} hasn't linked a profile yet."
 msgstr "{member} non ha ancora aggiunto un profilo."
 
-#: cogs/profile.py:94
+#: cogs/profile.py:96
 #, python-brace-format
 msgid "The star indicates the main profile - {profiles}/5"
 msgstr "La stella indica il profilo principale - {profiles}/5"
 
-#: cogs/profile.py:112
+#: cogs/profile.py:114
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr "Inserisci il tuo BattleTag (formato: nome#0000):"
 
-#: cogs/profile.py:114
+#: cogs/profile.py:116
 msgid "Enter your Online ID:"
 msgstr "Inseriesci il tuo Online ID:"
 
-#: cogs/profile.py:116
+#: cogs/profile.py:118
 msgid "Enter your Gamertag:"
 msgstr "Inserisci il tuo Gamertag:"
 
-#: cogs/profile.py:118
+#: cogs/profile.py:120
 msgid "Enter your Nintendo Switch ID:"
 msgstr "Inserisci il tuo Nintendo Switch ID:"
 
-#: cogs/profile.py:174
+#: cogs/profile.py:176
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
@@ -475,12 +473,12 @@ msgstr ""
 "Non posso modificare i soprannomi in questo server. Concedimi il permesso "
 "`Gestire i soprannomi`."
 
-#: cogs/profile.py:180
+#: cogs/profile.py:182
 msgid "Something bad happened while updating your nickname. Please try again."
 msgstr ""
 "Qualcosa è andato storto mentre cambiavo il tuo soprannome. Riprova ancora."
 
-#: cogs/profile.py:191
+#: cogs/profile.py:193
 msgid ""
 "Nickname successfully set. Your SR will now be visible in your nickname "
 "within this server."
@@ -488,32 +486,32 @@ msgstr ""
 "Soprannome cambiato con successo. Il tuo SR sarà ora visibile nel tuo "
 "soprannome all'interno di questo server."
 
-#: cogs/profile.py:197
+#: cogs/profile.py:199
 msgid "Nickname successfully removed."
 msgstr "Soprannome rimosso con successo."
 
-#: cogs/profile.py:211
+#: cogs/profile.py:213
 msgid "Displays a list with all profile's subcommands."
 msgstr "Mostra una lista contente tutti i sotto comandi di profile."
 
-#: cogs/profile.py:220
+#: cogs/profile.py:222
 msgid "Link your Overwatch profile(s) to your Discord account."
 msgstr "Collega i tuoi profili Overwatch al tuo account Discord."
 
-#: cogs/profile.py:221
+#: cogs/profile.py:223
 msgid "Link your Overwatch profile to your Discord ID"
 msgstr "Collega il tou profilo Overwatch al tuo Discord ID"
 
-#: cogs/profile.py:241
+#: cogs/profile.py:243
 #, python-brace-format
 msgid ""
 "Profile successfully linked. Use \"{prefix}profile list\" to see your "
 "profile(s)."
 msgstr ""
-"Profilo aggiunto con successo. Usa \"{prefix} profile list\" per vedere i "
+"Profilo aggiunto con successo. Usa \"{prefix}profile list\" per vedere i "
 "tuoi profili."
 
-#: cogs/profile.py:251
+#: cogs/profile.py:253
 msgid ""
 "Unlink your Overwatch profile from your Discord account.\n"
 "\n"
@@ -530,31 +528,38 @@ msgstr ""
 "profilo collegato.\n"
 "        "
 
-#: cogs/profile.py:263
+#: cogs/profile.py:265
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile unlink\" for more info."
 msgstr ""
 "Index non valido. Usa \"{prefix}help profile unlink\" per maggiori "
 "informazioni"
 
-#: cogs/profile.py:273
+#: cogs/profile.py:275
 #, python-brace-format
 msgid ""
 "You can't unlink your main profile if you have multiple profiles set. Use "
 "\"{prefix}help profile main\" for more info."
 msgstr ""
 "Non puoi rimuovere il tuo profilo principale se possiedi più di un profilo "
-"collegato. Usa \"{prefix}help profile main\" per maggiori informazioni"
+"collegato. Usa \"{prefix}help profile main\" per maggiori informazioni."
 
-#: cogs/profile.py:283
-msgid "Are you sure you want to unlink the following profile?\n"
-msgstr "Sei sicuro di volere rimuovere il seguente profilo?\n"
+#: cogs/profile.py:285
+#, python-brace-format
+msgid ""
+"Are you sure you want to unlink the following profile?\n"
+"Platform: `{platform}`\n"
+"Username: `{username}`"
+msgstr ""
+"Sei sicuro di volere rimuovere il seguente profilo?\n"
+"Piattaforma: `{platform}`\n"
+"Nome Utente: `{username}`"
 
-#: cogs/profile.py:295
+#: cogs/profile.py:297
 msgid "Profile successfully unlinked."
 msgstr "Profilo rimosso con successo."
 
-#: cogs/profile.py:303
+#: cogs/profile.py:305
 msgid ""
 "Update your Overwatch profile linked to your Discord account.\n"
 "\n"
@@ -565,18 +570,18 @@ msgstr ""
 "account.\n"
 "        `<index>` - L'indice dell'account che vuoi aggiornare.        "
 
-#: cogs/profile.py:313
+#: cogs/profile.py:316
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile update\" for more info."
 msgstr ""
 "Index non valido. Usa \"{prefix}help profile update\" per maggiori "
 "informazioni."
 
-#: cogs/profile.py:317
+#: cogs/profile.py:320
 msgid "Update your Overwatch profile"
 msgstr "Aggiorna le informazioni di un profilo Overwatch."
 
-#: cogs/profile.py:333
+#: cogs/profile.py:336
 #, python-brace-format
 msgid ""
 "Profile successfully updated. Use \"{prefix}profile list\" to see the "
@@ -585,7 +590,7 @@ msgstr ""
 "Profilo aggiornato con successo. Usa \"{prefix}profile list\" per vedere i "
 "cambiamenti."
 
-#: cogs/profile.py:343
+#: cogs/profile.py:348
 msgid ""
 "Updates your main profile.\n"
 "\n"
@@ -602,26 +607,26 @@ msgstr ""
 "        Predefinito al primo profilo che hai collegato.\n"
 "        "
 
-#: cogs/profile.py:355
+#: cogs/profile.py:360
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile main\" for more info."
 msgstr ""
 "Index non valido. Usa \"{prefix}help profile update\" per maggiori "
 "informazioni."
 
-#: cogs/profile.py:361
+#: cogs/profile.py:366
 msgid "Main profile successfully set to:"
 msgstr "Profilo principale impostato correttamente su:"
 
-#: cogs/profile.py:362 utils/paginator.py:175
+#: cogs/profile.py:367 utils/paginator.py:181
 msgid "Platform"
 msgstr "Piattaforma"
 
-#: cogs/profile.py:363 utils/paginator.py:176
+#: cogs/profile.py:368 utils/paginator.py:182
 msgid "Username"
 msgstr "Nome Utente"
 
-#: cogs/profile.py:372
+#: cogs/profile.py:377
 msgid ""
 "Displays all member's profiles.\n"
 "\n"
@@ -639,7 +644,7 @@ msgstr ""
 "saranno le tue.\n"
 "        "
 
-#: cogs/profile.py:395
+#: cogs/profile.py:400
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -667,12 +672,12 @@ msgstr ""
 "membro sono richiesti.\n"
 "        "
 
-#: cogs/profile.py:416
+#: cogs/profile.py:421
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile rating\" for more info."
 msgstr ""
 
-#: cogs/profile.py:441
+#: cogs/profile.py:446
 msgid ""
 "Shows a member's Overwatch both quick play and competitive statistics.\n"
 "\n"
@@ -700,14 +705,14 @@ msgstr ""
 "membro sono richiesti.\n"
 "        "
 
-#: cogs/profile.py:463
+#: cogs/profile.py:468
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile statistics\" for more info."
 msgstr ""
 "Index non valido. Usa \"{prefix}help profile update\" per maggiori "
 "informazioni."
 
-#: cogs/profile.py:490
+#: cogs/profile.py:495
 msgid ""
 "Shows a member's Overwatch both quick play and competitive statistics for a "
 "given hero.\n"
@@ -737,12 +742,12 @@ msgstr ""
 "membro sono richiesti.\n"
 "        "
 
-#: cogs/profile.py:512
+#: cogs/profile.py:517
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile hero\" for more info."
 msgstr ""
 
-#: cogs/profile.py:538
+#: cogs/profile.py:543
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -762,11 +767,11 @@ msgstr ""
 "stato utilizzato per il soprannome.\n"
 "        "
 
-#: cogs/profile.py:548
+#: cogs/profile.py:553
 msgid "Do you want to display your SR in your nickname?"
 msgstr "Vuoi mostrare il tuo SR nel tuo soprannome?"
 
-#: cogs/profile.py:555
+#: cogs/profile.py:560
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
@@ -777,7 +782,7 @@ msgstr ""
 "proprietario di questo server, non c'è alcun modo che io possa aggiornare il "
 "tuo nickname, scusa!"
 
-#: cogs/profile.py:577
+#: cogs/profile.py:582
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr "Vuoi rimuove il tuo SR dal tuo soprannome?"
 
@@ -814,8 +819,8 @@ msgstr ""
 "        - Support (heal, healear)\n"
 "        - Tank\n"
 "\n"
-"        Se nessun categoria viene data, un eroe casuale verrà selezione tra "
-"tutte le categorie.\n"
+"        Se nessun categoria viene data, un eroe casuale verrà selezionato "
+"tra tutte le categorie.\n"
 "        "
 
 #: cogs/random.py:134
@@ -849,6 +854,18 @@ msgid ""
 "categories.\n"
 "        "
 msgstr ""
+"Ritorna una mappa casuale.\n"
+"        `[category]` - La categoria dalla quale prendere la mappa.\n"
+"\n"
+"        Categorie\n"
+"        - Assault\n"
+"        - Control\n"
+"        - Escort\n"
+"        - Hybrid\n"
+"\n"
+"        Se nessuna categoria viene passata, una mappa casuale verrà "
+"selezionata tra tutte le cateogorie.\n"
+"        "
 
 #: cogs/random.py:177
 #, python-brace-format
@@ -875,34 +892,51 @@ msgid ""
 "        You must have Manage Server permission to use this command.\n"
 "        "
 msgstr ""
+"Aggiorna o controlla il prefisso del bot.\n"
+"        `[prefix]` - Il nuovo prefisso da utilizzare.\n"
+"\n"
+"        Devi possedere il permesso `Gestire Server` per poter utilizzare "
+"questo comando.\n"
+"        "
 
 #: cogs/server.py:42
 msgid "`Manage Server` permission is required to change the prefix."
 msgstr "Il permesso `Gesire Server` è richiesto per cambiare il prefisso."
 
 #: cogs/server.py:50
-msgid "Use \"{self.bot.clean_prefix(ctx)}prefix value\" to change it."
-msgstr "Usa \"{prefix}prefix value\" per cambiarlo."
+#, python-brace-format
+msgid "Use \"{prefix}prefix value\" to change it."
+msgstr "Usa \"{prefix} prefix value\" per cambiarlo."
 
-#: cogs/server.py:53
+#: cogs/server.py:55
 msgid "Prefixes"
 msgstr "Prefissi"
 
-#: cogs/server.py:73
+#: cogs/server.py:75
 msgid ""
 "Shows OverBot's most active servers.\n"
 "\n"
 "        It is based on commands runned.\n"
 "        "
 msgstr ""
+"Mostra i server più attivi di OverBot.\n"
+"        Basato sui comandi eseguiti.\n"
+"        "
 
-#: cogs/server.py:85
+#: cogs/server.py:91
 msgid "Most Active Servers"
 msgstr "Server Più Attivi"
 
-#: cogs/server.py:87
+#: cogs/server.py:93
 msgid "Tracking command usage since • 11/26/2020"
 msgstr "Traccio l'utilizzo dei comandi dal • 11/26/2020"
+
+#: cogs/server.py:103
+#, python-brace-format
+msgid ""
+"{placement} **{guild}** ran a total of **{commands}** commands\n"
+"Joined on: **{joined_on}**"
+msgstr ""
 
 #: cogs/stats.py:18
 msgid ""
@@ -927,6 +961,26 @@ msgid ""
 "        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7\n"
 "        "
 msgstr ""
+"Ritorna l'SR di un giocatore.\n"
+"\n"
+"        `<platform>` - La piattaforma sulla quale il giocatore gioca.\n"
+"        `<username>` - Il nome utente del giocatore.\n"
+"\n"
+"        Piattaforme\n"
+"        - pc (bnet)\n"
+"        - playstation (ps, psn, play)\n"
+"        - xbox (xbl)\n"
+"        - nintendo-switch (nsw, switch)\n"
+"\n"
+"        Formato nome utente\n"
+"        - pc: BattleTag (formato: nome#0000)\n"
+"        - playstation: Online ID\n"
+"        - xbox: Gamertag\n"
+"        - nintendo-switch: Nintendo Switch ID (formato: nome-codice)\n"
+"\n"
+"        Esempio BattleTag: Timmy#22340\n"
+"        Esempio Nintendo Switch ID: nome-7alf327e36d5d1d8f507e765u5a2ech7\n"
+"        "
 
 #: cogs/stats.py:58
 msgid ""
@@ -951,6 +1005,26 @@ msgid ""
 "        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7\n"
 "        "
 msgstr ""
+"Ritorna le statistiche sia rapide che competitive di un giocatore.\n"
+"\n"
+"        `<platform>` - La piattaforma sulla quale il giocatore gioca.\n"
+"        `<username>` - Il nome utente del giocatore.\n"
+"\n"
+"        Piattaforme\n"
+"        - pc (bnet)\n"
+"        - playstation (ps, psn, play)\n"
+"        - xbox (xbl)\n"
+"        - nintendo-switch (nsw, switch)\n"
+"\n"
+"        Formato nome utente\n"
+"        - pc: BattleTag (formato: nome#0000)\n"
+"        - playstation: Online ID\n"
+"        - xbox: Gamertag\n"
+"        - nintendo-switch: Nintendo Switch ID (formato: nome-codice)\n"
+"\n"
+"        Esempio BattleTag: Timmy#22340\n"
+"        Esempio Nintendo Switch ID: nome-7alf327e36d5d1d8f507e765u5a2ech7\n"
+"        "
 
 #: cogs/stats.py:111
 msgid ""
@@ -976,6 +1050,29 @@ msgid ""
 "        Nintendo Switch ID example: name-7alf327e36d5d1d8f507e765u5a2ech7\n"
 "        "
 msgstr ""
+"Ritorna le statistiche sia rapide che competitive di un giocatore per un "
+"dato eroe.\n"
+"\n"
+"        `<hero>` - Il nome dell'eroe di cui vuoi visualizzare le "
+"statistiche.\n"
+"        `<platform>` - La piattaforma sulla quale il giocatore gioca.\n"
+"        `<username>` - Il nome utente del giocatore.\n"
+"\n"
+"        Piattaforme\n"
+"        - pc (bnet)\n"
+"        - playstation (ps, psn, play)\n"
+"        - xbox (xbl)\n"
+"        - nintendo-switch (nsw, switch)\n"
+"\n"
+"        Formato nome utente\n"
+"        - pc: BattleTag (formato: nome#0000)\n"
+"        - playstation: Online ID\n"
+"        - xbox: Gamertag\n"
+"        - nintendo-switch: Nintendo Switch ID (formato: nome-codice)\n"
+"\n"
+"        Esempio BattleTag: Timmy#22340\n"
+"        Esempio Nintendo Switch ID: nome-7alf327e36d5d1d8f507e765u5a2ech7\n"
+"        "
 
 #: cogs/trivia.py:17
 #, python-brace-format
@@ -1059,10 +1156,16 @@ msgid ""
 "        This command can be used once a minute.\n"
 "        "
 msgstr ""
+"Mostra la classifica dei migliori giocatori di trivia.\n"
+"\n"
+"        Basato sulle partite vinte.\n"
+"\n"
+"        Questo comando può essere eseguito una volta ogni 60 secondi.\n"
+"        "
 
 #: cogs/trivia.py:200
 msgid "Best Trivia Players"
-msgstr ""
+msgstr "Migliori Giocatori di Trivia"
 
 #: cogs/trivia.py:216
 msgid ""
@@ -1126,7 +1229,7 @@ msgstr "Media: {average}"
 
 #: utils/player.py:197
 msgid "Quickplay"
-msgstr "Partite Veloci"
+msgstr "Rapida"
 
 #: utils/player.py:200
 msgid "Competitive"
@@ -1175,9 +1278,9 @@ msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
 
 #: utils/paginator.py:126
 msgid "React with the platform you play on..."
-msgstr "Reagisci con la piattaforma sulla quale giochi"
+msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
-#: utils/paginator.py:172
+#: utils/paginator.py:178
 msgid ""
 "\n"
 "\n"
@@ -1186,6 +1289,53 @@ msgstr ""
 "\n"
 "\n"
 "Aggiornerai le informazini del seguente profilo"
+
+#: classes/context.py:20
+msgid "Confirmation"
+msgstr "Conferma"
+
+#: classes/context.py:41
+msgid "You took to long to confirm."
+msgstr "Hai impiegato troppo tempo per confermare."
+
+#: classes/converters.py:17
+#, python-brace-format
+msgid "Invalid platform. Use \"{prefix}help {command}\" for more info."
+msgstr ""
+"Piattaforma non valida. Usa \"{prefix}help {command}\" per maggiori "
+"informazioni."
+
+#: classes/converters.py:27
+#, python-brace-format
+msgid "Hero **{hero}** doesn't exist."
+msgstr "L'eroe **{hero}** non esiste."
+
+#: classes/converters.py:35
+#, python-brace-format
+msgid "Invalid category. Use \"{prefix}help {command}\" for more info."
+msgstr ""
+"Categoria non valida. Usa \"{prefix}help {command}\" per maggiori "
+"informazioni."
+
+#: classes/converters.py:45
+msgid "Index must be a number."
+msgstr "L'indice deve essere un numero."
+
+#~ msgid "Are you sure you want to unlink the following profile?\n"
+#~ msgstr "Sei sicuro di volere rimuovere il seguente profilo?\n"
+
+#~ msgid "Use \"{self.bot.clean_prefix(ctx)}prefix value\" to change it."
+#~ msgstr "Usa \"{prefix}prefix value\" per cambiarlo."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Current locale `{current_locale}`.\n"
+#~ "Available locales:\n"
+#~ "{locales}"
+#~ msgstr ""
+#~ "Lingua corrente `{current_locale}`.\n"
+#~ "Lingue disponibili:\n"
+#~ "{locales}"
 
 #~ msgid ""
 #~ "Show or update the bot language.\n"
