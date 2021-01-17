@@ -152,16 +152,16 @@ class GroupHelp(menus.ListPageSource):
         if maximum > 1:
             embed.set_author(
                 name=_(
-                    "Page {current_page}/{maximum} ({total_entries} commands)".format(
-                        current_page=menu.current_page + 1,
-                        maximum=maximum,
-                        total_entries=len(self.entries),
-                    )
+                    "Page {current_page}/{maximum} ({total_entries} commands)"
+                ).format(
+                    current_page=menu.current_page + 1,
+                    maximum=maximum,
+                    total_entries=len(self.entries),
                 )
             )
 
         embed.set_footer(
-            text=_(f'Use "{self.prefix}help [command]" for more info on a command.')
+            text=_('Use "{prefix}help [command]" for more info on a command.').format(prefix=self.prefix)
         )
         return embed
 
