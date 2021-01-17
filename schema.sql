@@ -40,7 +40,8 @@ ALTER TABLE public.command OWNER TO davide;
 CREATE TABLE public.member (
     id bigint NOT NULL,
     commands_run integer DEFAULT 0 NOT NULL,
-    main_profile integer
+    main_profile integer,
+    locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL
 );
 
 
@@ -189,6 +190,14 @@ ALTER TABLE ONLY public.rating ALTER COLUMN id SET DEFAULT nextval('public.ratin
 
 
 --
+-- Name: trivia Trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.trivia
+    ADD CONSTRAINT "Trivia_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: command command_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -258,14 +267,6 @@ ALTER TABLE ONLY public.rating
 
 ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (id);
-
-
---
--- Name: trivia trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.trivia
-    ADD CONSTRAINT trivia_pkey PRIMARY KEY (id);
 
 
 --
