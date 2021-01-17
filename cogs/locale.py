@@ -56,7 +56,7 @@ class Locale(commands.Cog):
     @locale
     async def set(self, ctx):
         _("""Update the bot language.""")
-        title = _("Select which language you would like the bot to use")
+        title = _("Select the language you would like the bot to use")
         locale = await ChooseLocale(title=title).start(ctx)
 
         if not locale:
