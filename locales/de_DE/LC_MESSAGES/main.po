@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 16:44+0100\n"
+"POT-Creation-Date: 2021-01-17 14:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgstr ""
 
 #: cogs/help.py:164
 #, python-brace-format
-msgid "Use \"{self.prefix}help [command]\" for more info on a command."
+msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
 #: cogs/help.py:173
@@ -281,19 +281,19 @@ msgid ""
 "{commits}"
 msgstr ""
 
-#: cogs/meta.py:143
+#: cogs/meta.py:146
 msgid "Process"
 msgstr ""
 
-#: cogs/meta.py:144
+#: cogs/meta.py:147
 msgid "Host"
 msgstr ""
 
-#: cogs/meta.py:146
+#: cogs/meta.py:149
 msgid "Channels"
 msgstr ""
 
-#: cogs/meta.py:148
+#: cogs/meta.py:151
 #, python-brace-format
 msgid ""
 "{total} total\n"
@@ -301,31 +301,31 @@ msgid ""
 "{voice} voice"
 msgstr ""
 
-#: cogs/meta.py:151
+#: cogs/meta.py:154
 msgid "Members"
 msgstr ""
 
-#: cogs/meta.py:152
+#: cogs/meta.py:155
 msgid "Servers"
 msgstr ""
 
-#: cogs/meta.py:154
+#: cogs/meta.py:157
 msgid "Shards"
 msgstr ""
 
-#: cogs/meta.py:157
+#: cogs/meta.py:160
 msgid "Commands Run"
 msgstr ""
 
-#: cogs/meta.py:158
+#: cogs/meta.py:161
 msgid "Lines of code"
 msgstr ""
 
-#: cogs/meta.py:159
+#: cogs/meta.py:162
 msgid "Uptime"
 msgstr ""
 
-#: cogs/meta.py:161
+#: cogs/meta.py:164
 #, python-brace-format
 msgid "Made with discord.py v{discord_version}"
 msgstr ""
