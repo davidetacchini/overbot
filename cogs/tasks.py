@@ -208,7 +208,7 @@ class Tasks(commands.Cog):
 
         await self.bot.wait_until_ready()
 
-        title, link, img, date = await get_overwatch_news(1)
+        title, link, img, date = await get_overwatch_news(amount=1)
         # Get the latest news id from the URL
         news_id = re.search(r"\d+", link[0]).group(0)
 
