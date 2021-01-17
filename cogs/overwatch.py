@@ -86,8 +86,9 @@ class Overwatch(commands.Cog):
             amount = amount or 4
 
             try:
+                locale = self.bot.locales[ctx.author.id]
                 titles, links, imgs, dates = await get_overwatch_news(
-                    ctx, amount=abs(amount)
+                    locale, amount=abs(amount)
                 )
             except Exception:
                 embed = discord.Embed(color=self.bot.color)
