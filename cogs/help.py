@@ -99,7 +99,7 @@ class BotHelp(menus.ListPageSource):
 
     async def format_page(self, menu, cogs):
         description = _(
-            "[Support server]({support}) • [View commands online]({website})\n"
+            "[Support server]({support}) - [View commands online]({website})\n"
             'Use "{prefix}help [command]" for more info on a command\n'
             'Use "{prefix}help [category]" for more info on a category'
         ).format(
@@ -161,7 +161,9 @@ class GroupHelp(menus.ListPageSource):
             )
 
         embed.set_footer(
-            text=_('Use "{prefix}help [command]" for more info on a command.').format(prefix=self.prefix)
+            text=_('Use "{prefix}help [command]" for more info on a command.').format(
+                prefix=self.prefix
+            )
         )
         return embed
 

@@ -90,7 +90,7 @@ class Server(commands.Cog):
                 embed = discord.Embed()
                 embed.title = _("Most Active Servers")
                 embed.url = self.bot.config.website
-                embed.set_footer(text=_("Tracking command usage since • 11/26/2020"))
+                embed.set_footer(text=_("Tracking command usage since - 11/26/2020"))
 
                 board = []
                 for index, guild in enumerate(guilds, start=1):
