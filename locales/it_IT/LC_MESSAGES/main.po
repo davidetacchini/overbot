@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 16:44+0100\n"
+"POT-Creation-Date: 2021-01-17 14:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,13 +173,12 @@ msgstr "Nessun aiuto trovato..."
 #: cogs/help.py:155
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
-msgstr "Pagina {current_page}/{maximum} ({total_entries} commands)"
+msgstr "Pagina {current_page}/{maximum} ({total_entries} comandi)"
 
 #: cogs/help.py:164
 #, python-brace-format
-msgid "Use \"{self.prefix}help [command]\" for more info on a command."
-msgstr ""
-"Usa \"{prefix}help [command]\" per maggiori informazione su un comando."
+msgid "Use \"{prefix}help [command]\" for more info on a command."
+msgstr "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
 
 #: cogs/help.py:173
 msgid "Shows help about the bot, a command, or a category"
@@ -306,19 +305,19 @@ msgstr ""
 "Ultimi Cambiamenti:\n"
 "{commits}"
 
-#: cogs/meta.py:143
+#: cogs/meta.py:146
 msgid "Process"
-msgstr "Processi"
+msgstr "Processo"
 
-#: cogs/meta.py:144
+#: cogs/meta.py:147
 msgid "Host"
 msgstr "Host"
 
-#: cogs/meta.py:146
+#: cogs/meta.py:149
 msgid "Channels"
 msgstr "Canali"
 
-#: cogs/meta.py:148
+#: cogs/meta.py:151
 #, python-brace-format
 msgid ""
 "{total} total\n"
@@ -329,31 +328,31 @@ msgstr ""
 "{text} testuali\n"
 "{voice} vocali"
 
-#: cogs/meta.py:151
+#: cogs/meta.py:154
 msgid "Members"
 msgstr "Membri"
 
-#: cogs/meta.py:152
+#: cogs/meta.py:155
 msgid "Servers"
 msgstr "Servers"
 
-#: cogs/meta.py:154
+#: cogs/meta.py:157
 msgid "Shards"
 msgstr "Shards"
 
-#: cogs/meta.py:157
+#: cogs/meta.py:160
 msgid "Commands Run"
 msgstr "Comandi Eseguiti"
 
-#: cogs/meta.py:158
+#: cogs/meta.py:161
 msgid "Lines of code"
 msgstr "Righe di codice"
 
-#: cogs/meta.py:159
+#: cogs/meta.py:162
 msgid "Uptime"
 msgstr "Tempo Online"
 
-#: cogs/meta.py:161
+#: cogs/meta.py:164
 #, python-brace-format
 msgid "Made with discord.py v{discord_version}"
 msgstr "Creato con discord.py v{discord_version}"
@@ -532,7 +531,7 @@ msgstr ""
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile unlink\" for more info."
 msgstr ""
-"Index non valido. Usa \"{prefix}help profile unlink\" per maggiori "
+"Indice non valido. Usa \"{prefix}help profile unlink\" per maggiori "
 "informazioni"
 
 #: cogs/profile.py:275
@@ -574,7 +573,7 @@ msgstr ""
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile update\" for more info."
 msgstr ""
-"Index non valido. Usa \"{prefix}help profile update\" per maggiori "
+"Indice non valido. Usa \"{prefix}help profile update\" per maggiori "
 "informazioni."
 
 #: cogs/profile.py:320
@@ -611,7 +610,7 @@ msgstr ""
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile main\" for more info."
 msgstr ""
-"Index non valido. Usa \"{prefix}help profile update\" per maggiori "
+"Indice non valido. Usa \"{prefix}help profile main\" per maggiori "
 "informazioni."
 
 #: cogs/profile.py:366
@@ -638,7 +637,7 @@ msgid ""
 msgstr ""
 "Mostra tutti i profili di un membro.\n"
 "\n"
-"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
 "\n"
 "        Se nessun membro viene specificato, le informazioni ritornate "
 "saranno le tue.\n"
@@ -662,7 +661,7 @@ msgstr ""
 "Mostra le statistiche di Overwatch di un membro.\n"
 "\n"
 "        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
-"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
 "\n"
 "        Se nessun indice viene dato, il profilo utilizzato sarà quello "
 "principale.\n"
@@ -676,6 +675,8 @@ msgstr ""
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile rating\" for more info."
 msgstr ""
+"Indice non valido. Usa \"{prefix}help profile rating\" per maggiori "
+"informazioni."
 
 #: cogs/profile.py:446
 msgid ""
@@ -695,7 +696,7 @@ msgstr ""
 "Mostra le statistiche rapide e competitive di Overwatch di un membro.\n"
 "\n"
 "        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
-"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
 "\n"
 "        Se nessun indice viene dato, il profilo utilizzato sarà quello "
 "principale.\n"
@@ -709,7 +710,7 @@ msgstr ""
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile statistics\" for more info."
 msgstr ""
-"Index non valido. Usa \"{prefix}help profile update\" per maggiori "
+"Indice non valido. Usa \"{prefix}help profile statistics\" per maggiori "
 "informazioni."
 
 #: cogs/profile.py:495
@@ -732,7 +733,7 @@ msgstr ""
 "Mostra le statistiche rapide e competitive di un membro per un dato eroe.\n"
 "\n"
 "        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
-"        `[member]` - Il tag o l'ID di un membro del server corrente.\n"
+"        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
 "\n"
 "        Se nessun indice viene dato, il profilo utilizzato sarà quello "
 "principale.\n"
@@ -746,6 +747,8 @@ msgstr ""
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile hero\" for more info."
 msgstr ""
+"Indice non valido. Usa \"{prefix}help profile hero\" per maggiori "
+"informazioni."
 
 #: cogs/profile.py:543
 msgid ""
@@ -1146,6 +1149,13 @@ msgid ""
 "        If no member is given then the stats returned will be yours.\n"
 "        "
 msgstr ""
+"Mostra la statistiche trivia di un membro.\n"
+"\n"
+"        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
+"\n"
+"        Se nessun membro viene specificato, le informazioni ritornate "
+"saranno le tue.\n"
+"        "
 
 #: cogs/trivia.py:187
 msgid ""
@@ -1173,7 +1183,8 @@ msgid ""
 "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
 "Ratio: {ratio}"
 msgstr ""
-"{placement} **{player}** Giocate: {played} | Vittorie: {won} | Sconfitte: {lost} | Rateo: {ratio}"
+"{placement} **{player}** Giocate: {played} | Vittorie: {won} | Sconfitte: "
+"{lost} | Rateo: {ratio}"
 
 #: cogs/trivia.py:224
 msgid ""
@@ -1327,6 +1338,11 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#, python-brace-format
+#~ msgid "Use \"{self.prefix}help [command]\" for more info on a command."
+#~ msgstr ""
+#~ "Usa \"{prefix}help [command]\" per maggiori informazione su un comando."
 
 #~ msgid ""
 #~ "{str(ctx.author)}, your request has been successfully sent. Thanks for "
