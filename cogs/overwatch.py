@@ -106,7 +106,7 @@ class Overwatch(commands.Cog):
                 embed.set_author(name="Blizzard Entertainment")
                 embed.set_image(url=f"https:{img}")
                 embed.set_footer(
-                    text=_("News {current}/{total} • {date}").format(
+                    text=_("News {current}/{total} - {date}").format(
                         current=i, total=len(titles), date=date
                     )
                 )
