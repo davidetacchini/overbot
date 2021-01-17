@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-17 14:57+0100\n"
+"POT-Creation-Date: 2021-01-17 15:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: bot.py:129
@@ -140,7 +140,7 @@ msgstr ""
 #: cogs/help.py:102
 #, python-brace-format
 msgid ""
-"[Support server]({support}) • [View commands online]({website})\n"
+"[Support server]({support}) - [View commands online]({website})\n"
 "Use \"{prefix}help [command]\" for more info on a command\n"
 "Use \"{prefix}help [category]\" for more info on a category"
 msgstr ""
@@ -154,7 +154,7 @@ msgstr ""
 msgid "Page {current_page}/{maximum}"
 msgstr ""
 
-#: cogs/help.py:147 cogs/help.py:194
+#: cogs/help.py:147 cogs/help.py:196
 msgid "No help found..."
 msgstr ""
 
@@ -168,11 +168,11 @@ msgstr ""
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:173
+#: cogs/help.py:175
 msgid "Shows help about the bot, a command, or a category"
 msgstr ""
 
-#: cogs/help.py:197
+#: cogs/help.py:199
 msgid "Aliases"
 msgstr ""
 
@@ -359,7 +359,7 @@ msgstr ""
 
 #: cogs/overwatch.py:109
 #, python-brace-format
-msgid "News {current}/{total} • {date}"
+msgid "News {current}/{total} - {date}"
 msgstr ""
 
 #: cogs/overwatch.py:121
@@ -752,7 +752,7 @@ msgid "Most Active Servers"
 msgstr ""
 
 #: cogs/server.py:93
-msgid "Tracking command usage since • 11/26/2020"
+msgid "Tracking command usage since - 11/26/2020"
 msgstr ""
 
 #: cogs/server.py:103

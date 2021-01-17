@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-17 14:46+0100\n"
+"POT-Creation-Date: 2021-01-17 15:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,11 +149,11 @@ msgstr "Ci trovavamo alla pagina {current_page} prima di questo messaggio."
 #: cogs/help.py:102
 #, python-brace-format
 msgid ""
-"[Support server]({support}) • [View commands online]({website})\n"
+"[Support server]({support}) - [View commands online]({website})\n"
 "Use \"{prefix}help [command]\" for more info on a command\n"
 "Use \"{prefix}help [category]\" for more info on a category"
 msgstr ""
-"[Server di supporto]({support}) • [Vedi i comandi online]({website})\n"
+"[Server di supporto]({support}) - [Vedi i comandi online]({website})\n"
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
 "Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
 
@@ -166,7 +166,7 @@ msgstr "Guida"
 msgid "Page {current_page}/{maximum}"
 msgstr "Pagina {current_page}/{maximum}"
 
-#: cogs/help.py:147 cogs/help.py:194
+#: cogs/help.py:147 cogs/help.py:196
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
@@ -178,13 +178,14 @@ msgstr "Pagina {current_page}/{maximum} ({total_entries} comandi)"
 #: cogs/help.py:164
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
-msgstr "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
+msgstr ""
+"Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
 
-#: cogs/help.py:173
+#: cogs/help.py:175
 msgid "Shows help about the bot, a command, or a category"
 msgstr "Mostra la guida per il bot, un comando, o una categoria"
 
-#: cogs/help.py:197
+#: cogs/help.py:199
 msgid "Aliases"
 msgstr "Aliases"
 
@@ -391,8 +392,8 @@ msgstr "[Clicca qui]({news})"
 
 #: cogs/overwatch.py:109
 #, python-brace-format
-msgid "News {current}/{total} • {date}"
-msgstr "Notizia {current}/{total} • {date}"
+msgid "News {current}/{total} - {date}"
+msgstr "Notizia {current}/{total} - {date}"
 
 #: cogs/overwatch.py:121
 msgid "Returns patch notes links."
@@ -931,8 +932,8 @@ msgid "Most Active Servers"
 msgstr "Server Più Attivi"
 
 #: cogs/server.py:93
-msgid "Tracking command usage since • 11/26/2020"
-msgstr "Traccio l'utilizzo dei comandi dal • 11/26/2020"
+msgid "Tracking command usage since - 11/26/2020"
+msgstr "Traccio l'utilizzo dei comandi dal - 11/26/2020"
 
 #: cogs/server.py:103
 #, python-brace-format
@@ -1338,103 +1339,3 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
-
-#, python-brace-format
-#~ msgid "Use \"{self.prefix}help [command]\" for more info on a command."
-#~ msgstr ""
-#~ "Usa \"{prefix}help [command]\" per maggiori informazione su un comando."
-
-#~ msgid ""
-#~ "{str(ctx.author)}, your request has been successfully sent. Thanks for "
-#~ "the contribution!"
-#~ msgstr ""
-#~ "{author}, la tua richiesto è stats inviata con successo. Grazie per il "
-#~ "contributo!"
-
-#~ msgid "Are you sure you want to unlink the following profile?\n"
-#~ msgstr "Sei sicuro di volere rimuovere il seguente profilo?\n"
-
-#~ msgid "Use \"{self.bot.clean_prefix(ctx)}prefix value\" to change it."
-#~ msgstr "Usa \"{prefix}prefix value\" per cambiarlo."
-
-#, python-brace-format
-#~ msgid ""
-#~ "Current locale `{current_locale}`.\n"
-#~ "Available locales:\n"
-#~ "{locales}"
-#~ msgstr ""
-#~ "Lingua corrente `{current_locale}`.\n"
-#~ "Lingue disponibili:\n"
-#~ "{locales}"
-
-#~ msgid ""
-#~ "Show or update the bot language.\n"
-#~ "\n"
-#~ "        `[locale] - The language you want the bot to use.\n"
-#~ "        "
-#~ msgstr ""
-#~ "Mostra o aggiorna la lingua del bot.\n"
-#~ "\n"
-#~ "        `[locale] - La lingua che vuoi che il bot utilizzi.\n"
-#~ "        "
-
-#~ msgid "Invalid language entered."
-#~ msgstr "Lingua non valida inserita."
-
-#, python-brace-format
-#~ msgid "[Click here to view **live** patch notes]({live})"
-#~ msgstr "[Clicca qui per vedere le patch notes **live**]({live})"
-
-#, python-brace-format
-#~ msgid "[Click here to view **ptr** patch notes]({ptr})"
-#~ msgstr "[Clicca qui per vedere le patch notes **ptr**]({ptr})"
-
-#, python-brace-format
-#~ msgid "[Click here to view **experimental** patch notes]({experimental})"
-#~ msgstr ""
-#~ "[Clicca qui per vedere le patch notes **experimental**]({experimental})"
-
-#~ msgid ""
-#~ "{text + voice} total\n"
-#~ "{text} text\n"
-#~ "{voice} voice"
-#~ msgstr ""
-#~ "{text + voice} totali\n"
-#~ "{text} testuali\n"
-#~ "{voice} vocali"
-
-#, python-brace-format
-#~ msgid ""
-#~ "[Support server]({support}) • [View commands online]({website}/commands)\n"
-#~ "Use \"{prefix}help [command]\" for more info on a command\n"
-#~ "Use \"{prefix}help [category]\" for more info on a category"
-#~ msgstr ""
-#~ "[Server di supporto]({support}) • [Vedi i comandi online]({website})/"
-#~ "commands)\n"
-#~ "Usa \"{prefix}help [commando]\" per maggiori informazioni su un comando.\n"
-#~ "Usa \"{prefix}help [categoria]\" per maggiori informazioni su una "
-#~ "categoria."
-
-#, python-brace-format
-#~ msgid ""
-#~ "[Support server]({support}) • [View commands online]({website}/commands)\n"
-#~ msgstr ""
-#~ "[Server di supporto]({support}) • [Guarda i comandi online]({website})/"
-#~ "commands)\n"
-
-#~ msgid "The star indicates the main profile - {len(profiles)}/5"
-#~ msgstr "La stella indicate il profilo principale - {profiles}/5"
-
-#, python-brace-format
-#~ msgid "You are missing a required argument: `{error.param.name}`"
-#~ msgstr "Stai tralasciando un argomento richiesto: `{error.param.name}`"
-
-#~ msgid "{str(command).capitalize()} Commands"
-#~ msgstr "{str(command).capitalize()} Comandi"
-
-#~ msgid ""
-#~ "Use \"{ctx.prefix}help {str(command)} [command]\" for more info on a "
-#~ "command"
-#~ msgstr ""
-#~ "Usa \"{ctx.prefix}help {str(command)} [command]\" per maggiori info su un "
-#~ "comando"
