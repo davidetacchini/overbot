@@ -29,24 +29,28 @@ class Links(commands.Cog):
     @commands.command(aliases=["kofi", "tip"])
     @locale
     async def donate(self, ctx):
-        _("""Returns the developer's PayPal.""")
-        embed = discord.Embed(color=discord.Color.blue())
-        embed.title = _("Support OverBot")
-        embed.url = self.bot.config.paypal
-        guild = await self.bot.fetch_guild(self.bot.config.support_server_id)
-        owner = await guild.fetch_member(self.bot.config.owner_id)
-        embed.description = _(
-            "Maintaining OverBot and adding new features takes up a huge "
-            "portion of [{owner}]({github_profile})'s spare time. "
-            "If you enjoy using OverBot you can donate a small amount "
-            "to keep the project alive or just support me. **Thank you!**\n\n"
-            "{kofi}"
-        ).format(
-            owner=str(owner),
-            github_profile=self.bot.config.github["profile"],
-            kofi=self.bot.config.kofi,
-        )
-        await ctx.send(embed=embed)
+        _("""Returns OverBot's ko-fi page.""")
+        try:  
+            embed = discord.Embed(color=discord.Color.blue())
+            embed.title = _("Support OverBot")
+            embed.url = self.bot.config.kofi
+            guild = await self.bot.fetch_guild(self.bot.config.support_server_id)
+            owner = await guild.fetch_member(self.bot.config.owner_id)
+            embed.description = _(
+                "Maintaining OverBot and adding new features takes up a huge "
+                "portion of [{owner}]({github_profile})'s spare time. "
+                "If you enjoy using OverBot you can donate a small amount "
+                "to keep the project alive or just support me. **Thank you!**\n\n"
+                "{kofi}"
+            ).format(
+                owner=str(owner),
+                github_profile=self.bot.config.github["profile"],
+                kofi=self.bot.config.kofi,
+            )
+        except Exception as e:
+            await ctx.send(embed=self.bot.embed_exception(e))
+        else:
+            await ctx.send(embed=embed)
 
     @commands.command(aliases=["git"])
     @locale
