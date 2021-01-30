@@ -26,7 +26,7 @@ class Links(commands.Cog):
         _("""Returns bot invite link.""")
         await ctx.send(self.bot.config.invite)
 
-    @commands.command(aliases=["paypal", "tip"])
+    @commands.command(aliases=["kofi", "tip"])
     @locale
     async def donate(self, ctx):
         _("""Returns the developer's PayPal.""")
@@ -40,11 +40,11 @@ class Links(commands.Cog):
             "portion of [{owner}]({github_profile})'s spare time. "
             "If you enjoy using OverBot you can donate a small amount "
             "to keep the project alive or just support me. **Thank you!**\n\n"
-            "{paypal}"
+            "{kofi}"
         ).format(
             owner=str(owner),
             github_profile=self.bot.config.github["profile"],
-            paypal=self.bot.config.paypal,
+            kofi=self.bot.config.kofi,
         )
         await ctx.send(embed=embed)
 
