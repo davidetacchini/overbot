@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 22:45+0100\n"
+"POT-Creation-Date: 2021-01-30 22:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,14 +189,14 @@ msgid "Returns bot invite link."
 msgstr ""
 
 #: cogs/links.py:32
-msgid "Returns the developer's PayPal."
+msgid "Returns OverBot's ko-fi page."
 msgstr ""
 
-#: cogs/links.py:34
+#: cogs/links.py:35
 msgid "Support OverBot"
 msgstr ""
 
-#: cogs/links.py:39
+#: cogs/links.py:40
 #, python-brace-format
 msgid ""
 "Maintaining OverBot and adding new features takes up a huge portion of "
@@ -207,7 +207,7 @@ msgid ""
 "{kofi}"
 msgstr ""
 
-#: cogs/links.py:54
+#: cogs/links.py:58
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
