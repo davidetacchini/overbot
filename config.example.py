@@ -99,7 +99,7 @@ github = {
 """Random endpoints."""
 random = {
     "hero": "https://overwatch-api.tekrop.fr/heroes",
-    "map": "https://api.overwatchleague.com/maps",
+    "map": "https://playoverwatch.com/en-us/maps",
 }
 
 """Overwatch endpoints."""
@@ -129,8 +129,8 @@ invite = "https://discord.com/api/oauth2/authorize?client_id=547546531666984961&
 """Vote link."""
 vote = "https://top.gg/bot/547546531666984961/vote"
 
-"""PayPal URL."""
-paypal = "https://www.paypal.com/paypalme/DavideTacchini"
+"""Ko-fi URL."""
+kofi = "https://ko-fi.com/overbot"
 
 """Guilds to ignore when getting data from DB."""
 ignored_guilds = (
