@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from utils.i18n import _, locale
+from utils.scrape import get_overwatch_maps
 from classes.converters import MapCategory, HeroCategory
 
 ROLES = [
@@ -47,8 +48,12 @@ class Random(commands.Cog):
         return 0x13A549
 
     @staticmethod
-    def filter_by_category(items, *, path, category):
-        return [i for i in items if i[path] == category]
+    def filter_heroes_by_role(heroes, category):
+        return [h for h in heroes if h["role"] == category]
+
+    @staticmethod
+    def filter_maps_by_type(maps, *, category):
+        return [m for m in maps if category in m["types"]]
 
     async def get_random_hero(self, category):
         heroes = await self.get(self.bot.config.random["hero"])
@@ -56,9 +61,7 @@ class Random(commands.Cog):
         if not category:
             random_hero = secrets.choice(heroes)
         else:
-            categorized_heroes = self.filter_by_category(
-                heroes, path="role", category=category
-            )
+            categorized_heroes = self.filter_heroes_by_role(heroes, category=category)
             random_hero = secrets.choice(categorized_heroes)
 
         embed = discord.Embed(color=self.get_hero_color(random_hero))
@@ -83,23 +86,21 @@ class Random(commands.Cog):
         embed.set_thumbnail(url=random_role["icon"])
         return embed
 
-    async def get_random_map(self, category):
-        maps = await self.get(self.bot.config.random["map"])
+    async def get_random_map(self, ctx, category):
+        locale = self.bot.locales[ctx.author.id]
+        maps = await get_overwatch_maps(locale)
 
         if not category:
             random_map = secrets.choice(maps)
         else:
-            categorized_maps = self.filter_by_category(
-                maps, path="type", category=category
-            )
+            categorized_maps = self.filter_maps_by_type(maps, category=category)
             random_map = secrets.choice(categorized_maps)
 
         embed = discord.Embed()
-        embed.title = random_map["name"]["en_US"]
-        embed.set_thumbnail(url=random_map["thumbnail"])
-        embed.set_footer(
-            text=_("Type: {type}").format(type=random_map["type"] or "N/A")
-        )
+        embed.title = random_map["name"]
+        embed.set_image(url=random_map["image_url"])
+        embed.set_thumbnail(url=random_map["flag_url"])
+        embed.set_footer(text="Type(s): " + ", ".join(random_map["types"]))
         return embed
 
     @commands.group(invoke_without_command=True)
@@ -154,31 +155,36 @@ class Random(commands.Cog):
     @random.command(invoke_without_command=True)
     @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
-    async def map(self, ctx, category: MapCategory = None):
+    async def map(self, ctx, *, category: MapCategory = None):
         _(
             """Returns a random map.
 
         `[category]` - The category to get a random map from.
 
         Categories
-        - Assault
         - Control
+        - Assault
         - Escort
+        - Capture the Flag
         - Hybrid
+        - Elimination
+        - Deathmatch
+        - Team Deathmatch
 
         If no category is passed, a random map is chosen from all categories.
         """
         )
         try:
-            embed = await self.get_random_map(category)
+            embed = await self.get_random_map(ctx, category)
         except IndexError:
             await ctx.send(
                 _(
                     'Invalid category. Use "{prefix}help random map" for more info.'
                 ).format(prefix=ctx.prefix)
             )
-        except Exception:
-            await ctx.send(_("Something bad happened. Please try again."))
+        except Exception as e:
+            #  await ctx.send(_("Something bad happened. Please try again."))
+            await ctx.send(embed=self.bot.embed_exception(e))
         else:
             await ctx.send(embed=embed)
 
