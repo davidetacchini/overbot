@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-17 15:48+0100\n"
+"POT-Creation-Date: 2021-01-30 22:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -248,8 +248,8 @@ msgid "Update the bot language."
 msgstr "Aggiorna la lingua del bot."
 
 #: cogs/locale.py:59
-msgid "Select which language you would like the bot to use"
-msgstr "Selezione la lingua che vorresti che il bot utilizzasse"
+msgid "Select the language you would like the bot to use"
+msgstr "Seleziona la lingua che vorresti che il bot utilizzasse"
 
 #: cogs/locale.py:72
 #, python-brace-format
@@ -381,34 +381,34 @@ msgstr ""
 "        Puoi usare questo comando una volta ogni 30 secondi.\n"
 "        "
 
-#: cogs/overwatch.py:94
+#: cogs/overwatch.py:95
 msgid "Latest Overwatch News"
 msgstr "Ultime notizie di Overwatch"
 
-#: cogs/overwatch.py:95
+#: cogs/overwatch.py:96
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr "[Clicca qui]({news})"
 
-#: cogs/overwatch.py:109
+#: cogs/overwatch.py:110
 #, python-brace-format
 msgid "News {current}/{total} - {date}"
 msgstr "Notizia {current}/{total} - {date}"
 
-#: cogs/overwatch.py:121
+#: cogs/overwatch.py:122
 msgid "Returns patch notes links."
 msgstr "Ritorna il link per le patch notes."
 
-#: cogs/overwatch.py:124
+#: cogs/overwatch.py:125
 msgid "Overwatch Patch Notes"
 msgstr "Overwatch Patch Notes"
 
-#: cogs/overwatch.py:128
+#: cogs/overwatch.py:129
 #, python-brace-format
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr "[Clicca qui per vedere le note della patch **{category}**]({link})"
 
-#: cogs/overwatch.py:140
+#: cogs/overwatch.py:141
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -790,16 +790,11 @@ msgstr ""
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr "Vuoi rimuove il tuo SR dal tuo soprannome?"
 
-#: cogs/random.py:101
-#, python-brace-format
-msgid "Type: {type}"
-msgstr "Tipo: {type}"
-
-#: cogs/random.py:108
+#: cogs/random.py:109
 msgid "Returns a random hero, role or map."
 msgstr "Ritorna un eroe, un ruolo o una mappa casuale."
 
-#: cogs/random.py:117
+#: cogs/random.py:118
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -816,7 +811,7 @@ msgid ""
 msgstr ""
 "Ritorna un eroe casuale.\n"
 "\n"
-"        `[category]` - La categoria dall quale prendere l'eroe.\n"
+"        `[category]` - La categoria dalla quale prendere l'eroe.\n"
 "\n"
 "        Categorie\n"
 "        - Damage (dps)\n"
@@ -827,51 +822,60 @@ msgstr ""
 "tra tutte le categorie.\n"
 "        "
 
-#: cogs/random.py:134
+#: cogs/random.py:135
 #, python-brace-format
 msgid "Invalid category. Use \"{prefix}help random hero\" for more info."
 msgstr ""
 "Categoria non valida. Usa \"{prefix}help randam hero\" per maggiori "
 "informazioni."
 
-#: cogs/random.py:138 cogs/random.py:150 cogs/random.py:181
+#: cogs/random.py:139 cogs/random.py:151
 msgid "Something bad happened. Please try again."
 msgstr "Qualcosa è andato storto. Riprova ancora."
 
-#: cogs/random.py:146
+#: cogs/random.py:147
 msgid "Returns a random role to play."
 msgstr "Ritorna un ruolo casuale da giocare."
 
-#: cogs/random.py:159
+#: cogs/random.py:160
 msgid ""
 "Returns a random map.\n"
 "\n"
 "        `[category]` - The category to get a random map from.\n"
 "\n"
 "        Categories\n"
-"        - Assault\n"
 "        - Control\n"
+"        - Assault\n"
 "        - Escort\n"
+"        - Capture the Flag\n"
 "        - Hybrid\n"
+"        - Elimination\n"
+"        - Deathmatch\n"
+"        - Team Deathmatch\n"
 "\n"
 "        If no category is passed, a random map is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
 "Ritorna una mappa casuale.\n"
-"        `[category]` - La categoria dalla quale prendere la mappa.\n"
+"\n"
+"        `[category]` - La categoria dalla quale prendere una mappa.\n" 
 "\n"
 "        Categorie\n"
-"        - Assault\n"
 "        - Control\n"
+"        - Assault\n"
 "        - Escort\n"
+"        - Capture the Flag\n"
 "        - Hybrid\n"
+"        - Elimination\n"
+"        - Deathmatch\n"
+"        - Team Deathmatch\n"
 "\n"
-"        Se nessuna categoria viene passata, una mappa casuale verrà "
-"selezionata tra tutte le cateogorie.\n"
-"        "
+"        Se nessuna categoria viene data, una mappa casuale verrà selezionata "
+"tra tutte le categorie.\n"
+" "
 
-#: cogs/random.py:177
+#: cogs/random.py:182
 #, python-brace-format
 msgid "Invalid category. Use \"{prefix}help random map\" for more info."
 msgstr ""
@@ -941,6 +945,8 @@ msgid ""
 "{placement} **{guild}** ran a total of **{commands}** commands\n"
 "Joined on: **{joined_on}**"
 msgstr ""
+"{placement} **{guild}** ha eseguito **{commands}** comandi\n"
+"Aggiunto il: **{joined_on}**"
 
 #: cogs/stats.py:18
 msgid ""
@@ -1223,6 +1229,8 @@ msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
 "contribution!"
 msgstr ""
+"{author}, la tua richiesta è stata inviata con successo. Grazie per il "
+"contributo!"
 
 #: utils/player.py:28
 msgid "This profile has no quick play nor competitive statistics to display."
@@ -1339,3 +1347,38 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#~ msgid ""
+#~ "Returns a random map.\n"
+#~ "\n"
+#~ "        `[category]` - The category to get a random map from.\n"
+#~ "\n"
+#~ "        Categories\n"
+#~ "        - Assault\n"
+#~ "        - Control\n"
+#~ "        - Escort\n"
+#~ "        - Hybrid\n"
+#~ "\n"
+#~ "        If no category is passed, a random map is chosen from all "
+#~ "categories.\n"
+#~ "        "
+#~ msgstr ""
+#~ "Ritorna una mappa casuale.\n"
+#~ "        `[category]` - La categoria dalla quale prendere la mappa.\n"
+#~ "\n"
+#~ "        Categorie\n"
+#~ "        - Assault\n"
+#~ "        - Control\n"
+#~ "        - Escort\n"
+#~ "        - Hybrid\n"
+#~ "\n"
+#~ "        Se nessuna categoria viene passata, una mappa casuale verrà "
+#~ "selezionata tra tutte le cateogorie.\n"
+#~ "        "
+
+#~ msgid "Select which language you would like the bot to use"
+#~ msgstr "Seleziona la lingua che vorresti che il bot utilizzasse"
+
+#, python-brace-format
+#~ msgid "Type: {type}"
+#~ msgstr "Tipo: {type}"
