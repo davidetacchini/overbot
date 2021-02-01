@@ -194,7 +194,7 @@ class CustomHelpCommand(commands.HelpCommand):
             embed.description = command.help
         else:
             embed.description = _("No help found...")
-        if command.aliases:
+        if command.aliases and not isinstance(embed, GroupHelp):
             aliases = self.get_command_aliases(command.aliases)
             embed.add_field(name=_("Aliases"), value=", ".join(aliases))
 
