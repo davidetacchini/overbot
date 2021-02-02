@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 22:53+0100\n"
+"POT-Creation-Date: 2021-02-02 14:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,11 +192,11 @@ msgstr ""
 msgid "Returns OverBot's ko-fi page."
 msgstr ""
 
-#: cogs/links.py:35
+#: cogs/links.py:34
 msgid "Support OverBot"
 msgstr ""
 
-#: cogs/links.py:40
+#: cogs/links.py:39
 #, python-brace-format
 msgid ""
 "Maintaining OverBot and adding new features takes up a huge portion of "
@@ -207,7 +207,7 @@ msgid ""
 "{kofi}"
 msgstr ""
 
-#: cogs/links.py:58
+#: cogs/links.py:54
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
@@ -930,15 +930,14 @@ msgstr ""
 
 #: cogs/trivia.py:224
 msgid ""
-"Copy everything inside the code block below and hit enter. NOTE: If your "
-"question is a true/false one, you should know what to do.\n"
+"Copy everything inside the code block below and hit the green checkmark.\n"
 "```\"question\": \"REPLACE\",\n"
 "\"image_url\": \"REAPLCE\",\n"
 "\"correct_answer\": \"REPLACE\",\n"
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
 
-#: cogs/trivia.py:248
+#: cogs/trivia.py:249
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -946,17 +945,17 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:258
+#: cogs/trivia.py:259
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
 msgstr ""
 
-#: cogs/trivia.py:272
+#: cogs/trivia.py:273
 msgid "You took too long to submit the request."
 msgstr ""
 
-#: cogs/trivia.py:282
+#: cogs/trivia.py:283
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
