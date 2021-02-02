@@ -35,8 +35,8 @@ class NoHeroStatistics(PlayerException):
     def __init__(self, player, hero):
         super().__init__(
             _(
-                f"**{player}** has no quick play nor competitive statistics for **{hero}** to display."
-            )
+                "**{player}** has no quick play nor competitive statistics for **{hero}** to display."
+            ).format(player=player, hero=hero)
         )
 
 
