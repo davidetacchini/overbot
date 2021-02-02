@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 22:53+0100\n"
+"POT-Creation-Date: 2021-02-02 14:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,11 +205,11 @@ msgstr "Ritorna il link per invitare il bot."
 msgid "Returns OverBot's ko-fi page."
 msgstr "Ritorna la pagina ko-fi di OverBot."
 
-#: cogs/links.py:35
+#: cogs/links.py:34
 msgid "Support OverBot"
 msgstr "Supporta OverBot"
 
-#: cogs/links.py:40
+#: cogs/links.py:39
 #, python-brace-format
 msgid ""
 "Maintaining OverBot and adding new features takes up a huge portion of "
@@ -226,7 +226,7 @@ msgstr ""
 "\n"
 "{kofi}"
 
-#: cogs/links.py:58
+#: cogs/links.py:54
 msgid "Returns the bot GitHub repository."
 msgstr "Ritorna la repository GitHub del bot."
 
@@ -781,10 +781,10 @@ msgid ""
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
-"Il proprietario di questo server deve muove il ruolo `OverBot` più in alto, "
-"così che io possa aggiornare il tuo soprannome. In caso non fossi il "
-"proprietario di questo server, non c'è alcun modo che io possa aggiornare il "
-"tuo nickname, scusa!"
+"Il proprietario di questo server deve muovere il ruolo `OverBot` più in "
+"alto, così che io possa aggiornare il tuo soprannome. Se sei il proprietario "
+"di questo server, non c'è alcun modo per me di aggiornare il tuo nickname, "
+"scusa!"
 
 #: cogs/profile.py:582
 msgid "Do you want to **remove** your SR in your nickname?"
@@ -1195,23 +1195,31 @@ msgstr ""
 
 #: cogs/trivia.py:224
 msgid ""
-"Copy everything inside the code block below and hit enter. NOTE: If your "
-"question is a true/false one, you should know what to do.\n"
+"Copy everything inside the code block below and hit the green checkmark.\n"
 "```\"question\": \"REPLACE\",\n"
 "\"image_url\": \"REAPLCE\",\n"
 "\"correct_answer\": \"REPLACE\",\n"
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
+"Copia tutto all'interno del blocco qui sotto e clicca la spunta verde.\n"
+"```\"question\": \"SOSTITUISCI\",\n"
+"\"image_url\": \"SOSTITUISCI\",\n"
+"\"correct_answer\": \"SOSTITUISCI\",\n"
+"\"wrong_answers\": [min 1 max 4]```"
 
-#: cogs/trivia.py:248
+#: cogs/trivia.py:249
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
 "        You can submit a request once an hour.\n"
 "        "
 msgstr ""
+"Invia una domanda da essere aggiunta a trivia.\n"
+"\n"
+"        Puoi inviare una domanda all'ora.\n"
+"        "
 
-#: cogs/trivia.py:258
+#: cogs/trivia.py:259
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
@@ -1219,11 +1227,11 @@ msgstr ""
 "Incolla il codice che hai copiato poco fa, sostituisci tutto e clicca invio. "
 "Hai 60 secondi."
 
-#: cogs/trivia.py:272
+#: cogs/trivia.py:273
 msgid "You took too long to submit the request."
 msgstr "Hai impiegato troppo tempo per inviare la richiesto."
 
-#: cogs/trivia.py:282
+#: cogs/trivia.py:283
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
@@ -1243,7 +1251,7 @@ msgid ""
 "display."
 msgstr ""
 "**{player}** non possiede statistiche ne rapide ne competitive per l'eroe "
-"**{hero}**"
+"**{hero}**."
 
 #: utils/player.py:155
 msgid "This profile is unranked."
@@ -1347,6 +1355,33 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#~ msgid ""
+#~ "Copy everything inside the code block below and hit enter.\n"
+#~ "```\"question\": \"REPLACE\",\n"
+#~ "\"image_url\": \"REAPLCE\",\n"
+#~ "\"correct_answer\": \"REPLACE\",\n"
+#~ "\"wrong_answers\": [min 1 max 4]```"
+#~ msgstr ""
+#~ "Copia tutto all'interno del blocco qui sotto e clicca invio.\n"
+#~ "```\"question\": \"SOSTITUISCI\",\n"
+#~ "\"image_url\": \"SOSTITUISCI\",\n"
+#~ "\"correct_answer\": \"SOSTITUISCI\",\n"
+#~ "\"wrong_answers\": [min 1 max 4]```"
+
+#~ msgid ""
+#~ "Copy everything inside the code block below and hit enter. NOTE: If your "
+#~ "question is a true/false one, you should know what to do.\n"
+#~ "```\"question\": \"REPLACE\",\n"
+#~ "\"image_url\": \"REAPLCE\",\n"
+#~ "\"correct_answer\": \"REPLACE\",\n"
+#~ "\"wrong_answers\": [min 1 max 4]```"
+#~ msgstr ""
+#~ "Copia question is a true/false one, you should know what to do.\n"
+#~ "```\"question\": \"REPLACE\",\n"
+#~ "\"image_url\": \"REAPLCE\",\n"
+#~ "\"correct_answer\": \"REPLACE\",\n"
+#~ "\"wrong_answers\": [min 1 max 4]```"
 
 #~ msgid "Returns the developer's PayPal."
 #~ msgstr "Ritorna il profile PayPal dello sviluppatore."
