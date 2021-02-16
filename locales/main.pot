@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-02 14:56+0100\n"
+"POT-Creation-Date: 2021-02-16 11:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Fetching..."
 msgstr ""
 
-#: bot.py:147 cogs/help.py:135
+#: bot.py:147 cogs/help.py:136
 #, python-brace-format
 msgid "{command} Commands"
 msgstr ""
@@ -140,39 +140,40 @@ msgstr ""
 #: cogs/help.py:102
 #, python-brace-format
 msgid ""
-"[Support server]({support}) - [View commands online]({website})\n"
+"[Support server]({support}) - [View commands online]({website}) - [Help "
+"translating]({github})\n"
 "Use \"{prefix}help [command]\" for more info on a command\n"
 "Use \"{prefix}help [category]\" for more info on a category"
 msgstr ""
 
-#: cogs/help.py:112
+#: cogs/help.py:113
 msgid "Help"
 msgstr ""
 
-#: cogs/help.py:123
+#: cogs/help.py:124
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr ""
 
-#: cogs/help.py:147 cogs/help.py:196
+#: cogs/help.py:148 cogs/help.py:197
 msgid "No help found..."
 msgstr ""
 
-#: cogs/help.py:155
+#: cogs/help.py:156
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
 msgstr ""
 
-#: cogs/help.py:164
+#: cogs/help.py:165
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:175
+#: cogs/help.py:176
 msgid "Shows help about the bot, a command, or a category"
 msgstr ""
 
-#: cogs/help.py:199
+#: cogs/help.py:200
 msgid "Aliases"
 msgstr ""
 
