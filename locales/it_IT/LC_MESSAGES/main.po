@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-02 14:54+0100\n"
+"POT-Creation-Date: 2021-02-16 10:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Fetching..."
 msgstr "Cerco..."
 
-#: bot.py:147 cogs/help.py:135
+#: bot.py:147 cogs/help.py:136
 #, python-brace-format
 msgid "{command} Commands"
 msgstr "Comandi {command}"
@@ -149,43 +149,45 @@ msgstr "Ci trovavamo alla pagina {current_page} prima di questo messaggio."
 #: cogs/help.py:102
 #, python-brace-format
 msgid ""
-"[Support server]({support}) - [View commands online]({website})\n"
+"[Support server]({support}) - [View commands online]({website}) - [Help "
+"translating]({github})\n"
 "Use \"{prefix}help [command]\" for more info on a command\n"
 "Use \"{prefix}help [category]\" for more info on a category"
 msgstr ""
-"[Server di supporto]({support}) - [Vedi i comandi online]({website})\n"
+"[Server di supporto]({support}) - [Vedi i comandi online]({website}) - "
+"[Aiuta a tradurre]({github})\n"
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
 "Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
 
-#: cogs/help.py:112
+#: cogs/help.py:113
 msgid "Help"
 msgstr "Guida"
 
-#: cogs/help.py:123
+#: cogs/help.py:124
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr "Pagina {current_page}/{maximum}"
 
-#: cogs/help.py:147 cogs/help.py:196
+#: cogs/help.py:148 cogs/help.py:197
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
-#: cogs/help.py:155
+#: cogs/help.py:156
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
 msgstr "Pagina {current_page}/{maximum} ({total_entries} comandi)"
 
-#: cogs/help.py:164
+#: cogs/help.py:165
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
 
-#: cogs/help.py:175
+#: cogs/help.py:176
 msgid "Shows help about the bot, a command, or a category"
 msgstr "Mostra la guida per il bot, un comando, o una categoria"
 
-#: cogs/help.py:199
+#: cogs/help.py:200
 msgid "Aliases"
 msgstr "Aliases"
 
@@ -1355,6 +1357,16 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#, python-brace-format
+#~ msgid ""
+#~ "[Support server]({support}) - [View commands online]({website})\n"
+#~ "Use \"{prefix}help [command]\" for more info on a command\n"
+#~ "Use \"{prefix}help [category]\" for more info on a category"
+#~ msgstr ""
+#~ "[Server di supporto]({support}) - [Vedi i comandi online]({website})\n"
+#~ "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
+#~ "Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
 
 #~ msgid ""
 #~ "Copy everything inside the code block below and hit enter.\n"
