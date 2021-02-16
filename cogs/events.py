@@ -51,6 +51,9 @@ class Events(commands.Cog):
         # classes/converters.py to check if the entered hero exists.
         if not hasattr(self.bot, "heroes"):
             self.bot.heroes = await self.cache_heroes()
+            options = ["soldier", "soldier76", "wreckingball", "dva"]
+            for opt in options:
+                self.bot.heroes.append(opt)
 
         await self.change_presence()
         await self.send_log(discord.Color.blue(), "Bot is online.")
