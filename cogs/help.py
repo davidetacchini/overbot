@@ -99,12 +99,13 @@ class BotHelp(menus.ListPageSource):
 
     async def format_page(self, menu, cogs):
         description = _(
-            "[Support server]({support}) - [View commands online]({website})\n"
+            "[Support server]({support}) - [View commands online]({website}) - [Help translating]({github})\n"
             'Use "{prefix}help [command]" for more info on a command\n'
             'Use "{prefix}help [category]" for more info on a category'
         ).format(
             support=self.bot.config.support,
             website=self.bot.config.website + "/commands",
+            github=self.bot.config.github["repo"],
             prefix=self.prefix,
         )
 
