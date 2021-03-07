@@ -1,7 +1,12 @@
 import asyncio
+from io import BytesIO
 from contextlib import suppress
 
+import pandas as pd
 import discord
+import seaborn as sns
+import matplotlib
+from matplotlib import pyplot
 from discord.ext import commands
 
 from utils.i18n import _, locale
@@ -26,6 +31,15 @@ class MemberHasNoProfile(Exception):
     def __init__(self, member):
         super().__init__(
             _("{member} hasn't linked a profile yet.").format(member=member)
+        )
+
+
+class MemberHasNoRatings(Exception):
+    """Exception raised when mentioned member has not ratings saved."""
+
+    def __init__(self):
+        super().__init__(
+            _("More data are needed in order for me to create a graph." "")
         )
 
 
@@ -585,6 +599,96 @@ class Profile(commands.Cog):
                     await self.set_or_remove_nickname(ctx, remove=True)
                 except Exception as e:
                     await ctx.send(e)
+    
+    async def sr_graph(self, ctx, *, profile):
+        profile_id, platform, username = profile
+
+        query = """SELECT tank, damage, support, date
+                   FROM rating
+                   INNER JOIN profile
+                           ON profile.id = rating.profile_id
+                   WHERE profile.id = $1
+                """
+
+        ratings = await self.bot.pool.fetch(query, profile_id)
+
+        sns.set()
+        sns.set_style("darkgrid")
+
+        data = pd.DataFrame.from_records(
+            ratings,
+            columns=["tank", "damage", "support", "date"],
+            index="date",
+        )
+
+        for row in ["support", "damage", "tank"]:
+            if data[row].isnull().all():
+                data.drop(row, axis=1, inplace=True)
+
+        if len(data.columns) == 0:
+            raise MemberHasNoRatings()
+
+        fig, ax = pyplot.subplots()
+        ax.xaxis_date()
+
+        sns.lineplot(data=data, ax=ax, linewidth=2.5)
+        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
+        fig.autofmt_xdate()
+
+        fig.suptitle(f"{username} - {platform}", fontsize="20")
+        pyplot.legend(title="Roles", loc="upper right")
+        pyplot.xlabel("Date")
+        pyplot.ylabel("SR")
+
+        image = BytesIO()
+        pyplot.savefig(format="png", fname=image, transparent=False)
+        image.seek(0)
+
+        file = discord.File(image, filename="graph.png")
+
+        embed = discord.Embed(color=ctx.author.color)
+        embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+        embed.set_image(url="attachment://graph.png")
+        return file, embed
+
+    @has_profile()
+    @profile.command()
+    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @locale
+    async def graph(self, ctx, index: Index = None, member: discord.Member = None):
+        _(
+            """Displays a graph of your SR's performance.
+
+        `[index]` - The profile's index you want to see the SR graph for.
+        `[member]` - The mention or the ID of a Discord member of the current server.
+
+        If no index is given then the profile used will be the main one.
+        If no member is given then the graph returned will be yours.
+
+        If you want to see a member's graph, you must enter both the index and the member.
+        """
+        )
+        member = member or ctx.author
+
+        try:
+            profile = await self.get_profile(member, index=index)
+        except MemberHasNoProfile as e:
+            return await ctx.send(e)
+        except IndexError:
+            return await ctx.send(
+                _(
+                    'Invalid index. Use "{prefix}help profile statistics" for more info.'
+                ).format(prefix=ctx.prefix)
+            )
+
+        try:
+            file, embed = await self.sr_graph(ctx, profile=profile)
+        except MemberHasNoRatings as e:
+            await ctx.send(e)
+        except Exception as e:
+            await ctx.send(embed=self.bot.embed_exception(e))
+        else:
+            await ctx.send(file=file, embed=embed)
 
 
 def setup(bot):
