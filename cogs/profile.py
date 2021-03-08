@@ -116,9 +116,9 @@ class Profile(commands.Cog):
             if platform == "pc":
                 username = username.replace("-", "#")
             if not await self.is_main_profile(member.id, profile_id=id):
-                fmt = f"{index}. {platform} - {username}"
+                fmt = f"{index}. {self.platforms.get(platform)} - {username}"
             else:
-                fmt = f"{index}. {platform} - {username} :star:"
+                fmt = f"{index}. {self.platforms.get(platform)} - {username} :star:"
             description.append(fmt)
         embed.description = "\n".join(description)
         return embed
@@ -599,7 +599,7 @@ class Profile(commands.Cog):
                     await self.set_or_remove_nickname(ctx, remove=True)
                 except Exception as e:
                     await ctx.send(e)
-    
+
     async def sr_graph(self, ctx, *, profile):
         profile_id, platform, username = profile
 
@@ -635,6 +635,7 @@ class Profile(commands.Cog):
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
         fig.autofmt_xdate()
 
+        username = username.replace("-", "#")
         fig.suptitle(f"{username} - {platform}", fontsize="20")
         pyplot.legend(title="Roles", loc="upper right")
         pyplot.xlabel("Date")
@@ -665,7 +666,7 @@ class Profile(commands.Cog):
         If no index is given then the profile used will be the main one.
         If no member is given then the graph returned will be yours.
 
-        If you want to see a member's graph, you must enter both the index and the member.
+        If you want to see a member SR graph, you must enter both the index and the member.
         """
         )
         member = member or ctx.author
