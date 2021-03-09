@@ -112,7 +112,7 @@ class Tasks(commands.Cog):
                 dict(
                     id=g.id,
                     name=str(g),
-                    icon=str(g.icon_url),
+                    icon=str(g.icon_url_as(format="webp")),
                     region=str(g.region),
                     members=g.member_count,
                     commands_run=guild["commands_run"],
