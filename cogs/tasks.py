@@ -116,6 +116,8 @@ class Tasks(commands.Cog):
                     region=str(g.region),
                     members=g.member_count,
                     commands_run=guild["commands_run"],
+                    shard_id=g.shard_id,
+                    joined_at=str(g.me.joined_at),
                 )
             )
         return servers
