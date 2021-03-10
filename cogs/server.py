@@ -103,12 +103,12 @@ class Server(commands.Cog):
                             "{placement} **{guild}**"
                             " ran a total of **{commands}** commands\n"
                             "Joined on: **{joined_on}**"
+                        ).format(
+                            placement=placement,
+                            guild=str(cur_guild),
+                            commands=guild["commands_run"],
+                            joined_on=joined_on,
                         )
-                    ).format(
-                        placement=placement,
-                        guild=str(cur_guild),
-                        commands=guild["commands_run"],
-                        joined_on=joined_on,
                     )
 
                     if index < 5:
