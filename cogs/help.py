@@ -173,7 +173,7 @@ class CustomHelpCommand(commands.HelpCommand):
     def __init__(self):
         command_attrs = dict(
             cooldown=commands.Cooldown(1, 3.0, commands.BucketType.member),
-            help=_("Shows help about the bot, a command, or a category"),
+            help=_("Shows help about the bot, a command, or a category."),
         )
         super().__init__(command_attrs=command_attrs)
 
