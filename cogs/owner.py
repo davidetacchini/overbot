@@ -291,7 +291,7 @@ class Owner(commands.Cog):
                 ("Total contributions", contribs),
             )
 
-            embed = discord.Embed(color=ctx.author.color)
+            embed = discord.Embed(color=self.bot.color)
             embed.title = "Admin Panel"
             bot = []
             trivia = []
