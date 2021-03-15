@@ -182,8 +182,9 @@ class Random(commands.Cog):
                     'Invalid category. Use "{prefix}help random map" for more info.'
                 ).format(prefix=ctx.prefix)
             )
-        except Exception as e:
+        except Exception:
             await ctx.send(_("Something bad happened. Please try again."))
+        else:
             await ctx.send(embed=embed)
 
 
