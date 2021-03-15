@@ -183,9 +183,7 @@ class Random(commands.Cog):
                 ).format(prefix=ctx.prefix)
             )
         except Exception as e:
-            #  await ctx.send(_("Something bad happened. Please try again."))
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
+            await ctx.send(_("Something bad happened. Please try again."))
             await ctx.send(embed=embed)
 
 
