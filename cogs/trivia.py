@@ -127,7 +127,7 @@ class Trivia(commands.Cog):
                 return 0
 
     def embed_member_stats(self, member, stats):
-        embed = discord.Embed(color=member.color)
+        embed = discord.Embed(color=self.bot.color)
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
         ratio = self.get_player_ratio(stats["won"], stats["lost"])

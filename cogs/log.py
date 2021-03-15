@@ -54,14 +54,14 @@ class Log(commands.Cog):
     async def on_guild_join(self, guild):
         if self.bot.debug:
             return
-        embed = discord.Embed(color=0x4CA64C)
+        embed = discord.Embed(color=discord.Color.green())
         await self.send_guild_log(embed, guild)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         if self.bot.debug:
             return
-        embed = discord.Embed(color=0xFF3232)
+        embed = discord.Embed(color=discord.Color.red())
         await self.send_guild_log(embed, guild)
 
     @commands.Cog.listener()
