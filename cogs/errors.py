@@ -41,7 +41,7 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(
-                _("You can't use `{command}` command for `{seconds}` seconds.").format(
+                _("You can't use `{command}` command for `{seconds}s`.").format(
                     command=ctx.command.qualified_name,
                     seconds=round(error.retry_after, 2),
                 )
@@ -79,11 +79,22 @@ class ErrorHandler(commands.Cog):
                 )
 
             elif type(error) == checks.ProfileLimitReached:
-                await ctx.send(
-                    _(
-                        'You have reached the maximum number of profiles that can be added. Use "{prefix}profile list" for more info.'
-                    ).format(prefix=ctx.prefix)
+                embed = discord.Embed(color=ctx.bot.color)
+                embed.description = _(
+                    "Max profiles limit reached.\n[Upgrade to Premium]({premium}) to be able to link up to 25 profiles.".format(
+                        premium=self.bot.config.premium
+                    )
                 )
+                await ctx.send(embed=embed)
+
+            elif type(error) == checks.MemberIsNotPremium:
+                embed = discord.Embed(color=ctx.bot.color)
+                embed.description = _(
+                    "This command requires a Premium membership.\n[Click here]({premium}) to have a look at the Premium plan.".format(
+                        premium=self.bot.config.premium
+                    )
+                )
+                await ctx.send(embed=embed)
 
 
 def setup(bot):
