@@ -11,7 +11,8 @@ class ProfileNotLinked(commands.CheckFailure):
 class ProfileLimitReached(commands.CheckFailure):
     """Exception raised when a user try to link a 6th profile."""
 
-    pass
+    def __init__(self, limit):
+        self.limit = limit
 
 
 class MemberIsNotPremium(commands.CheckFailure):
@@ -46,11 +47,33 @@ def can_add_profile():
 
     async def predicate(ctx):
         profiles = await get_profiles(ctx)
-        if len(profiles) < 5:
+
+        if not await member_is_premium(ctx):
+            limit = 5
+        else:
+            limit = 25
+
+        if len(profiles) < limit:
             return True
-        raise ProfileLimitReached()
+        raise ProfileLimitReached(limit)
 
     return commands.check(predicate)
+
+
+async def member_is_premium(ctx):
+    """Check for a user to be a premium member."""
+    guild = ctx.bot.get_guild(ctx.bot.config.support_server_id)
+
+    try:
+        member = await guild.fetch_member(ctx.author.id)
+    except discord.HTTPException:
+        return False
+
+    role = discord.utils.get(member.roles, name="Premium")
+
+    if role:
+        return True
+    return False
 
 
 def is_premium():
@@ -58,10 +81,11 @@ def is_premium():
 
     async def predicate(ctx):
         guild = ctx.bot.get_guild(ctx.bot.config.support_server_id)
-        member = await guild.fetch_member(ctx.author.id)
 
-        if not member:
-            return False
+        try:
+            member = await guild.fetch_member(ctx.author.id)
+        except discord.HTTPException:
+            raise MemberIsNotPremium()
 
         role = discord.utils.get(member.roles, name="Premium")
 
