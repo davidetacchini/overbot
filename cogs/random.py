@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands
 
 from utils.i18n import _, locale
-from utils.scrape import get_overwatch_maps
 from classes.converters import MapCategory, HeroCategory
 
 ROLES = [
@@ -35,10 +34,6 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def get(self, url):
-        async with self.bot.session.get(url) as r:
-            return await r.json()
-
     @staticmethod
     def get_hero_color(hero):
         if hero["role"] == "tank":
@@ -56,7 +51,7 @@ class Random(commands.Cog):
         return [m for m in maps if category in m["types"]]
 
     async def get_random_hero(self, category):
-        heroes = await self.get(self.bot.config.random["hero"])
+        heroes = self.bot.heroes
 
         if not category:
             random_hero = secrets.choice(heroes)
@@ -87,8 +82,7 @@ class Random(commands.Cog):
         return embed
 
     async def get_random_map(self, ctx, category):
-        locale = self.bot.locales[ctx.author.id]
-        maps = await get_overwatch_maps(locale)
+        maps = self.bot.maps
 
         if not category:
             random_map = secrets.choice(maps)
