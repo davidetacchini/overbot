@@ -63,7 +63,7 @@ class Platform(commands.Converter):
 class Hero(commands.Converter):
     async def convert(self, ctx, hero):
         hero = hero.lower()
-        if hero not in ctx.bot.heroes:
+        if hero not in ctx.bot.hero_names:
             raise InvalidHero(hero)
         # Advanced A.I. implementation
         elif hero in ("soldier", "soldier-76"):
