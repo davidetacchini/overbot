@@ -3,7 +3,6 @@ import asyncio
 import discord
 from discord.ext import commands
 
-from config import main_color
 from utils.i18n import _
 from utils.paginator import NoChoice
 
@@ -16,7 +15,7 @@ class Context(commands.Context):
         if user.id == self.bot.user.id:
             return False
 
-        embed = discord.Embed(color=main_color)
+        embed = discord.Embed(color=self.bot.color)
         embed.title = _("Confirmation")
         embed.description = message
         msg = await self.send(embed=embed)
