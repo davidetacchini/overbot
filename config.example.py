@@ -132,6 +132,9 @@ vote = "https://top.gg/bot/547546531666984961/vote"
 """Ko-fi URL."""
 kofi = "https://ko-fi.com/overbot"
 
+"""Premium URL."""
+premium = "https://overbot.netlify.app/premium"
+
 """Guilds to ignore when getting data from DB."""
 ignored_guilds = (
     550685823784321035,
