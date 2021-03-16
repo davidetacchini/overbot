@@ -245,11 +245,10 @@ class Help(commands.Cog):
         self.bot = bot
         self.old_help_command = bot.help_command
         bot.help_command = CustomHelpCommand()
-        bot.help_command_cog = self
+        bot.help_command.cog = self
 
     def cog_unload(self):
         self.bot.help_command = self.old_help_command
-
 
 def setup(bot):
     bot.add_cog(Help(bot))
