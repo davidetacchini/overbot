@@ -40,8 +40,8 @@ async def get_overwatch_patch_notes(ctx):
     ]
 
 
-async def get_overwatch_maps(locale):
-    content = await fetch(config.random["map"].format(locale))
+async def get_overwatch_maps():
+    content = await fetch(config.random["map"])
     page = BeautifulSoup(content, features="html.parser")
 
     all_maps = []
