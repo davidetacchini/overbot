@@ -87,12 +87,16 @@ class Tasks(commands.Cog):
         for command in self.bot.walk_commands():
             if command.hidden:
                 continue
+            is_premium = False
+            if command.short_doc.startswith("`[Premium]`"):
+                is_premium = True
             all_commands.append(
                 dict(
                     cog=command.cog_name,
                     name=command.qualified_name,
                     aliases=command.aliases or None,
                     signature=command.signature or None,
+                    is_premium=is_premium,
                     short_desc=command.short_doc or "No help found...",
                     long_desc=command.help or "No help found...",
                 )
