@@ -165,8 +165,9 @@ class Bot(commands.AutoShardedBot):
         embed = discord.Embed(color=discord.Color.red())
         embed.title = _("An unknown error occured.")
         embed.description = _(
-            "Please report the following error to the developer"
-            " by joning the support server at https://discord.gg/eZU69EV"
+            "Please report the following error to the developer by clicking [here]({report_channel})".format(
+                report_channel="https://discord.gg/eZU69EV"
+            )
         )
         embed.add_field(name=type(e).__name__, value=e)
         return embed
