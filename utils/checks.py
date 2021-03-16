@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 
 
@@ -9,6 +10,12 @@ class ProfileNotLinked(commands.CheckFailure):
 
 class ProfileLimitReached(commands.CheckFailure):
     """Exception raised when a user try to link a 6th profile."""
+
+    pass
+
+
+class MemberIsNotPremium(commands.CheckFailure):
+    """Exception raised when a user is not premium."""
 
     pass
 
@@ -42,5 +49,24 @@ def can_add_profile():
         if len(profiles) < 5:
             return True
         raise ProfileLimitReached()
+
+    return commands.check(predicate)
+
+
+def is_premium():
+    """Check for a user to be a premium member."""
+
+    async def predicate(ctx):
+        guild = ctx.bot.get_guild(ctx.bot.config.support_server_id)
+        member = await guild.fetch_member(ctx.author.id)
+
+        if not member:
+            return False
+
+        role = discord.utils.get(member.roles, name="Premium")
+
+        if role:
+            return True
+        raise MemberIsNotPremium()
 
     return commands.check(predicate)
