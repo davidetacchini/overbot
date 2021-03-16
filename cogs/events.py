@@ -5,6 +5,8 @@ from contextlib import suppress
 import discord
 from discord.ext import commands
 
+from utils.scrape import get_overwatch_maps
+
 
 class Events(commands.Cog):
     def __init__(self, bot):
@@ -47,13 +49,17 @@ class Events(commands.Cog):
             self.bot.total_lines = 0
             self.bot.get_line_count()
 
-        # caching all Overwatch heroes at startup. Used in
-        # classes/converters.py to check if the entered hero exists.
         if not hasattr(self.bot, "heroes"):
             self.bot.heroes = await self.cache_heroes()
-            options = ["soldier", "soldier76", "wreckingball", "dva"]
-            for opt in options:
-                self.bot.heroes.append(opt)
+
+        if not hasattr(self.bot, "maps"):
+            self.bot.maps = await self.cache_maps()
+
+        if not hasattr(self.bot, "hero_names"):
+            self.bot.hero_names = await self.get_hero_names()
+            heroes = ["soldier", "soldier76", "wreckingball", "dva"]
+            for hero in heroes:
+                self.bot.hero_names.append(hero)
 
         await self.change_presence()
         await self.send_log(discord.Color.blue(), "Bot is online.")
@@ -105,8 +111,13 @@ class Events(commands.Cog):
     async def cache_heroes(self):
         url = self.bot.config.random["hero"]
         async with self.bot.session.get(url) as r:
-            heroes = await r.json()
-        return [str(h["key"]).lower() for h in heroes]
+            return await r.json()
+
+    async def cache_maps(self):
+        return await get_overwatch_maps()
+
+    async def get_hero_names(self):
+        return [str(h["key"]).lower() for h in self.bot.heroes]
 
 
 def setup(bot):
