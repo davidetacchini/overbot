@@ -54,7 +54,7 @@ class TooManyAccounts(RequestError):
             message = _(
                 f"**{players}** accounts found under the name of `{username}`"
                 f" playing on `{platform}`. Please be more specific by entering"
-                f" the full BattleTag in the following format: `name#0000`"
+                " the full BattleTag in the following format: `name#0000`"
             )
         else:
             message = _(
