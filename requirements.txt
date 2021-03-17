@@ -12,3 +12,4 @@ speedtest-cli
 python-dateutil
 pandas
 seaborn
+colour
