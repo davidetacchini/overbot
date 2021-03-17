@@ -10,7 +10,7 @@ from matplotlib import pyplot
 from discord.ext import commands
 
 from utils.i18n import _, locale
-from utils.checks import has_profile, can_add_profile
+from utils.checks import is_premium, has_profile, can_add_profile, member_is_premium
 from utils.player import Player, NoStatistics, NoHeroStatistics
 from utils.request import Request, RequestError
 from utils.paginator import Link, Update
@@ -23,6 +23,11 @@ ROLES = {
     "damage": "\N{CROSSED SWORDS}",
     "support": "\N{HEAVY GREEK CROSS}",
 }
+
+
+async def chunker(entries, chunk):
+    for x in range(0, len(entries), chunk):
+        yield entries[x : x + chunk]
 
 
 class MemberHasNoProfile(Exception):
@@ -38,9 +43,7 @@ class MemberHasNoRatings(Exception):
     """Exception raised when mentioned member has not ratings saved."""
 
     def __init__(self):
-        super().__init__(
-            _("More data are needed in order for me to create a graph." "")
-        )
+        super().__init__(_("More data are needed in order for me to create a graph."))
 
 
 class Profile(commands.Cog):
@@ -103,25 +106,38 @@ class Profile(commands.Cog):
         query = "UPDATE profile SET platform = $1, username = $2 WHERE id = $3;"
         await self.bot.pool.execute(query, platform, username, profile_id)
 
-    async def list_profiles(self, profiles, member):
-        embed = discord.Embed(color=member.color)
-        embed.set_author(name=str(member), icon_url=member.avatar_url)
-        embed.set_footer(
-            text=_("The star indicates the main profile - {profiles}/5").format(
-                profiles=len(profiles)
+    async def list_profiles(self, ctx, profiles):
+        pages = []
+        chunks = [c async for c in chunker(profiles, 10)]
+        index = 1  # avoid starting from 1 every page
+
+        if not await member_is_premium(ctx):
+            limit = 5
+        else:
+            limit = 25
+
+        for chunk in chunks:
+            embed = discord.Embed(color=self.bot.color)
+            embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+            embed.set_footer(
+                text=_(
+                    "The star indicates the main profile - {profiles}/{limit}"
+                ).format(profiles=len(profiles), limit=limit)
             )
-        )
-        description = []
-        for index, (id, platform, username) in enumerate(profiles, start=1):
-            if platform == "pc":
-                username = username.replace("-", "#")
-            if not await self.is_main_profile(member.id, profile_id=id):
-                fmt = f"{index}. {self.platforms.get(platform)} - {username}"
-            else:
-                fmt = f"{index}. {self.platforms.get(platform)} - {username} :star:"
-            description.append(fmt)
-        embed.description = "\n".join(description)
-        return embed
+
+            description = []
+            for (id, platform, username) in chunk:
+                if platform == "pc":
+                    username = username.replace("-", "#")
+                if not await self.is_main_profile(ctx.author.id, profile_id=id):
+                    fmt = f"{index}. {self.platforms.get(platform)} - {username}"
+                else:
+                    fmt = f"{index}. {self.platforms.get(platform)} - {username} :star:"
+                description.append(fmt)
+                index += 1
+            embed.description = "\n".join(description)
+            pages.append(embed)
+        return pages
 
     async def get_player_username(self, ctx, platform):
         if platform == "pc":
@@ -376,7 +392,7 @@ class Profile(commands.Cog):
             )
 
         await self.set_main_profile(ctx.author.id, profile_id=id)
-        embed = discord.Embed(color=ctx.author.color)
+        embed = discord.Embed(color=self.bot.color)
         embed.description = _("Main profile successfully set to:")
         embed.add_field(name=_("Platform"), value=platform)
         embed.add_field(name=_("Username"), value=username)
@@ -402,8 +418,8 @@ class Profile(commands.Cog):
         except MemberHasNoProfile as e:
             return await ctx.send(e)
 
-        embed = await self.list_profiles(profiles, member)
-        await ctx.send(embed=embed)
+        embed = await self.list_profiles(ctx, profiles)
+        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
     @profile.command(aliases=["rank", "sr"])
@@ -647,18 +663,19 @@ class Profile(commands.Cog):
 
         file = discord.File(image, filename="graph.png")
 
-        embed = discord.Embed(color=ctx.author.color)
+        embed = discord.Embed(color=self.bot.color)
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         embed.set_image(url="attachment://graph.png")
         return file, embed
 
+    @is_premium()
     @has_profile()
     @profile.command()
     @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def graph(self, ctx, index: Index = None, member: discord.Member = None):
         _(
-            """Displays a graph of your SR's performance.
+            """`[Premium]` Displays a member's SR graph performance.
 
         `[index]` - The profile's index you want to see the SR graph for.
         `[member]` - The mention or the ID of a Discord member of the current server.
