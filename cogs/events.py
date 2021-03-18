@@ -102,7 +102,7 @@ class Events(commands.Cog):
         await self.bot.wait_until_ready()
         await self.bot.change_presence(
             activity=discord.Activity(
-                name=f"{self.bot.prefix}help",
+                name="https://overbot.me",
                 type=discord.ActivityType.playing,
             ),
             status=discord.Status.idle,
