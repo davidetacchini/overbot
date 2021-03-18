@@ -51,15 +51,22 @@ class Events(commands.Cog):
 
         if not hasattr(self.bot, "heroes"):
             self.bot.heroes = await self.cache_heroes()
+            print("Heroes successfully cached.")
 
         if not hasattr(self.bot, "maps"):
             self.bot.maps = await self.cache_maps()
+            print("Maps successfully cached.")
 
         if not hasattr(self.bot, "hero_names"):
             self.bot.hero_names = await self.get_hero_names()
             heroes = ["soldier", "soldier76", "wreckingball", "dva"]
             for hero in heroes:
                 self.bot.hero_names.append(hero)
+            print("Hero names successfully cached.")
+
+        if not hasattr(self.bot, "embed_colors"):
+            self.bot.embed_colors = await self.cache_embed_colors()
+            print("Embed colors successfully cached.")
 
         await self.change_presence()
         await self.send_log(discord.Color.blue(), "Bot is online.")
@@ -118,6 +125,15 @@ class Events(commands.Cog):
 
     async def get_hero_names(self):
         return [str(h["key"]).lower() for h in self.bot.heroes]
+
+    async def cache_embed_colors(self):
+        embed_colors = {}
+        colors = await self.bot.pool.fetch(
+            "SELECT id, embed_color FROM member WHERE embed_color <> 6605311;"
+        )
+        for member_id, color in colors:
+            embed_colors[member_id] = color
+        return embed_colors
 
 
 def setup(bot):
