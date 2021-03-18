@@ -37,7 +37,9 @@ import config
 from utils import i18n
 from utils.i18n import _
 from utils.time import human_timedelta
+from utils.checks import member_is_premium
 from classes.context import Context
+from classes.exceptions import MemberOnCooldown
 
 try:
     import uvloop
@@ -53,9 +55,19 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, **kwargs):
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
+        self.paginator = pygicord
+
+        # caching
         self.prefixes = {}
 
-        self.paginator = pygicord
+        self.normal_cooldown = commands.CooldownMapping.from_cooldown(
+            1, 3, commands.BucketType.member
+        )
+        self.premium_cooldown = commands.CooldownMapping.from_cooldown(
+            1, 1.5, commands.BucketType.member
+        )
+
+        self.add_check(self.general_cooldown, call_once=True)
 
     @property
     def timestamp(self):
@@ -76,6 +88,19 @@ class Bot(commands.AutoShardedBot):
     @property
     def debug(self):
         return config.DEBUG
+
+    async def general_cooldown(self, ctx):
+        if not await member_is_premium(ctx):
+            bucket = self.normal_cooldown.get_bucket(ctx.message)
+        else:
+            bucket = self.premium_cooldown.get_bucket(ctx.message)
+
+        retry_after = bucket.update_rate_limit()
+
+        if retry_after:
+            raise MemberOnCooldown(bucket, retry_after)
+        else:
+            return True
 
     def get_uptime(self, *, brief=False):
         return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
