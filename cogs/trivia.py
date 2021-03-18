@@ -79,7 +79,6 @@ class Trivia(commands.Cog):
         return embed
 
     @commands.group(invoke_without_command=True)
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def trivia(self, ctx):
         _("""Displays a list with all trivia's subcommands.""")
@@ -87,7 +86,6 @@ class Trivia(commands.Cog):
         await ctx.send(embed=embed)
 
     @trivia.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def play(self, ctx):
         _("""Play Overwatch trivia.""")
@@ -140,7 +138,6 @@ class Trivia(commands.Cog):
         return embed
 
     @trivia.command(aliases=["stats"])
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def statistics(self, ctx, member: discord.Member = None):
         _(
@@ -180,7 +177,7 @@ class Trivia(commands.Cog):
         return placements.get(place)
 
     @trivia.command(aliases=["top"])
-    @commands.cooldown(1, 60.0, commands.BucketType.member)
+    @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def best(self, ctx):
         _(
@@ -188,7 +185,7 @@ class Trivia(commands.Cog):
 
         It is based on games won.
 
-        This command can be used once a minute.
+        This command can be used once every 30 seconds.
         """
         )
         async with ctx.typing():
