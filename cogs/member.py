@@ -14,7 +14,7 @@ class Member(commands.Cog):
     @locale
     async def premium(self, ctx):
         _("""Shows your current premium status.""")
-        embed = discord.Embed(color=self.bot.color)
+        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
         embed.title = _("Premium status")
         embed.description = _(
             "Current status: `N/A`\n[Upgrade to Premium]({premium})".format(
@@ -86,6 +86,7 @@ class Member(commands.Cog):
             await self.bot.pool.execute(
                 "UPDATE member SET embed_color = $1 WHERE id = $2;", c, ctx.author.id
             )
+            self.bot.embed_colors[ctx.author.id] = c
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:

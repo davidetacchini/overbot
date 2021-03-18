@@ -88,6 +88,13 @@ class Bot(commands.AutoShardedBot):
     def debug(self):
         return config.DEBUG
 
+    def get_color(self, member_id):
+        try:
+            color = self.embed_colors.get(member_id, self.color)
+            return discord.Color(color)
+        except Exception:
+            return self.color
+
     def get_uptime(self, *, brief=False):
         return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
 
