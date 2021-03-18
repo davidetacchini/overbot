@@ -45,7 +45,7 @@ class Server(commands.Cog):
             pre = await self.bot.pool.fetchval(
                 "SELECT prefix FROM server WHERE id = $1;", ctx.guild.id
             )
-            embed = discord.Embed(color=self.bot.color)
+            embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
             embed.set_footer(
                 text=_('Use "{prefix}prefix value" to change it.').format(
                     prefix=self.bot.clean_prefix(ctx)
@@ -87,7 +87,7 @@ class Server(commands.Cog):
                 guilds = await self.bot.pool.fetch(
                     query, self.bot.config.ignored_guilds
                 )
-                embed = discord.Embed()
+                embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
                 embed.title = _("Most Active Servers")
                 embed.url = self.bot.config.website
                 embed.set_footer(text=_("Tracking command usage since - 11/26/2020"))

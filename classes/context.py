@@ -15,7 +15,7 @@ class Context(commands.Context):
         if user.id == self.bot.user.id:
             return False
 
-        embed = discord.Embed(color=self.bot.color)
+        embed = discord.Embed(color=self.bot.get_color(user.id))
         embed.title = _("Confirmation")
         embed.description = message
         msg = await self.send(embed=embed)
