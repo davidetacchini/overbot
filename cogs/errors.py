@@ -39,6 +39,13 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send(_("You don't have enough permissions."))
 
+        elif isinstance(error, checks.MemberOnCooldown):
+            await ctx.send(
+                _(
+                    "You are on cooldown. Wait `{seconds}s` before running another command."
+                ).format(seconds=round(error.retry_after, 2))
+            )
+
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(
                 _("You can't use `{command}` command for `{seconds}s`.").format(
