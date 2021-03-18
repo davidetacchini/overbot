@@ -51,13 +51,13 @@ class Member(commands.Cog):
         _(
             """`[Premium]` Set a custom color for the embeds.
 
-        Notice that few embeds will not change their color.
+        `<color>` - The color to use for the embeds.
 
         Formats:
         - Either 3 or 6 hex digit: #RGB or #RRGGBB.
-        - Color code: red, white, black etc...
+        - Color code: green, white, red etc...
 
-        You can find a list of all the color codes at: https://htmlcolorcodes.com/color-names/
+        Notice that few embeds will not change their color.
         """
         )
         # white color doesn't work for embeds
@@ -67,19 +67,32 @@ class Member(commands.Cog):
             else:
                 c = Color("#fffff0").get_hex_l()
         except (AttributeError, ValueError):
-            return await ctx.send(
-                _(
-                    "Wrong format! Supported formats:\n"
-                    "1. Either 3 or 6 hex digit. Example: `#fff` or `#ffffff`.\n"
-                    "2. Color code. Example: `red`, `white`, `limegreen` and so on...\n"
-                    "You can find a list of all available colors at the following link: https://htmlcolorcodes.com/color-names/"
-                )
+            embed = discord.Embed(color=discord.Color.red())
+            embed.description = _(
+                "Invalid color! Supported color formats:\n"
+                "1. Either 3 or 6 hex digit: `#RGB` or `#RRGGBB` \n"
+                "2. Color code. Example: `green`, `white`, `red`, etc...\n"
+                "[Click here](https://htmlcolorcodes.com/color-names/) to have a look at the available color codes."
             )
+            return await ctx.send(embed=embed)
 
-        c = int(c.replace("#", "0x"), 16)
+        # since discord.Color() takes only a raw integer value, we must convert our
+        # input (which could be: #ffffff) and convert it to a base 16 integer.
+        # Once we have our integer value, we can pass it to discord.Color
+        c = int(c.lstrip("#"), 16)
         embed = discord.Embed(color=discord.Color(c))
-        embed.description = _("Color successfully set to `{color}`").format(color=color)
-        await ctx.send(embed=embed)
+
+        try:
+            await self.bot.pool.execute(
+                "UPDATE member SET embed_color = $1 WHERE id = $2;", c, ctx.author.id
+            )
+        except Exception as e:
+            await ctx.send(embed=self.bot.embed_exception(e))
+        else:
+            embed.description = _("Color successfully set to `{color}`").format(
+                color=color
+            )
+            await ctx.send(embed=embed)
 
 
 def setup(bot):
