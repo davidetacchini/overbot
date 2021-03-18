@@ -21,6 +21,26 @@ class MemberIsNotPremium(commands.CheckFailure):
     pass
 
 
+class MemberOnCooldown(commands.CommandOnCooldown):
+    """Exception raised when a user is on cooldown (globally)."""
+
+    pass
+
+
+async def global_cooldown(ctx):
+    if not await member_is_premium(ctx):
+        bucket = ctx.bot.normal_cooldown.get_bucket(ctx.message)
+    else:
+        bucket = ctx.bot.premium_cooldown.get_bucket(ctx.message)
+
+    retry_after = bucket.update_rate_limit()
+
+    if retry_after:
+        raise MemberOnCooldown(bucket, retry_after)
+    else:
+        return True
+
+
 async def get_profiles(ctx):
     query = """SELECT platform, username
             FROM profile
