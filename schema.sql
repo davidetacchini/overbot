@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.1
--- Dumped by pg_dump version 13.1
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -41,7 +41,8 @@ CREATE TABLE public.member (
     id bigint NOT NULL,
     commands_run integer DEFAULT 0 NOT NULL,
     main_profile integer,
-    locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL
+    locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL,
+    embed_color integer DEFAULT 6605311 NOT NULL
 );
 
 
