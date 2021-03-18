@@ -75,7 +75,7 @@ class Member(commands.Cog):
                     "Wrong format! Supported formats:\n"
                     "1. Either 3 or 6 hex digit. Example: `#fff` or `#ffffff`.\n"
                     "2. Color code. Example: `red`, `white`, `limegreen` and so on...\n"
-                    "You can find a list of all available colors at the following link: https://htmlcolorcodes.com/color-names/
+                    "You can find a list of all available colors at the following link: https://htmlcolorcodes.com/color-names/"
                 )
             )
 
