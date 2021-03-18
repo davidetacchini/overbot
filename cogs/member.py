@@ -11,7 +11,6 @@ class Member(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.member)
     @locale
     async def premium(self, ctx):
         _("""Shows your current premium status.""")
@@ -39,7 +38,6 @@ class Member(commands.Cog):
 
     @is_premium()
     @commands.group(invoke_without_command=True)
-    @commands.cooldown(1, 5, commands.BucketType.member)
     @locale
     async def settings(self, ctx, command: str = None):
         _("""`[Premium]` Update your settings.""")
@@ -48,7 +46,6 @@ class Member(commands.Cog):
 
     @is_premium()
     @settings.command()
-    # @commands.cooldown(1, 5, commands.BucketType.member)
     @locale
     async def color(self, ctx, *, color: str):
         _(

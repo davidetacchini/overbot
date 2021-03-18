@@ -237,7 +237,6 @@ class Profile(commands.Cog):
             await member.edit(nick=nick)
 
     @commands.group(invoke_without_command=True)
-    @commands.cooldown(1, 1.0, commands.BucketType.member)
     @locale
     async def profile(self, ctx, command: str = None):
         _("""Displays a list with all profile's subcommands.""")
@@ -246,7 +245,6 @@ class Profile(commands.Cog):
 
     @can_add_profile()
     @profile.command(aliases=["add", "bind"])
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def link(self, ctx):
         _("""Link your Overwatch profile(s) to your Discord account.""")
@@ -276,7 +274,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["remove", "unbind"])
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def unlink(self, ctx, index: Index):
         _(
@@ -328,7 +325,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def update(self, ctx, index: Index):
         _(
@@ -371,7 +367,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def main(self, ctx, index: Index):
         _(
@@ -400,7 +395,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def list(self, ctx, member: discord.Member = None):
         _(
@@ -423,7 +417,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["rank", "sr"])
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def rating(self, ctx, index: Index = None, member: discord.Member = None):
         _(
@@ -469,7 +462,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["stats"])
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def statistics(self, ctx, index: Index = None, member: discord.Member = None):
         _(
@@ -516,7 +508,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def hero(
         self, ctx, hero: Hero, index: Index = None, member: discord.Member = None
@@ -565,7 +556,6 @@ class Profile(commands.Cog):
 
     @has_profile()
     @profile.command(aliases=["nick"])
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @commands.guild_only()
     @locale
     async def nickname(self, ctx):
@@ -671,7 +661,6 @@ class Profile(commands.Cog):
     @is_premium()
     @has_profile()
     @profile.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def graph(self, ctx, index: Index = None, member: discord.Member = None):
         _(

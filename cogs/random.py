@@ -105,7 +105,6 @@ class Random(commands.Cog):
         await ctx.send(embed=embed)
 
     @random.command(invoke_without_command=True)
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def hero(self, ctx, category: HeroCategory = None):
         _(
@@ -135,7 +134,6 @@ class Random(commands.Cog):
             await ctx.send(embed=embed)
 
     @random.command()
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def role(self, ctx):
         _("""Returns a random role to play.""")
@@ -147,7 +145,6 @@ class Random(commands.Cog):
             await ctx.send(embed=embed)
 
     @random.command(invoke_without_command=True)
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def map(self, ctx, *, category: MapCategory = None):
         _(

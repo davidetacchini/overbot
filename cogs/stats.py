@@ -11,7 +11,6 @@ class Statistics(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=["rank", "sr"])
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def rating(self, ctx, platform: Platform, *, username):
         _(
@@ -51,7 +50,6 @@ class Statistics(commands.Cog):
         await message.edit(embed=embed)
 
     @commands.command(aliases=["stats"])
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def statistics(self, ctx, platform: Platform, *, username):
         _(
@@ -97,7 +95,6 @@ class Statistics(commands.Cog):
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @commands.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
     @locale
     async def hero(
         self,
