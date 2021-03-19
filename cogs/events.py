@@ -3,6 +3,7 @@ from datetime import datetime
 from contextlib import suppress
 
 import discord
+from termcolor import colored
 from discord.ext import commands
 
 from utils.scrape import get_overwatch_maps
@@ -29,6 +30,58 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        if not hasattr(self.bot, "uptime"):
+            self.bot.uptime = datetime.utcnow()
+
+        if not hasattr(self.bot, "total_lines"):
+            self.bot.total_lines = 0
+            self.bot.get_line_count()
+
+        if not hasattr(self.bot, "heroes"):
+            try:
+                self.bot.heroes = await self.cache_heroes()
+            except Exception as e:
+                print(
+                    f"[{colored('ERROR', 'red')}] {'heroes':20} failed caching!\n[{e}]"
+                )
+            else:
+                print(f"[{colored('OK', 'green')}] {'heroes':20} successfully cached")
+
+        if not hasattr(self.bot, "maps"):
+            try:
+                self.bot.maps = await self.cache_maps()
+            except Exception as e:
+                print(f"[{colored('ERROR', 'red')}] {'maps':20} failed caching!\n[{e}]")
+            else:
+                print(f"[{colored('OK', 'green')}] {'maps':20} successfully cached")
+
+        if not hasattr(self.bot, "hero_names"):
+            try:
+                self.bot.hero_names = await self.get_hero_names()
+                heroes = ["soldier", "soldier76", "wreckingball", "dva"]
+                for hero in heroes:
+                    self.bot.hero_names.append(hero)
+            except Exception as e:
+                print(
+                    f"[{colored('ERROR', 'red')}] {'hero_names':20} failed caching!\n[{e}]"
+                )
+            else:
+                print(
+                    f"[{colored('OK', 'green')}] {'hero_names':20} successfully cached"
+                )
+
+        if not hasattr(self.bot, "embed_colors"):
+            try:
+                self.bot.embed_colors = await self.cache_embed_colors()
+            except Exception as e:
+                print(
+                    f"[{colored('ERROR', 'red')}] {'embed_colors':20} failed caching!\n[{e}]"
+                )
+            else:
+                print(
+                    f"[{colored('OK', 'green')}] {'embed_colors':20} successfully cached"
+                )
+
         print(
             textwrap.dedent(
                 f"""
@@ -41,32 +94,6 @@ class Events(commands.Cog):
             """
             )
         )
-
-        if not hasattr(self.bot, "uptime"):
-            self.bot.uptime = datetime.utcnow()
-
-        if not hasattr(self.bot, "total_lines"):
-            self.bot.total_lines = 0
-            self.bot.get_line_count()
-
-        if not hasattr(self.bot, "heroes"):
-            self.bot.heroes = await self.cache_heroes()
-            print("Heroes successfully cached.")
-
-        if not hasattr(self.bot, "maps"):
-            self.bot.maps = await self.cache_maps()
-            print("Maps successfully cached.")
-
-        if not hasattr(self.bot, "hero_names"):
-            self.bot.hero_names = await self.get_hero_names()
-            heroes = ["soldier", "soldier76", "wreckingball", "dva"]
-            for hero in heroes:
-                self.bot.hero_names.append(hero)
-            print("Hero names successfully cached.")
-
-        if not hasattr(self.bot, "embed_colors"):
-            self.bot.embed_colors = await self.cache_embed_colors()
-            print("Embed colors successfully cached.")
 
         await self.change_presence()
         await self.send_log(discord.Color.blue(), "Bot is online.")
