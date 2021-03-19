@@ -15,10 +15,13 @@ from classes.converters import MemeCategory
 class Overwatch(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.statuses = [
+            "no problems at overwatch",
+            "user reports indicate no current problems at overwatch",
+        ]
 
-    @staticmethod
-    def format_overwatch_status(status):
-        if status.lower() == "no problems at overwatch":
+    def format_overwatch_status(self, status):
+        if status.lower() in self.statuses:
             return (f"<:online:648186001361076243> {status}", discord.Color.green())
         return (f"<:dnd:648185968209428490> {status}", discord.Color.red())
 
@@ -47,10 +50,15 @@ class Overwatch(commands.Cog):
         return embed
 
     @commands.command()
-    @commands.cooldown(1, 60.0, commands.BucketType.member)
+    @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def status(self, ctx):
-        _("""Returns the current Overwatch servers status.""")
+        _(
+            """Returns the current Overwatch servers status.
+
+        You can use this command once every 30 seconds.
+        """
+        )
         embed = discord.Embed()
         embed.title = _("Status")
         embed.url = self.bot.config.overwatch["status"]
@@ -91,7 +99,7 @@ class Overwatch(commands.Cog):
                     locale, amount=abs(amount)
                 )
             except Exception:
-                embed = discord.Embed(color=self.bot.color)
+                embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
                 embed.title = _("Latest Overwatch News")
                 embed.description = _("[Click here]({news})").format(
                     news=self.bot.config.overwatch["news"]
@@ -101,7 +109,7 @@ class Overwatch(commands.Cog):
             for i, (title, link, img, date) in enumerate(
                 zip(titles, links, imgs, dates), start=1
             ):
-                embed = discord.Embed()
+                embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
                 embed.title = title
                 embed.url = link
                 embed.set_author(name="Blizzard Entertainment")
@@ -116,12 +124,17 @@ class Overwatch(commands.Cog):
             await self.bot.paginator.Paginator(pages=pages).start(ctx)
 
     @commands.command()
-    @commands.cooldown(1, 5.0, commands.BucketType.member)
+    @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def patch(self, ctx):
-        _("""Returns patch notes links.""")
+        _(
+            """Returns patch notes links.
+
+        You can use this command once every 30 seconds.
+        """
+        )
         locale = self.bot.locales[ctx.author.id].lower()
-        embed = discord.Embed(color=self.bot.color)
+        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
         embed.title = _("Overwatch Patch Notes")
         live, ptr, experimental = await get_overwatch_patch_notes(ctx)
         categories = {"live": live, "ptr": ptr, "experimental": experimental}
@@ -134,7 +147,6 @@ class Overwatch(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 3.0, commands.BucketType.member)
     @locale
     async def meme(self, ctx, category: MemeCategory = "hot"):
         _(
