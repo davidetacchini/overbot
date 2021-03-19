@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-07 18:00+0100\n"
+"POT-Creation-Date: 2021-03-19 15:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,40 +17,41 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:129
+#: bot.py:147
 msgid "Fetching..."
 msgstr ""
 
-#: bot.py:147 cogs/help.py:136
+#: bot.py:165 cogs/help.py:136
 #, python-brace-format
 msgid "{command} Commands"
 msgstr ""
 
-#: bot.py:149
+#: bot.py:167
 #, python-brace-format
 msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
 msgstr ""
 
-#: bot.py:152
+#: bot.py:170
 msgid "Replace [command] with one of the commands listed above."
 msgstr ""
 
-#: bot.py:156
+#: bot.py:174
 msgid "Commands Available"
 msgstr ""
 
-#: bot.py:158
+#: bot.py:176
 msgid "Usage"
 msgstr ""
 
-#: bot.py:166
+#: bot.py:184
 msgid "An unknown error occured."
 msgstr ""
 
-#: bot.py:168
+#: bot.py:186
+#, python-brace-format
 msgid ""
-"Please report the following error to the developer by joning the support "
-"server at https://discord.gg/eZU69EV"
+"Please report the following error to the developer by clicking [here]"
+"({report_channel})"
 msgstr ""
 
 #: cogs/errors.py:30
@@ -66,38 +67,54 @@ msgstr ""
 msgid "You don't have enough permissions."
 msgstr ""
 
-#: cogs/errors.py:44
+#: cogs/errors.py:45
 #, python-brace-format
-msgid "You can't use `{command}` command for `{seconds}` seconds."
+msgid "You are on cooldown. Wait `{seconds}s` before running another command."
 msgstr ""
 
 #: cogs/errors.py:51
+#, python-brace-format
+msgid "You can't use `{command}` command for `{seconds}s`."
+msgstr ""
+
+#: cogs/errors.py:58
 msgid "This command can't be used in direct messages."
 msgstr ""
 
-#: cogs/errors.py:54
+#: cogs/errors.py:61
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:65 cogs/profile.py:148
+#: cogs/errors.py:72 cogs/profile.py:164
 msgid "You took too long to reply."
 msgstr ""
 
-#: cogs/errors.py:71
+#: cogs/errors.py:78
 msgid "The argument you entered cannot be handled."
-msgstr ""
-
-#: cogs/errors.py:77
-#, python-brace-format
-msgid ""
-"You haven't linked a profile yet. Use \"{prefix}profile link\" to do so."
 msgstr ""
 
 #: cogs/errors.py:84
 #, python-brace-format
 msgid ""
-"You have reached the maximum number of profiles that can be added. Use "
-"\"{prefix}profile list\" for more info."
+"You haven't linked a profile yet. Use \"{prefix}profile link\" to do so."
+msgstr ""
+
+#: cogs/errors.py:92
+#, python-brace-format
+msgid ""
+"Max profiles limit reached.\n"
+"[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
+msgstr ""
+
+#: cogs/errors.py:96
+msgid "Max profiles limit reached."
+msgstr ""
+
+#: cogs/errors.py:101
+#, python-brace-format
+msgid ""
+"This command requires a Premium membership.\n"
+"[Click here]({premium}) to have a look at the Premium plan."
 msgstr ""
 
 #: cogs/help.py:59
@@ -170,7 +187,7 @@ msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
 #: cogs/help.py:176
-msgid "Shows help about the bot, a command, or a category"
+msgid "Shows help about the bot, a command, or a category."
 msgstr ""
 
 #: cogs/help.py:200
@@ -212,28 +229,28 @@ msgstr ""
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
-#: cogs/locale.py:39
+#: cogs/locale.py:38
 msgid "Displays your current language set and all the available languages."
 msgstr ""
 
-#: cogs/locale.py:41
+#: cogs/locale.py:40
 msgid "Available Languages"
 msgstr ""
 
-#: cogs/locale.py:44
+#: cogs/locale.py:43
 #, python-brace-format
 msgid "Current language set: {locale}"
 msgstr ""
 
-#: cogs/locale.py:58
+#: cogs/locale.py:56
 msgid "Update the bot language."
 msgstr ""
 
-#: cogs/locale.py:59
+#: cogs/locale.py:57
 msgid "Select the language you would like the bot to use"
 msgstr ""
 
-#: cogs/locale.py:72
+#: cogs/locale.py:70
 #, python-brace-format
 msgid "Language successfully changed to: `{locale}`"
 msgstr ""
@@ -331,15 +348,19 @@ msgstr ""
 msgid "Made with discord.py v{discord_version}"
 msgstr ""
 
-#: cogs/overwatch.py:53
-msgid "Returns the current Overwatch servers status."
+#: cogs/overwatch.py:57
+msgid ""
+"Returns the current Overwatch servers status.\n"
+"\n"
+"        You can use this command once every 30 seconds.\n"
+"        "
 msgstr ""
 
-#: cogs/overwatch.py:55
+#: cogs/overwatch.py:63
 msgid "Status"
 msgstr ""
 
-#: cogs/overwatch.py:77
+#: cogs/overwatch.py:85
 msgid ""
 "Returns the latest Overwatch news.\n"
 "\n"
@@ -349,34 +370,38 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:95
+#: cogs/overwatch.py:103
 msgid "Latest Overwatch News"
 msgstr ""
 
-#: cogs/overwatch.py:96
+#: cogs/overwatch.py:104
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr ""
 
-#: cogs/overwatch.py:110
+#: cogs/overwatch.py:118
 #, python-brace-format
 msgid "News {current}/{total} - {date}"
 msgstr ""
 
-#: cogs/overwatch.py:122
-msgid "Returns patch notes links."
+#: cogs/overwatch.py:131
+msgid ""
+"Returns patch notes links.\n"
+"\n"
+"        You can use this command once every 30 seconds.\n"
+"        "
 msgstr ""
 
-#: cogs/overwatch.py:125
+#: cogs/overwatch.py:138
 msgid "Overwatch Patch Notes"
 msgstr ""
 
-#: cogs/overwatch.py:129
+#: cogs/overwatch.py:142
 #, python-brace-format
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr ""
 
-#: cogs/overwatch.py:141
+#: cogs/overwatch.py:153
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -394,76 +419,76 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:33
+#: cogs/profile.py:38
 #, python-brace-format
 msgid "{member} hasn't linked a profile yet."
 msgstr ""
 
-#: cogs/profile.py:42
+#: cogs/profile.py:46
 msgid "More data are needed in order for me to create a graph."
 msgstr ""
 
-#: cogs/profile.py:110
+#: cogs/profile.py:124
 #, python-brace-format
-msgid "The star indicates the main profile - {profiles}/5"
+msgid "The star indicates the main profile - {profiles}/{limit}"
 msgstr ""
 
-#: cogs/profile.py:128
+#: cogs/profile.py:144
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr ""
 
-#: cogs/profile.py:130
+#: cogs/profile.py:146
 msgid "Enter your Online ID:"
 msgstr ""
 
-#: cogs/profile.py:132
+#: cogs/profile.py:148
 msgid "Enter your Gamertag:"
 msgstr ""
 
-#: cogs/profile.py:134
+#: cogs/profile.py:150
 msgid "Enter your Nintendo Switch ID:"
 msgstr ""
 
-#: cogs/profile.py:190
+#: cogs/profile.py:206
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
 msgstr ""
 
-#: cogs/profile.py:196
+#: cogs/profile.py:212
 msgid "Something bad happened while updating your nickname. Please try again."
 msgstr ""
 
-#: cogs/profile.py:207
+#: cogs/profile.py:223
 msgid ""
 "Nickname successfully set. Your SR will now be visible in your nickname "
 "within this server."
 msgstr ""
 
-#: cogs/profile.py:213
+#: cogs/profile.py:229
 msgid "Nickname successfully removed."
 msgstr ""
 
-#: cogs/profile.py:227
+#: cogs/profile.py:242
 msgid "Displays a list with all profile's subcommands."
 msgstr ""
 
-#: cogs/profile.py:236
+#: cogs/profile.py:250
 msgid "Link your Overwatch profile(s) to your Discord account."
 msgstr ""
 
-#: cogs/profile.py:237
+#: cogs/profile.py:251
 msgid "Link your Overwatch profile to your Discord ID"
 msgstr ""
 
-#: cogs/profile.py:257
+#: cogs/profile.py:271
 #, python-brace-format
 msgid ""
 "Profile successfully linked. Use \"{prefix}profile list\" to see your "
 "profile(s)."
 msgstr ""
 
-#: cogs/profile.py:267
+#: cogs/profile.py:280
 msgid ""
 "Unlink your Overwatch profile from your Discord account.\n"
 "\n"
@@ -474,19 +499,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:279
+#: cogs/profile.py:292
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile unlink\" for more info."
 msgstr ""
 
-#: cogs/profile.py:289
+#: cogs/profile.py:302
 #, python-brace-format
 msgid ""
 "You can't unlink your main profile if you have multiple profiles set. Use "
 "\"{prefix}help profile main\" for more info."
 msgstr ""
 
-#: cogs/profile.py:299
+#: cogs/profile.py:312
 #, python-brace-format
 msgid ""
 "Are you sure you want to unlink the following profile?\n"
@@ -494,11 +519,11 @@ msgid ""
 "Username: `{username}`"
 msgstr ""
 
-#: cogs/profile.py:311
+#: cogs/profile.py:324
 msgid "Profile successfully unlinked."
 msgstr ""
 
-#: cogs/profile.py:319
+#: cogs/profile.py:331
 msgid ""
 "Update your Overwatch profile linked to your Discord account.\n"
 "\n"
@@ -506,23 +531,23 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:330
+#: cogs/profile.py:342
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile update\" for more info."
 msgstr ""
 
-#: cogs/profile.py:334
+#: cogs/profile.py:346
 msgid "Update your Overwatch profile"
 msgstr ""
 
-#: cogs/profile.py:350
+#: cogs/profile.py:362
 #, python-brace-format
 msgid ""
 "Profile successfully updated. Use \"{prefix}profile list\" to see the "
 "changes."
 msgstr ""
 
-#: cogs/profile.py:362
+#: cogs/profile.py:373
 msgid ""
 "Updates your main profile.\n"
 "\n"
@@ -532,24 +557,24 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:374
+#: cogs/profile.py:385
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile main\" for more info."
 msgstr ""
 
-#: cogs/profile.py:380
+#: cogs/profile.py:391
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:381 utils/paginator.py:181
+#: cogs/profile.py:392 utils/paginator.py:181
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:382 utils/paginator.py:182
+#: cogs/profile.py:393 utils/paginator.py:182
 msgid "Username"
 msgstr ""
 
-#: cogs/profile.py:391
+#: cogs/profile.py:401
 msgid ""
 "Displays all member's profiles.\n"
 "\n"
@@ -560,7 +585,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:414
+#: cogs/profile.py:423
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -576,12 +601,12 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:435
+#: cogs/profile.py:444
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile rating\" for more info."
 msgstr ""
 
-#: cogs/profile.py:460
+#: cogs/profile.py:468
 msgid ""
 "Shows a member's Overwatch both quick play and competitive statistics.\n"
 "\n"
@@ -597,12 +622,12 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:482 cogs/profile.py:680
+#: cogs/profile.py:490 cogs/profile.py:687
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile statistics\" for more info."
 msgstr ""
 
-#: cogs/profile.py:509
+#: cogs/profile.py:516
 msgid ""
 "Shows a member's Overwatch both quick play and competitive statistics for a "
 "given hero.\n"
@@ -620,12 +645,12 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:531
+#: cogs/profile.py:538
 #, python-brace-format
 msgid "Invalid index. Use \"{prefix}help profile hero\" for more info."
 msgstr ""
 
-#: cogs/profile.py:557
+#: cogs/profile.py:563
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -637,24 +662,24 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:567
+#: cogs/profile.py:573
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:574
+#: cogs/profile.py:580
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:596
+#: cogs/profile.py:602
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:660
+#: cogs/profile.py:667
 msgid ""
-"Displays a graph of your SR's performance.\n"
+"`[Premium]` Displays a member's SR graph performance.\n"
 "\n"
 "        `[index]` - The profile's index you want to see the SR graph for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
@@ -663,16 +688,16 @@ msgid ""
 "        If no index is given then the profile used will be the main one.\n"
 "        If no member is given then the graph returned will be yours.\n"
 "\n"
-"        If you want to see a member's graph, you must enter both the index "
+"        If you want to see a member SR graph, you must enter both the index "
 "and the member.\n"
 "        "
 msgstr ""
 
-#: cogs/random.py:109
+#: cogs/random.py:103
 msgid "Returns a random hero, role or map."
 msgstr ""
 
-#: cogs/random.py:118
+#: cogs/random.py:111
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -688,20 +713,20 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/random.py:135
+#: cogs/random.py:128
 #, python-brace-format
 msgid "Invalid category. Use \"{prefix}help random hero\" for more info."
 msgstr ""
 
-#: cogs/random.py:139 cogs/random.py:151
+#: cogs/random.py:132 cogs/random.py:143 cogs/random.py:177
 msgid "Something bad happened. Please try again."
 msgstr ""
 
-#: cogs/random.py:147
+#: cogs/random.py:139
 msgid "Returns a random role to play."
 msgstr ""
 
-#: cogs/random.py:160
+#: cogs/random.py:151
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -722,7 +747,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/random.py:182
+#: cogs/random.py:173
 #, python-brace-format
 msgid "Invalid category. Use \"{prefix}help random map\" for more info."
 msgstr ""
@@ -782,7 +807,7 @@ msgid ""
 "Joined on: **{joined_on}**"
 msgstr ""
 
-#: cogs/stats.py:18
+#: cogs/stats.py:17
 msgid ""
 "Returns player ranks.\n"
 "\n"
@@ -806,7 +831,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:58
+#: cogs/stats.py:56
 msgid ""
 "Returns player both quick play and competitive statistics.\n"
 "\n"
@@ -830,7 +855,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:111
+#: cogs/stats.py:108
 msgid ""
 "Returns player both quick play and competitive statistics for a given hero.\n"
 "\n"
@@ -885,39 +910,39 @@ msgstr ""
 msgid "Correct answer"
 msgstr ""
 
-#: cogs/trivia.py:85
+#: cogs/trivia.py:84
 msgid "Displays a list with all trivia's subcommands."
 msgstr ""
 
-#: cogs/trivia.py:93
+#: cogs/trivia.py:91
 msgid "Play Overwatch trivia."
 msgstr ""
 
-#: cogs/trivia.py:134
+#: cogs/trivia.py:132
 msgid "Total"
 msgstr ""
 
-#: cogs/trivia.py:135
+#: cogs/trivia.py:133
 msgid "Won"
 msgstr ""
 
-#: cogs/trivia.py:136
+#: cogs/trivia.py:134
 msgid "Lost"
 msgstr ""
 
-#: cogs/trivia.py:137
+#: cogs/trivia.py:135
 msgid "Ratio (W/L)"
 msgstr ""
 
-#: cogs/trivia.py:138
+#: cogs/trivia.py:136
 msgid "Unanswered"
 msgstr ""
 
-#: cogs/trivia.py:139
+#: cogs/trivia.py:137
 msgid "Contributions"
 msgstr ""
 
-#: cogs/trivia.py:147
+#: cogs/trivia.py:144
 msgid ""
 "Shows trivia statistics.\n"
 "\n"
@@ -928,28 +953,28 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:187
+#: cogs/trivia.py:184
 msgid ""
 "Shows the best OverBot's trivia players.\n"
 "\n"
 "        It is based on games won.\n"
 "\n"
-"        This command can be used once a minute.\n"
+"        This command can be used once every 30 seconds.\n"
 "        "
 msgstr ""
 
-#: cogs/trivia.py:200
+#: cogs/trivia.py:197
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:209
+#: cogs/trivia.py:206
 #, python-brace-format
 msgid ""
 "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
 "Ratio: {ratio}"
 msgstr ""
 
-#: cogs/trivia.py:224
+#: cogs/trivia.py:221
 msgid ""
 "Copy everything inside the code block below and hit the green checkmark.\n"
 "```\"question\": \"REPLACE\",\n"
@@ -958,7 +983,7 @@ msgid ""
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
 
-#: cogs/trivia.py:249
+#: cogs/trivia.py:246
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -966,17 +991,17 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:259
+#: cogs/trivia.py:256
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
 msgstr ""
 
-#: cogs/trivia.py:273
+#: cogs/trivia.py:270
 msgid "You took too long to submit the request."
 msgstr ""
 
-#: cogs/trivia.py:283
+#: cogs/trivia.py:280
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
@@ -1057,11 +1082,11 @@ msgid ""
 "You are going to update the following profile"
 msgstr ""
 
-#: classes/context.py:20
+#: classes/context.py:19
 msgid "Confirmation"
 msgstr ""
 
-#: classes/context.py:41
+#: classes/context.py:40
 msgid "You took to long to confirm."
 msgstr ""
 
