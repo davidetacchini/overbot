@@ -172,14 +172,9 @@ class GroupHelp(menus.ListPageSource):
 class CustomHelpCommand(commands.HelpCommand):
     def __init__(self):
         command_attrs = dict(
-            cooldown=commands.Cooldown(1, 3.0, commands.BucketType.member),
             help=_("Shows help about the bot, a command, or a category."),
         )
         super().__init__(command_attrs=command_attrs)
-
-    async def on_help_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            await ctx.send(str(error.original))
 
     def get_command_aliases(self, aliases):
         return [f"`{alias}`" for alias in aliases]
