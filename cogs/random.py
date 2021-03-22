@@ -90,7 +90,7 @@ class Random(commands.Cog):
             categorized_maps = self.filter_maps_by_type(maps, category=category)
             random_map = secrets.choice(categorized_maps)
 
-        embed = discord.Embed()
+        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
         embed.title = random_map["name"]
         embed.set_image(url=random_map["image_url"])
         embed.set_thumbnail(url=random_map["flag_url"])
