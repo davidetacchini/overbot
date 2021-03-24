@@ -161,7 +161,7 @@ class Player:
                 value=f"{self.get_rating_icon(value)} **{value}**{SR}",
             )
         embed.set_footer(
-            text=_("Avarage: {average}").format(average=self.data.get("rating")),
+            text=_("Average: {average}").format(average=self.data.get("rating")),
             icon_url=self.data.get("ratingIcon"),
         )
 
