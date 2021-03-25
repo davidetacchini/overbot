@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-19 16:01+0100\n"
+"POT-Creation-Date: 2021-03-25 19:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,37 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:147
+#: bot.py:154
 msgid "Fetching..."
 msgstr ""
 
-#: bot.py:165 cogs/help.py:136
+#: bot.py:172 cogs/help.py:136
 #, python-brace-format
 msgid "{command} Commands"
 msgstr ""
 
-#: bot.py:167
+#: bot.py:174
 #, python-brace-format
 msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
 msgstr ""
 
-#: bot.py:170
+#: bot.py:177
 msgid "Replace [command] with one of the commands listed above."
 msgstr ""
 
-#: bot.py:174
+#: bot.py:181
 msgid "Commands Available"
 msgstr ""
 
-#: bot.py:176
+#: bot.py:183
 msgid "Usage"
 msgstr ""
 
-#: bot.py:184
+#: bot.py:191
 msgid "An unknown error occured."
 msgstr ""
 
-#: bot.py:186
+#: bot.py:193
 #, python-brace-format
 msgid ""
 "Please report the following error to the developer by clicking [here]"
@@ -172,7 +172,7 @@ msgstr ""
 msgid "Page {current_page}/{maximum}"
 msgstr ""
 
-#: cogs/help.py:148 cogs/help.py:197
+#: cogs/help.py:148 cogs/help.py:192
 msgid "No help found..."
 msgstr ""
 
@@ -186,11 +186,11 @@ msgstr ""
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:176
+#: cogs/help.py:175
 msgid "Shows help about the bot, a command, or a category."
 msgstr ""
 
-#: cogs/help.py:200
+#: cogs/help.py:195
 msgid "Aliases"
 msgstr ""
 
@@ -271,47 +271,34 @@ msgstr ""
 msgid "Shows how long the bot has been online."
 msgstr ""
 
-#: cogs/meta.py:47
-msgid ""
-"Leave a feedback about the bot.\n"
-"\n"
-"        You can leave a feedback once a minute.\n"
-"        "
-msgstr ""
-
-#: cogs/meta.py:66
-#, python-brace-format
-msgid "{author}, your feedback has been successfully sent, thanks!"
-msgstr ""
-
-#: cogs/meta.py:102
+#: cogs/meta.py:73
 msgid "Displays the bot information."
 msgstr ""
 
-#: cogs/meta.py:106
+#: cogs/meta.py:77
 msgid "Official Website"
 msgstr ""
 
-#: cogs/meta.py:107
+#: cogs/meta.py:78
 #, python-brace-format
 msgid ""
 "Latest Changes:\n"
 "{commits}"
 msgstr ""
 
-#: cogs/meta.py:146
+#: cogs/meta.py:117
 msgid "Process"
 msgstr ""
 
-#: cogs/meta.py:147
+#: cogs/meta.py:118
 msgid "Host"
 msgstr ""
 
-#: cogs/meta.py:149
+#: cogs/meta.py:120
 msgid "Channels"
 msgstr ""
 
-#: cogs/meta.py:151
+#: cogs/meta.py:122
 #, python-brace-format
 msgid ""
 "{total} total\n"
@@ -319,31 +306,31 @@ msgid ""
 "{voice} voice"
 msgstr ""
 
-#: cogs/meta.py:154
+#: cogs/meta.py:125
 msgid "Members"
 msgstr ""
 
-#: cogs/meta.py:155
+#: cogs/meta.py:126
 msgid "Servers"
 msgstr ""
 
-#: cogs/meta.py:157
+#: cogs/meta.py:128
 msgid "Shards"
 msgstr ""
 
-#: cogs/meta.py:160
+#: cogs/meta.py:131
 msgid "Commands Run"
 msgstr ""
 
-#: cogs/meta.py:161
+#: cogs/meta.py:132
 msgid "Lines of code"
 msgstr ""
 
-#: cogs/meta.py:162
+#: cogs/meta.py:133
 msgid "Uptime"
 msgstr ""
 
-#: cogs/meta.py:164
+#: cogs/meta.py:135
 #, python-brace-format
 msgid "Made with discord.py v{discord_version}"
 msgstr ""
@@ -608,14 +595,14 @@ msgstr ""
 
 #: cogs/profile.py:468
 msgid ""
-"Shows a member's Overwatch both quick play and competitive statistics.\n"
+"Shows a member's Overwatch both quick play and competitive stats.\n"
 "\n"
-"        `[index]` - The profile's index you want to see the statistics for.\n"
+"        `[index]` - The profile's index you want to see the stats for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
 "current server.\n"
 "\n"
 "        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the statistics returned will be yours.\n"
+"        If no member is given then the stats returned will be yours.\n"
 "\n"
 "        If you want to see a member's stats, you must enter both the index "
 "and the member.\n"
@@ -624,13 +611,13 @@ msgstr ""
 
 #: cogs/profile.py:490 cogs/profile.py:687
 #, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile statistics\" for more info."
+msgid "Invalid index. Use \"{prefix}help profile stats\" for more info."
 msgstr ""
 
 #: cogs/profile.py:516
 msgid ""
-"Shows a member's Overwatch both quick play and competitive statistics for a "
-"given hero.\n"
+"Shows a member's Overwatch both quick play and competitive stats for a given "
+"hero.\n"
 "\n"
 "        `<hero>` - The name of the hero you want to see stats for.\n"
 "        `[index]` - The profile's index you want to see the ranks for.\n"
@@ -638,7 +625,7 @@ msgid ""
 "current server.\n"
 "\n"
 "        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the statistics returned will be yours.\n"
+"        If no member is given then the stats returned will be yours.\n"
 "\n"
 "        If you want to see a member's stats, you must enter both the index "
 "and the member.\n"
@@ -833,7 +820,7 @@ msgstr ""
 
 #: cogs/stats.py:56
 msgid ""
-"Returns player both quick play and competitive statistics.\n"
+"Returns player both quick play and competitive stats.\n"
 "\n"
 "        `<platform>` - The platform of the player to get stats for.\n"
 "        `<username>` - The username of the player to get stats for.\n"
@@ -857,7 +844,7 @@ msgstr ""
 
 #: cogs/stats.py:108
 msgid ""
-"Returns player both quick play and competitive statistics for a given hero.\n"
+"Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
 "        `<hero>` - The name of the hero you want to see stats for.\n"
 "        `<platform>` - The platform of the player to get stats for.\n"
@@ -944,7 +931,7 @@ msgstr ""
 
 #: cogs/trivia.py:144
 msgid ""
-"Shows trivia statistics.\n"
+"Shows trivia stats.\n"
 "\n"
 "        `[member]` - The mention or the ID of a discord member of the "
 "current server.\n"
@@ -1009,13 +996,13 @@ msgid ""
 msgstr ""
 
 #: utils/player.py:28
-msgid "This profile has no quick play nor competitive statistics to display."
+msgid "This profile has no quick play nor competitive stats to display."
 msgstr ""
 
 #: utils/player.py:38
 #, python-brace-format
 msgid ""
-"**{player}** has no quick play nor competitive statistics for **{hero}** to "
+"**{player}** has no quick play nor competitive stast for **{hero}** to "
 "display."
 msgstr ""
 
@@ -1025,7 +1012,7 @@ msgstr ""
 
 #: utils/player.py:164
 #, python-brace-format
-msgid "Avarage: {average}"
+msgid "Average: {average}"
 msgstr ""
 
 #: utils/player.py:197
@@ -1066,7 +1053,16 @@ msgid ""
 "later."
 msgstr ""
 
-#: utils/request.py:55 utils/request.py:61
+#: utils/request.py:45
+msgid "The API is under maintenance. Please be patient and try again later."
+msgstr ""
+
+#: utils/request.py:55
+msgid ""
+"Something bad happened during the request. Please be patient and try again."
+msgstr ""
+
+#: utils/request.py:66 utils/request.py:72
 #, python-brace-format
 msgid "**{players}** accounts found under the name of `{username}`"
 msgstr ""
