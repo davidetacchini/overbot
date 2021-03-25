@@ -104,22 +104,24 @@ class Tasks(commands.Cog):
         return all_commands
 
     async def get_top_servers(self):
-        guilds = await self.bot.pool.fetch(
-            "SELECT id, commands_run FROM server WHERE id <> "
-            "ALL($1::bigint[]) ORDER BY commands_run DESC LIMIT 5;",
-            self.bot.config.ignored_guilds,
-        )
+        query = """SELECT guild_id, COUNT(*) as commands
+                   FROM command
+                   GROUP BY guild_id
+                   HAVING guild_id <> ALL($1::bigint[])
+                   ORDER BY commands DESC LIMIT 5;
+                """
+        guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
         servers = []
         for guild in guilds:
-            g = self.bot.get_guild(guild["id"])
+            g = self.bot.get_guild(guild["guild_id"])
             servers.append(
                 dict(
                     id=g.id,
                     name=str(g),
-                    icon=str(g.icon_url_as(format="webp")),
+                    icon=str(g.icon_url_as(format="webp", size=128)),
                     region=str(g.region),
                     members=g.member_count,
-                    commands_run=guild["commands_run"],
+                    commands_run=guild["commands"],
                     shard_id=g.shard_id,
                     joined_at=str(g.me.joined_at),
                 )
