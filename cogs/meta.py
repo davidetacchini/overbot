@@ -79,8 +79,7 @@ class Meta(commands.Cog):
             embed.url = self.bot.config.website
             embed.timestamp = ctx.message.created_at
 
-            guild = await self.bot.fetch_guild(self.bot.config.support_server_id)
-            owner = await guild.fetch_member(self.bot.config.owner_id)
+            owner = await self.bot.get_or_fetch_member(self.bot.config.owner_id)
 
             embed.set_author(
                 name=str(owner),
