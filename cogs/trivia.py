@@ -177,7 +177,7 @@ class Trivia(commands.Cog):
         return placements.get(place)
 
     @trivia.command(aliases=["top"])
-    @commands.cooldown(1, 30.0, commands.BucketType.member)
+    @commands.cooldown(1, 60.0, commands.BucketType.member)
     @locale
     async def best(self, ctx):
         _(
@@ -185,14 +185,16 @@ class Trivia(commands.Cog):
 
         It is based on games won.
 
-        This command can be used once every 30 seconds.
+        This command can be used once per minute. 
         """
         )
         async with ctx.typing():
-            players = await self.bot.pool.fetch(
-                "SELECT id, started, won, lost FROM trivia WHERE "
-                "id <> 285502621295312896 ORDER BY won DESC LIMIT 10;"
-            )
+            query = """SELECT id, started, won, lost
+                       FROM trivia
+                       WHERE id <> $1
+                       ORDER BY won DESC LIMIT 10;
+                    """
+            players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
             embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
             embed.title = _("Best Trivia Players")
 
