@@ -42,7 +42,18 @@ class ServiceUnavailable(RequestError):
 
     def __init__(self):
         super().__init__(
-            "The API is under maintenance. Please be patient and try again later."
+            _("The API is under maintenance. Please be patient and try again later.")
+        )
+
+
+class UnexpectedError(RequestError):
+    """Exception raised when the response has an invalid mime type."""
+
+    def __init__(self):
+        super().__init__(
+            _(
+                "Something bad happened during the request. Please be patient and try again."
+            )
         )
 
 
@@ -104,8 +115,12 @@ class Request:
     async def get_name(self):
         async with aiohttp.ClientSession() as s:
             async with s.get(self.account_url) as r:
-                name = await r.json()
-                return await self.resolve_name(name)
+                try:
+                    name = await r.json()
+                except aiohttp.ContentTypeError:
+                    raise UnexpectedError()
+                else:
+                    return await self.resolve_name(name)
 
     async def url(self):
         """Returns the resolved url."""
@@ -130,7 +145,10 @@ class Request:
         url = await self.url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
-                return await self.resolve_response(r)
+                try:
+                    return await self.resolve_response(r)
+                except aiohttp.client_exceptions.ClientPayloadError:
+                    raise UnexpectedError()
 
     async def get(self):
         """Returns resolved response."""
