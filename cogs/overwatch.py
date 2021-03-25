@@ -62,7 +62,7 @@ class Overwatch(commands.Cog):
         embed = discord.Embed()
         embed.title = _("Status")
         embed.url = self.bot.config.overwatch["status"]
-        embed.timestamp = self.bot.timestamp
+        embed.timestamp = ctx.message.created_at
         embed.set_footer(text="downdetector.com")
 
         try:
@@ -104,7 +104,7 @@ class Overwatch(commands.Cog):
                 embed.description = _("[Click here]({news})").format(
                     news=self.bot.config.overwatch["news"]
                 )
-                await ctx.send(embed=embed)
+                return await ctx.send(embed=embed)
 
             for i, (title, link, img, date) in enumerate(
                 zip(titles, links, imgs, dates), start=1
@@ -170,8 +170,8 @@ class Overwatch(commands.Cog):
             embed = self.embed_meme(ctx, meme)
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
-
-        await ctx.send(embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 def setup(bot):
