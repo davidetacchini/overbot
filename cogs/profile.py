@@ -461,17 +461,17 @@ class Profile(commands.Cog):
             await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
-    @profile.command(aliases=["stats"])
+    @profile.command(aliases=["statistics"])
     @locale
-    async def statistics(self, ctx, index: Index = None, member: discord.Member = None):
+    async def stats(self, ctx, index: Index = None, member: discord.Member = None):
         _(
-            """Shows a member's Overwatch both quick play and competitive statistics.
+            """Shows a member's Overwatch both quick play and competitive stats.
 
-        `[index]` - The profile's index you want to see the statistics for.
+        `[index]` - The profile's index you want to see the stats for.
         `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no index is given then the profile used will be the main one.
-        If no member is given then the statistics returned will be yours.
+        If no member is given then the stats returned will be yours.
 
         If you want to see a member's stats, you must enter both the index and the member.
         """
@@ -487,7 +487,7 @@ class Profile(commands.Cog):
             except IndexError:
                 return await ctx.send(
                     _(
-                        'Invalid index. Use "{prefix}help profile statistics" for more info.'
+                        'Invalid index. Use "{prefix}help profile stats" for more info.'
                     ).format(prefix=ctx.prefix)
                 )
 
@@ -501,7 +501,7 @@ class Profile(commands.Cog):
                 embed = profile.private()
             else:
                 try:
-                    embed = profile.get_statistics(ctx)
+                    embed = profile.get_stats(ctx)
                 except NoStats as e:
                     return await ctx.send(e)
                 await self.bot.paginator.Paginator(pages=embed).start(ctx)
@@ -513,14 +513,14 @@ class Profile(commands.Cog):
         self, ctx, hero: Hero, index: Index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's Overwatch both quick play and competitive statistics for a given hero.
+            """Shows a member's Overwatch both quick play and competitive stats for a given hero.
 
         `<hero>` - The name of the hero you want to see stats for.
         `[index]` - The profile's index you want to see the ranks for.
         `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no index is given then the profile used will be the main one.
-        If no member is given then the statistics returned will be yours.
+        If no member is given then the stats returned will be yours.
 
         If you want to see a member's stats, you must enter both the index and the member.
         """
@@ -684,7 +684,7 @@ class Profile(commands.Cog):
         except IndexError:
             return await ctx.send(
                 _(
-                    'Invalid index. Use "{prefix}help profile statistics" for more info.'
+                    'Invalid index. Use "{prefix}help profile stats" for more info.'
                 ).format(prefix=ctx.prefix)
             )
 
