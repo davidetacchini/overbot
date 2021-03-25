@@ -64,20 +64,11 @@ main_color = 0xFA9C1D
 
 # IGNORE
 
-"""Channel ID for feedback logs."""
-feedback_channel = 581888563256229891
-
-"""Channel ID for error logs."""
-errors_channel = 649188058574356481
-
 """OverBot's server ID."""
 support_server_id = 550685823784321035
 
 """Overwatch news feed channel."""
 news_channel = 771489241288540220
-
-"""Bot status channel."""
-status_channel = 784091607540039790
 
 """Channel ID for trivia submits."""
 trivia_channel = 783149071217065985
@@ -128,9 +119,6 @@ invite = "https://discord.com/api/oauth2/authorize?client_id=547546531666984961&
 
 """Vote link."""
 vote = "https://top.gg/bot/547546531666984961/vote"
-
-"""Ko-fi URL."""
-kofi = "https://ko-fi.com/overbot"
 
 """Premium URL."""
 premium = "https://overbot.netlify.app/premium"
