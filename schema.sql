@@ -25,13 +25,40 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.command (
-    id integer DEFAULT 1 NOT NULL,
-    total integer DEFAULT 0 NOT NULL,
-    CONSTRAINT command_chk CHECK ((id = 1))
+    id integer NOT NULL,
+    name text NOT NULL,
+    guild_id bigint NOT NULL,
+    channel_id bigint NOT NULL,
+    author_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    prefix text NOT NULL,
+    failed boolean NOT NULL
 );
 
 
 ALTER TABLE public.command OWNER TO davide;
+
+--
+-- Name: command_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
+--
+
+CREATE SEQUENCE public.command_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.command_id_seq OWNER TO davide;
+
+--
+-- Name: command_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
+--
+
+ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
+
 
 --
 -- Name: member; Type: TABLE; Schema: public; Owner: davide
@@ -39,7 +66,6 @@ ALTER TABLE public.command OWNER TO davide;
 
 CREATE TABLE public.member (
     id bigint NOT NULL,
-    commands_run integer DEFAULT 0 NOT NULL,
     main_profile integer,
     locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL,
     embed_color integer DEFAULT 6605311 NOT NULL
@@ -89,10 +115,10 @@ CREATE TABLE public.profile (
 ALTER TABLE public.profile OWNER TO davide;
 
 --
--- Name: profile_id_seq1; Type: SEQUENCE; Schema: public; Owner: davide
+-- Name: profile_id_seq; Type: SEQUENCE; Schema: public; Owner: davide
 --
 
-CREATE SEQUENCE public.profile_id_seq1
+CREATE SEQUENCE public.profile_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -101,13 +127,13 @@ CREATE SEQUENCE public.profile_id_seq1
     CACHE 1;
 
 
-ALTER TABLE public.profile_id_seq1 OWNER TO davide;
+ALTER TABLE public.profile_id_seq OWNER TO davide;
 
 --
--- Name: profile_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
+-- Name: profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davide
 --
 
-ALTER SEQUENCE public.profile_id_seq1 OWNED BY public.profile.id;
+ALTER SEQUENCE public.profile_id_seq OWNED BY public.profile.id;
 
 
 --
@@ -154,8 +180,7 @@ ALTER SEQUENCE public.rating_id_seq OWNED BY public.rating.id;
 
 CREATE TABLE public.server (
     id bigint NOT NULL,
-    prefix character varying(5) NOT NULL,
-    commands_run integer DEFAULT 0 NOT NULL
+    prefix character varying(5) NOT NULL
 );
 
 
@@ -177,10 +202,17 @@ CREATE TABLE public.trivia (
 ALTER TABLE public.trivia OWNER TO davide;
 
 --
+-- Name: command id; Type: DEFAULT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.command ALTER COLUMN id SET DEFAULT nextval('public.command_id_seq'::regclass);
+
+
+--
 -- Name: profile id; Type: DEFAULT; Schema: public; Owner: davide
 --
 
-ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.profile_id_seq1'::regclass);
+ALTER TABLE ONLY public.profile ALTER COLUMN id SET DEFAULT nextval('public.profile_id_seq'::regclass);
 
 
 --
@@ -204,14 +236,6 @@ ALTER TABLE ONLY public.trivia
 
 ALTER TABLE ONLY public.command
     ADD CONSTRAINT command_pkey PRIMARY KEY (id);
-
-
---
--- Name: command command_unq; Type: CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.command
-    ADD CONSTRAINT command_unq UNIQUE (id);
 
 
 --
