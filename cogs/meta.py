@@ -39,35 +39,6 @@ class Meta(commands.Cog):
         _("""Shows how long the bot has been online.""")
         await ctx.send(f"Uptime: {self.bot.get_uptime()}")
 
-    @commands.command(aliases=["feed"])
-    @commands.cooldown(1, 60.0, commands.BucketType.member)
-    @locale
-    async def feedback(self, ctx, *, message: str):
-        _(
-            """Leave a feedback about the bot.
-
-        You can leave a feedback once a minute.
-        """
-        )
-        if self.bot.debug:
-            return
-
-        channel = self.bot.get_channel(self.bot.config.feedback_channel)
-
-        if not channel:
-            return
-
-        embed = discord.Embed(color=self.bot.color)
-        embed.description = ctx.message.content
-        embed.timestamp = ctx.message.created_at
-        embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-        await channel.send(embed=embed)
-        await ctx.send(
-            _("{author}, your feedback has been successfully sent, thanks!").format(
-                author=str(ctx.author)
-            )
-        )
-
     @staticmethod
     def format_commit(commit):
         message, _, _ = commit.message.partition("\n")
@@ -106,7 +77,7 @@ class Meta(commands.Cog):
             embed.title = _("Official Website")
             embed.description = _("Latest Changes:\n{commits}").format(commits=commits)
             embed.url = self.bot.config.website
-            embed.timestamp = self.bot.timestamp
+            embed.timestamp = ctx.message.created_at
 
             guild = await self.bot.fetch_guild(self.bot.config.support_server_id)
             owner = await guild.fetch_member(self.bot.config.owner_id)
