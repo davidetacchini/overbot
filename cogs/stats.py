@@ -6,7 +6,7 @@ from utils.request import Request, RequestError
 from classes.converters import Hero, Platform
 
 
-class Statistics(commands.Cog):
+class Stats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -149,4 +149,4 @@ class Statistics(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Statistics(bot))
+    bot.add_cog(Stats(bot))

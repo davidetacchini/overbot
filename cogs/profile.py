@@ -11,7 +11,7 @@ from discord.ext import commands
 
 from utils.i18n import _, locale
 from utils.checks import is_premium, has_profile, can_add_profile, member_is_premium
-from utils.player import Player, NoStatistics, NoHeroStatistics
+from utils.player import Player, NoStats, NoHeroStats
 from utils.request import Request, RequestError
 from utils.paginator import Link, Update
 from classes.converters import Hero, Index
@@ -502,7 +502,7 @@ class Profile(commands.Cog):
             else:
                 try:
                     embed = profile.get_statistics(ctx)
-                except NoStatistics as e:
+                except NoStats as e:
                     return await ctx.send(e)
                 await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
@@ -550,7 +550,7 @@ class Profile(commands.Cog):
             else:
                 try:
                     embed = profile.get_hero(ctx, hero)
-                except NoHeroStatistics as e:
+                except NoHeroStats as e:
                     return await ctx.send(e)
             await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
