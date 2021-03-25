@@ -20,22 +20,22 @@ class PlayerException(Exception):
     pass
 
 
-class NoStatistics(PlayerException):
-    """Exception raised when a player has no statistics to display."""
+class NoStats(PlayerException):
+    """Exception raised when a player has no stats to display."""
 
     def __init__(self):
         super().__init__(
-            _("This profile has no quick play nor competitive statistics to display.")
+            _("This profile has no quick play nor competitive stats to display.")
         )
 
 
-class NoHeroStatistics(PlayerException):
+class NoHeroStats(PlayerException):
     """Exception raised when a player has no quick play nor competitive stats for a given hero."""
 
     def __init__(self, player, hero):
         super().__init__(
             _(
-                "**{player}** has no quick play nor competitive statistics for **{hero}** to display."
+                "**{player}** has no quick play nor competitive stast for **{hero}** to display."
             ).format(player=player, hero=hero)
         )
 
@@ -67,7 +67,7 @@ class Player:
         return self.data["private"]
 
     @property
-    def has_statistics(self):
+    def has_stats(self):
         return (
             self.data["quickPlayStats"]["careerStats"]
             or self.data["competitiveStats"]["careerStats"]
@@ -170,17 +170,17 @@ class Player:
 
         return embed
 
-    def resolve_statistics(self, hero="allHeroes"):
-        if not self.has_statistics:
-            raise NoStatistics()
+    def resolve_stats(self, hero="allHeroes"):
+        if not self.has_stats:
+            raise NoStats()
 
-        # quickplay statistics
+        # quickplay stats
         q = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
-        # competitive statistics
+        # competitive stats
         c = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
 
         if hero != "allHeroes" and not q and not c:
-            raise NoHeroStatistics(str(self), hero)
+            raise NoHeroStats(str(self), hero)
 
         keys = list({*q, *c})
         keys.sort()
@@ -191,7 +191,7 @@ class Player:
 
         return keys, q, c
 
-    def format_statistics(self, embed, key, quickplay, competitive):
+    def format_stats(self, embed, key, quickplay, competitive):
         if quickplay and quickplay[key]:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
             embed.add_field(name=_("Quickplay"), value=self.add_space(q_t))
@@ -199,8 +199,8 @@ class Player:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name=_("Competitive"), value=self.add_space(c_t))
 
-    def get_statistics(self, ctx):
-        keys, quickplay, competitive = self.resolve_statistics()
+    def get_stats(self, ctx):
+        keys, quickplay, competitive = self.resolve_stats()
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=ctx.bot.get_color(ctx.author.id))
@@ -210,12 +210,12 @@ class Player:
             embed.set_footer(
                 text=_("Page {current}/{total}").format(current=i, total=len(keys))
             )
-            self.format_statistics(embed, key, quickplay, competitive)
+            self.format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
     def get_hero(self, ctx, hero):
-        keys, quickplay, competitive = self.resolve_statistics(hero)
+        keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=ctx.bot.get_color(ctx.author.id))
@@ -225,7 +225,7 @@ class Player:
             embed.set_footer(
                 text=_("Page {current}/{total}").format(current=i, total=len(keys))
             )
-            self.format_statistics(embed, key, quickplay, competitive)
+            self.format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
