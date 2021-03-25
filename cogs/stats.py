@@ -49,11 +49,11 @@ class Stats(commands.Cog):
             embed = await profile.get_ratings(ctx)
         await message.edit(embed=embed)
 
-    @commands.command(aliases=["stats"])
+    @commands.command(aliases=["statistics"])
     @locale
-    async def statistics(self, ctx, platform: Platform, *, username):
+    async def stats(self, ctx, platform: Platform, *, username):
         _(
-            """Returns player both quick play and competitive statistics.
+            """Returns player both quick play and competitive stats.
 
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
@@ -86,7 +86,7 @@ class Stats(commands.Cog):
             embed = profile.private()
         else:
             try:
-                embed = profile.get_statistics(ctx)
+                embed = profile.get_stats(ctx)
             except PlayerException as e:
                 await self.bot.cleanup(message)
                 return await ctx.send(e)
@@ -105,7 +105,7 @@ class Stats(commands.Cog):
         username,
     ):
         _(
-            """Returns player both quick play and competitive statistics for a given hero.
+            """Returns player both quick play and competitive stats for a given hero.
 
         `<hero>` - The name of the hero you want to see stats for.
         `<platform>` - The platform of the player to get stats for.
