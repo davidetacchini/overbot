@@ -1,9 +1,9 @@
 import textwrap
+import traceback
 from datetime import datetime
 from contextlib import suppress
 
 import discord
-from termcolor import colored
 from discord.ext import commands
 
 from utils.scrape import get_overwatch_maps
@@ -13,20 +13,62 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @property
+    def webhook(self):
+        wh_id, wh_token = (
+            self.bot.config.webhook["id"],
+            self.bot.config.webhook["token"],
+        )
+        return discord.Webhook.partial(
+            id=wh_id,
+            token=wh_token,
+            adapter=discord.AsyncWebhookAdapter(self.bot.session),
+        )
+
     async def send_log(self, color, message):
         if self.bot.debug:
             return
 
         embed = discord.Embed(color=color)
-        embed.timestamp = self.bot.timestamp
         embed.title = message
+        embed.timestamp = self.bot.timestamp
+        await self.wehbhook.send(embed=embed)
 
-        channel = self.bot.get_channel(self.bot.config.status_channel)
+    async def change_presence(self):
+        await self.bot.wait_until_ready()
+        game = discord.Game("https://overbot.me")
+        await self.bot.change_presence(activity=game)
 
-        if not channel:
-            return
+    async def cache_heroes(self):
+        url = self.bot.config.random["hero"]
+        async with self.bot.session.get(url) as r:
+            return await r.json()
 
-        await channel.send(embed=embed)
+    async def cache_maps(self):
+        return await get_overwatch_maps()
+
+    async def get_hero_names(self):
+        return [str(h["key"]).lower() for h in self.bot.heroes]
+
+    async def cache_embed_colors(self):
+        embed_colors = {}
+        colors = await self.bot.pool.fetch(
+            "SELECT id, embed_color FROM member WHERE embed_color <> 6605311;"
+        )
+        for member_id, color in colors:
+            embed_colors[member_id] = color
+        return embed_colors
+
+    async def send_guild_log(self, embed, guild):
+        """Sends information about a joined guild."""
+        embed.title = guild.name
+        if guild.icon:
+            embed.set_thumbnail(url=guild.icon_url)
+        embed.add_field(name="Members", value=guild.member_count)
+        embed.add_field(name="Region", value=guild.region)
+        embed.add_field(name="Shard ID", value=guild.shard_id + 1)
+        embed.set_footer(text=f"ID: {guild.id}")
+        await self.webhook.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -38,49 +80,19 @@ class Events(commands.Cog):
             self.bot.get_line_count()
 
         if not hasattr(self.bot, "heroes"):
-            try:
-                self.bot.heroes = await self.cache_heroes()
-            except Exception as e:
-                print(
-                    f"[{colored('ERROR', 'red')}] {'heroes':20} failed caching!\n[{e}]"
-                )
-            else:
-                print(f"[{colored('OK', 'green')}] {'heroes':20} successfully cached")
+            self.bot.heroes = await self.cache_heroes()
 
         if not hasattr(self.bot, "maps"):
-            try:
-                self.bot.maps = await self.cache_maps()
-            except Exception as e:
-                print(f"[{colored('ERROR', 'red')}] {'maps':20} failed caching!\n[{e}]")
-            else:
-                print(f"[{colored('OK', 'green')}] {'maps':20} successfully cached")
+            self.bot.maps = await self.cache_maps()
 
         if not hasattr(self.bot, "hero_names"):
-            try:
-                self.bot.hero_names = await self.get_hero_names()
-                heroes = ["soldier", "soldier76", "wreckingball", "dva"]
-                for hero in heroes:
-                    self.bot.hero_names.append(hero)
-            except Exception as e:
-                print(
-                    f"[{colored('ERROR', 'red')}] {'hero_names':20} failed caching!\n[{e}]"
-                )
-            else:
-                print(
-                    f"[{colored('OK', 'green')}] {'hero_names':20} successfully cached"
-                )
+            self.bot.hero_names = await self.get_hero_names()
+            heroes = ["soldier", "soldier76", "wreckingball", "dva"]
+            for hero in heroes:
+                self.bot.hero_names.append(hero)
 
         if not hasattr(self.bot, "embed_colors"):
-            try:
-                self.bot.embed_colors = await self.cache_embed_colors()
-            except Exception as e:
-                print(
-                    f"[{colored('ERROR', 'red')}] {'embed_colors':20} failed caching!\n[{e}]"
-                )
-            else:
-                print(
-                    f"[{colored('OK', 'green')}] {'embed_colors':20} successfully cached"
-                )
+            self.bot.embed_colors = await self.cache_embed_colors()
 
         print(
             textwrap.dedent(
@@ -105,7 +117,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_resumed(self):
-        message = "Connection resumed"
+        message = "Connection resumed."
         await self.send_log(discord.Color.green(), message)
 
     @commands.Cog.listener()
@@ -126,41 +138,56 @@ class Events(commands.Cog):
             self.bot.prefix,
         )
 
+        if self.bot.debug:
+            return
+
+        embed = discord.Embed(color=discord.Color.green())
+        await self.send_guild_log(embed, guild)
+
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         with suppress(KeyError):
             del self.bot.prefixes[guild.id]
         await self.bot.pool.execute("DELETE FROM server WHERE id = $1;", guild.id)
 
-    async def change_presence(self):
-        await self.bot.wait_until_ready()
-        await self.bot.change_presence(
-            activity=discord.Activity(
-                name="https://overbot.me",
-                type=discord.ActivityType.playing,
-            ),
-            status=discord.Status.idle,
+        if self.bot.debug:
+            return
+
+        embed = discord.Embed(color=discord.Color.red())
+        await self.send_guild_log(embed, guild)
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if self.bot.debug:
+            return
+
+        if not isinstance(
+            error, (commands.CommandInvokeError, commands.ConversionError)
+        ):
+            return
+
+        error = error.original
+        if isinstance(error, (discord.Forbidden, discord.NotFound)):
+            return
+
+        embed = discord.Embed(title="Error", color=discord.Color.red())
+        embed.add_field(name="Command", value=ctx.command.qualified_name)
+        embed.add_field(name="Author", value=ctx.author)
+        fmt = f"Channel: {ctx.channel} (ID: {ctx.channel.id})"
+        if ctx.guild:
+            fmt = f"{fmt}\nGuild: {ctx.guild} (ID: {ctx.guild.id})"
+        embed.add_field(name="Location", value=fmt, inline=False)
+        embed.add_field(
+            name="Content", value=textwrap.shorten(ctx.message.content, width=512)
         )
-
-    async def cache_heroes(self):
-        url = self.bot.config.random["hero"]
-        async with self.bot.session.get(url) as r:
-            return await r.json()
-
-    async def cache_maps(self):
-        return await get_overwatch_maps()
-
-    async def get_hero_names(self):
-        return [str(h["key"]).lower() for h in self.bot.heroes]
-
-    async def cache_embed_colors(self):
-        embed_colors = {}
-        colors = await self.bot.pool.fetch(
-            "SELECT id, embed_color FROM member WHERE embed_color <> 6605311;"
+        exc = "".join(
+            traceback.format_exception(
+                type(error), error, error.__traceback__, chain=False
+            )
         )
-        for member_id, color in colors:
-            embed_colors[member_id] = color
-        return embed_colors
+        embed.description = f"```py\n{exc}\n```"
+        embed.timestamp = self.bot.timestamp
+        await self.webhook.send(embed=embed)
 
 
 def setup(bot):
