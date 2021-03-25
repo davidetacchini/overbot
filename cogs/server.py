@@ -78,47 +78,42 @@ class Server(commands.Cog):
         """
         )
         async with ctx.typing():
-            try:
-                query = """SELECT id, commands_run
-                        FROM server
-                        WHERE id <> ALL($1::bigint[])
-                        ORDER BY commands_run DESC LIMIT 5;
-                        """
-                guilds = await self.bot.pool.fetch(
-                    query, self.bot.config.ignored_guilds
-                )
-                embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
-                embed.title = _("Most Active Servers")
-                embed.url = self.bot.config.website
-                embed.set_footer(text=_("Tracking command usage since - 11/26/2020"))
+            query = """SELECT guild_id, COUNT(*) as commands
+                       FROM command
+                       GROUP BY guild_id
+                       HAVING guild_id <> ALL($1::bigint[])
+                       ORDER BY commands DESC LIMIT 5;
+                    """
+            guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
+            embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+            embed.title = _("Most Active Servers")
+            embed.url = self.bot.config.website
+            embed.set_footer(text=_("Tracking command usage since - 11/26/2020"))
 
-                board = []
-                for index, guild in enumerate(guilds, start=1):
-                    cur_guild = self.bot.get_guild(guild["id"])
-                    placement = self.get_placement(index)
-                    joined_on = str(cur_guild.me.joined_at).split(" ")[0]
+            board = []
+            for index, guild in enumerate(guilds, start=1):
+                cur_guild = self.bot.get_guild(guild["guild_id"])
+                placement = self.get_placement(index)
+                joined_on = str(cur_guild.me.joined_at).split(" ")[0]
 
-                    board.append(
-                        _(
-                            "{placement} **{guild}**"
-                            " ran a total of **{commands}** commands\n"
-                            "Joined on: **{joined_on}**"
-                        ).format(
-                            placement=placement,
-                            guild=str(cur_guild),
-                            commands=guild["commands_run"],
-                            joined_on=joined_on,
-                        )
+                board.append(
+                    _(
+                        "{placement} **{guild}**"
+                        " ran a total of **{commands}** commands\n"
+                        "Joined on: **{joined_on}**"
+                    ).format(
+                        placement=placement,
+                        guild=str(cur_guild),
+                        commands=guild["commands"],
+                        joined_on=joined_on,
                     )
+                )
 
-                    if index < 5:
-                        board.append("-----------")
+                if index < 5:
+                    board.append("-----------")
 
-                embed.description = "\n".join(board)
-            except Exception as e:
-                await ctx.send(embed=self.bot.embed_exception(e))
-            else:
-                await ctx.send(embed=embed)
+            embed.description = "\n".join(board)
+            await ctx.send(embed=embed)
 
 
 def setup(bot):
