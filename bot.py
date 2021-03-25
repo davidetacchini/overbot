@@ -99,25 +99,13 @@ class Bot(commands.AutoShardedBot):
         return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
 
     async def total_commands(self):
-        return await self.pool.fetchval("SELECT total FROM command;")
-
-    async def on_command(self, ctx):
-        await self.pool.execute("UPDATE command SET total = total + 1 WHERE id = 1;")
-        if ctx.guild:
-            await self.pool.execute(
-                "INSERT INTO server(id, prefix) VALUES($1, $2) ON CONFLICT (id) DO "
-                "UPDATE SET commands_run = server.commands_run + 1;",
-                ctx.guild.id,
-                self.prefix,
-            )
-        await self.pool.execute(
-            "INSERT INTO member(id) VALUES($1) ON CONFLICT (id) DO "
-            "UPDATE SET commands_run = member.commands_run + 1;",
-            ctx.author.id,
-        )
+        total_commands = await self.pool.fetchval("SELECT COUNT(*) FROM command;")
+        return total_commands + config.old_commands_count
 
     async def on_message(self, message):
         if not self.is_ready():
+            return
+        if message.author.bot:
             return
         await self.process_commands(message)
 
@@ -136,6 +124,27 @@ class Bot(commands.AutoShardedBot):
             )
         except KeyError:
             return commands.when_mentioned_or(self.prefix)(self, message)
+
+    async def get_or_fetch_member(self, member_id):
+        guild = self.get_guild(config.support_server_id)
+
+        member = guild.get_member(member_id)
+        if member is not None:
+            return member
+
+        shard = self.get_shard(guild.shard_id)
+        if shard.is_ws_ratelimited():
+            try:
+                member = await guild.fetch_member(member_id)
+            except discord.HTTPException:
+                return None
+            else:
+                return member
+
+        members = await guild.query_members(limit=1, user_ids=[member_id], cache=True)
+        if not members:
+            return None
+        return members[0]
 
     def clean_prefix(self, ctx):
         user = ctx.guild.me if ctx.guild else ctx.bot.user
