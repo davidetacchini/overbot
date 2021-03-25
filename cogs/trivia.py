@@ -185,7 +185,7 @@ class Trivia(commands.Cog):
 
         It is based on games won.
 
-        This command can be used once per minute. 
+        This command can be used once per minute.
         """
         )
         async with ctx.typing():
