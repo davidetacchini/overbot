@@ -11,7 +11,7 @@ from utils.paginator import Choose
 
 
 class MemberHasNoStats(Exception):
-    """Exception raised when a member has no trivia statistics to display."""
+    """Exception raised when a member has no trivia stats to display."""
 
     def __init__(self, member):
         super().__init__(_(f"{member} hasn't played trivia yet."))
@@ -137,11 +137,11 @@ class Trivia(commands.Cog):
         embed.add_field(name=_("Contributions"), value=stats["contribs"])
         return embed
 
-    @trivia.command(aliases=["stats"])
+    @trivia.command(aliases=["statistics"])
     @locale
-    async def statistics(self, ctx, member: discord.Member = None):
+    async def stats(self, ctx, member: discord.Member = None):
         _(
-            """Shows trivia statistics.
+            """Shows trivia stats.
 
         `[member]` - The mention or the ID of a discord member of the current server.
 
