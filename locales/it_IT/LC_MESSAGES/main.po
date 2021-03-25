@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-25 19:21+0100\n"
+"POT-Creation-Date: 2021-03-25 21:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,39 +17,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:154
+#: bot.py:156
 msgid "Fetching..."
 msgstr "Cerco..."
 
-#: bot.py:172 cogs/help.py:136
+#: bot.py:174 cogs/help.py:136
 #, python-brace-format
 msgid "{command} Commands"
 msgstr "Comandi {command}"
 
-#: bot.py:174
+#: bot.py:176
 #, python-brace-format
 msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
 msgstr ""
 "Usa \"{prefix}help {command} [command]\" per maggiori informazioni su un "
 "comando"
 
-#: bot.py:177
+#: bot.py:179
 msgid "Replace [command] with one of the commands listed above."
 msgstr "Sostituisci [command] con uno dei commandi listati qui sopra."
 
-#: bot.py:181
+#: bot.py:183
 msgid "Commands Available"
 msgstr "Comandi Disponibili"
 
-#: bot.py:183
+#: bot.py:185
 msgid "Usage"
 msgstr "Utilizzo"
 
-#: bot.py:191
+#: bot.py:193
 msgid "An unknown error occured."
 msgstr "Si è verificato un errore sconosciuto."
 
-#: bot.py:193
+#: bot.py:195
 #, python-brace-format
 msgid ""
 "Please report the following error to the developer by clicking [here]"
@@ -209,44 +209,19 @@ msgstr "Mostra la guida per il bot, un comando, o una categoria."
 msgid "Aliases"
 msgstr "Aliases"
 
-#: cogs/links.py:14
+#: cogs/links.py:13
 msgid "Returns the official bot support server invite link."
 msgstr "Ritorna il link ufficiale del server di supporto."
 
-#: cogs/links.py:20
+#: cogs/links.py:19
 msgid "Returns bot vote link."
 msgstr "Ritorna il link di voto per il bot."
 
-#: cogs/links.py:26
+#: cogs/links.py:25
 msgid "Returns bot invite link."
 msgstr "Ritorna il link per invitare il bot."
 
-#: cogs/links.py:32
-msgid "Returns OverBot's ko-fi page."
-msgstr "Ritorna la pagina ko-fi di OverBot."
-
-#: cogs/links.py:34
-msgid "Support OverBot"
-msgstr "Supporta OverBot"
-
-#: cogs/links.py:39
-#, python-brace-format
-msgid ""
-"Maintaining OverBot and adding new features takes up a huge portion of "
-"[{owner}]({github_profile})'s spare time. If you enjoy using OverBot you can "
-"donate a small amount to keep the project alive or just support me. **Thank "
-"you!**\n"
-"\n"
-"{kofi}"
-msgstr ""
-"Mantenere OverBot e aggiungere nuove features ad esso richiede una gran "
-"parte del tempo libero di [{owner}]({github_profile}). Se ti piace il bot, "
-"puoi donare una piccola somma di denaro utile a mantenere il progetto in "
-"vita e supportarmi. **Grazie mille!**\n"
-"\n"
-"{kofi}"
-
-#: cogs/links.py:54
+#: cogs/links.py:31
 msgid "Returns the bot GitHub repository."
 msgstr "Ritorna la repository GitHub del bot."
 
@@ -309,19 +284,19 @@ msgstr ""
 "Ultimi Cambiamenti:\n"
 "{commits}"
 
-#: cogs/meta.py:117
+#: cogs/meta.py:116
 msgid "Process"
 msgstr "Processo"
 
-#: cogs/meta.py:118
+#: cogs/meta.py:117
 msgid "Host"
 msgstr "Host"
 
-#: cogs/meta.py:120
+#: cogs/meta.py:119
 msgid "Channels"
 msgstr "Canali"
 
-#: cogs/meta.py:122
+#: cogs/meta.py:121
 #, python-brace-format
 msgid ""
 "{total} total\n"
@@ -332,31 +307,31 @@ msgstr ""
 "{text} testuali\n"
 "{voice} vocali"
 
-#: cogs/meta.py:125
+#: cogs/meta.py:124
 msgid "Members"
 msgstr "Membri"
 
-#: cogs/meta.py:126
+#: cogs/meta.py:125
 msgid "Servers"
 msgstr "Servers"
 
-#: cogs/meta.py:128
+#: cogs/meta.py:127
 msgid "Shards"
 msgstr "Shards"
 
-#: cogs/meta.py:131
+#: cogs/meta.py:130
 msgid "Commands Run"
 msgstr "Comandi Eseguiti"
 
-#: cogs/meta.py:132
+#: cogs/meta.py:131
 msgid "Lines of code"
 msgstr "Righe di codice"
 
-#: cogs/meta.py:133
+#: cogs/meta.py:132
 msgid "Uptime"
 msgstr "Tempo Online"
 
-#: cogs/meta.py:135
+#: cogs/meta.py:134
 #, python-brace-format
 msgid "Made with discord.py v{discord_version}"
 msgstr "Creato con discord.py v{discord_version}"
@@ -956,15 +931,15 @@ msgstr ""
 "        Basato sui comandi eseguiti.\n"
 "        "
 
-#: cogs/server.py:91
+#: cogs/server.py:89
 msgid "Most Active Servers"
 msgstr "Server Più Attivi"
 
-#: cogs/server.py:93
+#: cogs/server.py:91
 msgid "Tracking command usage since - 11/26/2020"
 msgstr "Traccio l'utilizzo dei comandi dal - 11/26/2020"
 
-#: cogs/server.py:103
+#: cogs/server.py:101
 #, python-brace-format
 msgid ""
 "{placement} **{guild}** ran a total of **{commands}** commands\n"
@@ -1145,21 +1120,15 @@ msgid ""
 "\n"
 "        It is based on games won.\n"
 "\n"
-"        This command can be used once every 30 seconds.\n"
+"        This command can be used once per minute.\n"
 "        "
 msgstr ""
-"Mostra i migliori giocatori di Overwatch trivia.\n"
-"\n"
-"        Si basa sulle partite vinte.\n"
-"\n"
-"        Questo comando può essere eseguito una volta ogni 60 secondi.\n"
-"        "
 
-#: cogs/trivia.py:197
+#: cogs/trivia.py:199
 msgid "Best Trivia Players"
 msgstr "Migliori Giocatori di Trivia"
 
-#: cogs/trivia.py:206
+#: cogs/trivia.py:208
 #, python-brace-format
 msgid ""
 "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
@@ -1168,7 +1137,7 @@ msgstr ""
 "{placement} **{player}** Giocate: {played} | Vittorie: {won} | Sconfitte: "
 "{lost} | Rateo: {ratio}"
 
-#: cogs/trivia.py:221
+#: cogs/trivia.py:223
 msgid ""
 "Copy everything inside the code block below and hit the green checkmark.\n"
 "```\"question\": \"REPLACE\",\n"
@@ -1182,7 +1151,7 @@ msgstr ""
 "\"correct_answer\": \"SOSTITUISCI\",\n"
 "\"wrong_answers\": [min 1 max 4]```"
 
-#: cogs/trivia.py:246
+#: cogs/trivia.py:248
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -1194,7 +1163,7 @@ msgstr ""
 "        Puoi inviare una domanda all'ora.\n"
 "        "
 
-#: cogs/trivia.py:256
+#: cogs/trivia.py:258
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
@@ -1202,11 +1171,11 @@ msgstr ""
 "Incolla il codice che hai copiato poco fa, sostituisci tutto e clicca invio. "
 "Hai 60 secondi."
 
-#: cogs/trivia.py:270
+#: cogs/trivia.py:272
 msgid "You took too long to submit the request."
 msgstr "Hai impiegato troppo tempo per inviare la richiesto."
 
-#: cogs/trivia.py:280
+#: cogs/trivia.py:282
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
@@ -1337,6 +1306,43 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#~ msgid "Returns OverBot's ko-fi page."
+#~ msgstr "Ritorna la pagina ko-fi di OverBot."
+
+#~ msgid "Support OverBot"
+#~ msgstr "Supporta OverBot"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Maintaining OverBot and adding new features takes up a huge portion of "
+#~ "[{owner}]({github_profile})'s spare time. If you enjoy using OverBot you "
+#~ "can donate a small amount to keep the project alive or just support me. "
+#~ "**Thank you!**\n"
+#~ "\n"
+#~ "{kofi}"
+#~ msgstr ""
+#~ "Mantenere OverBot e aggiungere nuove features ad esso richiede una gran "
+#~ "parte del tempo libero di [{owner}]({github_profile}). Se ti piace il "
+#~ "bot, puoi donare una piccola somma di denaro utile a mantenere il "
+#~ "progetto in vita e supportarmi. **Grazie mille!**\n"
+#~ "\n"
+#~ "{kofi}"
+
+#~ msgid ""
+#~ "Shows the best OverBot's trivia players.\n"
+#~ "\n"
+#~ "        It is based on games won.\n"
+#~ "\n"
+#~ "        This command can be used once every 30 seconds.\n"
+#~ "        "
+#~ msgstr ""
+#~ "Mostra i migliori giocatori di Overwatch trivia.\n"
+#~ "\n"
+#~ "        Si basa sulle partite vinte.\n"
+#~ "\n"
+#~ "        Questo comando può essere eseguito una volta ogni 60 secondi.\n"
+#~ "        "
 
 #~ msgid ""
 #~ "Shows a member's Overwatch both quick play and competitive statistics.\n"

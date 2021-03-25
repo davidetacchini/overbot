@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-25 19:22+0100\n"
+"POT-Creation-Date: 2021-03-25 21:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,37 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:154
+#: bot.py:156
 msgid "Fetching..."
 msgstr ""
 
-#: bot.py:172 cogs/help.py:136
+#: bot.py:174 cogs/help.py:136
 #, python-brace-format
 msgid "{command} Commands"
 msgstr ""
 
-#: bot.py:174
+#: bot.py:176
 #, python-brace-format
 msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
 msgstr ""
 
-#: bot.py:177
+#: bot.py:179
 msgid "Replace [command] with one of the commands listed above."
 msgstr ""
 
-#: bot.py:181
+#: bot.py:183
 msgid "Commands Available"
 msgstr ""
 
-#: bot.py:183
+#: bot.py:185
 msgid "Usage"
 msgstr ""
 
-#: bot.py:191
+#: bot.py:193
 msgid "An unknown error occured."
 msgstr ""
 
-#: bot.py:193
+#: bot.py:195
 #, python-brace-format
 msgid ""
 "Please report the following error to the developer by clicking [here]"
@@ -194,38 +194,19 @@ msgstr ""
 msgid "Aliases"
 msgstr ""
 
-#: cogs/links.py:14
+#: cogs/links.py:13
 msgid "Returns the official bot support server invite link."
 msgstr ""
 
-#: cogs/links.py:20
+#: cogs/links.py:19
 msgid "Returns bot vote link."
 msgstr ""
 
-#: cogs/links.py:26
+#: cogs/links.py:25
 msgid "Returns bot invite link."
 msgstr ""
 
-#: cogs/links.py:32
-msgid "Returns OverBot's ko-fi page."
-msgstr ""
-
-#: cogs/links.py:34
-msgid "Support OverBot"
-msgstr ""
-
-#: cogs/links.py:39
-#, python-brace-format
-msgid ""
-"Maintaining OverBot and adding new features takes up a huge portion of "
-"[{owner}]({github_profile})'s spare time. If you enjoy using OverBot you can "
-"donate a small amount to keep the project alive or just support me. **Thank "
-"you!**\n"
-"\n"
-"{kofi}"
-msgstr ""
-
-#: cogs/links.py:54
+#: cogs/links.py:31
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
@@ -286,19 +267,19 @@ msgid ""
 "{commits}"
 msgstr ""
 
-#: cogs/meta.py:117
+#: cogs/meta.py:116
 msgid "Process"
 msgstr ""
 
-#: cogs/meta.py:118
+#: cogs/meta.py:117
 msgid "Host"
 msgstr ""
 
-#: cogs/meta.py:120
+#: cogs/meta.py:119
 msgid "Channels"
 msgstr ""
 
-#: cogs/meta.py:122
+#: cogs/meta.py:121
 #, python-brace-format
 msgid ""
 "{total} total\n"
@@ -306,31 +287,31 @@ msgid ""
 "{voice} voice"
 msgstr ""
 
-#: cogs/meta.py:125
+#: cogs/meta.py:124
 msgid "Members"
 msgstr ""
 
-#: cogs/meta.py:126
+#: cogs/meta.py:125
 msgid "Servers"
 msgstr ""
 
-#: cogs/meta.py:128
+#: cogs/meta.py:127
 msgid "Shards"
 msgstr ""
 
-#: cogs/meta.py:131
+#: cogs/meta.py:130
 msgid "Commands Run"
 msgstr ""
 
-#: cogs/meta.py:132
+#: cogs/meta.py:131
 msgid "Lines of code"
 msgstr ""
 
-#: cogs/meta.py:133
+#: cogs/meta.py:132
 msgid "Uptime"
 msgstr ""
 
-#: cogs/meta.py:135
+#: cogs/meta.py:134
 #, python-brace-format
 msgid "Made with discord.py v{discord_version}"
 msgstr ""
@@ -779,15 +760,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:91
+#: cogs/server.py:89
 msgid "Most Active Servers"
 msgstr ""
 
-#: cogs/server.py:93
+#: cogs/server.py:91
 msgid "Tracking command usage since - 11/26/2020"
 msgstr ""
 
-#: cogs/server.py:103
+#: cogs/server.py:101
 #, python-brace-format
 msgid ""
 "{placement} **{guild}** ran a total of **{commands}** commands\n"
@@ -946,22 +927,22 @@ msgid ""
 "\n"
 "        It is based on games won.\n"
 "\n"
-"        This command can be used once every 30 seconds.\n"
+"        This command can be used once per minute.\n"
 "        "
 msgstr ""
 
-#: cogs/trivia.py:197
+#: cogs/trivia.py:199
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:206
+#: cogs/trivia.py:208
 #, python-brace-format
 msgid ""
 "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
 "Ratio: {ratio}"
 msgstr ""
 
-#: cogs/trivia.py:221
+#: cogs/trivia.py:223
 msgid ""
 "Copy everything inside the code block below and hit the green checkmark.\n"
 "```\"question\": \"REPLACE\",\n"
@@ -970,7 +951,7 @@ msgid ""
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
 
-#: cogs/trivia.py:246
+#: cogs/trivia.py:248
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -978,17 +959,17 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:256
+#: cogs/trivia.py:258
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
 msgstr ""
 
-#: cogs/trivia.py:270
+#: cogs/trivia.py:272
 msgid "You took too long to submit the request."
 msgstr ""
 
-#: cogs/trivia.py:280
+#: cogs/trivia.py:282
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
