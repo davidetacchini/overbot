@@ -81,7 +81,7 @@ def can_add_profile():
 
 def member_is_premium(ctx):
     """Check for a user/server to be premium."""
-    to_check = [ctx.author.id, ctx.guild.id]
+    to_check = (ctx.author.id, ctx.guild.id)
 
     if all(x not in ctx.bot.premiums for x in to_check):
         return False
@@ -92,7 +92,7 @@ def is_premium():
     """Check for a user/server to be premium."""
 
     async def predicate(ctx):
-        to_check = [ctx.author.id, ctx.guild.id]
+        to_check = (ctx.author.id, ctx.guild.id)
 
         if all(x not in ctx.bot.premiums for x in to_check):
             raise MemberIsNotPremium()
