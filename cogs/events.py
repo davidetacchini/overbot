@@ -69,7 +69,7 @@ class Events(commands.Cog):
                    WHERE server.premium = true;
                 """
         ids = await self.bot.pool.fetch(query)
-        # remove records, make a list of integers
+        # remove records, make a set of integers
         return {i["id"] for i in ids}
 
     async def send_guild_log(self, embed, guild):
