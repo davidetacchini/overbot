@@ -13,17 +13,16 @@ class Locale(commands.Cog):
 
     async def set_locale(self, member_id, locale):
         query = """INSERT INTO member(id, locale)
-                VALUES($1, $2)
-                ON CONFLICT (id) DO
-                UPDATE SET locale = $2;
+                   VALUES($1, $2)
+                   ON CONFLICT (id) DO
+                   UPDATE SET locale = $2;
                 """
         await self.bot.pool.execute(query, member_id, locale)
         self.bot.locales[member_id] = locale
 
     async def get_locale(self, member_id):
-        return await self.bot.pool.fetchval(
-            "SELECT locale FROM member WHERE id = $1;", member_id
-        )
+        query = "SELECT locale FROM member WHERE id = $1;"
+        return await self.bot.pool.fetchval(query, member_id)
 
     async def update_locale(self, member_id):
         locale = self.bot.locales.get(member_id)
