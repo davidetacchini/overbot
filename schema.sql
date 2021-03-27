@@ -68,7 +68,8 @@ CREATE TABLE public.member (
     id bigint NOT NULL,
     main_profile integer,
     locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL,
-    embed_color integer DEFAULT 6605311 NOT NULL
+    embed_color integer DEFAULT 6605311 NOT NULL,
+    premium boolean DEFAULT false NOT NULL
 );
 
 
@@ -180,7 +181,8 @@ ALTER SEQUENCE public.rating_id_seq OWNED BY public.rating.id;
 
 CREATE TABLE public.server (
     id bigint NOT NULL,
-    prefix character varying(5) NOT NULL
+    prefix character varying(5) NOT NULL,
+    premium boolean DEFAULT false NOT NULL
 );
 
 
