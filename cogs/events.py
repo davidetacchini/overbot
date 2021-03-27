@@ -157,6 +157,14 @@ class Events(commands.Cog):
         await self.send_guild_log(embed, guild)
 
     @commands.Cog.listener()
+    async def on_command(self, ctx):
+        query = """INSERT INTO member (id)
+                   VALUES ($1)
+                   ON CONFLICT (id) DO NOTHING;
+                """
+        await self.bot.pool.execute(query, ctx.author.id)
+
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if self.bot.debug:
             return
