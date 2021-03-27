@@ -15,6 +15,7 @@ class Tasks(commands.Cog):
         self.bot = bot
         self.update.start()
         self.statistics.start()
+        self.subscriptions.start()
         self.send_overwatch_news.start()
 
     def get_shards(self):
@@ -209,6 +210,56 @@ class Tasks(commands.Cog):
             self.bot.config.discord_bots["url"], json=payload, headers=headers
         )
 
+    async def set_premium_for(self, target_id, *, server=True):
+        server_query = """INSERT INTO server (id, prefix)
+                          VALUES ($1, $2)
+                          ON CONFLICT (id) DO
+                          UPDATE SET premium = true;
+                       """
+        member_query = """INSERT INTO member (id)
+                          VALUES ($1)
+                          ON CONFLICT (id) DO
+                          UPDATE SET premium = true;
+                       """
+        if server:
+            await self.bot.pool.execute(server_query, int(target_id), self.bot.prefix)
+        else:
+            await self.bot.pool.execute(member_query, int(target_id))
+
+    @tasks.loop(minutes=5.0)
+    async def subscriptions(self):
+        if self.bot.debug:
+            return
+
+        await self.bot.wait_until_ready()
+
+        # endpoint to check for new donations
+        url_new = self.bot.config.dbot["new"]
+        product_server_id = self.bot.config.dbot["product_ids"]["server"]
+
+        headers = {"Authorization": self.bot.config.dbot["api_key"]}
+
+        async with self.bot.session.get(url_new, headers=headers) as r:
+            subs = await r.json()
+
+        for sub in subs["donations"]:
+            if sub["product_id"] == product_server_id:
+                guild_id = sub["seller_customs"]["Your In-Game ID"]
+                await self.set_premium_for(guild_id)
+                self.bot.premiums.add(guild_id)
+            else:
+                member_id = sub["buyer_id"]
+                await self.set_premium_for(member_id, server=False)
+                self.bot.premiums.add(member_id)
+
+            # endpoint to mark donation as processed
+            url_mark = self.bot.config.dbot["mark"].format(sub["txn_id"])
+            payload = {"markProcessed": True}
+            async with self.bot.session.post(
+                url_mark, json=payload, headers=headers
+            ) as r:
+                print(f'Donation {sub["txn_id"]} has been processed. Status {r.status}')
+
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
         if self.bot.debug:
@@ -250,6 +301,7 @@ class Tasks(commands.Cog):
     def cog_unload(self):
         self.update.cancel()
         self.statistics.cancel()
+        self.subscriptions.cancel()
         self.send_overwatch_news.cancel()
 
 
