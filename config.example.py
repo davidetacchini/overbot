@@ -15,6 +15,17 @@ database = {
 # IGNORE (you don't actually need them to run the bot)
 # NOTE: DEBUG must be set to True though
 
+"""DonateBot API authorization."""
+dbot = {
+    "new": "endpoint for new donations",
+    "mark": "endpoint to mark donation as processed",
+    "api_key": "personal api key",
+    "product_ids": {
+        "member": "member product ID",
+        "server": "server product ID"
+    },
+}
+
 """Webhook credentials."""
 webhook = {
     "id": 0,
