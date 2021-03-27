@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 
 
@@ -28,7 +27,7 @@ class MemberOnCooldown(commands.CommandOnCooldown):
 
 
 async def global_cooldown(ctx):
-    if not await member_is_premium(ctx):
+    if not member_is_premium(ctx):
         bucket = ctx.bot.normal_cooldown.get_bucket(ctx.message)
     else:
         bucket = ctx.bot.premium_cooldown.get_bucket(ctx.message)
@@ -43,10 +42,10 @@ async def global_cooldown(ctx):
 
 async def get_profiles(ctx):
     query = """SELECT platform, username
-            FROM profile
-            INNER JOIN member
-                    ON member.id = profile.member_id
-            WHERE member.id = $1;
+               FROM profile
+               INNER JOIN member
+                       ON member.id = profile.member_id
+               WHERE member.id = $1;
             """
     return await ctx.bot.pool.fetch(query, ctx.author.id)
 
@@ -68,49 +67,35 @@ def can_add_profile():
     async def predicate(ctx):
         profiles = await get_profiles(ctx)
 
-        if not await member_is_premium(ctx):
+        if not member_is_premium(ctx):
             limit = 5
         else:
             limit = 25
 
-        if len(profiles) < limit:
-            return True
-        raise ProfileLimitReached(limit)
+        if len(profiles) >= limit:
+            raise ProfileLimitReached(limit)
+        return True
 
     return commands.check(predicate)
 
 
-async def member_is_premium(ctx):
-    """Check for a user to be a premium member."""
-    guild = ctx.bot.get_guild(ctx.bot.config.support_server_id)
+def member_is_premium(ctx):
+    """Check for a user/server to be premium."""
+    to_check = [ctx.author.id, ctx.guild.id]
 
-    try:
-        member = await guild.fetch_member(ctx.author.id)
-    except discord.HTTPException:
+    if all(x not in ctx.bot.premiums for x in to_check):
         return False
-
-    role = discord.utils.get(member.roles, name="Premium")
-
-    if role:
-        return True
-    return False
+    return True
 
 
 def is_premium():
-    """Check for a user to be a premium member."""
+    """Check for a user/server to be premium."""
 
     async def predicate(ctx):
-        guild = ctx.bot.get_guild(ctx.bot.config.support_server_id)
+        to_check = [ctx.author.id, ctx.guild.id]
 
-        try:
-            member = await guild.fetch_member(ctx.author.id)
-        except discord.HTTPException:
+        if all(x not in ctx.bot.premiums for x in to_check):
             raise MemberIsNotPremium()
-
-        role = discord.utils.get(member.roles, name="Premium")
-
-        if role:
-            return True
-        raise MemberIsNotPremium()
+        return True
 
     return commands.check(predicate)
