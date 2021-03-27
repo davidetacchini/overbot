@@ -15,25 +15,33 @@ class Member(commands.Cog):
     async def premium(self, ctx):
         _("""Shows your current premium status.""")
         embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
-        embed.title = _("Premium status")
-        embed.description = _(
-            "Current status: `N/A`\n[Upgrade to Premium]({premium})".format(
-                premium=self.bot.config.premium
-            )
+        embed.title = _("Premium Status")
+
+        one_premium = False
+
+        if ctx.author.id in self.bot.premiums:
+            member = "Active"
+            one_premium = True
+        else:
+            member = "N/A"
+
+        if ctx.guild.id in self.bot.premiums:
+            guild = "Active"
+            one_premium = True
+        else:
+            guild = "N/A"
+
+        description = _("Your Status: `{member}`\nServer Status: `{guild}`").format(
+            member=member, guild=guild
         )
 
-        guild = self.bot.get_guild(self.bot.config.support_server_id)
+        if one_premium is False:
+            link = _("[Upgrade to Premium]({premium})").format(
+                premium=self.bot.config.premium
+            )
+            description = description + "\n" + link
 
-        try:
-            member = await guild.fetch_member(ctx.author.id)
-        except discord.HTTPException:
-            return await ctx.send(embed=embed)
-
-        role = discord.utils.get(member.roles, name="Premium") is not None
-
-        if role:
-            embed.description = _("Current status: `Active`")
-
+        embed.description = description
         await ctx.send(embed=embed)
 
     @is_premium()
@@ -57,14 +65,16 @@ class Member(commands.Cog):
         - Either 3 or 6 hex digit: #RGB or #RRGGBB.
         - Color code: green, white, red etc...
 
+        Enter `none` or `default` to reset the color.
         Notice that few embeds will not change their color.
         """
         )
-        # white color doesn't work for embeds
+        # TODO: enter `none` or `default` to reset color
         try:
             if not Color(color) == Color("white"):
                 c = Color(color).get_hex_l()
             else:
+                # pure white doesn't work for embeds
                 c = Color("#fffff0").get_hex_l()
         except (AttributeError, ValueError):
             embed = discord.Embed(color=discord.Color.red())
@@ -76,16 +86,15 @@ class Member(commands.Cog):
             )
             return await ctx.send(embed=embed)
 
-        # since discord.Color() takes only a raw integer value, we must convert our
-        # input (which could be: #ffffff) and convert it to a base 16 integer.
-        # Once we have our integer value, we can pass it to discord.Color
+        # since discord.Color() takes only a raw integer value,
+        # the color must be converted to a base 16 integer and
+        # then passed to discord.Color()
         c = int(c.lstrip("#"), 16)
         embed = discord.Embed(color=discord.Color(c))
 
         try:
-            await self.bot.pool.execute(
-                "UPDATE member SET embed_color = $1 WHERE id = $2;", c, ctx.author.id
-            )
+            query = "UPDATE member SET embed_color = $1 WHERE id = $1;"
+            await self.bot.pool.execute(query, c, ctx.author.id)
             self.bot.embed_colors[ctx.author.id] = c
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
