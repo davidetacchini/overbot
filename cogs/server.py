@@ -15,9 +15,8 @@ class Server(commands.Cog):
             del self.bot.prefixes[ctx.guild.id]
         else:
             self.bot.prefixes[ctx.guild.id] = prefix
-        await self.bot.pool.execute(
-            "UPDATE server SET prefix = $1 WHERE id = $2;", prefix, ctx.guild.id
-        )
+        query = "UPDATE server SET prefix = $1 WHERE id = $2;"
+        await self.bot.pool.execute(query, prefix, ctx.guild.id)
         await ctx.send(_("Prefix successfully set to `{prefix}`").format(prefix=prefix))
 
     @commands.command()
@@ -42,9 +41,8 @@ class Server(commands.Cog):
                     _("`Manage Server` permission is required to change the prefix.")
                 )
         else:
-            pre = await self.bot.pool.fetchval(
-                "SELECT prefix FROM server WHERE id = $1;", ctx.guild.id
-            )
+            query = "SELECT prefix FROM server WHERE id = $1;"
+            pre = await self.bot.pool.fetchval(query, ctx.guild.id)
             embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
             embed.set_footer(
                 text=_('Use "{prefix}prefix value" to change it.').format(
@@ -82,7 +80,8 @@ class Server(commands.Cog):
                        FROM command
                        GROUP BY guild_id
                        HAVING guild_id <> ALL($1::bigint[])
-                       ORDER BY commands DESC LIMIT 5;
+                       ORDER BY commands DESC
+                       LIMIT 5;
                     """
             guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
             embed = discord.Embed(color=self.bot.get_color(ctx.author.id))

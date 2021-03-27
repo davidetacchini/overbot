@@ -109,9 +109,9 @@ class Profile(commands.Cog):
     async def list_profiles(self, ctx, profiles):
         pages = []
         chunks = [c async for c in chunker(profiles, 10)]
-        index = 1  # avoid starting from 1 every page
+        index = 1  # avoid resetting index to 1 every page
 
-        if not await member_is_premium(ctx):
+        if not member_is_premium(ctx):
             limit = 5
         else:
             limit = 25
@@ -248,8 +248,7 @@ class Profile(commands.Cog):
     @locale
     async def link(self, ctx):
         _("""Link your Overwatch profile(s) to your Discord account.""")
-        title = _("Link your Overwatch profile to your Discord ID")
-        platform = await Link(title=title).start(ctx)
+        platform = await Link().start(ctx)
         username = await self.get_player_username(ctx, platform)
 
         if not username:
@@ -260,7 +259,7 @@ class Profile(commands.Cog):
             if not await self.has_main_profile(ctx.author.id):
                 # if the player has no profiles linked, that means he doesn't
                 # have a main_profile as well. Then we can just set the first
-                # profile linked as the main one.
+                # profile linked as the main one
                 query = "SELECT id FROM profile WHERE member_id = $1;"
                 profile_id = await self.bot.pool.fetchval(query, ctx.author.id)
                 await self.set_main_profile(ctx.author.id, profile_id=profile_id)
@@ -287,11 +286,7 @@ class Profile(commands.Cog):
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
-            return await ctx.send(
-                _(
-                    'Invalid index. Use "{prefix}help profile unlink" for more info.'
-                ).format(prefix=ctx.prefix)
-            )
+            return await ctx.send(_("Invalid index."))
 
         profiles = await self.get_profiles(ctx.author)
         if (
@@ -334,36 +329,28 @@ class Profile(commands.Cog):
         """
         )
         try:
-            try:
-                id, platform, username = await self.get_profile(ctx.author, index=index)
-            except IndexError:
-                return await ctx.send(
-                    _(
-                        'Invalid index. Use "{prefix}help profile update" for more info.'
-                    ).format(prefix=ctx.prefix)
-                )
+            id, platform, username = await self.get_profile(ctx.author, index=index)
+        except IndexError:
+            return await ctx.send(_("Invalid index."))
 
-            title = _("Update your Overwatch profile")
-            platform = await Update(platform, username, title=title).start(ctx)
+        try:
+            platform = await Update(platform, username).start(ctx)
             username = await self.get_player_username(ctx, platform)
+        except Exception as e:
+            return await ctx.send(embed=self.bot.embed_exception(e))
 
-            if not username:
-                return
+        if not username:
+            return
 
-            if platform == "pc":
-                username = username.replace("-", "#")
+        if platform == "pc":
+            username = username.replace("-", "#")
 
-            try:
-                await self.update_profile(platform, username, profile_id=id)
-            except Exception as e:
-                await ctx.send(embed=self.bot.embed_exception(e))
-            else:
-                message = _(
-                    'Profile successfully updated. Use "{prefix}profile list" to see the changes.'
-                ).format(prefix=ctx.prefix)
-                await ctx.send(message)
+        try:
+            await self.update_profile(platform, username, profile_id=id)
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
+        else:
+            await ctx.send("Profile successfully updated.")
 
     @has_profile()
     @profile.command()
@@ -380,11 +367,7 @@ class Profile(commands.Cog):
         try:
             id, platform, username = await self.get_profile(ctx.author, index=index)
         except IndexError:
-            return await ctx.send(
-                _(
-                    'Invalid index. Use "{prefix}help profile main" for more info.'
-                ).format(prefix=ctx.prefix)
-            )
+            return await ctx.send(_("Invalid index."))
 
         await self.set_main_profile(ctx.author.id, profile_id=id)
         embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
@@ -439,11 +422,7 @@ class Profile(commands.Cog):
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
-                return await ctx.send(
-                    _(
-                        'Invalid index. Use "{prefix}help profile rating" for more info.'
-                    ).format(prefix=ctx.prefix)
-                )
+                return await ctx.send(_("Invalid index."))
 
             try:
                 data = await Request(platform=platform, username=username).get()
@@ -485,11 +464,7 @@ class Profile(commands.Cog):
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
-                return await ctx.send(
-                    _(
-                        'Invalid index. Use "{prefix}help profile stats" for more info.'
-                    ).format(prefix=ctx.prefix)
-                )
+                return await ctx.send(_("Invalid index."))
 
             try:
                 data = await Request(platform=platform, username=username).get()
@@ -533,11 +508,7 @@ class Profile(commands.Cog):
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
-                return await ctx.send(
-                    _(
-                        'Invalid index. Use "{prefix}help profile hero" for more info.'
-                    ).format(prefix=ctx.prefix)
-                )
+                return await ctx.send(_("Invalid index."))
 
             try:
                 data = await Request(platform=platform, username=username).get()
@@ -682,11 +653,7 @@ class Profile(commands.Cog):
         except MemberHasNoProfile as e:
             return await ctx.send(e)
         except IndexError:
-            return await ctx.send(
-                _(
-                    'Invalid index. Use "{prefix}help profile stats" for more info.'
-                ).format(prefix=ctx.prefix)
-            )
+            return await ctx.send(_("Invalid index."))
 
         try:
             file, embed = await self.sr_graph(ctx, profile=profile)

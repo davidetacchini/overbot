@@ -8,6 +8,13 @@ from discord.ext.commands import CommandInvokeError
 from config import main_color
 from utils.i18n import _
 
+PLATFORMS = {
+    "pc": "PC",
+    "psn": "Playstation",
+    "xbl": "Xbox",
+    "nintendo-switch": "Switch",
+}
+
 
 class NoChoice(CommandInvokeError):
     """Exception raised when no choice is given."""
@@ -61,10 +68,13 @@ class BasePaginator:
         embed = discord.Embed(color=self.bot.get_color(self.author.id))
         embed.set_author(name=str(self.author), icon_url=self.author.avatar_url)
 
-        if self.title and len(self.title) <= 256:
+        # if self.title and len(self.title) <= 256:
+        #     embed.title = self.title
+        # elif self.title and len(self.title) > 256:
+        #     self.description.append(self.title)
+
+        if self.title:
             embed.title = self.title
-        else:
-            self.description.append(self.title)
 
         if self.image:
             embed.set_image(url=self.image)
@@ -119,10 +129,8 @@ class BasePaginator:
 
 
 class Link(BasePaginator):
-
-    __slots__ = "title"
-
-    def __init__(self, *, title):
+    def __init__(self):
+        title = _("Platform")
         footer = _("React with the platform you play on...")
         super().__init__(title=title, footer=footer)
         self.reactions = {
@@ -143,10 +151,10 @@ class Link(BasePaginator):
         self.embed = self.init_embed()
 
         for key, value in self.reactions.items():
-            try:
-                self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
-            except AttributeError:
-                self.description.append(f"{key} - CLOSE")
+            if value is None:
+                continue
+            value = PLATFORMS.get(value)
+            self.description.append(f"{key} - {value}")
         self.embed.description = "\n".join(self.description)
 
         return await self.paginator()
@@ -154,10 +162,10 @@ class Link(BasePaginator):
 
 class Update(Link):
 
-    __slots__ = ("platform", "username", "title")
+    __slots__ = ("platform", "username")
 
-    def __init__(self, platform, username, *, title):
-        super().__init__(title=title)
+    def __init__(self, platform, username, **kwargs):
+        super().__init__(**kwargs)
         self.platform = platform
         self.username = username
 
@@ -168,15 +176,13 @@ class Update(Link):
         self.embed = self.init_embed()
 
         for key, value in self.reactions.items():
-            try:
-                self.description.append(f"{key} - {value.replace('-', ' ').upper()}")
-            except AttributeError:
-                self.description.append(f"{key} - CLOSE")
-        self.embed.description = "\n".join(self.description)
+            if value is None:
+                continue
+            value = PLATFORMS.get(value)
+            self.description.append(f"{key} - {value}")
 
-        self.embed.description = self.embed.description + _(
-            "\n\nYou are going to update the following profile"
-        )
+        self.description.append("\nProfile to update:")
+        self.embed.description = "\n".join(self.description)
 
         self.embed.add_field(name=_("Platform"), value=self.platform)
         self.embed.add_field(name=_("Username"), value=self.username)
