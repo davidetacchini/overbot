@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-27 20:24+0100\n"
+"POT-Creation-Date: 2021-03-27 20:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -463,19 +463,20 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:291
-#, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile unlink\" for more info."
+#: cogs/profile.py:289 cogs/profile.py:334 cogs/profile.py:370
+#: cogs/profile.py:425 cogs/profile.py:467 cogs/profile.py:511
+#: cogs/profile.py:656
+msgid "Invalid index."
 msgstr ""
 
-#: cogs/profile.py:301
+#: cogs/profile.py:297
 #, python-brace-format
 msgid ""
 "You can't unlink your main profile if you have multiple profiles set. Use "
 "\"{prefix}help profile main\" for more info."
 msgstr ""
 
-#: cogs/profile.py:311
+#: cogs/profile.py:307
 #, python-brace-format
 msgid ""
 "Are you sure you want to unlink the following profile?\n"
@@ -483,11 +484,11 @@ msgid ""
 "Username: `{username}`"
 msgstr ""
 
-#: cogs/profile.py:323
+#: cogs/profile.py:319
 msgid "Profile successfully unlinked."
 msgstr ""
 
-#: cogs/profile.py:330
+#: cogs/profile.py:326
 msgid ""
 "Update your Overwatch profile linked to your Discord account.\n"
 "\n"
@@ -495,12 +496,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:340
-#, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile update\" for more info."
-msgstr ""
-
-#: cogs/profile.py:368
+#: cogs/profile.py:360
 msgid ""
 "Updates your main profile.\n"
 "\n"
@@ -510,25 +506,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:380
-#, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile main\" for more info."
-msgstr ""
-
-#: cogs/profile.py:386
+#: cogs/profile.py:374
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:387 utils/paginator.py:133 utils/paginator.py:168
-#: utils/paginator.py:201
+#: cogs/profile.py:375 utils/paginator.py:133 utils/paginator.py:187
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:388 utils/paginator.py:202
+#: cogs/profile.py:376 utils/paginator.py:188
 msgid "Username"
 msgstr ""
 
-#: cogs/profile.py:396
+#: cogs/profile.py:384
 msgid ""
 "Displays all member's profiles.\n"
 "\n"
@@ -539,7 +529,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:418
+#: cogs/profile.py:406
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -555,12 +545,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:439
-#, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile rating\" for more info."
-msgstr ""
-
-#: cogs/profile.py:463
+#: cogs/profile.py:447
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats.\n"
 "\n"
@@ -576,12 +561,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:485 cogs/profile.py:682
-#, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile stats\" for more info."
-msgstr ""
-
-#: cogs/profile.py:511
+#: cogs/profile.py:491
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
@@ -599,12 +579,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:533
-#, python-brace-format
-msgid "Invalid index. Use \"{prefix}help profile hero\" for more info."
-msgstr ""
-
-#: cogs/profile.py:558
+#: cogs/profile.py:534
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -616,22 +591,22 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:568
+#: cogs/profile.py:544
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:575
+#: cogs/profile.py:551
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:597
+#: cogs/profile.py:573
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:662
+#: cogs/profile.py:638
 msgid ""
 "`[Premium]` Displays a member's SR graph performance.\n"
 "\n"
@@ -1034,15 +1009,8 @@ msgstr ""
 msgid "**{players}** accounts found under the name of `{username}`"
 msgstr ""
 
-#: utils/paginator.py:134 utils/paginator.py:169
+#: utils/paginator.py:134
 msgid "React with the platform you play on..."
-msgstr ""
-
-#: utils/paginator.py:198
-msgid ""
-"\n"
-"\n"
-"You are going to update the following profile:"
 msgstr ""
 
 #: classes/context.py:19
