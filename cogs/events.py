@@ -59,6 +59,19 @@ class Events(commands.Cog):
             embed_colors[member_id] = color
         return embed_colors
 
+    async def cache_premiums(self):
+        query = """SELECT id
+                   FROM member
+                   WHERE member.premium = true
+                   UNION
+                   SELECT id
+                   FROM server
+                   WHERE server.premium = true;
+                """
+        ids = await self.bot.pool.fetch(query)
+        # remove records, make a list of integers
+        return {i["id"] for i in ids}
+
     async def send_guild_log(self, embed, guild):
         """Sends information about a joined guild."""
         embed.title = guild.name
@@ -93,6 +106,9 @@ class Events(commands.Cog):
 
         if not hasattr(self.bot, "embed_colors"):
             self.bot.embed_colors = await self.cache_embed_colors()
+
+        if not hasattr(self.bot, "premiums"):
+            self.bot.premiums = await self.cache_premiums()
 
         print(
             textwrap.dedent(
