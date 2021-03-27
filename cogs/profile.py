@@ -58,10 +58,10 @@ class Profile(commands.Cog):
 
     async def get_profiles(self, member):
         query = """SELECT profile.id, platform, username
-                FROM profile
-                INNER JOIN member
-                        ON member.id = profile.member_id
-                WHERE member.id = $1;
+                   FROM profile
+                   INNER JOIN member
+                           ON member.id = profile.member_id
+                   WHERE member.id = $1;
                 """
         profiles = await self.bot.pool.fetch(query, member.id)
         if not profiles:
@@ -74,10 +74,10 @@ class Profile(commands.Cog):
             profile = profiles[abs(index) - 1]
         else:
             query = """SELECT profile.id, platform, username
-                    FROM profile
-                    INNER JOIN member
-                            ON member.main_profile = profile.id
-                    WHERE member.id = $1;
+                       FROM profile
+                       INNER JOIN member
+                               ON member.main_profile = profile.id
+                       WHERE member.id = $1;
                     """
             profile = await self.bot.pool.fetchrow(query, member.id)
         if not profile:

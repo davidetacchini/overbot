@@ -43,20 +43,19 @@ class Trivia(commands.Cog):
 
     async def update_member_games_started(self, member_id):
         query = """INSERT INTO trivia(id, started)
-                VALUES($1, 1)
-                ON CONFLICT (id) DO
-                UPDATE SET started = trivia.started + 1;"""
+                   VALUES($1, 1)
+                   ON CONFLICT (id) DO
+                   UPDATE SET started = trivia.started + 1;
+                """
         await self.bot.pool.execute(query, member_id)
 
     async def update_member_games_won(self, member_id):
-        await self.bot.pool.execute(
-            "UPDATE trivia SET won = won + 1 WHERE id = $1;", member_id
-        )
+        query = "UPDATE trivia SET won = won + 1 WHERE id = $1;"
+        await self.bot.pool.execute(query, member_id)
 
     async def update_member_games_lost(self, member_id):
-        await self.bot.pool.execute(
-            "UPDATE trivia SET lost = lost + 1 WHERE id = $1;", member_id
-        )
+        query = "UPDATE trivia SET lost = lost + 1 WHERE id = $1;"
+        await self.bot.pool.execute(query, member_id)
 
     async def update_member_stats(self, member_id, *, won=True):
         if won:
@@ -108,9 +107,8 @@ class Trivia(commands.Cog):
             await ctx.send(embed=embed)
 
     async def get_member_trivia_stats(self, member):
-        member_stats = await self.bot.pool.fetchrow(
-            "SELECT * FROM trivia WHERE id = $1;", member.id
-        )
+        query = "SELECT * FROM trivia WHERE id = $1;"
+        member_stats = await self.bot.pool.fetchrow(query, member.id)
         if not member_stats:
             raise MemberHasNoStats(member)
         return member_stats
@@ -192,7 +190,8 @@ class Trivia(commands.Cog):
             query = """SELECT id, started, won, lost
                        FROM trivia
                        WHERE id <> $1
-                       ORDER BY won DESC LIMIT 10;
+                       ORDER BY won DESC
+                       LIMIT 10;
                     """
             players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
             embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
@@ -229,9 +228,9 @@ class Trivia(commands.Cog):
 
     async def update_member_contribs_stats(self, member_id):
         query = """INSERT INTO trivia(id, contribs)
-                VALUES($1, 1)
-                ON CONFLICT (id) DO
-                UPDATE SET contribs = trivia.contribs + 1;
+                   VALUES($1, 1)
+                   ON CONFLICT (id) DO
+                   UPDATE SET contribs = trivia.contribs + 1;
                 """
         await self.bot.pool.execute(query, member_id)
 
