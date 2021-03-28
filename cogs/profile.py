@@ -10,7 +10,7 @@ from matplotlib import pyplot
 from discord.ext import commands
 
 from utils.i18n import _, locale
-from utils.checks import is_premium, has_profile, can_add_profile, member_is_premium
+from utils.checks import is_premium, has_profile, can_add_profile
 from utils.player import Player, NoStats, NoHeroStats
 from utils.request import Request, RequestError
 from utils.paginator import Link, Update
@@ -57,13 +57,15 @@ class Profile(commands.Cog):
         }
 
     async def get_profiles(self, member):
+        limit = self.bot.get_max_profiles_limit(member.id, member.guild.id)
         query = """SELECT profile.id, platform, username
                    FROM profile
                    INNER JOIN member
                            ON member.id = profile.member_id
-                   WHERE member.id = $1;
+                   WHERE member.id = $1
+                   LIMIT $2;
                 """
-        profiles = await self.bot.pool.fetch(query, member.id)
+        profiles = await self.bot.pool.fetch(query, member.id, limit)
         if not profiles:
             raise MemberHasNoProfile(member)
         return profiles
@@ -110,11 +112,7 @@ class Profile(commands.Cog):
         pages = []
         chunks = [c async for c in chunker(profiles, 10)]
         index = 1  # avoid resetting index to 1 every page
-
-        if not member_is_premium(ctx):
-            limit = 5
-        else:
-            limit = 25
+        limit = self.bot.get_max_profiles_limit(ctx.author.id, ctx.guild.id)
 
         for chunk in chunks:
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
