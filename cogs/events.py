@@ -52,9 +52,8 @@ class Events(commands.Cog):
 
     async def cache_embed_colors(self):
         embed_colors = {}
-        colors = await self.bot.pool.fetch(
-            "SELECT id, embed_color FROM member WHERE embed_color <> 6605311;"
-        )
+        query = "SELECT id, embed_color FROM member WHERE embed_color <> NULL;"
+        colors = await self.bot.pool.fetch(query)
         for member_id, color in colors:
             embed_colors[member_id] = color
         return embed_colors
