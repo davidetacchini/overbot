@@ -146,7 +146,7 @@ class Player:
         return ratings
 
     async def get_ratings(self, ctx, *, save=False, profile_id=None):
-        embed = discord.Embed(color=ctx.bot.get_color(ctx.author.id))
+        embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
 
         ratings = self.resolve_ratings()
@@ -203,7 +203,7 @@ class Player:
         keys, quickplay, competitive = self.resolve_stats()
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=ctx.bot.get_color(ctx.author.id))
+            embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=self.level_icon)
@@ -218,7 +218,7 @@ class Player:
         keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=ctx.bot.get_color(ctx.author.id))
+            embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))

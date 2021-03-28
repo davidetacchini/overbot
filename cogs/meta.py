@@ -73,7 +73,7 @@ class Meta(commands.Cog):
         _("""Displays the bot information.""")
         async with ctx.typing():
             commits = self.get_latest_commits()
-            embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+            embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.title = _("Official Website")
             embed.description = _("Latest Changes:\n{commits}").format(commits=commits)
             embed.url = self.bot.config.website
