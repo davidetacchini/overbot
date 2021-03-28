@@ -117,7 +117,7 @@ class Profile(commands.Cog):
             limit = 25
 
         for chunk in chunks:
-            embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+            embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
             embed.set_footer(
                 text=_(
@@ -367,7 +367,7 @@ class Profile(commands.Cog):
             return await ctx.send(_("Invalid index."))
 
         await self.set_main_profile(ctx.author.id, profile_id=id)
-        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.description = _("Main profile successfully set to:")
         embed.add_field(name=_("Platform"), value=platform)
         embed.add_field(name=_("Username"), value=username)
@@ -621,7 +621,7 @@ class Profile(commands.Cog):
 
         file = discord.File(image, filename="graph.png")
 
-        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         embed.set_image(url="attachment://graph.png")
         return file, embed

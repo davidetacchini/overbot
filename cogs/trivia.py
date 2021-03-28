@@ -123,7 +123,7 @@ class Trivia(commands.Cog):
                 return 0
 
     def embed_member_stats(self, member, stats):
-        embed = discord.Embed(color=self.bot.get_color(member.id))
+        embed = discord.Embed(color=self.bot.color(member.id))
         embed.set_author(name=str(member), icon_url=member.avatar_url)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
         ratio = self.get_player_ratio(stats["won"], stats["lost"])
@@ -194,7 +194,7 @@ class Trivia(commands.Cog):
                        LIMIT 10;
                     """
             players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
-            embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+            embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.title = _("Best Trivia Players")
 
             board = []

@@ -99,7 +99,7 @@ class Overwatch(commands.Cog):
                     locale, amount=abs(amount)
                 )
             except Exception:
-                embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+                embed = discord.Embed(color=self.bot.color(ctx.author.id))
                 embed.title = _("Latest Overwatch News")
                 embed.description = _("[Click here]({news})").format(
                     news=self.bot.config.overwatch["news"]
@@ -109,7 +109,7 @@ class Overwatch(commands.Cog):
             for i, (title, link, img, date) in enumerate(
                 zip(titles, links, imgs, dates), start=1
             ):
-                embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+                embed = discord.Embed(color=self.bot.color(ctx.author.id))
                 embed.title = title
                 embed.url = link
                 embed.set_author(name="Blizzard Entertainment")
@@ -134,7 +134,7 @@ class Overwatch(commands.Cog):
         """
         )
         locale = self.bot.locales[ctx.author.id].lower()
-        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = _("Overwatch Patch Notes")
         live, ptr, experimental = await get_overwatch_patch_notes(ctx)
         categories = {"live": live, "ptr": ptr, "experimental": experimental}

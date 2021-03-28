@@ -35,7 +35,7 @@ class Locale(commands.Cog):
     @locale
     async def language(self, ctx):
         _("""Displays your current language set and all the available languages.""")
-        embed = discord.Embed(color=self.bot.get_color(ctx.author.id))
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = _("Available Languages")
         current_locale = self.bot.locales[ctx.author.id] or i18n.current_locale
         embed.set_footer(

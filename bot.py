@@ -81,19 +81,11 @@ class Bot(commands.AutoShardedBot):
         return config.version
 
     @property
-    def color(self):
-        return config.main_color
-
-    @property
     def debug(self):
         return config.DEBUG
 
-    def get_color(self, member_id):
-        try:
-            color = self.embed_colors.get(member_id, self.color)
-            return discord.Color(color)
-        except Exception:
-            return self.color
+    def color(self, member_id: discord.Member = None):
+        return self.embed_colors.get(member_id, config.main_color)
 
     def get_uptime(self, *, brief=False):
         return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
@@ -170,7 +162,7 @@ class Bot(commands.AutoShardedBot):
 
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
-        embed = discord.Embed(color=self.color)
+        embed = discord.Embed(color=self.color(ctx.author.id))
         embed.title = _("{command} Commands").format(command=str(command).capitalize())
         embed.description = _(
             'Use "{prefix}help {command} [command]" for more info on a command'
