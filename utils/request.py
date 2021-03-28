@@ -5,7 +5,7 @@ from utils.i18n import _
 
 
 class RequestError(Exception):
-    """Base exception class for data.py."""
+    """Base exception class for request.py."""
 
     pass
 
