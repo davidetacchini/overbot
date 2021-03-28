@@ -160,6 +160,20 @@ class Bot(commands.AutoShardedBot):
                     with open(f"{root}/{name}") as f:
                         self.total_lines += len(f.readlines())
 
+    def member_is_premium(self, member_id, guild_id):
+        """Check for a member/guild to be premium."""
+        to_check = (member_id, guild_id)
+
+        if all(x not in self.premiums for x in to_check):
+            return False
+        return True
+
+    def get_max_profiles_limit(self, member_id, guild_id):
+        if self.member_is_premium(member_id, guild_id):
+            return 25
+        else:
+            return 5
+
     def get_subcommands(self, ctx, command):
         subcommands = getattr(command, "commands")
         embed = discord.Embed(color=self.color(ctx.author.id))
