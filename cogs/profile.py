@@ -266,10 +266,7 @@ class Profile(commands.Cog):
         except Exception as e:
             await ctx.send(embed=self.bot.embed_exception(e))
         else:
-            message = _(
-                'Profile successfully linked. Use "{prefix}profile list" to see your profile(s).'
-            ).format(prefix=ctx.prefix)
-            await ctx.send(message)
+            await ctx.send(_("Profile successfully linked."))
 
     @has_profile()
     @profile.command(aliases=["remove", "unbind"])
