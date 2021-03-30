@@ -39,14 +39,14 @@ class Overwatch(commands.Cog):
         return secrets.choice(memes)
 
     def embed_meme(self, ctx, meme):
-        embed = discord.Embed(color=0xFF5700)
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = meme["data"]["title"]
-        embed.url = f'https://reddit.com/{meme["data"]["permalink"]}'
-        embed.set_image(url=meme["data"]["url"])
-        embed.set_footer(
-            text=meme["data"]["subreddit_name_prefixed"],
-            icon_url=self.bot.config.reddit_logo,
+        embed.description = "{upvotes} upvotes - {comments} comments".format(
+            upvotes=meme["data"]["ups"], comments=meme["data"]["num_comments"]
         )
+        embed.url = f'https://reddit.com{meme["data"]["permalink"]}'
+        embed.set_image(url=meme["data"]["url"])
+        embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
         return embed
 
     @commands.command()
