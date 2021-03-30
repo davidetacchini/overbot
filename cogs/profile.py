@@ -118,9 +118,9 @@ class Profile(commands.Cog):
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
             embed.set_footer(
-                text=_(
-                    "The star indicates the main profile - {profiles}/{limit}"
-                ).format(profiles=len(profiles), limit=limit)
+                text=_("{profiles}/{limit} profiles").format(
+                    profiles=len(profiles), limit=limit
+                )
             )
 
             description = []
