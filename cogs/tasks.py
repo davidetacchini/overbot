@@ -244,7 +244,7 @@ class Tasks(commands.Cog):
 
         for sub in subs["donations"]:
             if sub["product_id"] == product_server_id:
-                guild_id = sub["seller_customs"]["Your In-Game ID"]
+                guild_id = sub["seller_customs"]["Server ID (to be set as premium)"]
                 await self.set_premium_for(guild_id)
                 self.bot.premiums.add(guild_id)
             else:
