@@ -21,7 +21,8 @@ class Commands(commands.Cog):
                 """
 
         if self._data_batch:
-            await self.bot.pool.executemany(query, self._data_batch)
+            for command in self._data_batch:
+                await self.bot.pool.execute(query, *command)
             self._data_batch.clear()
 
     @tasks.loop(seconds=10.0)
