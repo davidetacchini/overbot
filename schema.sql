@@ -68,7 +68,7 @@ CREATE TABLE public.member (
     id bigint NOT NULL,
     main_profile integer,
     locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL,
-    embed_color integer DEFAULT 6605311,
+    embed_color integer,
     premium boolean DEFAULT false NOT NULL
 );
 
