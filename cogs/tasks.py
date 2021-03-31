@@ -222,9 +222,9 @@ class Tasks(commands.Cog):
                           UPDATE SET premium = true;
                        """
         if server:
-            await self.bot.pool.execute(server_query, int(target_id), self.bot.prefix)
+            await self.bot.pool.execute(server_query, target_id, self.bot.prefix)
         else:
-            await self.bot.pool.execute(member_query, int(target_id))
+            await self.bot.pool.execute(member_query, target_id)
 
     @tasks.loop(minutes=5.0)
     async def subscriptions(self):
@@ -244,11 +244,11 @@ class Tasks(commands.Cog):
 
         for sub in subs["donations"]:
             if sub["product_id"] == product_server_id:
-                guild_id = sub["seller_customs"]["Server ID (to be set as premium)"]
+                guild_id = int(sub["seller_customs"]["Server ID (to be set as premium)"])
                 await self.set_premium_for(guild_id)
                 self.bot.premiums.add(guild_id)
             else:
-                member_id = sub["buyer_id"]
+                member_id = int(sub["buyer_id"])
                 await self.set_premium_for(member_id, server=False)
                 self.bot.premiums.add(member_id)
 
