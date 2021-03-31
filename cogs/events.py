@@ -32,7 +32,7 @@ class Events(commands.Cog):
         embed = discord.Embed(color=color)
         embed.title = message
         embed.timestamp = self.bot.timestamp
-        await self.wehbhook.send(embed=embed)
+        await self.webhook.send(embed=embed)
 
     async def change_presence(self):
         await self.bot.wait_until_ready()
