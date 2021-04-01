@@ -125,7 +125,7 @@ class Player:
         roles = await ctx.bot.pool.fetch(query, profile_id, requested_at)
 
         if roles:
-            # Assuming a user uses `-profile rating` multiple times in the same day,
+            # Assuming a user uses `-profile rating` multiple times within the same day,
             # we don't want duplicate ratings. If only 1 rating differs, then we
             # insert the new ratings into the database.
             all_equals = False
