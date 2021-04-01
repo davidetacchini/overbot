@@ -147,11 +147,11 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        await self.bot.pool.execute(
-            "INSERT INTO server(id, prefix) VALUES($1, $2);",
-            guild.id,
-            self.bot.prefix,
-        )
+        query = """INSERT INTO server(id, prefix)
+                   VALUES($1, $2)
+                   ON CONFLICT (id) DO NOTHING;
+                """
+        await self.bot.pool.execute(query, guild.id, self.bot.prefix)
 
         if self.bot.debug:
             return
