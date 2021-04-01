@@ -628,23 +628,17 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command()
     @locale
-    async def graph(self, ctx, index: Index = None, member: discord.Member = None):
+    async def graph(self, ctx, index: Index = None):
         _(
-            """`[Premium]` Displays a member's SR graph performance.
+            """`[Premium]` Displays a profile's SR graph performance.
 
         `[index]` - The profile's index you want to see the SR graph for.
-        `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no index is given then the profile used will be the main one.
-        If no member is given then the graph returned will be yours.
-
-        If you want to see a member SR graph, you must enter both the index and the member.
         """
         )
-        member = member or ctx.author
-
         try:
-            profile = await self.get_profile(member, index=index)
+            profile = await self.get_profile(ctx.author, index=index)
         except MemberHasNoProfile as e:
             return await ctx.send(e)
         except IndexError:
