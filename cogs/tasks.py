@@ -27,7 +27,7 @@ class Tasks(commands.Cog):
             total_members = 0
             guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
             try:
-                total_members = sum(g.member_count for g in self.bot.guilds)
+                total_members = sum(g.member_count for g in guilds)
             except AttributeError:
                 total_members += 0
             shards.append(
@@ -119,8 +119,8 @@ class Tasks(commands.Cog):
                 """
         guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
         servers = []
-        is_premium = False
         for guild in guilds:
+            is_premium = False
             g = self.bot.get_guild(guild["guild_id"])
             if g.id in self.bot.premiums:
                 is_premium = True
