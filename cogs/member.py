@@ -11,6 +11,7 @@ class Member(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.guild_only()
     @locale
     async def premium(self, ctx):
         _("""Shows your current premium status.""")
