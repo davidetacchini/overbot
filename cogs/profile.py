@@ -56,8 +56,10 @@ class Profile(commands.Cog):
             "nintendo-switch": "<:nsw:752653766377078817>",
         }
 
-    async def get_profiles(self, member):
-        limit = self.bot.get_max_profiles_limit(member.id, member.guild.id)
+    async def get_profiles(self, ctx, *, member=None):
+        if member is None:
+            member = ctx.author
+        limit = self.bot.get_max_profiles_limit(ctx)
         query = """SELECT profile.id, platform, username
                    FROM profile
                    INNER JOIN member
@@ -70,9 +72,11 @@ class Profile(commands.Cog):
             raise MemberHasNoProfile(member)
         return profiles
 
-    async def get_profile(self, member, *, index):
-        if index:
-            profiles = await self.get_profiles(member)
+    async def get_profile(self, ctx, *, member=None, index=None):
+        if member is None:
+            member = ctx.author
+        if index is not None:
+            profiles = await self.get_profiles(ctx, member=member)
             profile = profiles[abs(index) - 1]
         else:
             query = """SELECT profile.id, platform, username
@@ -112,7 +116,7 @@ class Profile(commands.Cog):
         pages = []
         chunks = [c async for c in chunker(profiles, 10)]
         index = 1  # avoid resetting index to 1 every page
-        limit = self.bot.get_max_profiles_limit(ctx.author.id, ctx.guild.id)
+        limit = self.bot.get_max_profiles_limit(ctx)
 
         for chunk in chunks:
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
@@ -279,11 +283,11 @@ class Profile(commands.Cog):
         """
         )
         try:
-            id, platform, username = await self.get_profile(ctx.author, index=index)
+            id, platform, username = await self.get_profile(ctx, index=index)
         except IndexError:
             return await ctx.send(_("Invalid index."))
 
-        profiles = await self.get_profiles(ctx.author)
+        profiles = await self.get_profiles(ctx)
         if (
             await self.is_main_profile(ctx.author.id, profile_id=id)
             and len(profiles) > 1
@@ -324,7 +328,7 @@ class Profile(commands.Cog):
         """
         )
         try:
-            id, platform, username = await self.get_profile(ctx.author, index=index)
+            id, platform, username = await self.get_profile(ctx, index=index)
         except IndexError:
             return await ctx.send(_("Invalid index."))
 
@@ -360,7 +364,7 @@ class Profile(commands.Cog):
         """
         )
         try:
-            id, platform, username = await self.get_profile(ctx.author, index=index)
+            id, platform, username = await self.get_profile(ctx, index=index)
         except IndexError:
             return await ctx.send(_("Invalid index."))
 
@@ -386,7 +390,7 @@ class Profile(commands.Cog):
         member = member or ctx.author
 
         try:
-            profiles = await self.get_profiles(member)
+            profiles = await self.get_profiles(ctx, member=member)
         except MemberHasNoProfile as e:
             return await ctx.send(e)
 
@@ -413,7 +417,9 @@ class Profile(commands.Cog):
             member = member or ctx.author
 
             try:
-                id, platform, username = await self.get_profile(member, index=index)
+                id, platform, username = await self.get_profile(
+                    ctx, member=member, index=index
+                )
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
@@ -455,7 +461,9 @@ class Profile(commands.Cog):
 
             try:
                 # using 'unused' instead of '_' since it conflicts with gettext _()
-                unused, platform, username = await self.get_profile(member, index=index)
+                unused, platform, username = await self.get_profile(
+                    ctx, member=member, index=index
+                )
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
@@ -499,7 +507,9 @@ class Profile(commands.Cog):
             member = member or ctx.author
 
             try:
-                unused, platform, username = await self.get_profile(member, index=index)
+                unused, platform, username = await self.get_profile(
+                    ctx, member=member, index=index
+                )
             except MemberHasNoProfile as e:
                 return await ctx.send(e)
             except IndexError:
@@ -549,7 +559,7 @@ class Profile(commands.Cog):
                     )
                 )
 
-            id, platform, username = await self.get_profile(ctx.author, index=None)
+            id, platform, username = await self.get_profile(ctx)
             try:
                 data = await Request(platform=platform, username=username).get()
             except RequestError as e:
@@ -638,7 +648,7 @@ class Profile(commands.Cog):
         """
         )
         try:
-            profile = await self.get_profile(ctx.author, index=index)
+            profile = await self.get_profile(ctx, index=index)
         except MemberHasNoProfile as e:
             return await ctx.send(e)
         except IndexError:
