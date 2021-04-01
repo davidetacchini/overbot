@@ -123,7 +123,7 @@ class Tasks(commands.Cog):
         for guild in guilds:
             g = self.bot.get_guild(guild["guild_id"])
             if g.id in self.bot.premiums:
-                is_premium=True
+                is_premium = True
             servers.append(
                 dict(
                     id=g.id,
@@ -254,7 +254,9 @@ class Tasks(commands.Cog):
 
         for sub in subs["donations"]:
             if sub["product_id"] == product_server_id:
-                guild_id = int(sub["seller_customs"]["Server ID (to be set as premium)"])
+                guild_id = int(
+                    sub["seller_customs"]["Server ID (to be set as premium)"]
+                )
                 await self.set_premium_for(guild_id)
                 self.bot.premiums.add(guild_id)
             else:
