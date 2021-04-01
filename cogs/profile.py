@@ -372,7 +372,7 @@ class Profile(commands.Cog):
         await ctx.send(embed=embed)
 
     @has_profile()
-    @profile.command()
+    @profile.command(aliases=["ls"])
     @locale
     async def list(self, ctx, member: discord.Member = None):
         _(
