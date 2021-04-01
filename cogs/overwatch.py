@@ -60,7 +60,7 @@ class Overwatch(commands.Cog):
         """
         )
         embed = discord.Embed()
-        embed.title = _("Status")
+        embed.title = "Overwatch"
         embed.url = self.bot.config.overwatch["status"]
         embed.timestamp = ctx.message.created_at
         embed.set_footer(text="downdetector.com")
@@ -68,19 +68,20 @@ class Overwatch(commands.Cog):
         try:
             overwatch = await get_overwatch_status()
         except Exception:
+            embed.color = self.bot.color(ctx.author.id)
             embed.description = (
                 f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
             )
-
-        status, color = self.format_overwatch_status(str(overwatch).strip())
-        embed.color = color
-        embed.add_field(name="Overwatch", value=status)
+        else:
+            status, color = self.format_overwatch_status(str(overwatch).strip())
+            embed.color = color
+            embed.description = status
         await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
-    async def news(self, ctx, amount: int = None):
+    async def news(self, ctx, amount: int = 4):
         _(
             """Returns the latest Overwatch news.
 
@@ -91,7 +92,6 @@ class Overwatch(commands.Cog):
         )
         async with ctx.typing():
             pages = []
-            amount = amount or 4
 
             try:
                 locale = self.bot.locales[ctx.author.id]
