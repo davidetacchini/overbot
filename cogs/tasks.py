@@ -113,8 +113,11 @@ class Tasks(commands.Cog):
                 """
         guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
         servers = []
+        is_premium = False
         for guild in guilds:
             g = self.bot.get_guild(guild["guild_id"])
+            if g.id in self.bot.premiums:
+                is_premium=True
             servers.append(
                 dict(
                     id=g.id,
@@ -125,6 +128,7 @@ class Tasks(commands.Cog):
                     commands_run=guild["commands"],
                     shard_id=g.shard_id,
                     joined_at=str(g.me.joined_at),
+                    is_premium=is_premium,
                 )
             )
         return servers
