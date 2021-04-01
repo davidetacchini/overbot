@@ -90,7 +90,7 @@ class Server(commands.Cog):
             guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.title = _("Most Active Servers")
-            embed.url = self.bot.config.website
+            embed.url = self.bot.config.website + '/#servers'
             embed.set_footer(text=_("Tracking command usage since - 03/31/2021"))
 
             board = []
