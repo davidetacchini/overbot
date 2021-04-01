@@ -37,10 +37,7 @@ class Commands(commands.Cog):
             return
 
         command = ctx.command.qualified_name
-        if ctx.guild is not None:
-            guild_id = ctx.guild.id
-        else:
-            guild_id = 0  # direct messages
+        guild_id = ctx.guild.id if ctx.guild is not None else 0
 
         async with self._batch_lock:
             self._data_batch.append(
