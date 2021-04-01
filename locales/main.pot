@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-31 18:08+0200\n"
+"POT-Creation-Date: 2021-04-01 19:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -462,7 +462,7 @@ msgstr ""
 
 #: cogs/profile.py:284 cogs/profile.py:329 cogs/profile.py:365
 #: cogs/profile.py:420 cogs/profile.py:462 cogs/profile.py:506
-#: cogs/profile.py:651
+#: cogs/profile.py:645
 msgid "Invalid index."
 msgstr ""
 
@@ -605,17 +605,11 @@ msgstr ""
 
 #: cogs/profile.py:633
 msgid ""
-"`[Premium]` Displays a member's SR graph performance.\n"
+"`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
 "        `[index]` - The profile's index you want to see the SR graph for.\n"
-"        `[member]` - The mention or the ID of a Discord member of the "
-"current server.\n"
 "\n"
 "        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the graph returned will be yours.\n"
-"\n"
-"        If you want to see a member SR graph, you must enter both the index "
-"and the member.\n"
 "        "
 msgstr ""
 
