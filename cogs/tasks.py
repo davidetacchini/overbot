@@ -24,12 +24,18 @@ class Tasks(commands.Cog):
             shard = self.bot.get_shard(i)
             if not shard:
                 break
+            total_members = 0
             guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
+            try:
+                total_members = sum(g.member_count for g in self.bot.guilds)
+            except AttributeError:
+                total_members += 0
             shards.append(
                 dict(
                     id=shard.id + 1,
                     latency=round(shard.latency * 1000, 2),
                     guild_count=len(guilds),
+                    member_count=total_members,
                 )
             )
         return shards
@@ -37,10 +43,10 @@ class Tasks(commands.Cog):
     async def get_bot_statistics(self):
         total_commands = await self.bot.total_commands()
         try:
-            total_members = sum(guild.member_count for guild in self.bot.guilds)
+            total_members = sum(g.member_count for g in self.bot.guilds)
         except AttributeError:
             total_members = 0
-        large_servers = sum(1 for guild in self.bot.guilds if guild.large)
+        large_servers = sum(1 for g in self.bot.guilds if g.large)
 
         with suppress(OverflowError):
             shards = self.get_shards()
@@ -77,7 +83,7 @@ class Tasks(commands.Cog):
                 "Total Commands": total_commands,
                 "Uptime": str(self.bot.get_uptime(brief=True)),
                 "Ping": ping,
-                "Lines of Code": self.bot.total_lines,
+                "Lines of code": self.bot.total_lines,
             },
             "shards": shards,
         }
@@ -126,7 +132,7 @@ class Tasks(commands.Cog):
                     region=str(g.region),
                     members=g.member_count,
                     commands_run=guild["commands"],
-                    shard_id=g.shard_id,
+                    shard_id=g.shard_id + 1,
                     joined_at=str(g.me.joined_at),
                     is_premium=is_premium,
                 )
@@ -188,7 +194,7 @@ class Tasks(commands.Cog):
 
         # POST stats on discordbotlist.com
         try:
-            members = sum(guild.member_count for guild in self.bot.guilds)
+            members = sum(g.member_count for g in self.bot.guilds)
         except AttributeError:
             members = 0
         dbl_payload = {"guilds": len(self.bot.guilds), "users": members}
