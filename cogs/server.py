@@ -77,6 +77,8 @@ class Server(commands.Cog):
             """Shows OverBot's most active servers.
 
         It is based on commands runned.
+
+        You can use this command once every 30 seconds.
         """
         )
         async with ctx.typing():
@@ -96,25 +98,19 @@ class Server(commands.Cog):
             board = []
             for index, guild in enumerate(guilds, start=1):
                 cur_guild = self.bot.get_guild(guild["guild_id"])
+                if not cur_guild:
+                    continue
                 placement = self.get_placement(index)
-                joined_on = str(cur_guild.me.joined_at).split(" ")[0]
 
                 board.append(
                     _(
-                        "{placement} **{guild}**"
-                        " ran a total of **{commands}** commands\n"
-                        "Joined on: **{joined_on}**"
+                        "{placement} **{guild}** ran a total of **{commands}** commands"
                     ).format(
                         placement=placement,
                         guild=str(cur_guild),
                         commands=guild["commands"],
-                        joined_on=joined_on,
                     )
                 )
-
-                if index < 5:
-                    board.append("-----------")
-
             embed.description = "\n".join(board)
             await ctx.send(embed=embed)
 
