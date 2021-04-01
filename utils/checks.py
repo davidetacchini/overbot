@@ -28,7 +28,8 @@ class MemberOnCooldown(commands.CommandOnCooldown):
 
 async def global_cooldown(ctx):
     member_id = ctx.author.id
-    guild_id = ctx.guild.id
+    guild_id = ctx.guild.id if ctx.guild is not None else 0
+
     if not ctx.bot.member_is_premium(member_id, guild_id):
         bucket = ctx.bot.normal_cooldown.get_bucket(ctx.message)
     else:
@@ -68,9 +69,7 @@ def can_add_profile():
 
     async def predicate(ctx):
         profiles = await get_profiles(ctx)
-        member_id = ctx.author.id
-        guild_id = ctx.guild.id
-        limit = ctx.bot.get_max_profiles_limit(member_id, guild_id)
+        limit = ctx.bot.get_max_profiles_limit(ctx)
 
         if len(profiles) >= limit:
             raise ProfileLimitReached(limit)
@@ -83,7 +82,9 @@ def is_premium():
     """Check for a user/server to be premium."""
 
     async def predicate(ctx):
-        to_check = (ctx.author.id, ctx.guild.id)
+        member_id = ctx.author.id
+        guild_id = ctx.guild.id if ctx.guild is not None else 0
+        to_check = (member_id, guild_id)
 
         if all(x not in ctx.bot.premiums for x in to_check):
             raise MemberIsNotPremium()

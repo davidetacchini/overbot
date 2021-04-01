@@ -168,7 +168,9 @@ class Bot(commands.AutoShardedBot):
             return False
         return True
 
-    def get_max_profiles_limit(self, member_id, guild_id):
+    def get_max_profiles_limit(self, ctx):
+        member_id = ctx.author.id
+        guild_id = ctx.guild.id if ctx.guild is not None else 0
         if self.member_is_premium(member_id, guild_id):
             return 25
         else:
