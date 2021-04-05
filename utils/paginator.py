@@ -68,13 +68,10 @@ class BasePaginator:
         embed = discord.Embed(color=self.bot.color(self.author.id))
         embed.set_author(name=str(self.author), icon_url=self.author.avatar_url)
 
-        # if self.title and len(self.title) <= 256:
-        #     embed.title = self.title
-        # elif self.title and len(self.title) > 256:
-        #     self.description.append(self.title)
-
-        if self.title:
+        if self.title and len(self.title) <= 256:
             embed.title = self.title
+        else:
+            self.description.append(self.title)
 
         if self.image:
             embed.set_image(url=self.image)
