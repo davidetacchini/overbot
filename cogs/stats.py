@@ -32,8 +32,9 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
+        message = await ctx.send(embed=self.bot.loading_embed())
+
         try:
-            message = await ctx.send(embed=self.bot.loading_embed())
             data = await Request(platform=platform, username=username).get()
         except RequestError as e:
             await self.bot.cleanup(message)
@@ -68,8 +69,9 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
+        message = await ctx.send(embed=self.bot.loading_embed())
+
         try:
-            message = await ctx.send(embed=self.bot.loading_embed())
             data = await Request(platform=platform, username=username).get()
         except RequestError as e:
             await self.bot.cleanup(message)
@@ -118,8 +120,9 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
+        message = await ctx.send(embed=self.bot.loading_embed())
+
         try:
-            message = await ctx.send(embed=self.bot.loading_embed())
             data = await Request(platform=platform, username=username).get()
         except RequestError as e:
             await self.bot.cleanup(message)
