@@ -235,10 +235,10 @@ class Bot(commands.AutoShardedBot):
                     )
         await super().start(config.token, reconnect=True)
 
-    async def logout(self):
+    async def _close(self):
         await self.session.close()
         await self.pool.close()
-        await super().logout()
+        await super().close()
 
 
 def main():
@@ -261,7 +261,7 @@ def main():
     try:
         loop.run_until_complete(bot.start())
     except KeyboardInterrupt:
-        loop.run_until_complete(bot.logout())
+        loop.run_until_complete(bot._close())
     finally:
         loop.close()
 
