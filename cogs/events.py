@@ -179,6 +179,12 @@ class Events(commands.Cog):
                 """
         await self.bot.pool.execute(query, ctx.author.id)
 
+        query = """INSERT INTO server (id, prefix)
+                   VALUES ($1, $2)
+                   ON CONFLICT (id) DO NOTHING;
+                """
+        await self.bot.pool.execute(query, ctx.guild.id, self.bot.prefix)
+
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if self.bot.debug:
