@@ -38,6 +38,7 @@ from utils import i18n
 from utils.i18n import _
 from utils.time import human_timedelta
 from utils.checks import global_cooldown
+from utils.scrape import get_overwatch_maps
 from classes.context import Context
 
 try:
@@ -56,8 +57,15 @@ class Bot(commands.AutoShardedBot):
         self.config = config
         self.paginator = pygicord
 
+        self.total_lines = 0
+
         # caching
         self.prefixes = {}
+        self.premiums = {}
+        self.embed_colors = {}
+        self.heroes = []
+        self.maps = []
+        self.hero_names = []
 
         self.normal_cooldown = commands.CooldownMapping.from_cooldown(
             1, 3, commands.BucketType.member
@@ -210,17 +218,63 @@ class Bot(commands.AutoShardedBot):
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=Context)
 
-    async def start(self, *args, **kwargs):
-        self.session = ClientSession(loop=self.loop)
-        self.pool = await asyncpg.create_pool(
-            **self.config.database, max_size=20, command_timeout=60.0
-        )
-        # Caching prefixes at startup
+    async def cache_prefixes(self):
         rows = await self.pool.fetch("SELECT id, prefix FROM server;")
         for row in rows:
             if row["prefix"] != self.prefix:
                 self.prefixes[row["id"]] = row["prefix"]
         self.command_prefix = self._get_prefix
+
+    async def cache_premiums(self):
+        query = """SELECT id
+                   FROM member
+                   WHERE member.premium = true
+                   UNION
+                   SELECT id
+                   FROM server
+                   WHERE server.premium = true;
+                """
+        ids = await self.pool.fetch(query)
+        # make a set of integers
+        self.premiums = {i["id"] for i in ids}
+
+    async def cache_heroes(self):
+        url = config.random["hero"]
+        async with self.session.get(url) as r:
+            self.heroes = await r.json()
+
+    async def cache_maps(self):
+        self.maps = await get_overwatch_maps()
+
+    async def cache_hero_names(self):
+        self.hero_names = [str(h["key"]).lower() for h in self.heroes]
+        aliases = ("soldier", "soldier76", "wreckingball", "dva")
+        for alias in aliases:
+            self.hero_names.append(alias)
+
+    async def cache_embed_colors(self):
+        embed_colors = {}
+        query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
+        colors = await self.pool.fetch(query)
+        for member_id, color in colors:
+            embed_colors[member_id] = color
+        self.embed_colors = embed_colors
+
+    async def start(self, *args, **kwargs):
+        self.session = ClientSession(loop=self.loop)
+        self.pool = await asyncpg.create_pool(
+            **config.database, max_size=20, command_timeout=60.0
+        )
+
+        self.get_line_count()
+        # caching
+        await self.cache_prefixes()
+        await self.cache_premiums()
+        await self.cache_embed_colors()
+        await self.cache_heroes()
+        await self.cache_hero_names()
+        await self.cache_maps()
+
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
                 try:
