@@ -116,7 +116,7 @@ class Owner(commands.Cog):
 
     # Source: https://github.com/Rapptz/RoboDanny
     @_reload.command(name="all", hidden=True)
-    async def _reload_all(self, ctx):
+    async def reload_all(self, ctx):
         """Reloads all modules, while pulling from git."""
 
         async with ctx.typing():
@@ -274,7 +274,6 @@ class Owner(commands.Cog):
             played, won, lost, contribs = await self.bot.pool.fetchrow(
                 "SELECT SUM(started), SUM(won), SUM(lost), SUM(contribs) FROM trivia;"
             )
-            # Bot entries
             bot_entries = (
                 ("Total profiles linked", profiles),
                 ("Total prefixes set", len(prefixes)),
@@ -283,7 +282,6 @@ class Owner(commands.Cog):
                 ("Total guilds", guilds),
                 ("Total commands runned", total_commands),
             )
-            # Trivia entries
             trivia_entries = (
                 ("Total games played", played),
                 ("Total games won", won),
