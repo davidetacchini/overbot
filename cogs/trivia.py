@@ -246,7 +246,7 @@ class Trivia(commands.Cog):
         _(
             """Submit a new question to be added to trivia.
 
-        You can submit a request once an hour.
+        You can submit a new question once an hour.
         """
         )
         if not await ctx.prompt(self.get_submit_message()):
@@ -273,8 +273,14 @@ class Trivia(commands.Cog):
             channel = self.bot.get_channel(self.bot.config.trivia_channel)
             if not channel:
                 return
+
             content = self.format_content(message.content)
-            await channel.send(content)
+
+            embed = discord.Embed(color=self.bot.color())
+            embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+            embed.description = content
+            await channel.send(embed=embed)
+
             await self.update_member_contribs_stats(ctx.author.id)
             await ctx.send(
                 _(
