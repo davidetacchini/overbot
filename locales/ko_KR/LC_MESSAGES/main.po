@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-01 22:38+0200\n"
+"POT-Creation-Date: 2021-04-06 11:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -503,11 +503,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:374 utils/paginator.py:133 utils/paginator.py:187
+#: cogs/profile.py:374 utils/paginator.py:130 utils/paginator.py:184
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:375 utils/paginator.py:188
+#: cogs/profile.py:375 utils/paginator.py:185
 msgid "Username"
 msgstr ""
 
@@ -748,7 +748,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:53
+#: cogs/stats.py:54
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
@@ -769,7 +769,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:102
+#: cogs/stats.py:104
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -898,7 +898,7 @@ msgstr ""
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
-"        You can submit a request once an hour.\n"
+"        You can submit a new question once an hour.\n"
 "        "
 msgstr ""
 
@@ -912,7 +912,7 @@ msgstr ""
 msgid "You took too long to submit the request."
 msgstr ""
 
-#: cogs/trivia.py:281
+#: cogs/trivia.py:287
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
@@ -991,7 +991,7 @@ msgstr ""
 msgid "**{players}** accounts found under the name of `{username}`"
 msgstr ""
 
-#: utils/paginator.py:134
+#: utils/paginator.py:131
 msgid "React with the platform you play on..."
 msgstr ""
 
