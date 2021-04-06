@@ -6,8 +6,6 @@ from contextlib import suppress
 import discord
 from discord.ext import commands
 
-from utils.scrape import get_overwatch_maps
-
 
 class Events(commands.Cog):
     def __init__(self, bot):
@@ -39,38 +37,6 @@ class Events(commands.Cog):
         game = discord.Game("https://overbot.me")
         await self.bot.change_presence(activity=game)
 
-    async def cache_heroes(self):
-        url = self.bot.config.random["hero"]
-        async with self.bot.session.get(url) as r:
-            return await r.json()
-
-    async def cache_maps(self):
-        return await get_overwatch_maps()
-
-    async def get_hero_names(self):
-        return [str(h["key"]).lower() for h in self.bot.heroes]
-
-    async def cache_embed_colors(self):
-        embed_colors = {}
-        query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
-        colors = await self.bot.pool.fetch(query)
-        for member_id, color in colors:
-            embed_colors[member_id] = color
-        return embed_colors
-
-    async def cache_premiums(self):
-        query = """SELECT id
-                   FROM member
-                   WHERE member.premium = true
-                   UNION
-                   SELECT id
-                   FROM server
-                   WHERE server.premium = true;
-                """
-        ids = await self.bot.pool.fetch(query)
-        # remove records, make a set of integers
-        return {i["id"] for i in ids}
-
     async def send_guild_log(self, embed, guild):
         """Sends information about a joined guild."""
         embed.title = guild.name
@@ -86,28 +52,6 @@ class Events(commands.Cog):
     async def on_ready(self):
         if not hasattr(self.bot, "uptime"):
             self.bot.uptime = datetime.utcnow()
-
-        if not hasattr(self.bot, "total_lines"):
-            self.bot.total_lines = 0
-            self.bot.get_line_count()
-
-        if not hasattr(self.bot, "heroes"):
-            self.bot.heroes = await self.cache_heroes()
-
-        if not hasattr(self.bot, "maps"):
-            self.bot.maps = await self.cache_maps()
-
-        if not hasattr(self.bot, "hero_names"):
-            self.bot.hero_names = await self.get_hero_names()
-            heroes = ["soldier", "soldier76", "wreckingball", "dva"]
-            for hero in heroes:
-                self.bot.hero_names.append(hero)
-
-        if not hasattr(self.bot, "embed_colors"):
-            self.bot.embed_colors = await self.cache_embed_colors()
-
-        if not hasattr(self.bot, "premiums"):
-            self.bot.premiums = await self.cache_premiums()
 
         print(
             textwrap.dedent(
