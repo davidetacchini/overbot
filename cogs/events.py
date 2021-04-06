@@ -34,7 +34,7 @@ class Events(commands.Cog):
 
     async def change_presence(self):
         await self.bot.wait_until_ready()
-        game = discord.Game("https://overbot.me")
+        game = discord.Game(f"{self.bot.prefix}help")
         await self.bot.change_presence(activity=game)
 
     async def send_guild_log(self, embed, guild):
