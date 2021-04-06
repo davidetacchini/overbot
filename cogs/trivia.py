@@ -221,7 +221,7 @@ class Trivia(commands.Cog):
         return _(
             "Copy everything inside the code block below and hit the green checkmark.\n"
             '```"question": "REPLACE",\n'
-            '"image_url": "REAPLCE",\n'
+            '"image_url": "REPLACE",\n'
             '"correct_answer": "REPLACE",\n'
             '"wrong_answers": [min 1 max 4]```'
         )
