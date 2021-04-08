@@ -94,7 +94,7 @@ class Overwatch(commands.Cog):
             pages = []
 
             try:
-                locale = self.bot.locales[ctx.author.id]
+                locale = self.bot.locales.get(ctx.author.id)
                 titles, links, imgs, dates = await get_overwatch_news(
                     locale, amount=abs(amount)
                 )
