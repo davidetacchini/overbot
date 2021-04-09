@@ -93,10 +93,6 @@ class BotHelp(menus.ListPageSource):
         self.help_command = help_command
         self.prefix = help_command.clean_prefix
 
-    def format_commands(self, commands):
-        values = [f"`{command.name}`" for command in commands]
-        return ", ".join(values)
-
     async def format_page(self, menu, cogs):
         description = _(
             "[Support server]({support}) - [View commands online]({website}) - [Help translating]({github})\n"
@@ -116,7 +112,7 @@ class BotHelp(menus.ListPageSource):
         for cog in cogs:
             commands = self.commands.get(cog)
             if commands:
-                value = self.format_commands(commands)
+                value = ", ".join(map(lambda c: f"`{c}`", commands))
                 embed.add_field(name=cog.qualified_name, value=value)
 
         maximum = self.get_max_pages()
@@ -176,9 +172,6 @@ class CustomHelpCommand(commands.HelpCommand):
         )
         super().__init__(command_attrs=command_attrs)
 
-    def get_command_aliases(self, aliases):
-        return [f"`{alias}`" for alias in aliases]
-
     def get_command_signature(self, command):
         parent = command.full_parent_name
         fmt = command.name if not parent else f"{parent} {command.name}"
@@ -191,8 +184,8 @@ class CustomHelpCommand(commands.HelpCommand):
         else:
             embed.description = _("No help found...")
         if command.aliases and not isinstance(embed, GroupHelp):
-            aliases = self.get_command_aliases(command.aliases)
-            embed.add_field(name=_("Aliases"), value=", ".join(aliases))
+            aliases = ", ".join(map(lambda a: f"`{a}`", command.aliases))
+            embed.add_field(name=_("Aliases"), value=aliases)
 
     async def send_bot_help(self, mapping):
         bot = self.context.bot

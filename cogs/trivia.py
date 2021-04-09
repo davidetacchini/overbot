@@ -116,11 +116,10 @@ class Trivia(commands.Cog):
     def get_player_ratio(self, won, lost):
         if won >= 1 and lost == 0:
             return won
-        else:
-            try:
-                return won / lost
-            except ZeroDivisionError:
-                return 0
+        try:
+            return won / lost
+        except ZeroDivisionError:
+            return 0
 
     def embed_member_stats(self, member, stats):
         embed = discord.Embed(color=self.bot.color(member.id))
