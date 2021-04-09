@@ -43,12 +43,12 @@ class Random(commands.Cog):
         return 0x13A549
 
     @staticmethod
-    def filter_heroes_by_role(heroes, category):
-        return [h for h in heroes if h["role"] == category]
-
-    @staticmethod
-    def filter_maps_by_type(maps, *, category):
-        return [m for m in maps if category in m["types"]]
+    def get_random_role():
+        random_role = secrets.choice(ROLES)
+        embed = discord.Embed(color=random_role["color"])
+        embed.title = random_role["name"].upper()
+        embed.set_thumbnail(url=random_role["icon"])
+        return embed
 
     async def get_random_hero(self, category):
         heroes = self.bot.heroes
@@ -56,7 +56,7 @@ class Random(commands.Cog):
         if not category:
             random_hero = secrets.choice(heroes)
         else:
-            categorized_heroes = self.filter_heroes_by_role(heroes, category=category)
+            categorized_heroes = [h for h in heroes if h["role"] == category]
             random_hero = secrets.choice(categorized_heroes)
 
         embed = discord.Embed(color=self.get_hero_color(random_hero))
@@ -73,21 +73,13 @@ class Random(commands.Cog):
         )
         return embed
 
-    @staticmethod
-    def get_random_role():
-        random_role = secrets.choice(ROLES)
-        embed = discord.Embed(color=random_role["color"])
-        embed.title = random_role["name"].upper()
-        embed.set_thumbnail(url=random_role["icon"])
-        return embed
-
     async def get_random_map(self, ctx, category):
         maps = self.bot.maps
 
         if not category:
             random_map = secrets.choice(maps)
         else:
-            categorized_maps = self.filter_maps_by_type(maps, category=category)
+            categorized_maps = [m for m in maps if category in m["types"]]
             random_map = secrets.choice(categorized_maps)
 
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
