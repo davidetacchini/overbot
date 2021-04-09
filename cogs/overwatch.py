@@ -152,15 +152,13 @@ class Overwatch(commands.Cog):
         _(
             """Returns a random Overwatch meme.
 
-        `[category]` - The category to get a random meme from.
+        `[category]` - The category to get a random meme from. Defaults to `Hot`.
 
         Categories
         - Hot
         - New
         - Top
         - Rising
-
-        Defaults to `Hot`.
 
         All memes are taken from the subreddit r/Overwatch_Memes.
         """
