@@ -482,7 +482,7 @@ class Profile(commands.Cog):
                     embed = profile.get_stats(ctx)
                 except NoStats as e:
                     return await ctx.send(e)
-                await self.bot.paginator.Paginator(pages=embed).start(ctx)
+            await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @has_profile()
     @profile.command()
