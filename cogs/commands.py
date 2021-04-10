@@ -53,7 +53,7 @@ class Commands(commands.Cog):
             )
 
     @commands.Cog.listener()
-    async def on_command_completion(self, ctx):
+    async def on_command(self, ctx):
         await self.register_command(ctx)
 
     def cog_unload(self):
