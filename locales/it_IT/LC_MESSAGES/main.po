@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-06 11:11+0200\n"
+"POT-Creation-Date: 2021-04-17 15:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,39 +17,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:148
+#: bot.py:134
 msgid "Fetching..."
 msgstr "Cerco..."
 
-#: bot.py:182 cogs/help.py:136
+#: bot.py:168 cogs/help.py:132
 #, python-brace-format
 msgid "{command} Commands"
 msgstr "Comandi {command}"
 
-#: bot.py:184
+#: bot.py:170
 #, python-brace-format
 msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
 msgstr ""
 "Usa \"{prefix}help {command} [command]\" per maggiori informazioni su un "
 "comando"
 
-#: bot.py:187
+#: bot.py:173
 msgid "Replace [command] with one of the commands listed above."
 msgstr "Sostituisci [command] con uno dei commandi listati qui sopra."
 
-#: bot.py:191
+#: bot.py:177
 msgid "Commands Available"
 msgstr "Comandi Disponibili"
 
-#: bot.py:193
+#: bot.py:179
 msgid "Usage"
 msgstr "Utilizzo"
 
-#: bot.py:201
+#: bot.py:187
 msgid "An unknown error occured."
 msgstr "Si è verificato un errore sconosciuto."
 
-#: bot.py:203
+#: bot.py:189
 #, python-brace-format
 msgid ""
 "Please report the following error to the developer by clicking [here]"
@@ -58,46 +58,46 @@ msgstr ""
 "Riporta il seguente errore allo sviluppatore cliccando [qui]"
 "({report_channel})"
 
-#: cogs/errors.py:30
+#: cogs/errors.py:27
 #, python-brace-format
 msgid "You are missing a required argument: `{argument}`"
 msgstr "Stai mancando un argomento richiesto: `{argument}`"
 
-#: cogs/errors.py:37
+#: cogs/errors.py:34
 msgid "You are using a bad argument."
 msgstr "Stai utilizzando un argomento sbagliato."
 
-#: cogs/errors.py:40
+#: cogs/errors.py:37
 msgid "You don't have enough permissions."
 msgstr "Non hai abbastanza permessi."
 
-#: cogs/errors.py:45
+#: cogs/errors.py:42
 #, python-brace-format
 msgid "You are on cooldown. Wait `{seconds}s` before running another command."
 msgstr "Attendi `{seconds}s` prima di eseguire un altro comando."
 
-#: cogs/errors.py:51
+#: cogs/errors.py:48
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}s`."
 msgstr "Non puoi utilizzare il comando `{command}` per `{seconds}`"
 
-#: cogs/errors.py:58
+#: cogs/errors.py:55
 msgid "This command can't be used in direct messages."
 msgstr "Questo comando non può essere utilizzato nei messaggi privati."
 
-#: cogs/errors.py:61
+#: cogs/errors.py:58
 msgid "It seems you do not own this bot."
 msgstr "Sembra che tu non sia lo sviluppatore del bot."
 
-#: cogs/errors.py:72 cogs/profile.py:166
+#: cogs/errors.py:69 cogs/profile.py:166
 msgid "You took too long to reply."
 msgstr "Hai impiegato troppo tempo per rispondere."
 
-#: cogs/errors.py:78
+#: cogs/errors.py:75
 msgid "The argument you entered cannot be handled."
 msgstr "L'argomento che hai inserito non può essere gestito."
 
-#: cogs/errors.py:84
+#: cogs/errors.py:81
 #, python-brace-format
 msgid ""
 "You haven't linked a profile yet. Use \"{prefix}profile link\" to do so."
@@ -105,7 +105,7 @@ msgstr ""
 "Non hai ancora aggiunto un profilo. Usa \"{prefix}profile link\" per "
 "iniziare."
 
-#: cogs/errors.py:92
+#: cogs/errors.py:89
 #, python-brace-format
 msgid ""
 "Max profiles limit reached.\n"
@@ -114,11 +114,11 @@ msgstr ""
 "Limite massimo di profili raggiunto.\n"
 "[Passa a Premium]({premium}) per poter connettere fino a 25 profili."
 
-#: cogs/errors.py:96
+#: cogs/errors.py:93
 msgid "Max profiles limit reached."
 msgstr "Limite massimo di profili raggiunto."
 
-#: cogs/errors.py:101
+#: cogs/errors.py:98
 #, python-brace-format
 msgid ""
 "This command requires a Premium membership.\n"
@@ -164,7 +164,7 @@ msgstr "**Non devi** includere le parentesi nell'argomento."
 msgid "We were on page {current_page} before this message."
 msgstr "Ci trovavamo alla pagina {current_page} prima di questo messaggio."
 
-#: cogs/help.py:102
+#: cogs/help.py:98
 #, python-brace-format
 msgid ""
 "[Support server]({support}) - [View commands online]({website}) - [Help "
@@ -177,35 +177,35 @@ msgstr ""
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
 "Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
 
-#: cogs/help.py:113
+#: cogs/help.py:109
 msgid "Help"
 msgstr "Guida"
 
-#: cogs/help.py:124
+#: cogs/help.py:120
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr "Pagina {current_page}/{maximum}"
 
-#: cogs/help.py:148 cogs/help.py:192
+#: cogs/help.py:144 cogs/help.py:185
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
-#: cogs/help.py:156
+#: cogs/help.py:152
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
 msgstr "Pagina {current_page}/{maximum} ({total_entries} comandi)"
 
-#: cogs/help.py:165
+#: cogs/help.py:161
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
 
-#: cogs/help.py:175
+#: cogs/help.py:171
 msgid "Shows help about the bot, a command, or a category."
 msgstr "Mostra la guida per il bot, un comando, o una categoria."
 
-#: cogs/help.py:195
+#: cogs/help.py:188
 msgid "Aliases"
 msgstr "Aliases"
 
@@ -402,32 +402,18 @@ msgstr "[Clicca qui per vedere le note della patch **{category}**]({link})"
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
-"        `[category]` - The category to get a random meme from.\n"
+"        `[category]` - The category to get a random meme from. Defaults to "
+"`Hot`.\n"
 "\n"
 "        Categories\n"
 "        - Hot\n"
 "        - New\n"
 "        - Top\n"
 "        - Rising\n"
-"\n"
-"        Defaults to `Hot`.\n"
 "\n"
 "        All memes are taken from the subreddit r/Overwatch_Memes.\n"
 "        "
 msgstr ""
-"Ritorna un meme casuale riguardante Overwatch.\n"
-"        `[category]` - La categoria da cui prendere il meme.\n"
-"\n"
-"        Categories\n"
-"        - Hot\n"
-"        - New\n"
-"        - Top\n"
-"        - Rising\n"
-"\n"
-"        Predefinito a `Hot`.\n"
-"\n"
-"        Tutti i meme sono presi dal subreddit r/Overwatch_Memes.\n"
-"        "
 
 #: cogs/profile.py:38
 #, python-brace-format
@@ -712,11 +698,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/random.py:103
+#: cogs/random.py:95
 msgid "Returns a random hero, role or map."
 msgstr "Ritorna un eroe, un ruolo o una mappa casuale."
 
-#: cogs/random.py:111
+#: cogs/random.py:103
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -744,22 +730,22 @@ msgstr ""
 "tra tutte le categorie.\n"
 "        "
 
-#: cogs/random.py:128
+#: cogs/random.py:120
 #, python-brace-format
 msgid "Invalid category. Use \"{prefix}help random hero\" for more info."
 msgstr ""
 "Categoria non valida. Usa \"{prefix}help randam hero\" per maggiori "
 "informazioni."
 
-#: cogs/random.py:132 cogs/random.py:143 cogs/random.py:177
+#: cogs/random.py:124 cogs/random.py:135 cogs/random.py:169
 msgid "Something bad happened. Please try again."
 msgstr "Qualcosa è andato storto. Riprova ancora."
 
-#: cogs/random.py:139
+#: cogs/random.py:131
 msgid "Returns a random role to play."
 msgstr "Ritorna un ruolo casuale da giocare."
 
-#: cogs/random.py:151
+#: cogs/random.py:143
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -797,7 +783,7 @@ msgstr ""
 "tra tutte le categorie.\n"
 " "
 
-#: cogs/random.py:173
+#: cogs/random.py:165
 #, python-brace-format
 msgid "Invalid category. Use \"{prefix}help random map\" for more info."
 msgstr ""
@@ -971,31 +957,31 @@ msgstr "Mostra una lista contente tutti i sotto comandi di trivia."
 msgid "Play Overwatch trivia."
 msgstr "Gioca ad Overwatch trivia."
 
-#: cogs/trivia.py:130
+#: cogs/trivia.py:129
 msgid "Total"
 msgstr "Totali"
 
-#: cogs/trivia.py:131
+#: cogs/trivia.py:130
 msgid "Won"
 msgstr "Vittorie"
 
-#: cogs/trivia.py:132
+#: cogs/trivia.py:131
 msgid "Lost"
 msgstr "Sconfitte"
 
-#: cogs/trivia.py:133
+#: cogs/trivia.py:132
 msgid "Ratio (W/L)"
 msgstr "Rateo"
 
-#: cogs/trivia.py:134
+#: cogs/trivia.py:133
 msgid "Unanswered"
 msgstr "Non risposte"
 
-#: cogs/trivia.py:135
+#: cogs/trivia.py:134
 msgid "Contributions"
 msgstr "Contributi"
 
-#: cogs/trivia.py:142
+#: cogs/trivia.py:141
 msgid ""
 "Shows trivia stats.\n"
 "\n"
@@ -1006,7 +992,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:182
+#: cogs/trivia.py:181
 msgid ""
 "Shows the best OverBot's trivia players.\n"
 "\n"
@@ -1022,11 +1008,11 @@ msgstr ""
 "        Questo comando può essere utilizzato una volta ogni minuto.\n"
 "        "
 
-#: cogs/trivia.py:198
+#: cogs/trivia.py:197
 msgid "Best Trivia Players"
 msgstr "Migliori Giocatori di Trivia"
 
-#: cogs/trivia.py:207
+#: cogs/trivia.py:206
 #, python-brace-format
 msgid ""
 "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
@@ -1035,21 +1021,16 @@ msgstr ""
 "{placement} **{player}** Giocate: {played} | Vittorie: {won} | Sconfitte: "
 "{lost} | Rateo: {ratio}"
 
-#: cogs/trivia.py:222
+#: cogs/trivia.py:221
 msgid ""
 "Copy everything inside the code block below and hit the green checkmark.\n"
 "```\"question\": \"REPLACE\",\n"
-"\"image_url\": \"REAPLCE\",\n"
+"\"image_url\": \"REPLACE\",\n"
 "\"correct_answer\": \"REPLACE\",\n"
 "\"wrong_answers\": [min 1 max 4]```"
 msgstr ""
-"Copia tutto all'interno del blocco qui sotto e clicca la spunta verde.\n"
-"```\"question\": \"SOSTITUISCI\",\n"
-"\"image_url\": \"SOSTITUISCI\",\n"
-"\"correct_answer\": \"SOSTITUISCI\",\n"
-"\"wrong_answers\": [min 1 max 4]```"
 
-#: cogs/trivia.py:247
+#: cogs/trivia.py:246
 msgid ""
 "Submit a new question to be added to trivia.\n"
 "\n"
@@ -1057,7 +1038,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:257
+#: cogs/trivia.py:256
 msgid ""
 "Paste the code you copied before, replace everything and hit enter. You have "
 "60 seconds."
@@ -1065,11 +1046,11 @@ msgstr ""
 "Incolla il codice che hai copiato poco fa, sostituisci tutto e clicca invio. "
 "Hai 60 secondi."
 
-#: cogs/trivia.py:271
+#: cogs/trivia.py:270
 msgid "You took too long to submit the request."
 msgstr "Hai impiegato troppo tempo per inviare la richiesto."
 
-#: cogs/trivia.py:287
+#: cogs/trivia.py:286
 #, python-brace-format
 msgid ""
 "{author}, your request has been successfully sent. Thanks for the "
@@ -1092,33 +1073,33 @@ msgstr ""
 "**{player}** non possiede statistiche ne rapide ne competitive per l'eroe "
 "**{hero}** da mostrare."
 
-#: utils/player.py:155
+#: utils/player.py:154
 msgid "This profile is unranked."
 msgstr "Questo profilo non è rankato."
 
-#: utils/player.py:164
+#: utils/player.py:163
 #, python-brace-format
 msgid "Average: {average}"
 msgstr "Media: {average}"
 
-#: utils/player.py:197
+#: utils/player.py:196
 msgid "Quickplay"
 msgstr "Rapida"
 
-#: utils/player.py:200
+#: utils/player.py:199
 msgid "Competitive"
 msgstr "Competitiva"
 
-#: utils/player.py:211 utils/player.py:226
+#: utils/player.py:210 utils/player.py:225
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr "Pagina {current}/{total}"
 
-#: utils/player.py:234
+#: utils/player.py:233
 msgid "This profile is set to private"
 msgstr "Questo profilo è privato"
 
-#: utils/player.py:236
+#: utils/player.py:235
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
@@ -1194,6 +1175,49 @@ msgstr ""
 #: classes/converters.py:45
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#~ msgid ""
+#~ "Returns a random Overwatch meme.\n"
+#~ "\n"
+#~ "        `[category]` - The category to get a random meme from.\n"
+#~ "\n"
+#~ "        Categories\n"
+#~ "        - Hot\n"
+#~ "        - New\n"
+#~ "        - Top\n"
+#~ "        - Rising\n"
+#~ "\n"
+#~ "        Defaults to `Hot`.\n"
+#~ "\n"
+#~ "        All memes are taken from the subreddit r/Overwatch_Memes.\n"
+#~ "        "
+#~ msgstr ""
+#~ "Ritorna un meme casuale riguardante Overwatch.\n"
+#~ "        `[category]` - La categoria da cui prendere il meme.\n"
+#~ "\n"
+#~ "        Categories\n"
+#~ "        - Hot\n"
+#~ "        - New\n"
+#~ "        - Top\n"
+#~ "        - Rising\n"
+#~ "\n"
+#~ "        Predefinito a `Hot`.\n"
+#~ "\n"
+#~ "        Tutti i meme sono presi dal subreddit r/Overwatch_Memes.\n"
+#~ "        "
+
+#~ msgid ""
+#~ "Copy everything inside the code block below and hit the green checkmark.\n"
+#~ "```\"question\": \"REPLACE\",\n"
+#~ "\"image_url\": \"REAPLCE\",\n"
+#~ "\"correct_answer\": \"REPLACE\",\n"
+#~ "\"wrong_answers\": [min 1 max 4]```"
+#~ msgstr ""
+#~ "Copia tutto all'interno del blocco qui sotto e clicca la spunta verde.\n"
+#~ "```\"question\": \"SOSTITUISCI\",\n"
+#~ "\"image_url\": \"SOSTITUISCI\",\n"
+#~ "\"correct_answer\": \"SOSTITUISCI\",\n"
+#~ "\"wrong_answers\": [min 1 max 4]```"
 
 #~ msgid ""
 #~ "Submit a new question to be added to trivia.\n"
