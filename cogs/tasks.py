@@ -186,23 +186,10 @@ class Tasks(commands.Cog):
             "shard_count": self.bot.shard_count,
         }
 
-        topgg_headers = {"Authorization": self.bot.config.top_gg["token"]}
+        top_gg_headers = {"Authorization": self.bot.config.top_gg["token"]}
 
         await self.bot.session.post(
-            self.bot.config.top_gg["url"], data=payload, headers=topgg_headers
-        )
-
-        # POST stats on discordbotlist.com
-        try:
-            members = sum(g.member_count for g in self.bot.guilds)
-        except AttributeError:
-            members = 0
-        dbl_payload = {"guilds": len(self.bot.guilds), "users": members}
-
-        dbl_headers = {"Authorization": f'Bot {self.bot.config.dbl["token"]}'}
-
-        await self.bot.session.post(
-            self.bot.config.dbl["url"], data=dbl_payload, headers=dbl_headers
+            self.bot.config.top_gg["url"], data=payload, headers=top_gg_headers
         )
 
         # POST stats on discord.bots.gg
