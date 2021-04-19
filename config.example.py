@@ -44,12 +44,6 @@ top_gg = {
     "token": "",
 }
 
-"""Discord Bot List (discordbotlist.gg) authorization."""
-dbl = {
-    "url": "",
-    "token": "",
-}
-
 """discord.bots.gg authorization."""
 discord_bots = {
     "url": "",
