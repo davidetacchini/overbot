@@ -16,7 +16,7 @@ class ErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
-        if ctx.command.has_error_handler() or ctx.cog.has_error_handler():
+        if ctx.command.has_error_handler() or ctx.command.cog.has_error_handler():
             return
 
         if isinstance(error, commands.CommandNotFound):
