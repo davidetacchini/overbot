@@ -16,7 +16,10 @@ class ErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
-        if ctx.command.has_error_handler() or ctx.command.cog.has_error_handler():
+        if ctx.command and ctx.command.has_error_handler():
+            return
+
+        if ctx.cog and ctx.cog.has_error_handler():
             return
 
         if isinstance(error, commands.CommandNotFound):
@@ -30,7 +33,6 @@ class ErrorHandler(commands.Cog):
             )
 
         elif isinstance(error, commands.BadArgument):
-            # print the message if given else printing the standard one
             await ctx.send(error or _("You are using a bad argument."))
 
         elif isinstance(error, commands.MissingPermissions):
