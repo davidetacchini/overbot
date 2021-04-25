@@ -122,6 +122,8 @@ class Tasks(commands.Cog):
         for guild in guilds:
             is_premium = False
             g = self.bot.get_guild(guild["guild_id"])
+            if g is None:
+                continue
             if g.id in self.bot.premiums:
                 is_premium = True
             servers.append(
