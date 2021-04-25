@@ -42,7 +42,10 @@ class Events(commands.Cog):
         embed.title = guild.name
         if guild.icon:
             embed.set_thumbnail(url=guild.icon_url)
-        embed.add_field(name="Members", value=guild.member_count)
+        try:
+            embed.add_field(name="Members", value=guild.member_count)
+        except AttributeError:
+            pass
         embed.add_field(name="Region", value=guild.region)
         embed.add_field(name="Shard ID", value=guild.shard_id + 1)
         embed.set_footer(text=f"ID: {guild.id}")
