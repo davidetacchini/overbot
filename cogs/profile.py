@@ -17,7 +17,6 @@ from utils.paginator import Link, Update
 from classes.converters import Hero, Index
 
 MAX_NICKNAME_LENGTH = 32
-
 ROLES = {
     "tank": "\N{SHIELD}",
     "damage": "\N{CROSSED SWORDS}",
