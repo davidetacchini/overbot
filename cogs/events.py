@@ -4,7 +4,7 @@ from datetime import datetime
 from contextlib import suppress
 
 import discord
-from discord.ext import commands
+from discord.ext import menus, commands
 
 
 class Events(commands.Cog):
@@ -74,23 +74,19 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_disconnect(self):
-        message = "Connection lost."
-        await self.send_log(discord.Color.red(), message)
+        print("Connection lost.")
 
     @commands.Cog.listener()
     async def on_resumed(self):
-        message = "Connection resumed."
-        await self.send_log(discord.Color.green(), message)
+        print("Connection resumed.")
 
     @commands.Cog.listener()
     async def on_shard_disconnect(self, shard_id):
-        message = f"Shard {shard_id + 1} disconnected."
-        await self.send_log(discord.Color.red(), message)
+        print(f"Shard {shard_id + 1} disconnected.")
 
     @commands.Cog.listener()
     async def on_shard_connect(self, shard_id):
-        message = f"Shard {shard_id + 1} connected."
-        await self.send_log(discord.Color.green(), message)
+        print(f"Shard {shard_id + 1} connected.")
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -126,11 +122,12 @@ class Events(commands.Cog):
                 """
         await self.bot.pool.execute(query, ctx.author.id)
 
-        query = """INSERT INTO server (id, prefix)
-                   VALUES ($1, $2)
-                   ON CONFLICT (id) DO NOTHING;
-                """
-        await self.bot.pool.execute(query, ctx.guild.id, self.bot.prefix)
+        if ctx.guild:
+            query = """INSERT INTO server (id, prefix)
+                       VALUES ($1, $2)
+                       ON CONFLICT (id) DO NOTHING;
+                    """
+            await self.bot.pool.execute(query, ctx.guild.id, self.bot.prefix)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -143,15 +140,14 @@ class Events(commands.Cog):
             return
 
         error = error.original
-        if isinstance(error, (discord.Forbidden, discord.NotFound)):
+        if isinstance(error, (discord.Forbidden, discord.NotFound, menus.MenuError)):
             return
 
         embed = discord.Embed(title="Error", color=discord.Color.red())
         embed.add_field(name="Command", value=ctx.command.qualified_name)
         embed.add_field(name="Author", value=ctx.author)
-        fmt = f"Channel: {ctx.channel} (ID: {ctx.channel.id})"
         if ctx.guild:
-            fmt = f"{fmt}\nGuild: {ctx.guild} (ID: {ctx.guild.id})"
+            fmt = f"Guild: {ctx.guild} (ID: {ctx.guild.id})"
         embed.add_field(name="Location", value=fmt, inline=False)
         embed.add_field(
             name="Content", value=textwrap.shorten(ctx.message.content, width=512)
@@ -162,7 +158,7 @@ class Events(commands.Cog):
             )
         )
         embed.description = f"```py\n{exc}\n```"
-        embed.timestamp = self.bot.timestamp
+        embed.timestamp = ctx.message.created_at
         await self.webhook.send(embed=embed)
 
 
