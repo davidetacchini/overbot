@@ -132,7 +132,7 @@ class Events(commands.Cog):
         embed.add_field(name="Author", value=ctx.author)
         if ctx.guild:
             fmt = f"Guild: {ctx.guild} (ID: {ctx.guild.id})"
-        embed.add_field(name="Location", value=fmt, inline=False)
+            embed.add_field(name="Location", value=fmt, inline=False)
         embed.add_field(
             name="Content", value=textwrap.shorten(ctx.message.content, width=512)
         )
