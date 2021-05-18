@@ -73,22 +73,6 @@ class Events(commands.Cog):
         await self.send_log(discord.Color.blue(), "Bot is online.")
 
     @commands.Cog.listener()
-    async def on_disconnect(self):
-        print("Connection lost.")
-
-    @commands.Cog.listener()
-    async def on_resumed(self):
-        print("Connection resumed.")
-
-    @commands.Cog.listener()
-    async def on_shard_disconnect(self, shard_id):
-        print(f"Shard {shard_id + 1} disconnected.")
-
-    @commands.Cog.listener()
-    async def on_shard_connect(self, shard_id):
-        print(f"Shard {shard_id + 1} connected.")
-
-    @commands.Cog.listener()
     async def on_guild_join(self, guild):
         query = """INSERT INTO server(id, prefix)
                    VALUES($1, $2)
