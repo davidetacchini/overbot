@@ -59,7 +59,7 @@ loading_gif = "https://i.imgur.com/DwjPYQn.gif"
 owner_id = 285502621295312896
 
 """The version of the Bot."""
-version = "3.2.0"
+version = "3.4.3"
 
 """Prefix used if custom is not set."""
 default_prefix = "-"
