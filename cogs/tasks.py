@@ -241,6 +241,9 @@ class Tasks(commands.Cog):
         async with self.bot.session.get(url_new, headers=headers) as r:
             subs = await r.json()
 
+        if not subs["donations"]:
+            return
+
         for sub in subs["donations"]:
             if sub["product_id"] == product_server_id:
                 guild_id = int(
@@ -268,8 +271,11 @@ class Tasks(commands.Cog):
 
         await self.bot.wait_until_ready()
 
-        title, link, img, date = await get_overwatch_news("en_US", amount=1)
-        # Get the latest news id from the URL
+        try:
+            title, link, img, date = await get_overwatch_news("en_US", amount=1)
+        except AttributeError:
+            return
+        # Get the news id from the URL
         news_id = re.search(r"\d+", link[0]).group(0)
 
         # Returns whether the news_id it's equals to the one stored in the database.
@@ -293,7 +299,7 @@ class Tasks(commands.Cog):
 
         await channel.send(embed=embed)
 
-        # Once the latest news has been sent, we update the older
+        # Once the latest news has been sent, update the older
         # news_id stored in the database with the new one.
         await self.bot.pool.execute(
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
