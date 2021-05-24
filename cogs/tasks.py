@@ -66,10 +66,9 @@ class Tasks(commands.Cog):
 
         statistics = {
             "host": {
-                "Postgres Version": pg_version,
-                "Python Version": py_version,
-                "O.S. Name": os_name,
-                "O.S. Version": os_version,
+                "Postgres": pg_version,
+                "Python": py_version,
+                "OS": os_name + " " + os_version,
                 "CPU Percent": cpu_perc,
                 "CPU Cores": cpu_cores,
                 "CPU Frequency": cpu_freq,
@@ -79,10 +78,10 @@ class Tasks(commands.Cog):
                 "Servers": len(self.bot.guilds),
                 "Shards": self.bot.shard_count,
                 "Members": total_members,
-                "Large Servers": large_servers,
-                "Total Commands": total_commands,
+                "Large servers": large_servers,
+                "Commands runned": total_commands,
                 "Uptime": str(self.bot.get_uptime(brief=True)),
-                "Ping": ping,
+                "Websocket latency": ping,
                 "Lines of code": self.bot.total_lines,
             },
             "shards": shards,
