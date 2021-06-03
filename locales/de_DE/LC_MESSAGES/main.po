@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-17 15:43+0200\n"
+"POT-Creation-Date: 2021-06-03 09:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,63 +54,63 @@ msgid ""
 "({report_channel})"
 msgstr ""
 
-#: cogs/errors.py:27
+#: cogs/errors.py:30
 #, python-brace-format
 msgid "You are missing a required argument: `{argument}`"
 msgstr ""
 
-#: cogs/errors.py:34
+#: cogs/errors.py:36
 msgid "You are using a bad argument."
 msgstr ""
 
-#: cogs/errors.py:37
+#: cogs/errors.py:39
 msgid "You don't have enough permissions."
 msgstr ""
 
-#: cogs/errors.py:42
+#: cogs/errors.py:44
 #, python-brace-format
 msgid "You are on cooldown. Wait `{seconds}s` before running another command."
 msgstr ""
 
-#: cogs/errors.py:48
+#: cogs/errors.py:50
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}s`."
 msgstr ""
 
-#: cogs/errors.py:55
+#: cogs/errors.py:57
 msgid "This command can't be used in direct messages."
 msgstr ""
 
-#: cogs/errors.py:58
+#: cogs/errors.py:60
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:69 cogs/profile.py:166
+#: cogs/errors.py:71 cogs/profile.py:165
 msgid "You took too long to reply."
 msgstr ""
 
-#: cogs/errors.py:75
+#: cogs/errors.py:77
 msgid "The argument you entered cannot be handled."
 msgstr ""
 
-#: cogs/errors.py:81
+#: cogs/errors.py:83
 #, python-brace-format
 msgid ""
 "You haven't linked a profile yet. Use \"{prefix}profile link\" to do so."
 msgstr ""
 
-#: cogs/errors.py:89
+#: cogs/errors.py:91
 #, python-brace-format
 msgid ""
 "Max profiles limit reached.\n"
 "[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
 msgstr ""
 
-#: cogs/errors.py:93
+#: cogs/errors.py:95
 msgid "Max profiles limit reached."
 msgstr ""
 
-#: cogs/errors.py:98
+#: cogs/errors.py:100
 #, python-brace-format
 msgid ""
 "This command requires a Premium membership.\n"
@@ -382,69 +382,69 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:38
+#: cogs/profile.py:37
 #, python-brace-format
 msgid "{member} hasn't linked a profile yet."
 msgstr ""
 
-#: cogs/profile.py:46
+#: cogs/profile.py:45
 msgid "More data are needed in order for me to create a graph."
 msgstr ""
 
-#: cogs/profile.py:125
+#: cogs/profile.py:124
 #, python-brace-format
 msgid "{profiles}/{limit} profiles"
 msgstr ""
 
-#: cogs/profile.py:146
+#: cogs/profile.py:145
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr ""
 
-#: cogs/profile.py:148
+#: cogs/profile.py:147
 msgid "Enter your Online ID:"
 msgstr ""
 
-#: cogs/profile.py:150
+#: cogs/profile.py:149
 msgid "Enter your Gamertag:"
 msgstr ""
 
-#: cogs/profile.py:152
+#: cogs/profile.py:151
 msgid "Enter your Nintendo Switch ID:"
 msgstr ""
 
-#: cogs/profile.py:208
+#: cogs/profile.py:207
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
 msgstr ""
 
-#: cogs/profile.py:214
+#: cogs/profile.py:213
 msgid "Something bad happened while updating your nickname. Please try again."
 msgstr ""
 
-#: cogs/profile.py:225
+#: cogs/profile.py:224
 msgid ""
 "Nickname successfully set. Your SR will now be visible in your nickname "
 "within this server."
 msgstr ""
 
-#: cogs/profile.py:231
+#: cogs/profile.py:230
 msgid "Nickname successfully removed."
 msgstr ""
 
-#: cogs/profile.py:244
+#: cogs/profile.py:243
 msgid "Displays a list with all profile's subcommands."
 msgstr ""
 
-#: cogs/profile.py:252
+#: cogs/profile.py:251
 msgid "Link your Overwatch profile(s) to your Discord account."
 msgstr ""
 
-#: cogs/profile.py:271
+#: cogs/profile.py:270
 msgid "Profile successfully linked."
 msgstr ""
 
-#: cogs/profile.py:278
+#: cogs/profile.py:277
 msgid ""
 "Unlink your Overwatch profile from your Discord account.\n"
 "\n"
@@ -455,20 +455,20 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:288 cogs/profile.py:333 cogs/profile.py:369
-#: cogs/profile.py:426 cogs/profile.py:470 cogs/profile.py:516
-#: cogs/profile.py:655
+#: cogs/profile.py:287 cogs/profile.py:332 cogs/profile.py:368
+#: cogs/profile.py:425 cogs/profile.py:469 cogs/profile.py:515
+#: cogs/profile.py:654
 msgid "Invalid index."
 msgstr ""
 
-#: cogs/profile.py:296
+#: cogs/profile.py:295
 #, python-brace-format
 msgid ""
 "You can't unlink your main profile if you have multiple profiles set. Use "
 "\"{prefix}help profile main\" for more info."
 msgstr ""
 
-#: cogs/profile.py:306
+#: cogs/profile.py:305
 #, python-brace-format
 msgid ""
 "Are you sure you want to unlink the following profile?\n"
@@ -476,11 +476,11 @@ msgid ""
 "Username: `{username}`"
 msgstr ""
 
-#: cogs/profile.py:318
+#: cogs/profile.py:317
 msgid "Profile successfully unlinked."
 msgstr ""
 
-#: cogs/profile.py:325
+#: cogs/profile.py:324
 msgid ""
 "Update your Overwatch profile linked to your Discord account.\n"
 "\n"
@@ -488,7 +488,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:359
+#: cogs/profile.py:358
 msgid ""
 "Updates your main profile.\n"
 "\n"
@@ -498,19 +498,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:373
+#: cogs/profile.py:372
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:374 utils/paginator.py:130 utils/paginator.py:184
+#: cogs/profile.py:373 utils/paginator.py:130 utils/paginator.py:184
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:375 utils/paginator.py:185
+#: cogs/profile.py:374 utils/paginator.py:185
 msgid "Username"
 msgstr ""
 
-#: cogs/profile.py:383
+#: cogs/profile.py:382
 msgid ""
 "Displays all member's profiles.\n"
 "\n"
@@ -521,7 +521,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:405
+#: cogs/profile.py:404
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -537,7 +537,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:448
+#: cogs/profile.py:447
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats.\n"
 "\n"
@@ -553,7 +553,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:494
+#: cogs/profile.py:493
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
@@ -571,7 +571,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:539
+#: cogs/profile.py:538
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -583,22 +583,22 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:549
+#: cogs/profile.py:548
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:556
+#: cogs/profile.py:555
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:578
+#: cogs/profile.py:577
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:643
+#: cogs/profile.py:642
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
