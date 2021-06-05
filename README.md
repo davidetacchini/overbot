@@ -64,9 +64,8 @@ git clone https://github.com/davidetacchini/overbot.git
 ```bash
 pip install -U -r requirements.txt
 ```
-4. Rename `config.example.py` to `config.py`
-5. Edit the `config.py` file
-6. use `python3 bot.py` to run the bot
+4. Edit the `config.py` file
+5. use `python3 bot.py` to run the bot
 
 Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
