@@ -16,7 +16,7 @@ from utils import i18n
 from utils.i18n import _
 from utils.time import human_timedelta
 from utils.checks import global_cooldown
-from utils.scrape import get_overwatch_maps
+from utils.scrape import get_overwatch_maps, get_overwatch_heroes
 from classes.context import Context
 
 try:
@@ -217,9 +217,7 @@ class Bot(commands.AutoShardedBot):
         self.premiums = {i["id"] for i in ids}
 
     async def cache_heroes(self):
-        url = config.random["hero"]
-        async with self.session.get(url) as r:
-            self.heroes = await r.json()
+        self.heroes = await get_overwatch_heroes()
 
     async def cache_maps(self):
         self.maps = await get_overwatch_maps()

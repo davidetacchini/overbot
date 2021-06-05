@@ -58,3 +58,24 @@ async def get_overwatch_maps():
         cur_map["types"] = categories
         all_maps.append(cur_map)
     return all_maps
+
+
+async def get_overwatch_heroes():
+    content = await fetch(config.random["hero"])
+    page = BeautifulSoup(content, features="html.parser")
+
+    all_heroes = []
+    heroes = [
+        h for h in page.find_all("div", {"class": "hero-portrait-detailed-container"})
+    ]
+
+    for h in heroes:
+        cur_hero = {}
+        cur_hero["key"] = h.find("a", {"class": "hero-portrait-detailed"})[
+            "data-hero-id"
+        ]
+        cur_hero["name"] = h.find("span", {"class": "portrait-title"}).get_text()
+        cur_hero["portrait"] = h.find("img", {"class": "portrait"})["src"]
+        cur_hero["role"] = h["data-groups"][2:-2].lower()
+        all_heroes.append(cur_hero)
+    return all_heroes
