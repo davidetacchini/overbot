@@ -12,7 +12,7 @@ fi
 printf "${bold}Welcome to the OverBot Setup!${reset}\n\n"
 
 printf "Checking for the database ${bold}overbot${reset} to exists...\n"
-if [ "$( psql overbot -tAc 'SELECT 1' 2>&1 )" = '1' ]; then
+if [ "$( psql -h localhost -U davide -d overbot -tAc 'SELECT 1' 2>&1 )" = '1' ]; then
     printf "[${green}OK${reset}] Database ${bold}overbot${reset} exists.\n"
 else
     printf "${red}Database overbot doesn't exists. Please follow all the README instructions.${reset}\n"
@@ -35,7 +35,7 @@ sed -i "s:username:$(whoami):" overbot.service
 cp overbot.service /etc/systemd/system/overbot.service
 
 printf "Loading database schema...\n"
-sudo -u davide psql overbot < schema.sql
+psql -h localhost -U davide -d overbot < schema.sql
 
 printf "Reloading the daemon...\n"
 {
