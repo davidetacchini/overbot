@@ -27,7 +27,7 @@ sed -i "s:username:$(whoami):" overbot.service
 cp overbot.service /etc/systemd/system/overbot.service
 
 printf "Loading database schema...\n"
-psql -h localhost -U davide -d overbot < schema.sql
+sudo psql -h localhost -U davide -d overbot < schema.sql
 
 printf "Reloading the daemon...\n"
 {
