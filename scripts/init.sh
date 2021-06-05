@@ -11,14 +11,6 @@ fi
 
 printf "${bold}Welcome to the OverBot Setup!${reset}\n\n"
 
-printf "Checking for the database ${bold}overbot${reset} to exists...\n"
-if [ "$( psql -h localhost -U davide -d overbot -tAc 'SELECT 1' 2>&1 )" = '1' ]; then
-    printf "[${green}OK${reset}] Database ${bold}overbot${reset} exists.\n"
-else
-    printf "${red}Database overbot doesn't exists. Please follow all the README instructions.${reset}\n"
-    exit 1
-fi
-
 printf "Checking for the configuration file to be installed..."
 if [ ! -f "./config.example.py" ]; then
 	printf "\nInstalling the configuration file...\n"
