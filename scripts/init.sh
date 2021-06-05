@@ -7,8 +7,6 @@ reset=$(tput sgr0)
 if [ "$EUID" -ne 0 ]; then 
 	echo "${red}You must have root permission.${reset}"
   	exit 1
-else
- 	echo "[${green}OK${reset}] root permissions"
 fi
 
 printf "${bold}Welcome to the OverBot Setup!${reset}\n\n"
