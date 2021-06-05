@@ -94,7 +94,7 @@ github = {
 
 """Random endpoints."""
 random = {
-    "hero": "https://overwatch-api.tekrop.fr/heroes",
+    "hero": "https://playoverwatch.com/en-us/heroes",
     "map": "https://playoverwatch.com/en-us/maps",
 }
 
