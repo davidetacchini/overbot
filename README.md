@@ -59,13 +59,15 @@ python3 bot.py # or `systemctl start overbot`
 ```bash
 git clone https://github.com/davidetacchini/overbot.git
 ```
-2. Setup a virtual environment
-3. Install the dependencies
+2. Load `schema.sql` to the *overbot* database
+3. Setup a virtual environment
+4. Install the dependencies
 ```bash
 pip install -U -r requirements.txt
 ```
-4. Edit the `config.py` file
-5. use `python3 bot.py` to run the bot
+5. Rename `config.example.py` to `config.py`
+6. Edit the `config.py` file
+7. use `python3 bot.py` to run the bot
 
 Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
