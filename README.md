@@ -67,7 +67,7 @@ pip install -U -r requirements.txt
 ```
 5. Rename `config.example.py` to `config.py`
 6. Edit the `config.py` file
-7. use `python3 bot.py` to run the bot
+7. Use `python3 bot.py` to run the bot
 
 Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
