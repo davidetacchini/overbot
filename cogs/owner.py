@@ -169,7 +169,7 @@ class Owner(commands.Cog):
     async def shutdown(self, ctx):
         """Kills the bot session."""
         await ctx.send("Successfully gone offline.")
-        await self.bot.logout()
+        await self.bot.close()
 
     @commands.command(hidden=True)
     async def runas(self, ctx, member: discord.Member, *, command: str):
