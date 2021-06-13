@@ -3,7 +3,30 @@ from discord.ext import commands
 from utils.i18n import _, locale
 from utils.player import Player, PlayerException
 from utils.request import Request, RequestError
-from classes.converters import Hero, Platform
+from classes.converters import Hero
+
+
+def valid_platform(argument):
+    valid = {
+        "pc": "pc",
+        "bnet": "pc",
+        "xbl": "xbl",
+        "xbox": "xbl",
+        "ps": "psn",
+        "psn": "psn",
+        "play": "psn",
+        "playstation": "psn",
+        "nsw": "nintendo-switch",
+        "switch": "nintendo-switch",
+        "nintendo-switch": "nintendo-switch",
+    }
+
+    try:
+        platform = valid[argument.lower()]
+    except KeyError:
+        raise commands.BadArgument(_("Unknown platform.")) from None
+
+    return platform
 
 
 class Stats(commands.Cog):
@@ -12,9 +35,9 @@ class Stats(commands.Cog):
 
     @commands.command(aliases=["rank", "sr"])
     @locale
-    async def rating(self, ctx, platform: Platform, *, username):
+    async def rating(self, ctx, platform: valid_platform, *, username):
         _(
-            """Returns player ranks.
+            """Returns player ratings.
 
         `<platform>` - The platform of the player to get ranks for.
         `<username>` - The username of the player to get ranks for.
@@ -47,9 +70,9 @@ class Stats(commands.Cog):
             embed = await profile.get_ratings(ctx)
         await message.edit(embed=embed)
 
-    @commands.command(aliases=["statistics"])
+    @commands.command()
     @locale
-    async def stats(self, ctx, platform: Platform, *, username):
+    async def stats(self, ctx, platform: valid_platform, *, username):
         _(
             """Returns player both quick play and competitive stats.
 
@@ -96,7 +119,7 @@ class Stats(commands.Cog):
         self,
         ctx,
         hero: Hero,
-        platform: Platform,
+        platform: valid_platform,
         *,
         username,
     ):
