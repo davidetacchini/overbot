@@ -14,13 +14,19 @@ from utils.checks import is_premium, has_profile, can_add_profile
 from utils.player import Player, NoStats, NoHeroStats
 from utils.request import Request, RequestError
 from utils.paginator import Link, Update
-from classes.converters import Hero, Index
+from classes.converters import Hero, valid_index
 
 MAX_NICKNAME_LENGTH = 32
 ROLES = {
     "tank": "\N{SHIELD}",
     "damage": "\N{CROSSED SWORDS}",
     "support": "\N{HEAVY GREEK CROSS}",
+}
+PLATFORMS = {
+    "pc": "<:battlenet:679469162724196387>",
+    "psn": "<:psn:679468542541693128>",
+    "xbl": "<:xbl:679469487623503930>",
+    "nintendo-switch": "<:nsw:752653766377078817>",
 }
 
 
@@ -29,35 +35,12 @@ async def chunker(entries, chunk):
         yield entries[x : x + chunk]
 
 
-class MemberHasNoProfile(Exception):
-    """Exception raised when mentioned member has no profile connected."""
-
-    def __init__(self, member):
-        super().__init__(
-            _("{member} hasn't linked a profile yet.").format(member=member)
-        )
-
-
-class MemberHasNoRatings(Exception):
-    """Exception raised when mentioned member has not ratings saved."""
-
-    def __init__(self):
-        super().__init__(_("More data are needed in order for me to create a graph."))
-
-
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.platforms = {
-            "pc": "<:battlenet:679469162724196387>",
-            "psn": "<:psn:679468542541693128>",
-            "xbl": "<:xbl:679469487623503930>",
-            "nintendo-switch": "<:nsw:752653766377078817>",
-        }
 
     async def get_profiles(self, ctx, *, member=None):
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
         limit = self.bot.get_max_profiles_limit(ctx)
         query = """SELECT profile.id, platform, username
                    FROM profile
@@ -68,15 +51,17 @@ class Profile(commands.Cog):
                 """
         profiles = await self.bot.pool.fetch(query, member.id, limit)
         if not profiles:
-            raise MemberHasNoProfile(member)
+            raise commands.BadArgument("This member did not linked a profile.")
         return profiles
 
     async def get_profile(self, ctx, *, member=None, index=None):
-        if member is None:
-            member = ctx.author
+        member = member or ctx.author
         if index is not None:
             profiles = await self.get_profiles(ctx, member=member)
-            profile = profiles[abs(index) - 1]
+            try:
+                profile = profiles[abs(index) - 1]
+            except IndexError:
+                raise commands.BadArgument(_("Invalid index.")) from None
         else:
             query = """SELECT profile.id, platform, username
                        FROM profile
@@ -86,7 +71,7 @@ class Profile(commands.Cog):
                     """
             profile = await self.bot.pool.fetchrow(query, member.id)
         if not profile:
-            raise MemberHasNoProfile(member)
+            raise commands.BadArgument("This member did not linked a profile.")
         return profile
 
     async def set_main_profile(self, member_id, *, profile_id):
@@ -130,10 +115,9 @@ class Profile(commands.Cog):
             for (id, platform, username) in chunk:
                 if platform == "pc":
                     username = username.replace("-", "#")
-                if not await self.is_main_profile(ctx.author.id, profile_id=id):
-                    fmt = f"{index}. {self.platforms.get(platform)} - {username}"
-                else:
-                    fmt = f"{index}. {self.platforms.get(platform)} - {username} :star:"
+                fmt = f"{index}. {PLATFORMS.get(platform)} - {username}"
+                if await self.is_main_profile(ctx.author.id, profile_id=id):
+                    fmt += " `main`"
                 description.append(fmt)
                 index += 1
             embed.description = "\n".join(description)
@@ -237,12 +221,22 @@ class Profile(commands.Cog):
         with suppress(Exception):
             await member.edit(nick=nick)
 
+    @has_profile()
     @commands.group(invoke_without_command=True)
     @locale
-    async def profile(self, ctx, command: str = None):
-        _("""Displays a list with all profile's subcommands.""")
-        embed = self.bot.get_subcommands(ctx, ctx.command)
-        await ctx.send(embed=embed)
+    async def profile(self, ctx, member: discord.Member = None):
+        _(
+            """List your profiles.
+
+        `[member]` - The mention or the ID of a Discord member of the current server.
+
+        If no member is given then the information returned will be yours.
+        """
+        )
+        member = member or ctx.author
+        profiles = await self.get_profiles(ctx, member=member)
+        embed = await self.list_profiles(ctx, profiles)
+        await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @can_add_profile()
     @profile.command(aliases=["add", "bind"])
@@ -258,9 +252,7 @@ class Profile(commands.Cog):
         try:
             await self.insert_profile(platform, username, member_id=ctx.author.id)
             if not await self.has_main_profile(ctx.author.id):
-                # if the player has no profiles linked, that means he doesn't
-                # have a main_profile as well. Then we can just set the first
-                # profile linked as the main one
+                # set the first profile linked as the main one
                 query = "SELECT id FROM profile WHERE member_id = $1;"
                 profile_id = await self.bot.pool.fetchval(query, ctx.author.id)
                 await self.set_main_profile(ctx.author.id, profile_id=profile_id)
@@ -272,20 +264,16 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command(aliases=["remove", "unbind"])
     @locale
-    async def unlink(self, ctx, index: Index):
+    async def unlink(self, ctx, index: valid_index):
         _(
-            """Unlink your Overwatch profile from your Discord account.
+            """Unlink an Overwatch profile from your Discord account.
 
         `<index>` - The profile's index you want to unlink.
 
         You can't unlink your main profile if you have more than 1 profile linked.
         """
         )
-        try:
-            id, platform, username = await self.get_profile(ctx, index=index)
-        except IndexError:
-            return await ctx.send(_("Invalid index."))
-
+        id, platform, username = await self.get_profile(ctx, index=index)
         profiles = await self.get_profiles(ctx)
         if (
             await self.is_main_profile(ctx.author.id, profile_id=id)
@@ -319,23 +307,16 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command()
     @locale
-    async def update(self, ctx, index: Index):
+    async def update(self, ctx, index: valid_index):
         _(
-            """Update your Overwatch profile linked to your Discord account.
+            """Update an Overwatch profile linked to your Discord account.
 
         `<index>` - The profile's index you want to update.
         """
         )
-        try:
-            id, platform, username = await self.get_profile(ctx, index=index)
-        except IndexError:
-            return await ctx.send(_("Invalid index."))
-
-        try:
-            platform = await Update(platform, username).start(ctx)
-            username = await self.get_player_username(ctx, platform)
-        except Exception as e:
-            return await ctx.send(embed=self.bot.embed_exception(e))
+        id, platform, username = await self.get_profile(ctx, index=index)
+        platform = await Update(platform, username).start(ctx)
+        username = await self.get_player_username(ctx, platform)
 
         if not username:
             return
@@ -343,30 +324,22 @@ class Profile(commands.Cog):
         if platform == "pc":
             username = username.replace("-", "#")
 
-        try:
-            await self.update_profile(platform, username, profile_id=id)
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send("Profile successfully updated.")
+        await self.update_profile(platform, username, profile_id=id)
+        await ctx.send("Profile successfully updated.")
 
     @has_profile()
     @profile.command()
     @locale
-    async def main(self, ctx, index: Index):
+    async def main(self, ctx, index: valid_index):
         _(
-            """Updates your main profile.
+            """Update the main profile.
 
         `<index>` - The profile's index you want to set as main.
 
         Defaults to the first profile you have linked.
         """
         )
-        try:
-            id, platform, username = await self.get_profile(ctx, index=index)
-        except IndexError:
-            return await ctx.send(_("Invalid index."))
-
+        id, platform, username = await self.get_profile(ctx, index=index)
         await self.set_main_profile(ctx.author.id, profile_id=id)
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.description = _("Main profile successfully set to:")
@@ -375,31 +348,11 @@ class Profile(commands.Cog):
         await ctx.send(embed=embed)
 
     @has_profile()
-    @profile.command(aliases=["ls"])
-    @locale
-    async def list(self, ctx, member: discord.Member = None):
-        _(
-            """Displays all member's profiles.
-
-        `[member]` - The mention or the ID of a Discord member of the current server.
-
-        If no member is given then the information returned will be yours.
-        """
-        )
-        member = member or ctx.author
-
-        try:
-            profiles = await self.get_profiles(ctx, member=member)
-        except MemberHasNoProfile as e:
-            return await ctx.send(e)
-
-        embed = await self.list_profiles(ctx, profiles)
-        await self.bot.paginator.Paginator(pages=embed).start(ctx)
-
-    @has_profile()
     @profile.command(aliases=["rank", "sr"])
     @locale
-    async def rating(self, ctx, index: Index = None, member: discord.Member = None):
+    async def rating(
+        self, ctx, index: valid_index = None, member: discord.Member = None
+    ):
         _(
             """Shows a member's Overwatch ranks.
 
@@ -414,15 +367,9 @@ class Profile(commands.Cog):
         )
         async with ctx.typing():
             member = member or ctx.author
-
-            try:
-                id, platform, username = await self.get_profile(
-                    ctx, member=member, index=index
-                )
-            except MemberHasNoProfile as e:
-                return await ctx.send(e)
-            except IndexError:
-                return await ctx.send(_("Invalid index."))
+            id, platform, username = await self.get_profile(
+                ctx, member=member, index=index
+            )
 
             try:
                 data = await Request(platform=platform, username=username).get()
@@ -437,12 +384,14 @@ class Profile(commands.Cog):
                 # if the index is None that means it's the main profile
                 if not index and member.id == ctx.author.id:
                     await self.update_nickname_sr(ctx.author, profile=profile)
-            await self.bot.paginator.Paginator(pages=embed).start(ctx)
+            await ctx.send(embed=embed)
 
     @has_profile()
     @profile.command(aliases=["statistics"])
     @locale
-    async def stats(self, ctx, index: Index = None, member: discord.Member = None):
+    async def stats(
+        self, ctx, index: valid_index = None, member: discord.Member = None
+    ):
         _(
             """Shows a member's Overwatch both quick play and competitive stats.
 
@@ -457,16 +406,9 @@ class Profile(commands.Cog):
         )
         async with ctx.typing():
             member = member or ctx.author
-
-            try:
-                # using 'unused' instead of '_' since it conflicts with gettext _()
-                unused, platform, username = await self.get_profile(
-                    ctx, member=member, index=index
-                )
-            except MemberHasNoProfile as e:
-                return await ctx.send(e)
-            except IndexError:
-                return await ctx.send(_("Invalid index."))
+            unused, platform, username = await self.get_profile(
+                ctx, member=member, index=index
+            )
 
             try:
                 data = await Request(platform=platform, username=username).get()
@@ -487,7 +429,7 @@ class Profile(commands.Cog):
     @profile.command()
     @locale
     async def hero(
-        self, ctx, hero: Hero, index: Index = None, member: discord.Member = None
+        self, ctx, hero: Hero, index: valid_index = None, member: discord.Member = None
     ):
         _(
             """Shows a member's Overwatch both quick play and competitive stats for a given hero.
@@ -504,15 +446,9 @@ class Profile(commands.Cog):
         )
         async with ctx.typing():
             member = member or ctx.author
-
-            try:
-                unused, platform, username = await self.get_profile(
-                    ctx, member=member, index=index
-                )
-            except MemberHasNoProfile as e:
-                return await ctx.send(e)
-            except IndexError:
-                return await ctx.send(_("Invalid index."))
+            unused, platform, username = await self.get_profile(
+                ctx, member=member, index=index
+            )
 
             try:
                 data = await Request(platform=platform, username=username).get()
@@ -607,7 +543,9 @@ class Profile(commands.Cog):
                 data.drop(row, axis=1, inplace=True)
 
         if len(data.columns) == 0:
-            raise MemberHasNoRatings()
+            raise commands.BadArgument(
+                _("I don't have enough data to create the graph.")
+            )
 
         fig, ax = pyplot.subplots()
         ax.xaxis_date()
@@ -637,7 +575,7 @@ class Profile(commands.Cog):
     @has_profile()
     @profile.command()
     @locale
-    async def graph(self, ctx, index: Index = None):
+    async def graph(self, ctx, index: valid_index = None):
         _(
             """`[Premium]` Displays a profile's SR graph performance.
 
@@ -646,21 +584,8 @@ class Profile(commands.Cog):
         If no index is given then the profile used will be the main one.
         """
         )
-        try:
-            profile = await self.get_profile(ctx, index=index)
-        except MemberHasNoProfile as e:
-            return await ctx.send(e)
-        except IndexError:
-            return await ctx.send(_("Invalid index."))
-
-        try:
-            file, embed = await self.sr_graph(ctx, profile=profile)
-        except MemberHasNoRatings as e:
-            await ctx.send(e)
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send(file=file, embed=embed)
+        profile = await self.get_profile(ctx, index=index)
+        file, embed = await self.sr_graph(ctx, profile=profile)
 
 
 def setup(bot):
