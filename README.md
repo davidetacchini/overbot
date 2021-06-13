@@ -1,26 +1,26 @@
 <p align="center">
-  <img src="https://imgur.com/a/WMnUaBp" alt="OverBot Banner" width="300"/>
+  <img src="https://i.imgur.com/vWZBpjj.png" alt="OverBot Banner" width="300"/>
 </p>
 <h2 align="center">The best Overwatch bot for Discord.</h2>
 
 <p align="center">
   <a href="https://github.com/davidetacchini/overbot/actions" traget="_blank">
-    <img src="https://github.com/davidetacchini/overbot/workflows/Lint/badge.svg" alt="Lint Badge">
+    <img src="https://github.com/davidetacchini/overbot/workflows/Lint/badge.svg" alt="Lint Badge" />
   </a>
   <a href="https://github.com/psf/black" traget="_blank">
-    <img alt="Code Style: Black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
+    <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code Style: Black" />
   </a>
   <a href="https://pycqa.github.io/isort/" target="_blank">
     <img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336" alt="isort" />
   </a>
   <a href="https://pypi.org/project/discord.py/" traget="_blank">
-    <img alt="PyPI" src="https://img.shields.io/pypi/v/discord.py?label=discord.py">
+    <img src="https://img.shields.io/pypi/v/discord.py?label=discord.py" alt="PyPI" />
   </a>
   <a href="https://ow-api.com/docs/" traget="_blank">
-    <img alt="API" src="https://img.shields.io/badge/API-ow--api-orange">
+    <img src="https://img.shields.io/badge/API-ow--api-orange" alt="API" />
   </a>
-  <a href="https://discordapp.com/invite/8g3jnxv" traget="_blank">
-  <img alt="Discord" src="https://img.shields.io/discord/550685823784321035"> 
+  <a href="https://discord.com/invite/8g3jnxv" traget="_blank">
+  <img src="https://discord.com/api/guilds/550685823784321035/embed.png" alt="Discord Server" />
   </a>
   <a href="https://top.gg/bot/547546531666984961" traget="_blank">
     <img src="https://top.gg/api/widget/servers/547546531666984961.svg?noavatar=true" alt="Server Count" />
