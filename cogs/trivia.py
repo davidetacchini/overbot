@@ -134,7 +134,7 @@ class Trivia(commands.Cog):
         embed.add_field(name=_("Contributions"), value=stats["contribs"])
         return embed
 
-    @trivia.command(aliases=["statistics"])
+    @trivia.command()
     @locale
     async def stats(self, ctx, member: discord.Member = None):
         _(
