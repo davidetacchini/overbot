@@ -1,5 +1,3 @@
-import secrets
-
 import discord
 from discord.ext import commands
 
@@ -9,45 +7,21 @@ from utils.scrape import (
     get_overwatch_status,
     get_overwatch_patch_notes,
 )
-from classes.converters import MemeCategory
+
+STATUSES = [
+    "no problems at overwatch",
+    "user reports indicate no current problems at overwatch",
+]
 
 
 class Overwatch(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.statuses = [
-            "no problems at overwatch",
-            "user reports indicate no current problems at overwatch",
-        ]
 
     def format_overwatch_status(self, status):
-        if status.lower() in self.statuses:
+        if status.lower() in STATUSES:
             return (f"<:online:648186001361076243> {status}", discord.Color.green())
         return (f"<:dnd:648185968209428490> {status}", discord.Color.red())
-
-    async def get_meme(self, category):
-        url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
-        async with self.bot.session.get(url) as r:
-            memes = await r.json()
-        # excluding .mp4 and files from other domains
-        memes = [
-            meme
-            for meme in memes["data"]["children"]
-            if not meme["data"]["secure_media"]
-            or not meme["data"]["is_reddit_media_domain"]
-        ]
-        return secrets.choice(memes)
-
-    def embed_meme(self, ctx, meme):
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
-        embed.title = meme["data"]["title"]
-        embed.description = "{upvotes} upvotes - {comments} comments".format(
-            upvotes=meme["data"]["ups"], comments=meme["data"]["num_comments"]
-        )
-        embed.url = f'https://reddit.com{meme["data"]["permalink"]}'
-        embed.set_image(url=meme["data"]["url"])
-        embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
-        return embed
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
@@ -145,31 +119,6 @@ class Overwatch(commands.Cog):
             )
             embed.add_field(name=value, value=text, inline=False)
         await ctx.send(embed=embed)
-
-    @commands.command()
-    @locale
-    async def meme(self, ctx, category: MemeCategory = "hot"):
-        _(
-            """Returns a random Overwatch meme.
-
-        `[category]` - The category to get a random meme from. Defaults to `Hot`.
-
-        Categories
-        - Hot
-        - New
-        - Top
-        - Rising
-
-        All memes are taken from the subreddit r/Overwatch_Memes.
-        """
-        )
-        try:
-            meme = await self.get_meme(category)
-            embed = self.embed_meme(ctx, meme)
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send(embed=embed)
 
 
 def setup(bot):
