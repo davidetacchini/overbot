@@ -18,17 +18,17 @@ class Member(commands.Cog):
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = _("Premium Status")
 
-        one_premium = False
+        is_premium = False
 
         if ctx.author.id in self.bot.premiums:
             member = "Active"
-            one_premium = True
+            is_premium = True
         else:
             member = "N/A"
 
         if ctx.guild.id in self.bot.premiums:
             guild = "Active"
-            one_premium = True
+            is_premium = True
         else:
             guild = "N/A"
 
@@ -36,7 +36,7 @@ class Member(commands.Cog):
             member=member, guild=guild
         )
 
-        if one_premium is False:
+        if not is_premium:
             link = _("[Upgrade to Premium]({premium})").format(
                 premium=self.bot.config.premium
             )
@@ -108,18 +108,21 @@ class Member(commands.Cog):
         Notice that few embeds will not change their color.
         """
         )
-
         if color in ("none", "default"):
             query = "UPDATE member SET embed_color = NULL WHERE id = $1;"
             await self.bot.pool.execute(query, ctx.author.id)
-            del self.bot.embed_colors[ctx.author.id]
-            return await ctx.send(_("Color successfully reset."))
+            try:
+                del self.bot.embed_colors[ctx.author.id]
+            except KeyError:
+                return await ctx.send(_("Color already set to default."))
+            else:
+                return await ctx.send(_("Color successfully reset."))
 
         try:
             clr = Color(color).get_hex_l()
         except (AttributeError, ValueError):
             message = _(
-                "You need to specify a hex (Example: `#00ff00`) or a color code (Example: `red`)."
+                "You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
             )
             return await ctx.send(message)
 
