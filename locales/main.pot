@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-03 09:54+0200\n"
+"POT-Creation-Date: 2021-06-14 01:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,7 +85,7 @@ msgstr ""
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:71 cogs/profile.py:165
+#: cogs/errors.py:71 cogs/profile.py:149
 msgid "You took too long to reply."
 msgstr ""
 
@@ -316,7 +316,7 @@ msgstr ""
 msgid "Made with discord.py v{discord_version}"
 msgstr ""
 
-#: cogs/overwatch.py:57
+#: cogs/overwatch.py:31
 msgid ""
 "Returns the current Overwatch servers status.\n"
 "\n"
@@ -324,7 +324,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:86
+#: cogs/overwatch.py:60
 msgid ""
 "Returns the latest Overwatch news.\n"
 "\n"
@@ -334,21 +334,21 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:103
+#: cogs/overwatch.py:77
 msgid "Latest Overwatch News"
 msgstr ""
 
-#: cogs/overwatch.py:104
+#: cogs/overwatch.py:78
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr ""
 
-#: cogs/overwatch.py:118
+#: cogs/overwatch.py:92
 #, python-brace-format
 msgid "News {current}/{total} - {date}"
 msgstr ""
 
-#: cogs/overwatch.py:131
+#: cogs/overwatch.py:105
 msgid ""
 "Returns patch notes links.\n"
 "\n"
@@ -356,163 +356,63 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:138
+#: cogs/overwatch.py:112
 msgid "Overwatch Patch Notes"
 msgstr ""
 
-#: cogs/overwatch.py:142
+#: cogs/overwatch.py:116
 #, python-brace-format
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr ""
 
-#: cogs/overwatch.py:153
-msgid ""
-"Returns a random Overwatch meme.\n"
-"\n"
-"        `[category]` - The category to get a random meme from. Defaults to "
-"`Hot`.\n"
-"\n"
-"        Categories\n"
-"        - Hot\n"
-"        - New\n"
-"        - Top\n"
-"        - Rising\n"
-"\n"
-"        All memes are taken from the subreddit r/Overwatch_Memes.\n"
-"        "
+#: cogs/profile.py:64
+msgid "Invalid index."
 msgstr ""
 
-#: cogs/profile.py:37
-#, python-brace-format
-msgid "{member} hasn't linked a profile yet."
-msgstr ""
-
-#: cogs/profile.py:45
-msgid "More data are needed in order for me to create a graph."
-msgstr ""
-
-#: cogs/profile.py:124
+#: cogs/profile.py:109
 #, python-brace-format
 msgid "{profiles}/{limit} profiles"
 msgstr ""
 
-#: cogs/profile.py:145
+#: cogs/profile.py:129
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr ""
 
-#: cogs/profile.py:147
+#: cogs/profile.py:131
 msgid "Enter your Online ID:"
 msgstr ""
 
-#: cogs/profile.py:149
+#: cogs/profile.py:133
 msgid "Enter your Gamertag:"
 msgstr ""
 
-#: cogs/profile.py:151
+#: cogs/profile.py:135
 msgid "Enter your Nintendo Switch ID:"
 msgstr ""
 
-#: cogs/profile.py:207
+#: cogs/profile.py:191
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
 msgstr ""
 
-#: cogs/profile.py:213
+#: cogs/profile.py:197
 msgid "Something bad happened while updating your nickname. Please try again."
 msgstr ""
 
-#: cogs/profile.py:224
+#: cogs/profile.py:208
 msgid ""
 "Nickname successfully set. Your SR will now be visible in your nickname "
 "within this server."
 msgstr ""
 
-#: cogs/profile.py:230
+#: cogs/profile.py:214
 msgid "Nickname successfully removed."
 msgstr ""
 
-#: cogs/profile.py:243
-msgid "Displays a list with all profile's subcommands."
-msgstr ""
-
-#: cogs/profile.py:251
-msgid "Link your Overwatch profile(s) to your Discord account."
-msgstr ""
-
-#: cogs/profile.py:270
-msgid "Profile successfully linked."
-msgstr ""
-
-#: cogs/profile.py:277
+#: cogs/profile.py:229
 msgid ""
-"Unlink your Overwatch profile from your Discord account.\n"
-"\n"
-"        `<index>` - The profile's index you want to unlink.\n"
-"\n"
-"        You can't unlink your main profile if you have more than 1 profile "
-"linked.\n"
-"        "
-msgstr ""
-
-#: cogs/profile.py:287 cogs/profile.py:332 cogs/profile.py:368
-#: cogs/profile.py:425 cogs/profile.py:469 cogs/profile.py:515
-#: cogs/profile.py:654
-msgid "Invalid index."
-msgstr ""
-
-#: cogs/profile.py:295
-#, python-brace-format
-msgid ""
-"You can't unlink your main profile if you have multiple profiles set. Use "
-"\"{prefix}help profile main\" for more info."
-msgstr ""
-
-#: cogs/profile.py:305
-#, python-brace-format
-msgid ""
-"Are you sure you want to unlink the following profile?\n"
-"Platform: `{platform}`\n"
-"Username: `{username}`"
-msgstr ""
-
-#: cogs/profile.py:317
-msgid "Profile successfully unlinked."
-msgstr ""
-
-#: cogs/profile.py:324
-msgid ""
-"Update your Overwatch profile linked to your Discord account.\n"
-"\n"
-"        `<index>` - The profile's index you want to update.\n"
-"        "
-msgstr ""
-
-#: cogs/profile.py:358
-msgid ""
-"Updates your main profile.\n"
-"\n"
-"        `<index>` - The profile's index you want to set as main.\n"
-"\n"
-"        Defaults to the first profile you have linked.\n"
-"        "
-msgstr ""
-
-#: cogs/profile.py:372
-msgid "Main profile successfully set to:"
-msgstr ""
-
-#: cogs/profile.py:373 utils/paginator.py:130 utils/paginator.py:184
-msgid "Platform"
-msgstr ""
-
-#: cogs/profile.py:374 utils/paginator.py:185
-msgid "Username"
-msgstr ""
-
-#: cogs/profile.py:382
-msgid ""
-"Displays all member's profiles.\n"
+"List your profiles.\n"
 "\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
 "current server.\n"
@@ -521,7 +421,75 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:404
+#: cogs/profile.py:245
+msgid "Link your Overwatch profile(s) to your Discord account."
+msgstr ""
+
+#: cogs/profile.py:262
+msgid "Profile successfully linked."
+msgstr ""
+
+#: cogs/profile.py:269
+msgid ""
+"Unlink an Overwatch profile from your Discord account.\n"
+"\n"
+"        `<index>` - The profile's index you want to unlink.\n"
+"\n"
+"        You can't unlink your main profile if you have more than 1 profile "
+"linked.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:283
+#, python-brace-format
+msgid ""
+"You can't unlink your main profile if you have multiple profiles set. Use "
+"\"{prefix}help profile main\" for more info."
+msgstr ""
+
+#: cogs/profile.py:293
+#, python-brace-format
+msgid ""
+"Are you sure you want to unlink the following profile?\n"
+"Platform: `{platform}`\n"
+"Username: `{username}`"
+msgstr ""
+
+#: cogs/profile.py:305
+msgid "Profile successfully unlinked."
+msgstr ""
+
+#: cogs/profile.py:312
+msgid ""
+"Update an Overwatch profile linked to your Discord account.\n"
+"\n"
+"        `<index>` - The profile's index you want to update.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:335
+msgid ""
+"Update the main profile.\n"
+"\n"
+"        `<index>` - The profile's index you want to set as main.\n"
+"\n"
+"        Defaults to the first profile you have linked.\n"
+"        "
+msgstr ""
+
+#: cogs/profile.py:345
+msgid "Main profile successfully set to:"
+msgstr ""
+
+#: cogs/profile.py:346 utils/paginator.py:130 utils/paginator.py:184
+msgid "Platform"
+msgstr ""
+
+#: cogs/profile.py:347 utils/paginator.py:185
+msgid "Username"
+msgstr ""
+
+#: cogs/profile.py:355
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -537,7 +505,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:447
+#: cogs/profile.py:392
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats.\n"
 "\n"
@@ -553,7 +521,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:493
+#: cogs/profile.py:431
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
@@ -571,7 +539,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:538
+#: cogs/profile.py:470
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -583,22 +551,26 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:548
+#: cogs/profile.py:480
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:555
+#: cogs/profile.py:487
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:577
+#: cogs/profile.py:509
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:642
+#: cogs/profile.py:543
+msgid "I don't have enough data to create the graph."
+msgstr ""
+
+#: cogs/profile.py:576
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -608,46 +580,43 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/random.py:95
-msgid "Returns a random hero, role or map."
+#: cogs/fun.py:36
+msgid "Unknown hero category."
 msgstr ""
 
-#: cogs/random.py:103
+#: cogs/fun.py:51
+msgid "Unknown meme category."
+msgstr ""
+
+#: cogs/fun.py:132
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
 "        `[category]` - The category to get a random hero from.\n"
 "\n"
-"        Categories\n"
+"        Categories:\n"
+"\n"
 "        - Damage (dps)\n"
 "        - Support (heal, healear)\n"
 "        - Tank\n"
 "\n"
-"        If no category is passed, a random hero is chosen from all "
+"        If no category is passed in, a random hero is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
 
-#: cogs/random.py:120
-#, python-brace-format
-msgid "Invalid category. Use \"{prefix}help random hero\" for more info."
-msgstr ""
-
-#: cogs/random.py:124 cogs/random.py:135 cogs/random.py:169
-msgid "Something bad happened. Please try again."
-msgstr ""
-
-#: cogs/random.py:131
+#: cogs/fun.py:151
 msgid "Returns a random role to play."
 msgstr ""
 
-#: cogs/random.py:143
+#: cogs/fun.py:159
 msgid ""
 "Returns a random map.\n"
 "\n"
 "        `[category]` - The category to get a random map from.\n"
 "\n"
-"        Categories\n"
+"        Categories:\n"
+"\n"
 "        - Control\n"
 "        - Assault\n"
 "        - Escort\n"
@@ -657,14 +626,31 @@ msgid ""
 "        - Deathmatch\n"
 "        - Team Deathmatch\n"
 "\n"
-"        If no category is passed, a random map is chosen from all "
+"        If no category is passed in, a random map is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
 
-#: cogs/random.py:165
-#, python-brace-format
-msgid "Invalid category. Use \"{prefix}help random map\" for more info."
+#: cogs/fun.py:180
+msgid "Unknown map category."
+msgstr ""
+
+#: cogs/fun.py:188
+msgid ""
+"Returns a random Overwatch meme.\n"
+"\n"
+"        `[category]` - The category to get a random meme from. Defaults to "
+"`Hot`.\n"
+"\n"
+"        Categories:\n"
+"\n"
+"        - Hot\n"
+"        - New\n"
+"        - Top\n"
+"        - Rising\n"
+"\n"
+"        All memes are taken from the subreddit r/Overwatch_Memes.\n"
+"        "
 msgstr ""
 
 #: cogs/server.py:14
@@ -726,9 +712,13 @@ msgstr ""
 msgid "{placement} **{guild}** ran a total of **{commands}** commands"
 msgstr ""
 
-#: cogs/stats.py:17
+#: cogs/stats.py:27
+msgid "Unknown platform."
+msgstr ""
+
+#: cogs/stats.py:40
 msgid ""
-"Returns player ranks.\n"
+"Returns player ratings.\n"
 "\n"
 "        `<platform>` - The platform of the player to get ranks for.\n"
 "        `<username>` - The username of the player to get ranks for.\n"
@@ -747,7 +737,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:54
+#: cogs/stats.py:77
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
@@ -768,7 +758,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:104
+#: cogs/stats.py:127
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -1002,21 +992,11 @@ msgstr ""
 msgid "You took to long to confirm."
 msgstr ""
 
-#: classes/converters.py:17
+#: classes/converters.py:9
 #, python-brace-format
-msgid "Invalid platform. Use \"{prefix}help {command}\" for more info."
+msgid "Unknown hero: **{hero}**."
 msgstr ""
 
-#: classes/converters.py:27
-#, python-brace-format
-msgid "Hero **{hero}** doesn't exist."
-msgstr ""
-
-#: classes/converters.py:35
-#, python-brace-format
-msgid "Invalid category. Use \"{prefix}help {command}\" for more info."
-msgstr ""
-
-#: classes/converters.py:45
+#: classes/converters.py:30
 msgid "Index must be a number."
 msgstr ""
