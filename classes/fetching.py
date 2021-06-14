@@ -1,5 +1,7 @@
 import asyncio
+
 from utils.i18n import _
+
 
 def _fetching_done_callback(fut):
     try:
