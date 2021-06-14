@@ -90,9 +90,7 @@ class Fun(commands.Cog):
     def get_random_role():
         role = secrets.choice(ROLES)
         embed = discord.Embed(color=role["color"])
-        embed.set_author(
-            name=role["name"].capitalize(), icon_url=role["icon"]
-        )
+        embed.set_author(name=role["name"].capitalize(), icon_url=role["icon"])
         return embed
 
     async def get_random_hero(self, category):
