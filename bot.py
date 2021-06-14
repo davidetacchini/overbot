@@ -193,9 +193,6 @@ class Bot(commands.AutoShardedBot):
 
     async def cache_hero_names(self):
         self.hero_names = [str(h["key"]).lower() for h in self.heroes]
-        aliases = ("soldier", "soldier76", "wreckingball", "dva")
-        for alias in aliases:
-            self.hero_names.append(alias)
 
     async def cache_embed_colors(self):
         embed_colors = {}
