@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-14 01:17+0200\n"
+"POT-Creation-Date: 2021-06-14 11:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -422,7 +422,7 @@ msgid ""
 msgstr ""
 
 #: cogs/profile.py:245
-msgid "Link your Overwatch profile(s) to your Discord account."
+msgid "Link an Overwatch profile to your Discord account."
 msgstr ""
 
 #: cogs/profile.py:262
@@ -461,7 +461,7 @@ msgstr ""
 
 #: cogs/profile.py:312
 msgid ""
-"Update an Overwatch profile linked to your Discord account.\n"
+"Update an Overwatch profile.\n"
 "\n"
 "        `<index>` - The profile's index you want to update.\n"
 "        "
@@ -489,7 +489,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: cogs/profile.py:355
+#: cogs/profile.py:357
 msgid ""
 "Shows a member's Overwatch ranks.\n"
 "\n"
@@ -505,7 +505,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:392
+#: cogs/profile.py:396
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats.\n"
 "\n"
@@ -521,7 +521,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:431
+#: cogs/profile.py:435
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
@@ -539,7 +539,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:470
+#: cogs/profile.py:474
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -551,26 +551,26 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:480
+#: cogs/profile.py:484
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:487
+#: cogs/profile.py:491
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:509
+#: cogs/profile.py:513
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:543
+#: cogs/profile.py:547
 msgid "I don't have enough data to create the graph."
 msgstr ""
 
-#: cogs/profile.py:576
+#: cogs/profile.py:580
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -580,15 +580,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:36
+#: cogs/fun.py:45
 msgid "Unknown hero category."
 msgstr ""
 
-#: cogs/fun.py:51
+#: cogs/fun.py:66
+msgid "Unknown map category."
+msgstr ""
+
+#: cogs/fun.py:73
 msgid "Unknown meme category."
 msgstr ""
 
-#: cogs/fun.py:132
+#: cogs/fun.py:154
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -596,20 +600,20 @@ msgid ""
 "\n"
 "        Categories:\n"
 "\n"
-"        - Damage (dps)\n"
-"        - Support (heal, healear)\n"
-"        - Tank\n"
+"        - damage, dps\n"
+"        - support, heal, healear\n"
+"        - tank\n"
 "\n"
 "        If no category is passed in, a random hero is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
 
-#: cogs/fun.py:151
+#: cogs/fun.py:173
 msgid "Returns a random role to play."
 msgstr ""
 
-#: cogs/fun.py:159
+#: cogs/fun.py:181
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -617,25 +621,21 @@ msgid ""
 "\n"
 "        Categories:\n"
 "\n"
-"        - Control\n"
-"        - Assault\n"
-"        - Escort\n"
-"        - Capture the Flag\n"
-"        - Hybrid\n"
-"        - Elimination\n"
-"        - Deathmatch\n"
-"        - Team Deathmatch\n"
+"        - control\n"
+"        - assault\n"
+"        - escort\n"
+"        - capture the flag, ctf\n"
+"        - hybrid\n"
+"        - elimination\n"
+"        - deathmatch\n"
+"        - team deathmatch, tdm\n"
 "\n"
 "        If no category is passed in, a random map is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
 
-#: cogs/fun.py:180
-msgid "Unknown map category."
-msgstr ""
-
-#: cogs/fun.py:188
+#: cogs/fun.py:206
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -644,10 +644,10 @@ msgid ""
 "\n"
 "        Categories:\n"
 "\n"
-"        - Hot\n"
-"        - New\n"
-"        - Top\n"
-"        - Rising\n"
+"        - hot\n"
+"        - new\n"
+"        - top\n"
+"        - rising\n"
 "\n"
 "        All memes are taken from the subreddit r/Overwatch_Memes.\n"
 "        "
@@ -723,13 +723,15 @@ msgid ""
 "        `<platform>` - The platform of the player to get ranks for.\n"
 "        `<username>` - The username of the player to get ranks for.\n"
 "\n"
-"        Platforms\n"
-"        - pc (bnet)\n"
-"        - playstation (ps, psn, play)\n"
-"        - xbox (xbl)\n"
-"        - nintendo-switch (nsw, switch)\n"
+"        Platforms:\n"
 "\n"
-"        Username formatting\n"
+"        - pc, bnet\n"
+"        - playstation, ps, psn, play\n"
+"        - xbox, xbl\n"
+"        - nintendo-switch, nsw, switch\n"
+"\n"
+"        Username:\n"
+"\n"
 "        - pc: BattleTag (format: name#0000)\n"
 "        - playstation: Online ID\n"
 "        - xbox: Gamertag\n"
@@ -737,20 +739,22 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:77
+#: cogs/stats.py:79
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
 "        `<platform>` - The platform of the player to get stats for.\n"
 "        `<username>` - The username of the player to get stats for.\n"
 "\n"
-"        Platforms\n"
-"        - pc (bnet)\n"
-"        - playstation (ps, psn, play)\n"
-"        - xbox (xbl)\n"
-"        - nintendo-switch (nsw, switch)\n"
+"        Platforms:\n"
 "\n"
-"        Username formatting\n"
+"        - pc, bnet\n"
+"        - playstation, ps, psn, play\n"
+"        - xbox, xbl\n"
+"        - nintendo-switch, nsw, switch\n"
+"\n"
+"        Username:\n"
+"\n"
 "        - pc: BattleTag (format: name#0000)\n"
 "        - playstation: Online ID\n"
 "        - xbox: Gamertag\n"
@@ -758,7 +762,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:127
+#: cogs/stats.py:131
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -766,13 +770,15 @@ msgid ""
 "        `<platform>` - The platform of the player to get stats for.\n"
 "        `<username>` - The username of the player to get stats for.\n"
 "\n"
-"        Platforms\n"
-"        - pc (bnet)\n"
-"        - playstation (ps, psn, play)\n"
-"        - xbox (xbl)\n"
-"        - nintendo-switch (nsw, switch)\n"
+"        Platforms:\n"
 "\n"
-"        Username formatting\n"
+"        - pc, bnet\n"
+"        - playstation, ps, psn, play\n"
+"        - xbox, xbl\n"
+"        - nintendo-switch, nsw, switch\n"
+"\n"
+"        Username:\n"
+"\n"
 "        - pc: BattleTag (format: name#0000)\n"
 "        - playstation: Online ID\n"
 "        - xbox: Gamertag\n"
@@ -992,11 +998,11 @@ msgstr ""
 msgid "You took to long to confirm."
 msgstr ""
 
-#: classes/converters.py:9
+#: classes/converters.py:8
 #, python-brace-format
 msgid "Unknown hero: **{hero}**."
 msgstr ""
 
-#: classes/converters.py:30
+#: classes/converters.py:29
 msgid "Index must be a number."
 msgstr ""
