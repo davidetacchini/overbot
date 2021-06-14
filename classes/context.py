@@ -5,6 +5,7 @@ from discord.ext import commands
 
 from utils.i18n import _
 from utils.paginator import NoChoice
+from classes.fetching import Fetching
 
 
 class Context(commands.Context):
@@ -53,3 +54,6 @@ class Context(commands.Context):
         if label is not None:
             return f"{emoji}: {label}"
         return emoji
+
+    def fetching(self):
+        return Fetching(self)
