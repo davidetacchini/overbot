@@ -37,11 +37,8 @@ class Context(commands.Context):
                 "reaction_add", check=check, timeout=timeout
             )
         except asyncio.TimeoutError:
-            raise NoChoice(_("You took to long to confirm."))
+            raise NoChoice(_("You took too long to confirm."))
         else:
-            # return not bool since we want the checkmark to be the first
-            # reaction. Since it's the first reaction, its index is 0 which
-            # is equivalent to False, but we want it to return True.
             return not bool(reactions.index(str(reaction.emoji)))
         finally:
             await self.bot.cleanup(msg)
