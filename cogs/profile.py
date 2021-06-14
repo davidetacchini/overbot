@@ -354,7 +354,7 @@ class Profile(commands.Cog):
         self, ctx, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's Overwatch ranks.
+            """Shows a member's Overwatch ratings.
 
         `[index]` - The profile's index you want to see the ranks for.
         `[member]` - The mention or the ID of a Discord member of the current server.
@@ -362,7 +362,7 @@ class Profile(commands.Cog):
         If no index is given then the profile used will be the main one.
         If no member is given then the ranks returned will be yours.
 
-        If you want to see a member's stats, you must enter both the index and the member.
+        If you want to see a member's ratings, you must enter both the index and the member.
         """
         )
         async with ctx.typing():
