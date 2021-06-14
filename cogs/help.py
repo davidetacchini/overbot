@@ -141,7 +141,7 @@ class GroupHelp(menus.ListPageSource):
             signature = f"{command.qualified_name} {command.signature}"
             embed.add_field(
                 name=signature,
-                value=command.short_doc or _("No help found..."),
+                value=_(command.short_doc) or _("No help found..."),
                 inline=False,
             )
 
@@ -180,7 +180,7 @@ class CustomHelpCommand(commands.HelpCommand):
     def common_command_formatting(self, embed, command):
         embed.title = self.get_command_signature(command)
         if command.help:
-            embed.description = command.help
+            embed.description = _(command.help)
         else:
             embed.description = _("No help found...")
         if command.aliases and not isinstance(embed, GroupHelp):
