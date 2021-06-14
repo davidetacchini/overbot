@@ -33,6 +33,38 @@ class Stats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    async def show_stats_for(self, ctx, platform, username):
+        try:
+            data = await Request(platform=platform, username=username).get()
+        except RequestError as e:
+            return await ctx.send(e)
+
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private:
+            embed = profile.private()
+        else:
+            try:
+                embed = profile.get_stats(ctx)
+            except PlayerException as e:
+                return await ctx.send(e)
+        await self.bot.paginator.Paginator(pages=embed).start(ctx)
+
+    async def show_hero_stats_for(self, ctx, hero, platform, username):
+        try:
+            data = await Request(platform=platform, username=username).get()
+        except RequestError as e:
+            return await ctx.send(e)
+
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private:
+            embed = profile.private()
+        else:
+            try:
+                embed = profile.get_hero(ctx, hero)
+            except PlayerException as e:
+                return await ctx.send(e)
+        await self.bot.paginator.Paginator(pages=embed).start(ctx)
+
     @commands.command(aliases=["rank", "sr"])
     @locale
     async def rating(self, ctx, platform: valid_platform, *, username):
@@ -57,20 +89,18 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
-        message = await ctx.send(embed=self.bot.loading_embed())
+        async with ctx.fetching():
+            try:
+                data = await Request(platform=platform, username=username).get()
+            except RequestError as e:
+                return await ctx.send(e)
 
-        try:
-            data = await Request(platform=platform, username=username).get()
-        except RequestError as e:
-            await self.bot.cleanup(message)
-            return await ctx.send(e)
-
-        profile = Player(data, platform=platform, username=username)
-        if profile.is_private:
-            embed = profile.private()
-        else:
-            embed = await profile.get_ratings(ctx)
-        await message.edit(embed=embed)
+            profile = Player(data, platform=platform, username=username)
+            if profile.is_private:
+                embed = profile.private()
+            else:
+                embed = await profile.get_ratings(ctx)
+            await ctx.send(embed=embed)
 
     @commands.command()
     @locale
@@ -96,26 +126,8 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
-        message = await ctx.send(embed=self.bot.loading_embed())
-
-        try:
-            data = await Request(platform=platform, username=username).get()
-        except RequestError as e:
-            await self.bot.cleanup(message)
-            return await ctx.send(e)
-
-        profile = Player(data, platform=platform, username=username)
-        if profile.is_private:
-            embed = profile.private()
-        else:
-            try:
-                embed = profile.get_stats(ctx)
-            except PlayerException as e:
-                await self.bot.cleanup(message)
-                return await ctx.send(e)
-
-        await self.bot.cleanup(message)
-        await self.bot.paginator.Paginator(pages=embed).start(ctx)
+        async with ctx.fetching():
+            await self.show_stats_for(ctx, platform, username)
 
     @commands.command()
     @locale
@@ -149,26 +161,8 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
-        message = await ctx.send(embed=self.bot.loading_embed())
-
-        try:
-            data = await Request(platform=platform, username=username).get()
-        except RequestError as e:
-            await self.bot.cleanup(message)
-            return await ctx.send(e)
-
-        profile = Player(data, platform=platform, username=username)
-        if profile.is_private:
-            embed = profile.private()
-        else:
-            try:
-                embed = profile.get_hero(ctx, hero)
-            except PlayerException as e:
-                await self.bot.cleanup(message)
-                return await ctx.send(e)
-
-        await self.bot.cleanup(message)
-        await self.bot.paginator.Paginator(pages=embed).start(ctx)
+        async with ctx.fetching():
+            await self.show_hero_stats_for(ctx, hero, platform, username)
 
 
 def setup(bot):
