@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-14 14:22+0200\n"
+"POT-Creation-Date: 2021-06-14 17:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,39 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:134
-msgid "Fetching..."
-msgstr "Cerco..."
-
-#: bot.py:168 cogs/help.py:132
-#, python-brace-format
-msgid "{command} Commands"
-msgstr "Comandi {command}"
-
-#: bot.py:170
-#, python-brace-format
-msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
-msgstr ""
-"Usa \"{prefix}help {command} [command]\" per maggiori informazioni su un "
-"comando"
-
-#: bot.py:173
-msgid "Replace [command] with one of the commands listed above."
-msgstr "Sostituisci [command] con uno dei commandi listati qui sopra."
-
-#: bot.py:177
-msgid "Commands Available"
-msgstr "Comandi Disponibili"
-
-#: bot.py:179
-msgid "Usage"
-msgstr "Utilizzo"
-
-#: bot.py:187
+#: bot.py:158
 msgid "An unknown error occured."
 msgstr "Si è verificato un errore sconosciuto."
 
-#: bot.py:189
+#: bot.py:160
 #, python-brace-format
 msgid ""
 "Please report the following error to the developer by clicking [here]"
@@ -185,6 +157,11 @@ msgstr "Guida"
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr "Pagina {current_page}/{maximum}"
+
+#: cogs/help.py:132
+#, python-brace-format
+msgid "{command} Commands"
+msgstr "Comandi {command}"
 
 #: cogs/help.py:144 cogs/help.py:185
 msgid "No help found..."
@@ -557,7 +534,7 @@ msgstr "Nome Utente"
 
 #: cogs/profile.py:357
 msgid ""
-"Shows a member's Overwatch ranks.\n"
+"Shows a member's Overwatch ratings.\n"
 "\n"
 "        `[index]` - The profile's index you want to see the ranks for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
@@ -566,22 +543,10 @@ msgid ""
 "        If no index is given then the profile used will be the main one.\n"
 "        If no member is given then the ranks returned will be yours.\n"
 "\n"
-"        If you want to see a member's stats, you must enter both the index "
+"        If you want to see a member's ratings, you must enter both the index "
 "and the member.\n"
 "        "
 msgstr ""
-"Mostra le statistiche di Overwatch di un membro.\n"
-"\n"
-"        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
-"        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
-"\n"
-"        Se nessun indice viene dato, il profilo utilizzato sarà quello "
-"principale.\n"
-"        Se nessun membro viene dato, l'SR visualizzato sarà il tuo.\n"
-"\n"
-"        In caso volessi vedere l'SR di un altro membro, sia l'index che il "
-"membro sono richiesti.\n"
-"        "
 
 #: cogs/profile.py:396
 msgid ""
@@ -599,7 +564,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:435
+#: cogs/profile.py:424
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
@@ -617,7 +582,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:474
+#: cogs/profile.py:452
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -637,11 +602,11 @@ msgstr ""
 "stato utilizzato per il soprannome.\n"
 "        "
 
-#: cogs/profile.py:484
+#: cogs/profile.py:462
 msgid "Do you want to display your SR in your nickname?"
 msgstr "Vuoi mostrare il tuo SR nel tuo soprannome?"
 
-#: cogs/profile.py:491
+#: cogs/profile.py:469
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
@@ -652,15 +617,15 @@ msgstr ""
 "di questo server, non c'è alcun modo per me di aggiornare il tuo nickname, "
 "scusa!"
 
-#: cogs/profile.py:513
+#: cogs/profile.py:491
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr "Vuoi rimuove il tuo SR dal tuo soprannome?"
 
-#: cogs/profile.py:547
+#: cogs/profile.py:525
 msgid "I don't have enough data to create the graph."
 msgstr "Non possiedo dati sufficienti per la creazione del grafico."
 
-#: cogs/profile.py:580
+#: cogs/profile.py:558
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -824,7 +789,7 @@ msgstr "{index}. **{guild}** ha eseguito un totale di **{commands}** comandi."
 msgid "Unknown platform."
 msgstr "Piattaforma sconosciuta."
 
-#: cogs/stats.py:40
+#: cogs/stats.py:72
 msgid ""
 "Returns player ratings.\n"
 "\n"
@@ -868,7 +833,7 @@ msgstr ""
 "        - nintendo-switch: Nintendo Switch ID (format: nome-codice)\n"
 "        "
 
-#: cogs/stats.py:79
+#: cogs/stats.py:109
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
@@ -912,7 +877,7 @@ msgstr ""
 "        - nintendo-switch: Nintendo Switch ID (format: nome-codice)\n"
 "        "
 
-#: cogs/stats.py:131
+#: cogs/stats.py:143
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -1066,11 +1031,9 @@ msgstr ""
 #: utils/player.py:38
 #, python-brace-format
 msgid ""
-"**{player}** has no quick play nor competitive stast for **{hero}** to "
+"This profile has no quick play nor competitive stast for **{hero}** to "
 "display."
 msgstr ""
-"**{player}** non possiede statistiche ne rapide ne competitive per l'eroe "
-"**{hero}** da mostrare."
 
 #: utils/player.py:154
 msgid "This profile is unranked."
@@ -1144,11 +1107,11 @@ msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
 msgid "React with the platform you play on..."
 msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
-#: classes/context.py:19
+#: classes/context.py:20
 msgid "Confirmation"
 msgstr "Conferma"
 
-#: classes/context.py:40
+#: classes/context.py:41
 msgid "You took too long to confirm."
 msgstr "Hai impiegato troppo tempo per confermare."
 
@@ -1160,6 +1123,61 @@ msgstr "Eroe sconosciuto: **{hero}**."
 #: classes/converters.py:29
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#: classes/fetching.py:16
+msgid "Fetching..."
+msgstr "Recupero..."
+
+#, python-brace-format
+#~ msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
+#~ msgstr ""
+#~ "Usa \"{prefix}help {command} [command]\" per maggiori informazioni su un "
+#~ "comando"
+
+#~ msgid "Replace [command] with one of the commands listed above."
+#~ msgstr "Sostituisci [command] con uno dei commandi listati qui sopra."
+
+#~ msgid "Commands Available"
+#~ msgstr "Comandi Disponibili"
+
+#~ msgid "Usage"
+#~ msgstr "Utilizzo"
+
+#~ msgid ""
+#~ "Shows a member's Overwatch ranks.\n"
+#~ "\n"
+#~ "        `[index]` - The profile's index you want to see the ranks for.\n"
+#~ "        `[member]` - The mention or the ID of a Discord member of the "
+#~ "current server.\n"
+#~ "\n"
+#~ "        If no index is given then the profile used will be the main one.\n"
+#~ "        If no member is given then the ranks returned will be yours.\n"
+#~ "\n"
+#~ "        If you want to see a member's stats, you must enter both the "
+#~ "index and the member.\n"
+#~ "        "
+#~ msgstr ""
+#~ "Mostra le statistiche di Overwatch di un membro.\n"
+#~ "\n"
+#~ "        `[index]` - L'indice del profilo di cui vuoi vedere i ranks.\n"
+#~ "        `[member]` - La menzione o l'ID di un membro del server "
+#~ "corrente.\n"
+#~ "\n"
+#~ "        Se nessun indice viene dato, il profilo utilizzato sarà quello "
+#~ "principale.\n"
+#~ "        Se nessun membro viene dato, l'SR visualizzato sarà il tuo.\n"
+#~ "\n"
+#~ "        In caso volessi vedere l'SR di un altro membro, sia l'index che "
+#~ "il membro sono richiesti.\n"
+#~ "        "
+
+#, python-brace-format
+#~ msgid ""
+#~ "**{player}** has no quick play nor competitive stast for **{hero}** to "
+#~ "display."
+#~ msgstr ""
+#~ "**{player}** non possiede statistiche ne rapide ne competitive per l'eroe "
+#~ "**{hero}** da mostrare."
 
 #, python-brace-format
 #~ msgid "Use \"{prefix}prefix value\" to change it."

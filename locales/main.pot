@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-14 14:48+0200\n"
+"POT-Creation-Date: 2021-06-14 17:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bot.py:134
-msgid "Fetching..."
-msgstr ""
-
-#: bot.py:168 cogs/help.py:132
-#, python-brace-format
-msgid "{command} Commands"
-msgstr ""
-
-#: bot.py:170
-#, python-brace-format
-msgid "Use \"{prefix}help {command} [command]\" for more info on a command"
-msgstr ""
-
-#: bot.py:173
-msgid "Replace [command] with one of the commands listed above."
-msgstr ""
-
-#: bot.py:177
-msgid "Commands Available"
-msgstr ""
-
-#: bot.py:179
-msgid "Usage"
-msgstr ""
-
-#: bot.py:187
+#: bot.py:158
 msgid "An unknown error occured."
 msgstr ""
 
-#: bot.py:189
+#: bot.py:160
 #, python-brace-format
 msgid ""
 "Please report the following error to the developer by clicking [here]"
@@ -170,6 +144,11 @@ msgstr ""
 #: cogs/help.py:120
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
+msgstr ""
+
+#: cogs/help.py:132
+#, python-brace-format
+msgid "{command} Commands"
 msgstr ""
 
 #: cogs/help.py:144 cogs/help.py:185
@@ -491,7 +470,7 @@ msgstr ""
 
 #: cogs/profile.py:357
 msgid ""
-"Shows a member's Overwatch ranks.\n"
+"Shows a member's Overwatch ratings.\n"
 "\n"
 "        `[index]` - The profile's index you want to see the ranks for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
@@ -500,7 +479,7 @@ msgid ""
 "        If no index is given then the profile used will be the main one.\n"
 "        If no member is given then the ranks returned will be yours.\n"
 "\n"
-"        If you want to see a member's stats, you must enter both the index "
+"        If you want to see a member's ratings, you must enter both the index "
 "and the member.\n"
 "        "
 msgstr ""
@@ -521,7 +500,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:435
+#: cogs/profile.py:424
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
@@ -539,7 +518,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:474
+#: cogs/profile.py:452
 msgid ""
 "Update your server nickname and set it to your SR.\n"
 "\n"
@@ -551,26 +530,26 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:484
+#: cogs/profile.py:462
 msgid "Do you want to display your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:491
+#: cogs/profile.py:469
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:513
+#: cogs/profile.py:491
 msgid "Do you want to **remove** your SR in your nickname?"
 msgstr ""
 
-#: cogs/profile.py:547
+#: cogs/profile.py:525
 msgid "I don't have enough data to create the graph."
 msgstr ""
 
-#: cogs/profile.py:580
+#: cogs/profile.py:558
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -716,7 +695,7 @@ msgstr ""
 msgid "Unknown platform."
 msgstr ""
 
-#: cogs/stats.py:40
+#: cogs/stats.py:72
 msgid ""
 "Returns player ratings.\n"
 "\n"
@@ -739,7 +718,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:79
+#: cogs/stats.py:109
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
@@ -762,7 +741,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:131
+#: cogs/stats.py:143
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -878,7 +857,7 @@ msgstr ""
 #: utils/player.py:38
 #, python-brace-format
 msgid ""
-"**{player}** has no quick play nor competitive stast for **{hero}** to "
+"This profile has no quick play nor competitive stast for **{hero}** to "
 "display."
 msgstr ""
 
@@ -947,11 +926,11 @@ msgstr ""
 msgid "React with the platform you play on..."
 msgstr ""
 
-#: classes/context.py:19
+#: classes/context.py:20
 msgid "Confirmation"
 msgstr ""
 
-#: classes/context.py:40
+#: classes/context.py:41
 msgid "You took too long to confirm."
 msgstr ""
 
@@ -962,4 +941,8 @@ msgstr ""
 
 #: classes/converters.py:29
 msgid "Index must be a number."
+msgstr ""
+
+#: classes/fetching.py:16
+msgid "Fetching..."
 msgstr ""
