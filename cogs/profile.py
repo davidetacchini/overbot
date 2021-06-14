@@ -239,10 +239,10 @@ class Profile(commands.Cog):
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @can_add_profile()
-    @profile.command(aliases=["add", "bind"])
+    @profile.command(aliases=["add"])
     @locale
     async def link(self, ctx):
-        _("""Link your Overwatch profile(s) to your Discord account.""")
+        _("""Link an Overwatch profile to your Discord account.""")
         platform = await Link().start(ctx)
         username = await self.get_player_username(ctx, platform)
 
@@ -262,7 +262,7 @@ class Profile(commands.Cog):
             await ctx.send(_("Profile successfully linked."))
 
     @has_profile()
-    @profile.command(aliases=["remove", "unbind"])
+    @profile.command(aliases=["remove"])
     @locale
     async def unlink(self, ctx, index: valid_index):
         _(
@@ -309,7 +309,7 @@ class Profile(commands.Cog):
     @locale
     async def update(self, ctx, index: valid_index):
         _(
-            """Update an Overwatch profile linked to your Discord account.
+            """Update an Overwatch profile.
 
         `<index>` - The profile's index you want to update.
         """
