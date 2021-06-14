@@ -30,19 +30,41 @@ ROLES = [
 
 
 def hero_cat(argument):
-    argument = argument.lower()
-    valid = ("tank", "damage", "dps", "support", "healer", "heal")
-    if argument not in valid:
+    valid = {
+        "tank": "tank",
+        "damage": "damage",
+        "dps": "damage",
+        "support": "support",
+        "healer": "support",
+        "heal": "support",
+    }
+
+    try:
+        category = valid[argument.lower()]
+    except KeyError:
         raise commands.BadArgument(_("Unknown hero category."))
-    elif argument in ("heal", "healer"):
-        return "support"
-    elif argument == "dps":
-        return "damage"
-    return argument
+    return category
 
 
 def map_cat(argument):
-    return argument.lower()
+    valid = {
+        "control": "control",
+        "assault": "assault",
+        "escort": "escort",
+        "capture the flag": "capture the flag",
+        "ctf": "capture the flag",
+        "hybrid": "hybrid",
+        "elimination": "elimination",
+        "deathmatch": "deathmatch",
+        "team deathmatch": "team deathmatch",
+        "tdm": "team deathmatch",
+    }
+
+    try:
+        category = valid[argument.lower()]
+    except KeyError:
+        raise commands.BadArgument(_("Unknown map category."))
+    return category
 
 
 def meme_cat(argument):
@@ -66,10 +88,10 @@ class Fun(commands.Cog):
 
     @staticmethod
     def get_random_role():
-        random_role = secrets.choice(ROLES)
-        embed = discord.Embed(color=random_role["color"])
+        role = secrets.choice(ROLES)
+        embed = discord.Embed(color=role["color"])
         embed.set_author(
-            name=random_role["name"].capitalize(), icon_url=random_role["icon"]
+            name=role["name"].capitalize(), icon_url=role["icon"]
         )
         return embed
 
@@ -77,28 +99,28 @@ class Fun(commands.Cog):
         heroes = self.bot.heroes
 
         if not category:
-            random_hero = secrets.choice(heroes)
+            hero = secrets.choice(heroes)
         else:
             categorized_heroes = [h for h in heroes if h["role"] == category]
-            random_hero = secrets.choice(categorized_heroes)
+            hero = secrets.choice(categorized_heroes)
 
-        embed = discord.Embed(color=self.get_hero_color(random_hero))
-        embed.set_author(name=random_hero["name"], icon_url=random_hero["portrait"])
+        embed = discord.Embed(color=self.get_hero_color(hero))
+        embed.set_author(name=hero["name"], icon_url=hero["portrait"])
         return embed
 
     async def get_random_map(self, ctx, category):
         maps = self.bot.maps
 
         if not category:
-            random_map = secrets.choice(maps)
+            _map = secrets.choice(maps)
         else:
             categorized_maps = [m for m in maps if category in m["types"]]
-            random_map = secrets.choice(categorized_maps)
+            _map = secrets.choice(categorized_maps)
 
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
-        embed.set_author(name=random_map["name"], icon_url=random_map["flag_url"])
-        embed.set_thumbnail(url=random_map["image_url"])
-        embed.set_footer(text="Type(s): " + ", ".join(random_map["types"]))
+        embed.set_author(name=_map["name"], icon_url=_map["flag_url"])
+        embed.set_thumbnail(url=_map["image_url"])
+        embed.set_footer(text=", ".join(_map["types"]))
         return embed
 
     async def get_meme(self, category):
@@ -135,9 +157,9 @@ class Fun(commands.Cog):
 
         Categories:
 
-        - Damage (dps)
-        - Support (heal, healear)
-        - Tank
+        - damage, dps
+        - support, heal, healear
+        - tank
 
         If no category is passed in, a random hero is chosen from all categories.
         """
@@ -162,24 +184,20 @@ class Fun(commands.Cog):
 
         Categories:
 
-        - Control
-        - Assault
-        - Escort
-        - Capture the Flag
-        - Hybrid
-        - Elimination
-        - Deathmatch
-        - Team Deathmatch
+        - control
+        - assault
+        - escort
+        - capture the flag, ctf
+        - hybrid
+        - elimination
+        - deathmatch
+        - team deathmatch, tdm
 
         If no category is passed in, a random map is chosen from all categories.
         """
         )
-        try:
-            embed = await self.get_random_map(ctx, category)
-        except IndexError:
-            await ctx.send(_("Unknown map category."))
-        else:
-            await ctx.send(embed=embed)
+        embed = await self.get_random_map(ctx, category)
+        await ctx.send(embed=embed)
 
     @commands.command()
     @locale
@@ -191,10 +209,10 @@ class Fun(commands.Cog):
 
         Categories:
 
-        - Hot
-        - New
-        - Top
-        - Rising
+        - hot
+        - new
+        - top
+        - rising
 
         All memes are taken from the subreddit r/Overwatch_Memes.
         """
