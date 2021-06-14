@@ -162,26 +162,6 @@ class Bot(commands.AutoShardedBot):
         else:
             return 5
 
-    def get_subcommands(self, ctx, command):
-        subcommands = getattr(command, "commands")
-        embed = discord.Embed(color=self.color(ctx.author.id))
-        embed.title = _("{command} Commands").format(command=str(command).capitalize())
-        embed.description = _(
-            'Use "{prefix}help {command} [command]" for more info on a command'
-        ).format(prefix=ctx.prefix, command=str(command))
-        embed.set_footer(
-            text=_("Replace [command] with one of the commands listed above.")
-        )
-        sub = [f"`{subcommand.name}`" for subcommand in subcommands]
-        value = ", ".join(sub)
-        embed.add_field(name=_("Commands Available"), value=value)
-        embed.add_field(
-            name=_("Usage"),
-            value=f"{ctx.prefix}{str(command)} [command]",
-            inline=False,
-        )
-        return embed
-
     def embed_exception(self, e):
         embed = discord.Embed(color=discord.Color.red())
         embed.title = _("An unknown error occured.")
