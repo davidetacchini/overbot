@@ -129,15 +129,6 @@ class Bot(commands.AutoShardedBot):
         pattern = re.compile(r"<@!?%s>" % user.id)
         return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), ctx.prefix)
 
-    def loading_embed(self):
-        embed = discord.Embed(color=discord.Color.dark_theme())
-        embed.set_author(name=_("Fetching..."), icon_url=self.config.loading_gif)
-        return embed
-
-    async def cleanup(self, message):
-        with suppress(discord.HTTPException, discord.Forbidden):
-            await message.delete()
-
     def get_line_count(self):
         for root, dirs, files in os.walk(os.getcwd()):
             [dirs.remove(d) for d in list(dirs) if d == "env"]
