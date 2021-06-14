@@ -58,17 +58,6 @@ class Server(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    @staticmethod
-    def get_placement(place):
-        placements = {
-            1: ":first_place:",
-            2: ":second_place:",
-            3: ":third_place:",
-            4: ":four:",
-            5: ":five:",
-        }
-        return placements.get(place)
-
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
@@ -104,7 +93,7 @@ class Server(commands.Cog):
 
                 board.append(
                     _(
-                        "{placement} **{guild}** ran a total of **{commands}** commands"
+                        "{index}. **{guild}** ran a total of **{commands}** commands"
                     ).format(
                         placement=placement,
                         guild=str(cur_guild),
