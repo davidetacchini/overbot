@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-14 11:13+0200\n"
+"POT-Creation-Date: 2021-06-14 14:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -592,7 +592,7 @@ msgstr ""
 msgid "Unknown meme category."
 msgstr ""
 
-#: cogs/fun.py:154
+#: cogs/fun.py:152
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -609,11 +609,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:173
+#: cogs/fun.py:171
 msgid "Returns a random role to play."
 msgstr ""
 
-#: cogs/fun.py:181
+#: cogs/fun.py:179
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -635,7 +635,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:206
+#: cogs/fun.py:204
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -682,14 +682,14 @@ msgstr ""
 
 #: cogs/server.py:52
 #, python-brace-format
-msgid "Use \"{prefix}prefix value\" to change it."
+msgid "Use \"{prefix}prefix [value]\" to change it."
 msgstr ""
 
 #: cogs/server.py:57
 msgid "Prefixes"
 msgstr ""
 
-#: cogs/server.py:77
+#: cogs/server.py:66
 msgid ""
 "Shows OverBot's most active servers.\n"
 "\n"
@@ -699,17 +699,17 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:94
+#: cogs/server.py:83
 msgid "Most Active Servers"
 msgstr ""
 
-#: cogs/server.py:96
+#: cogs/server.py:85
 msgid "Tracking command usage since - 03/31/2021"
 msgstr ""
 
-#: cogs/server.py:107
+#: cogs/server.py:96
 #, python-brace-format
-msgid "{placement} **{guild}** ran a total of **{commands}** commands"
+msgid "{index}. **{guild}** ran a total of **{commands}** commands"
 msgstr ""
 
 #: cogs/stats.py:27
@@ -786,69 +786,60 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:17
-#, python-brace-format
-msgid "{member} hasn't played trivia yet."
-msgstr ""
-
-#: cogs/trivia.py:34
+#: cogs/trivia.py:26
 #, python-brace-format
 msgid "You have 1 try and {timeout} seconds to respond."
 msgstr ""
 
-#: cogs/trivia.py:71
+#: cogs/trivia.py:63
 msgid "Correct!"
 msgstr ""
 
-#: cogs/trivia.py:72
+#: cogs/trivia.py:64
 msgid "+1 win"
 msgstr ""
 
-#: cogs/trivia.py:75
+#: cogs/trivia.py:67
 msgid "Wrong!"
 msgstr ""
 
-#: cogs/trivia.py:76
+#: cogs/trivia.py:68
 msgid "+1 loss"
 msgstr ""
 
-#: cogs/trivia.py:77
+#: cogs/trivia.py:69
 msgid "Correct answer"
 msgstr ""
 
-#: cogs/trivia.py:83
-msgid "Displays a list with all trivia's subcommands."
+#: cogs/trivia.py:75
+msgid "Play an Overwatch trivia game."
 msgstr ""
 
-#: cogs/trivia.py:90
-msgid "Play Overwatch trivia."
+#: cogs/trivia.py:98
+msgid "This member has no stats to show."
 msgstr ""
 
-#: cogs/trivia.py:129
+#: cogs/trivia.py:114
 msgid "Total"
 msgstr ""
 
-#: cogs/trivia.py:130
+#: cogs/trivia.py:115
 msgid "Won"
 msgstr ""
 
-#: cogs/trivia.py:131
+#: cogs/trivia.py:116
 msgid "Lost"
 msgstr ""
 
-#: cogs/trivia.py:132
+#: cogs/trivia.py:117
 msgid "Ratio (W/L)"
 msgstr ""
 
-#: cogs/trivia.py:133
+#: cogs/trivia.py:118
 msgid "Unanswered"
 msgstr ""
 
-#: cogs/trivia.py:134
-msgid "Contributions"
-msgstr ""
-
-#: cogs/trivia.py:141
+#: cogs/trivia.py:125
 msgid ""
 "Shows trivia stats.\n"
 "\n"
@@ -859,7 +850,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:181
+#: cogs/trivia.py:142
 msgid ""
 "Shows the best OverBot's trivia players.\n"
 "\n"
@@ -869,49 +860,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:197
+#: cogs/trivia.py:158
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:206
+#: cogs/trivia.py:167
 #, python-brace-format
 msgid ""
-"{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | "
-"Ratio: {ratio}"
-msgstr ""
-
-#: cogs/trivia.py:221
-msgid ""
-"Copy everything inside the code block below and hit the green checkmark.\n"
-"```\"question\": \"REPLACE\",\n"
-"\"image_url\": \"REPLACE\",\n"
-"\"correct_answer\": \"REPLACE\",\n"
-"\"wrong_answers\": [min 1 max 4]```"
-msgstr ""
-
-#: cogs/trivia.py:246
-msgid ""
-"Submit a new question to be added to trivia.\n"
-"\n"
-"        You can submit a new question once an hour.\n"
-"        "
-msgstr ""
-
-#: cogs/trivia.py:256
-msgid ""
-"Paste the code you copied before, replace everything and hit enter. You have "
-"60 seconds."
-msgstr ""
-
-#: cogs/trivia.py:270
-msgid "You took too long to submit the request."
-msgstr ""
-
-#: cogs/trivia.py:286
-#, python-brace-format
-msgid ""
-"{author}, your request has been successfully sent. Thanks for the "
-"contribution!"
+"{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: "
+"{ratio}"
 msgstr ""
 
 #: utils/player.py:28
@@ -995,7 +952,7 @@ msgid "Confirmation"
 msgstr ""
 
 #: classes/context.py:40
-msgid "You took to long to confirm."
+msgid "You took too long to confirm."
 msgstr ""
 
 #: classes/converters.py:8
