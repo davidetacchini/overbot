@@ -11,7 +11,7 @@ from discord.ext import commands
 
 from utils.i18n import _, locale
 from utils.checks import is_premium, has_profile, can_add_profile
-from utils.player import Player, NoStats, NoHeroStats
+from utils.player import Player
 from utils.request import Request, RequestError
 from utils.paginator import Link, Update
 from classes.converters import Hero, valid_index
@@ -365,7 +365,7 @@ class Profile(commands.Cog):
         If you want to see a member's ratings, you must enter both the index and the member.
         """
         )
-        async with ctx.typing():
+        async with ctx.fetching():
             member = member or ctx.author
             id, platform, username = await self.get_profile(
                 ctx, member=member, index=index
@@ -404,26 +404,15 @@ class Profile(commands.Cog):
         If you want to see a member's stats, you must enter both the index and the member.
         """
         )
-        async with ctx.typing():
+        async with ctx.fetching():
             member = member or ctx.author
             unused, platform, username = await self.get_profile(
                 ctx, member=member, index=index
             )
 
-            try:
-                data = await Request(platform=platform, username=username).get()
-            except RequestError as e:
-                return await ctx.send(e)
-
-            profile = Player(data, platform=platform, username=username)
-            if profile.is_private:
-                embed = profile.private()
-            else:
-                try:
-                    embed = profile.get_stats(ctx)
-                except NoStats as e:
-                    return await ctx.send(e)
-            await self.bot.paginator.Paginator(pages=embed).start(ctx)
+            cog = self.bot.get_cog("Stats")
+            if cog:
+                await cog.show_stats_for(ctx, platform, username)
 
     @has_profile()
     @profile.command()
@@ -444,26 +433,15 @@ class Profile(commands.Cog):
         If you want to see a member's stats, you must enter both the index and the member.
         """
         )
-        async with ctx.typing():
+        async with ctx.fetching():
             member = member or ctx.author
             unused, platform, username = await self.get_profile(
                 ctx, member=member, index=index
             )
 
-            try:
-                data = await Request(platform=platform, username=username).get()
-            except RequestError as e:
-                return await ctx.send(e)
-
-            profile = Player(data, platform=platform, username=username)
-            if profile.is_private:
-                embed = profile.private()
-            else:
-                try:
-                    embed = profile.get_hero(ctx, hero)
-                except NoHeroStats as e:
-                    return await ctx.send(e)
-            await self.bot.paginator.Paginator(pages=embed).start(ctx)
+            cog = self.bot.get_cog("Stats")
+            if cog:
+                await cog.show_hero_stats_for(ctx, hero, platform, username)
 
     @has_profile()
     @profile.command(aliases=["nick"])
