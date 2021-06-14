@@ -49,7 +49,7 @@ class Server(commands.Cog):
             pre = await self.bot.pool.fetchval(query, ctx.guild.id)
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.set_footer(
-                text=_('Use "{prefix}prefix value" to change it.').format(
+                text=_('Use "{prefix}prefix [value]" to change it.').format(
                     prefix=self.bot.clean_prefix(ctx)
                 )
             )
