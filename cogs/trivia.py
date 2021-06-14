@@ -1,6 +1,5 @@
 import json
 import random
-import asyncio
 import secrets
 
 import discord
@@ -8,13 +7,6 @@ from discord.ext import commands
 
 from utils.i18n import _, locale
 from utils.paginator import Choose
-
-
-class MemberHasNoStats(Exception):
-    """Exception raised when a member has no trivia stats to display."""
-
-    def __init__(self, member):
-        super().__init__(_(f"{member} hasn't played trivia yet."))
 
 
 class Trivia(commands.Cog):
@@ -80,14 +72,7 @@ class Trivia(commands.Cog):
     @commands.group(invoke_without_command=True)
     @locale
     async def trivia(self, ctx):
-        _("""Displays a list with all trivia's subcommands.""")
-        embed = self.bot.get_subcommands(ctx, ctx.command)
-        await ctx.send(embed=embed)
-
-    @trivia.command()
-    @locale
-    async def play(self, ctx):
-        _("""Play Overwatch trivia.""")
+        _("""Play an Overwatch trivia game.""")
         try:
             question = self.get_question()
         except Exception as e:
@@ -106,11 +91,11 @@ class Trivia(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    async def get_member_trivia_stats(self, member):
+    async def get_member_stats(self, member):
         query = "SELECT * FROM trivia WHERE id = $1;"
         member_stats = await self.bot.pool.fetchrow(query, member.id)
         if not member_stats:
-            raise MemberHasNoStats(member)
+            raise commands.BadArgument(_("This member has no stats to show."))
         return member_stats
 
     def get_player_ratio(self, won, lost):
@@ -131,7 +116,6 @@ class Trivia(commands.Cog):
         embed.add_field(name=_("Lost"), value=stats["lost"])
         embed.add_field(name=_("Ratio (W/L)"), value="%.2f" % ratio)
         embed.add_field(name=_("Unanswered"), value=unanswered)
-        embed.add_field(name=_("Contributions"), value=stats["contribs"])
         return embed
 
     @trivia.command()
@@ -146,32 +130,9 @@ class Trivia(commands.Cog):
         """
         )
         member = member or ctx.author
-        try:
-            stats = await self.get_member_trivia_stats(member)
-        except MemberHasNoStats as e:
-            return await ctx.send(e)
-
-        try:
-            embed = self.embed_member_stats(member, stats)
-        except Exception as e:
-            await ctx.send(e)
-        else:
-            await ctx.send(embed=embed)
-
-    def get_placement(self, place):
-        placements = {
-            1: ":first_place:",
-            2: ":second_place:",
-            3: ":third_place:",
-            4: ":four:",
-            5: ":five:",
-            6: ":six:",
-            7: ":seven:",
-            8: ":eight:",
-            9: ":nine:",
-            10: ":keycap_ten:",
-        }
-        return placements.get(place)
+        stats = await self.get_member_stats(member)
+        embed = self.embed_member_stats(member, stats)
+        await ctx.send(embed=embed)
 
     @trivia.command(aliases=["top"])
     @commands.cooldown(1, 60.0, commands.BucketType.member)
@@ -203,7 +164,7 @@ class Trivia(commands.Cog):
                 ratio = self.get_player_ratio(player["won"], player["lost"])
                 board.append(
                     _(
-                        "{placement} **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}"
+                        "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}"
                     ).format(
                         placement=placement,
                         player=str(cur_player),
@@ -215,77 +176,6 @@ class Trivia(commands.Cog):
                 )
             embed.description = "\n".join(board)
             await ctx.send(embed=embed)
-
-    def get_submit_message(self):
-        return _(
-            "Copy everything inside the code block below and hit the green checkmark.\n"
-            '```"question": "REPLACE",\n'
-            '"image_url": "REPLACE",\n'
-            '"correct_answer": "REPLACE",\n'
-            '"wrong_answers": [min 1 max 4]```'
-        )
-
-    async def update_member_contribs_stats(self, member_id):
-        query = """INSERT INTO trivia(id, contribs)
-                   VALUES($1, 1)
-                   ON CONFLICT (id) DO
-                   UPDATE SET contribs = trivia.contribs + 1;
-                """
-        await self.bot.pool.execute(query, member_id)
-
-    def format_content(self, content):
-        if content.startswith("```") and content.endswith("```"):
-            return content
-        return "```json\n" + content + "```"
-
-    @trivia.command(aliases=["contrib"])
-    @commands.cooldown(1, 3600, commands.BucketType.member)
-    @locale
-    async def submit(self, ctx):
-        _(
-            """Submit a new question to be added to trivia.
-
-        You can submit a new question once an hour.
-        """
-        )
-        if not await ctx.prompt(self.get_submit_message()):
-            return
-
-        await ctx.send(
-            _(
-                "Paste the code you copied before, replace everything and hit enter. You have 60 seconds."
-            )
-        )
-
-        def check(m):
-            if m.author.id != ctx.author.id:
-                return False
-            if m.channel.id != ctx.channel.id:
-                return False
-            return True
-
-        try:
-            message = await self.bot.wait_for("message", check=check, timeout=60.0)
-        except asyncio.TimeoutError:
-            await ctx.send(_("You took too long to submit the request."))
-        else:
-            channel = self.bot.get_channel(self.bot.config.trivia_channel)
-            if not channel:
-                return
-
-            content = self.format_content(message.content)
-
-            embed = discord.Embed(color=self.bot.color())
-            embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-            embed.description = content
-            await channel.send(embed=embed)
-
-            await self.update_member_contribs_stats(ctx.author.id)
-            await ctx.send(
-                _(
-                    "{author}, your request has been successfully sent. Thanks for the contribution!"
-                ).format(author=str(ctx.author))
-            )
 
 
 def setup(bot):
