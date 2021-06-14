@@ -52,9 +52,6 @@ discord_bots = {
 
 # ENDIGNORE
 
-"""Loading GIF"""
-loading_gif = "https://i.imgur.com/DwjPYQn.gif"
-
 """The owner's ID."""
 owner_id = 285502621295312896
 
