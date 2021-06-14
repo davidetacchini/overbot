@@ -32,11 +32,11 @@ class NoStats(PlayerException):
 class NoHeroStats(PlayerException):
     """Exception raised when a player has no quick play nor competitive stats for a given hero."""
 
-    def __init__(self, player, hero):
+    def __init__(self, hero):
         super().__init__(
             _(
-                "**{player}** has no quick play nor competitive stast for **{hero}** to display."
-            ).format(player=player, hero=hero)
+                "This profile has no quick play nor competitive stast for **{hero}** to display."
+            ).format(hero=hero)
         )
 
 
@@ -179,7 +179,7 @@ class Player:
         c = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
 
         if hero != "allHeroes" and not q and not c:
-            raise NoHeroStats(str(self), hero)
+            raise NoHeroStats(hero)
 
         keys = list({*q, *c})
         keys.sort()
