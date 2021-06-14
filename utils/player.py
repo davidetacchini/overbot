@@ -48,7 +48,6 @@ class Player:
         self.data = data
         self.platform = platform
         self.username = username
-
         self.pages = []
 
     def __str__(self):

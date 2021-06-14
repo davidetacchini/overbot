@@ -2,7 +2,6 @@ import os
 import re
 import asyncio
 import datetime
-from contextlib import suppress
 
 import asyncpg
 import discord
@@ -34,7 +33,6 @@ class Bot(commands.AutoShardedBot):
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
         self.paginator = pygicord
-
         self.total_lines = 0
 
         # caching
