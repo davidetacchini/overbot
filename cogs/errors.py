@@ -67,7 +67,7 @@ class ErrorHandler(commands.Cog):
         ):
             return
 
-        if isinstance(error, NoChoice):
+        elif isinstance(error, NoChoice):
             await ctx.send(_("You took too long to reply."))
 
         elif isinstance(error, commands.CommandInvokeError) and hasattr(
