@@ -72,9 +72,6 @@ support_server_id = 550685823784321035
 """Overwatch news feed channel."""
 news_channel = 771489241288540220
 
-"""Channel ID for trivia submits."""
-trivia_channel = 783149071217065985
-
 # ENDIGNORE
 
 """Hero portrait URL."""
