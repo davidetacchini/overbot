@@ -67,6 +67,15 @@ class Bot(commands.AutoShardedBot):
     def debug(self):
         return config.DEBUG
 
+    @property
+    def webhook(self):
+        wh_id, wh_token = (config.webhook["id"], config.webhook["token"])
+        return discord.Webhook.partial(
+            id=wh_id,
+            token=wh_token,
+            adapter=discord.AsyncWebhookAdapter(self.bot.session),
+        )
+
     def color(self, member_id: discord.Member = None):
         return self.embed_colors.get(member_id, config.main_color)
 
