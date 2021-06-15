@@ -3,7 +3,34 @@ from discord.ext import commands
 
 from utils import i18n
 from utils.i18n import _, locale
-from utils.paginator import ChooseLocale
+
+
+def valid_locale(argument):
+    valid = {
+        "it_it": "it_IT",
+        "it": "it_IT",
+        "en_us": "en_US",
+        "en": "en_US",
+        "de_de": "de_DE",
+        "de": "de_DE",
+        "ru_ru": "ru_RU",
+        "ru": "ru_RU",
+        "ko_kr": "ko_KR",
+        "ko": "ko_KR",
+        "ja_jp": "ja_JP",
+        "ja": "ja_JP",
+        "fr_fr": "fr_FR",
+        "fr": "fr_FR",
+    }
+
+    try:
+        locale = valid[argument.lower()]
+    except KeyError:
+        raise commands.BadArgument(
+            _("Unknown locale: **{argument}**").format(argument=argument)
+        )
+
+    return locale
 
 
 class Locale(commands.Cog):
@@ -42,23 +69,19 @@ class Locale(commands.Cog):
             text=_("Current language set: {locale}").format(locale=current_locale)
         )
 
-        description = []
-        for _locale in i18n.locales:
-            description.append(f"`{_locale}`")
-
-        embed.description = ", ".join(description)
+        locales = ", ".join(map(lambda l: f"`{l}`", i18n.locales))
+        embed.description = locales
         await ctx.send(embed=embed)
 
     @language.command()
     @locale
-    async def set(self, ctx):
-        _("""Update the bot language.""")
-        title = _("Set the bot language")
-        locale = await ChooseLocale(title=title).start(ctx)
+    async def set(self, ctx, locale: valid_locale):
+        _(
+            """Update the bot language.
 
-        if not locale:
-            return
-
+        `<locale>` - The locale code of the language to use.
+        """
+        )
         await self.set_locale(ctx.author.id, locale)
         i18n.current_locale.set(locale)
         self.bot.locales[ctx.author.id] = locale
