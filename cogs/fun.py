@@ -156,7 +156,7 @@ class Fun(commands.Cog):
         Categories:
 
         - damage, dps
-        - support, heal, healear
+        - support, heal, healer
         - tank
 
         If no category is passed in, a random hero is chosen from all categories.
