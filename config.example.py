@@ -86,12 +86,6 @@ github = {
     "repo": "https://github.com/davidetacchini/overbot",
 }
 
-"""Random endpoints."""
-random = {
-    "hero": "https://playoverwatch.com/en-us/heroes",
-    "map": "https://playoverwatch.com/en-us/maps",
-}
-
 """Overwatch endpoints."""
 overwatch = {
     "status": "https://downdetector.com/status/overwatch/",
@@ -99,6 +93,8 @@ overwatch = {
     "news": "https://playoverwatch.com/en-us/news/",
     "player": "https://playoverwatch.com/en-us/career/{}/{}/",
     "account": "https://playoverwatch.com/en-us/search/account-by-name",
+    "hero": "https://playoverwatch.com/en-us/heroes",
+    "map": "https://playoverwatch.com/en-us/maps",
 }
 
 """Python logo."""
@@ -111,7 +107,7 @@ website = "https://overbot.netlify.app"
 support = "https://discord.gg/8g3jnxv"
 
 """Invite link."""
-invite = "https://discord.com/api/oauth2/authorize?client_id=547546531666984961&permissions=134498368&scope=bot"
+invite = "https://discord.com/oauth2/authorize?client_id=547546531666984961&permissions=134506560&scope=bot"
 
 """Vote link."""
 vote = "https://top.gg/bot/547546531666984961/vote"
@@ -123,6 +119,5 @@ premium = "https://overbot.netlify.app/premium"
 ignored_guilds = (
     550685823784321035,
     638339745117896745,
-    264445053596991498,
     110373943822540800,
 )
