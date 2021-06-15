@@ -71,46 +71,6 @@ class ErrorHandler(commands.Cog):
         ):
             return
 
-        elif isinstance(error, NoChoice):
-            await ctx.send(_("You took too long to reply."))
-
-        elif isinstance(error, commands.CommandInvokeError) and hasattr(
-            error, "original"
-        ):
-            if isinstance(error.original, DataError):
-                await ctx.send(_("The argument you entered cannot be handled."))
-            elif isinstance(error.original, RequestError):
-                await ctx.send(error.original)
-            elif isinstance(error.original, PlayerException):
-                await ctx.send(error.original)
-            else:
-                e = error.original
-                embed = discord.Embed(color=discord.Color.red())
-                embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                embed.add_field(name="Command", value=ctx.command.qualified_name)
-                content = textwrap.shorten(ctx.message.content, width=512)
-                embed.add_field(name="Content", value=content)
-                if ctx.guild:
-                    guild = f"{str(ctx.guild)} ({ctx.guild.id})"
-                    embed.add_field(name="Guild", value=guild, inline=False)
-                try:
-                    exc = "".join(
-                        traceback.format_exception(
-                            type(e), e, e.__traceback__, chain=False
-                        )
-                    )
-                except AttributeError:
-                    print(e)
-                embed.description = f"```py\n{exc}\n```"
-                embed.timestamp = ctx.message.created_at
-                if not self.bot.debug:
-                    await self.bot.webhook.send(embed=embed)
-                await ctx.send(
-                    _(
-                        "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
-                    )
-                )
-
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
@@ -137,6 +97,44 @@ class ErrorHandler(commands.Cog):
                     )
                 )
                 await ctx.send(embed=embed)
+
+        elif isinstance(error, commands.CommandInvokeError) and hasattr(
+            error, "original"
+        ):
+            group = (RequestError, PlayerException, NoChoice)
+            if isinstance(error.original, DataError):
+                await ctx.send(_("The argument you entered cannot be handled."))
+            elif isinstance(error.original, group):
+                await ctx.send(error.original)
+            else:
+                e = error.original
+                embed = discord.Embed(color=discord.Color.red())
+                embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+                embed.add_field(name="Command", value=ctx.command.qualified_name)
+                content = textwrap.shorten(ctx.message.content, width=512)
+                embed.add_field(name="Content", value=content)
+                if ctx.guild:
+                    guild = f"{str(ctx.guild)} ({ctx.guild.id})"
+                    embed.add_field(name="Guild", value=guild, inline=False)
+                try:
+                    exc = "".join(
+                        traceback.format_exception(
+                            type(e), e, e.__traceback__, chain=False
+                        )
+                    )
+                except AttributeError:
+                    print(e)
+                embed.description = f"```py\n{exc}\n```"
+                embed.timestamp = ctx.message.created_at
+                if not self.bot.debug:
+                    await self.bot.webhook.send(embed=embed)
+                else:
+                    print(e)
+                await ctx.send(
+                    _(
+                        "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
+                    )
+                )
 
 
 def setup(bot):
