@@ -103,7 +103,8 @@ class ErrorHandler(commands.Cog):
                     print(e)
                 embed.description = f"```py\n{exc}\n```"
                 embed.timestamp = ctx.message.created_at
-                await self.bot.webhook.send(embed=embed)
+                if not self.bot.debug:
+                    await self.bot.webhook.send(embed=embed)
                 await ctx.send(
                     _(
                         "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
