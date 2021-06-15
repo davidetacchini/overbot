@@ -96,11 +96,11 @@ class ErrorHandler(commands.Cog):
                 try:
                     exc = "".join(
                         traceback.format_exception(
-                            type(e), e, e.__traceback___, chain=False
+                            type(e), e, e.__traceback__, chain=False
                         )
                     )
                 except AttributeError:
-                    exc = "".join(traceback.format_exception(type(e), e, chain=False))
+                    print(e)
                 embed.description = f"```py\n{exc}\n```"
                 embed.timestamp = ctx.message.created_at
                 channel = self.bot.get_channel(775348334457782289)
