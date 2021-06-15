@@ -12,7 +12,6 @@ from discord.ext import commands
 
 import config
 from utils import i18n
-from utils.i18n import _
 from utils.time import human_timedelta
 from utils.checks import global_cooldown
 from utils.scrape import get_overwatch_maps, get_overwatch_heroes
@@ -150,17 +149,6 @@ class Bot(commands.AutoShardedBot):
             return 25
         else:
             return 5
-
-    def embed_exception(self, e):
-        embed = discord.Embed(color=discord.Color.red())
-        embed.title = _("An unknown error occured.")
-        embed.description = _(
-            "Please report the following error to the developer by clicking [here]({report_channel})".format(
-                report_channel="https://discord.gg/eZU69EV"
-            )
-        )
-        embed.add_field(name=type(e).__name__, value=e)
-        return embed
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=Context)

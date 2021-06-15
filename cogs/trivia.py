@@ -73,13 +73,8 @@ class Trivia(commands.Cog):
     @locale
     async def trivia(self, ctx):
         _("""Play an Overwatch trivia game.""")
-        try:
-            question = self.get_question()
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-
+        question = self.get_question()
         await self.update_member_games_started(ctx.author.id)
-
         result = await self.get_result(ctx, question)
         if result:
             await self.update_member_stats(ctx.author.id)

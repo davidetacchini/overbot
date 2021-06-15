@@ -249,17 +249,13 @@ class Profile(commands.Cog):
         if not username:
             return
 
-        try:
-            await self.insert_profile(platform, username, member_id=ctx.author.id)
-            if not await self.has_main_profile(ctx.author.id):
-                # set the first profile linked as the main one
-                query = "SELECT id FROM profile WHERE member_id = $1;"
-                profile_id = await self.bot.pool.fetchval(query, ctx.author.id)
-                await self.set_main_profile(ctx.author.id, profile_id=profile_id)
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send(_("Profile successfully linked."))
+        await self.insert_profile(platform, username, member_id=ctx.author.id)
+        if not await self.has_main_profile(ctx.author.id):
+            # set the first profile linked as the main one
+            query = "SELECT id FROM profile WHERE member_id = $1;"
+            profile_id = await self.bot.pool.fetchval(query, ctx.author.id)
+            await self.set_main_profile(ctx.author.id, profile_id=profile_id)
+        await ctx.send(_("Profile successfully linked."))
 
     @has_profile()
     @profile.command(aliases=["remove"])
@@ -297,12 +293,8 @@ class Profile(commands.Cog):
         ):
             return
 
-        try:
-            await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id)
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send(_("Profile successfully unlinked."))
+        await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id)
+        await ctx.send(_("Profile successfully unlinked."))
 
     @has_profile()
     @profile.command()

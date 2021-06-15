@@ -128,18 +128,11 @@ class Member(commands.Cog):
 
         clr = int(clr.lstrip("#"), 16)
         embed = discord.Embed(color=clr)
-
-        try:
-            query = "UPDATE member SET embed_color = $1 WHERE id = $2;"
-            await self.bot.pool.execute(query, clr, ctx.author.id)
-            self.bot.embed_colors[ctx.author.id] = clr
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            embed.description = _("Color successfully set to `{color}`").format(
-                color=color
-            )
-            await ctx.send(embed=embed)
+        query = "UPDATE member SET embed_color = $1 WHERE id = $2;"
+        await self.bot.pool.execute(query, clr, ctx.author.id)
+        self.bot.embed_colors[ctx.author.id] = clr
+        embed.description = _("Color successfully set to `{color}`").format(color=color)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

@@ -58,16 +58,13 @@ class Locale(commands.Cog):
 
         if not locale:
             return
-        try:
-            await self.set_locale(ctx.author.id, locale)
-            i18n.current_locale.set(locale)
-            self.bot.locales[ctx.author.id] = locale
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send(
-                _("Language successfully set to: `{locale}`").format(locale=locale)
-            )
+
+        await self.set_locale(ctx.author.id, locale)
+        i18n.current_locale.set(locale)
+        self.bot.locales[ctx.author.id] = locale
+        await ctx.send(
+            _("Language successfully set to: `{locale}`").format(locale=locale)
+        )
 
 
 def setup(bot):
