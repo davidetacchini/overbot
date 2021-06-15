@@ -3,7 +3,6 @@ from typing import Union, Optional
 from contextlib import suppress
 
 import discord
-from discord.ext.commands import CommandInvokeError
 
 from config import main_color
 from utils.i18n import _
@@ -16,10 +15,9 @@ PLATFORMS = {
 }
 
 
-class NoChoice(CommandInvokeError):
-    """Exception raised when no choice is given."""
-
-    pass
+class NoChoice(Exception):
+    def __init__(self):
+        super().__init__(_("Took too long."))
 
 
 class BasePaginator:
@@ -115,7 +113,7 @@ class BasePaginator:
                 "reaction_add", check=check, timeout=self.timeout
             )
         except asyncio.TimeoutError:
-            raise NoChoice("You took too long to reply.")
+            raise NoChoice() from None
         else:
             return self.result(reaction)
         finally:
@@ -209,40 +207,6 @@ class Choose(BasePaginator):
         for index, entry in enumerate(self.entries, start=1):
             self.reactions.append(f"{index}\u20e3")
             self.description.append(f"{index}. {entry}")
-
-        self.embed.description = "\n".join(self.description)
-
-        return await self.paginator()
-
-
-class ChooseLocale(BasePaginator):
-
-    __slots__ = "title"
-
-    def __init__(self, *, title):
-        super().__init__(title=title)
-        self.reactions = {
-            "🇩🇪": "de_DE",
-            "🇺🇸": "en_US",
-            "🇫🇷": "fr_FR",
-            "🇮🇹": "it_IT",
-            "🇯🇵": "ja_JP",
-            "🇰🇷": "ko_KR",
-            "🇷🇺": "ru_RU",
-            "❌": None,
-        }
-
-    def result(self, reaction):
-        return self.reactions.get(str(reaction.emoji))
-
-    async def start(self, ctx):
-        self.ctx = ctx
-        self.bot = ctx.bot
-        self.author = ctx.author
-        self.embed = self.init_embed()
-
-        for key, value in self.reactions.items():
-            self.description.append(f"{key} - `{value}`")
 
         self.embed.description = "\n".join(self.description)
 
