@@ -357,7 +357,7 @@ class Profile(commands.Cog):
         If you want to see a member's ratings, you must enter both the index and the member.
         """
         )
-        async with ctx.fetching():
+        async with ctx.typing():
             member = member or ctx.author
             id, platform, username = await self.get_profile(
                 ctx, member=member, index=index
@@ -392,7 +392,7 @@ class Profile(commands.Cog):
         If you want to see a member's stats, you must enter both the index and the member.
         """
         )
-        async with ctx.fetching():
+        async with ctx.typing():
             member = member or ctx.author
             unused, platform, username = await self.get_profile(
                 ctx, member=member, index=index
@@ -421,7 +421,7 @@ class Profile(commands.Cog):
         If you want to see a member's stats, you must enter both the index and the member.
         """
         )
-        async with ctx.fetching():
+        async with ctx.typing():
             member = member or ctx.author
             unused, platform, username = await self.get_profile(
                 ctx, member=member, index=index
