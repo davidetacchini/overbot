@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 16:09+0200\n"
+"POT-Creation-Date: 2021-06-15 19:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,42 +48,38 @@ msgstr ""
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:75 cogs/profile.py:149
-msgid "You took too long to reply."
-msgstr ""
-
-#: cogs/errors.py:81
-msgid "The argument you entered cannot be handled."
-msgstr ""
-
-#: cogs/errors.py:110
-msgid ""
-"This command ran into an error. The incident has been reported and will be "
-"fixed as soon as possible!"
-msgstr ""
-
-#: cogs/errors.py:118
+#: cogs/errors.py:78
 #, python-brace-format
 msgid ""
 "You haven't linked a profile yet. Use \"{prefix}profile link\" to start."
 msgstr ""
 
-#: cogs/errors.py:126
+#: cogs/errors.py:86
 #, python-brace-format
 msgid ""
 "Max profiles limit reached.\n"
 "[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
 msgstr ""
 
-#: cogs/errors.py:130
+#: cogs/errors.py:90
 msgid "Max profiles limit reached."
 msgstr ""
 
-#: cogs/errors.py:135
+#: cogs/errors.py:95
 #, python-brace-format
 msgid ""
 "This command requires a Premium membership.\n"
 "[Click here]({premium}) to have a look at the Premium plan."
+msgstr ""
+
+#: cogs/errors.py:106
+msgid "The argument you entered cannot be handled."
+msgstr ""
+
+#: cogs/errors.py:135
+msgid ""
+"This command ran into an error. The incident has been reported and will be "
+"fixed as soon as possible!"
 msgstr ""
 
 #: cogs/help.py:59
@@ -184,28 +180,33 @@ msgstr ""
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
-#: cogs/locale.py:37
+#: cogs/locale.py:30
+#, python-brace-format
+msgid "Unknown locale: **{locale}**"
+msgstr ""
+
+#: cogs/locale.py:63
 msgid "Displays your current language set and all the available languages."
 msgstr ""
 
-#: cogs/locale.py:39
+#: cogs/locale.py:65
 msgid "Available Languages"
 msgstr ""
 
-#: cogs/locale.py:42
+#: cogs/locale.py:68
 #, python-brace-format
 msgid "Current language set: {locale}"
 msgstr ""
 
-#: cogs/locale.py:55
-msgid "Update the bot language."
+#: cogs/locale.py:79
+msgid ""
+"Update the bot language.\n"
+"\n"
+"        `<locale>` - The locale code of the language to use.\n"
+"        "
 msgstr ""
 
-#: cogs/locale.py:56
-msgid "Set the bot language"
-msgstr ""
-
-#: cogs/locale.py:66
+#: cogs/locale.py:88
 #, python-brace-format
 msgid "Language successfully set to: `{locale}`"
 msgstr ""
@@ -364,6 +365,10 @@ msgstr ""
 msgid "Enter your Nintendo Switch ID:"
 msgstr ""
 
+#: cogs/profile.py:149
+msgid "You took too long to reply."
+msgstr ""
+
 #: cogs/profile.py:191
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
@@ -455,11 +460,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:338 utils/paginator.py:130 utils/paginator.py:184
+#: cogs/profile.py:338 utils/paginator.py:128 utils/paginator.py:182
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:339 utils/paginator.py:185
+#: cogs/profile.py:339 utils/paginator.py:183
 msgid "Username"
 msgstr ""
 
@@ -575,7 +580,7 @@ msgid ""
 "        Categories:\n"
 "\n"
 "        - damage, dps\n"
-"        - support, heal, healear\n"
+"        - support, heal, healer\n"
 "        - tank\n"
 "\n"
 "        If no category is passed in, a random hero is chosen from all "
@@ -917,16 +922,16 @@ msgstr ""
 msgid "**{players}** accounts found under the name of `{username}`"
 msgstr ""
 
-#: utils/paginator.py:131
+#: utils/paginator.py:20
+msgid "Took too long."
+msgstr ""
+
+#: utils/paginator.py:129
 msgid "React with the platform you play on..."
 msgstr ""
 
-#: classes/context.py:20
+#: classes/context.py:19
 msgid "Confirmation"
-msgstr ""
-
-#: classes/context.py:41
-msgid "You took too long to confirm."
 msgstr ""
 
 #: classes/converters.py:22
@@ -936,8 +941,4 @@ msgstr ""
 
 #: classes/converters.py:32
 msgid "Index must be a number."
-msgstr ""
-
-#: classes/fetching.py:18
-msgid "Fetching..."
 msgstr ""
