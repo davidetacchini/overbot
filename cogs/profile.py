@@ -1,4 +1,5 @@
 import asyncio
+
 from io import BytesIO
 from contextlib import suppress
 
@@ -6,6 +7,7 @@ import pandas as pd
 import discord
 import seaborn as sns
 import matplotlib
+
 from matplotlib import pyplot
 from discord.ext import commands
 
@@ -192,22 +194,14 @@ class Profile(commands.Cog):
                 )
             )
         except discord.HTTPException:
-            await ctx.send(
-                _(
-                    "Something bad happened while updating your nickname. Please try again."
-                )
-            )
+            await ctx.send(_("Something bad happened while updating your nickname."))
 
         if not remove:
             query = (
                 "INSERT INTO nickname(id, server_id, profile_id) VALUES($1, $2, $3);"
             )
             await self.bot.pool.execute(query, member.id, ctx.guild.id, profile_id)
-            await ctx.send(
-                _(
-                    "Nickname successfully set. Your SR will now be visible in your nickname within this server."
-                )
-            )
+            await ctx.send(_("Nickname successfully set."))
         else:
             query = "DELETE FROM nickname WHERE id = $1;"
             await self.bot.pool.execute(query, member.id)
