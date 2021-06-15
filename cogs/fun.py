@@ -29,7 +29,7 @@ ROLES = [
 ]
 
 
-def hero_cat(argument):
+def valid_hero_cat(argument):
     valid = {
         "tank": "tank",
         "damage": "damage",
@@ -46,7 +46,7 @@ def hero_cat(argument):
     return category
 
 
-def map_cat(argument):
+def valid_map_cat(argument):
     valid = {
         "control": "control",
         "assault": "assault",
@@ -67,7 +67,7 @@ def map_cat(argument):
     return category
 
 
-def meme_cat(argument):
+def valid_meme_cat(argument):
     argument = argument.lower()
     if argument not in ("hot", "new", "top", "rising"):
         raise commands.BadArgument(_("Unknown meme category."))
@@ -147,7 +147,7 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=["htp"])
     @locale
-    async def herotoplay(self, ctx, category: hero_cat = None):
+    async def herotoplay(self, ctx, category: valid_hero_cat = None):
         _(
             """Returns a random hero to play.
 
@@ -174,7 +174,7 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=["mtp"])
     @locale
-    async def maptoplay(self, ctx, *, category: map_cat = None):
+    async def maptoplay(self, ctx, *, category: valid_map_cat = None):
         _(
             """Returns a random map.
 
@@ -199,7 +199,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     @locale
-    async def meme(self, ctx, category: meme_cat = "hot"):
+    async def meme(self, ctx, category: valid_meme_cat = "hot"):
         _(
             """Returns a random Overwatch meme.
 
@@ -215,13 +215,9 @@ class Fun(commands.Cog):
         All memes are taken from the subreddit r/Overwatch_Memes.
         """
         )
-        try:
-            meme = await self.get_meme(category)
-            embed = self.embed_meme(ctx, meme)
-        except Exception as e:
-            await ctx.send(embed=self.bot.embed_exception(e))
-        else:
-            await ctx.send(embed=embed)
+        meme = await self.get_meme(category)
+        embed = self.embed_meme(ctx, meme)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
