@@ -42,7 +42,7 @@ async def get_overwatch_patch_notes(ctx):
 
 
 async def get_overwatch_maps():
-    content = await fetch(config.random["map"])
+    content = await fetch(config.overwatch["map"])
     page = BeautifulSoup(content, features="html.parser")
 
     all_maps = []
@@ -62,7 +62,7 @@ async def get_overwatch_maps():
 
 
 async def get_overwatch_heroes():
-    content = await fetch(config.random["hero"])
+    content = await fetch(config.overwatch["hero"])
     page = BeautifulSoup(content, features="html.parser")
 
     all_heroes = []
