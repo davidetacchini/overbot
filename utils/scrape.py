@@ -1,4 +1,5 @@
 import aiohttp
+
 from bs4 import BeautifulSoup
 
 import config

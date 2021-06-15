@@ -2,6 +2,7 @@ import textwrap
 import traceback
 
 import discord
+
 from asyncpg import DataError
 from discord.ext import commands
 from discord.ext.menus import MenuError
