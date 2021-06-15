@@ -6,29 +6,6 @@ from discord.ext import commands
 
 from utils.i18n import _, locale
 
-ROLES = [
-    {
-        "name": "tank",
-        "icon": "https://cdn.discordapp.com/attachments/531857697625341952/550347529225764865/TankIcon.png",
-        "color": 0xFAA528,
-    },
-    {
-        "name": "damage",
-        "icon": "https://cdn.discordapp.com/attachments/531857697625341952/550347576210227211/OffenseIcon.png",
-        "color": 0xE61B23,
-    },
-    {
-        "name": "support",
-        "icon": "https://cdn.discordapp.com/attachments/531857697625341952/550347552575324160/SupportIcon.png",
-        "color": 0x13A549,
-    },
-    {
-        "name": "flex",
-        "icon": "https://cdn.discordapp.com/attachments/580361889985593345/637232674062467092/FlexIcon.png",
-        "color": 0xFA9C1E,
-    },
-]
-
 
 def valid_hero_cat(argument):
     valid = {
@@ -79,48 +56,23 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @staticmethod
-    def get_hero_color(hero):
-        if hero["role"] == "tank":
-            return 0xFAA528
-        elif hero["role"] == "damage":
-            return 0xE61B23
-        return 0x13A549
-
-    @staticmethod
-    def get_random_role():
-        role = secrets.choice(ROLES)
-        embed = discord.Embed(color=role["color"])
-        embed.set_author(name=role["name"].capitalize(), icon_url=role["icon"])
-        return embed
-
-    async def get_random_hero(self, category):
+    def get_random_hero(self, category):
         heroes = self.bot.heroes
-
         if not category:
             hero = secrets.choice(heroes)
         else:
             categorized_heroes = [h for h in heroes if h["role"] == category]
             hero = secrets.choice(categorized_heroes)
+        return hero["name"]
 
-        embed = discord.Embed(color=self.get_hero_color(hero))
-        embed.set_author(name=hero["name"], icon_url=hero["portrait"])
-        return embed
-
-    async def get_random_map(self, ctx, category):
+    def get_random_map(self, ctx, category):
         maps = self.bot.maps
-
         if not category:
             _map = secrets.choice(maps)
         else:
             categorized_maps = [m for m in maps if category in m["types"]]
             _map = secrets.choice(categorized_maps)
-
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
-        embed.set_author(name=_map["name"], icon_url=_map["flag_url"])
-        embed.set_thumbnail(url=_map["image_url"])
-        embed.set_footer(text=", ".join(_map["types"]))
-        return embed
+        return _map["name"]
 
     async def get_meme(self, category):
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
@@ -163,15 +115,15 @@ class Fun(commands.Cog):
         If no category is passed in, a random hero is chosen from all categories.
         """
         )
-        embed = await self.get_random_hero(category)
-        await ctx.send(embed=embed)
+        hero = self.get_random_hero(category)
+        await ctx.send(hero)
 
     @commands.command(aliases=["rtp"])
     @locale
     async def roletoplay(self, ctx):
         _("""Returns a random role to play.""")
-        embed = self.get_random_role()
-        await ctx.send(embed=embed)
+        roles = ("Tank", "Damage", "Support", "Flex")
+        await ctx.send(secrets.choice(roles))
 
     @commands.command(aliases=["mtp"])
     @locale
@@ -195,8 +147,8 @@ class Fun(commands.Cog):
         If no category is passed in, a random map is chosen from all categories.
         """
         )
-        embed = await self.get_random_map(ctx, category)
-        await ctx.send(embed=embed)
+        _map = self.get_random_map(ctx, category)
+        await ctx.send(_map)
 
     @commands.command()
     @locale
