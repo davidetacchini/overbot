@@ -42,7 +42,7 @@ def valid_hero_cat(argument):
     try:
         category = valid[argument.lower()]
     except KeyError:
-        raise commands.BadArgument(_("Unknown hero category."))
+        raise commands.BadArgument(_("Unknown hero category.")) from None
     return category
 
 
@@ -63,7 +63,7 @@ def valid_map_cat(argument):
     try:
         category = valid[argument.lower()]
     except KeyError:
-        raise commands.BadArgument(_("Unknown map category."))
+        raise commands.BadArgument(_("Unknown map category.")) from None
     return category
 
 
