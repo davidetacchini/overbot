@@ -2,6 +2,7 @@ import os
 import re
 import asyncio
 import datetime
+from contextlib import suppress
 
 import asyncpg
 import discord
@@ -134,6 +135,10 @@ class Bot(commands.AutoShardedBot):
         user = ctx.guild.me if ctx.guild else ctx.bot.user
         pattern = re.compile(r"<@!?%s>" % user.id)
         return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), ctx.prefix)
+
+    async def cleanup(self, message):
+        with suppress(discord.HTTPException, discord.Forbidden):
+            await message.delete()
 
     def get_line_count(self):
         for root, dirs, files in os.walk(os.getcwd()):
