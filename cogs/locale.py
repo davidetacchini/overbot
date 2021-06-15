@@ -27,7 +27,7 @@ def valid_locale(argument):
         locale = valid[argument.lower()]
     except KeyError:
         raise commands.BadArgument(
-            _("Unknown locale: **{argument}**").format(argument=argument)
+            _("Unknown locale: **{locale}**").format(locale=argument)
         ) from None
     return locale
 
