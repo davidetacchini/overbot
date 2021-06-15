@@ -412,11 +412,11 @@ msgstr ""
 
 #: cogs/profile.py:197
 msgid "Something bad happened while updating your nickname."
-msgstr ""
+msgstr "Qualcosa è andato storto mentre cambiavo il tuo nickname."
 
 #: cogs/profile.py:204
 msgid "Nickname successfully set."
-msgstr ""
+msgstr "Nickname impostato con successo."
 
 #: cogs/profile.py:208
 msgid "Nickname successfully removed."
