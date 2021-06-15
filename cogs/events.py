@@ -10,18 +10,6 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @property
-    def webhook(self):
-        wh_id, wh_token = (
-            self.bot.config.webhook["id"],
-            self.bot.config.webhook["token"],
-        )
-        return discord.Webhook.partial(
-            id=wh_id,
-            token=wh_token,
-            adapter=discord.AsyncWebhookAdapter(self.bot.session),
-        )
-
     async def send_log(self, color, message):
         if self.bot.debug:
             return
@@ -29,7 +17,7 @@ class Events(commands.Cog):
         embed = discord.Embed(color=color)
         embed.title = message
         embed.timestamp = self.bot.timestamp
-        await self.webhook.send(embed=embed)
+        await self.bot.webhook.send(embed=embed)
 
     async def change_presence(self):
         await self.bot.wait_until_ready()
@@ -48,7 +36,7 @@ class Events(commands.Cog):
         embed.add_field(name="Region", value=guild.region)
         embed.add_field(name="Shard ID", value=guild.shard_id + 1)
         embed.set_footer(text=f"ID: {guild.id}")
-        await self.webhook.send(embed=embed)
+        await self.bot.webhook.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_ready(self):
