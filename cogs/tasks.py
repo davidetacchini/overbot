@@ -1,10 +1,12 @@
 import re
 import platform
+
 from contextlib import suppress
 
 import distro
 import psutil
 import discord
+
 from discord.ext import tasks, commands
 
 from utils.scrape import get_overwatch_news

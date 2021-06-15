@@ -1,7 +1,9 @@
 import asyncio
+
 from contextlib import suppress
 
 import discord
+
 from discord.ext import menus, commands
 
 from config import main_color
