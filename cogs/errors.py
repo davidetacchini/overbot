@@ -8,6 +8,8 @@ from discord.ext.menus import MenuError
 
 from utils import checks
 from utils.i18n import _, locale
+from utils.player import PlayerException
+from utils.request import RequestError
 from utils.paginator import NoChoice
 
 
@@ -77,6 +79,10 @@ class ErrorHandler(commands.Cog):
         ):
             if isinstance(error.original, DataError):
                 await ctx.send(_("The argument you entered cannot be handled."))
+            elif isinstance(error.original, RequestError):
+                await ctx.send(error.original)
+            elif isinstance(error.original, PlayerException):
+                await ctx.send(error.original)
             else:
                 e = error.original
                 embed = discord.Embed(color=discord.Color.red())
@@ -99,11 +105,11 @@ class ErrorHandler(commands.Cog):
                 embed.timestamp = ctx.message.created_at
                 channel = self.bot.get_channel(775348334457782289)
                 await channel.send(embed=embed)
-            await ctx.send(
-                _(
-                    "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
+                await ctx.send(
+                    _(
+                        "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
+                    )
                 )
-            )
 
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:

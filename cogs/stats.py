@@ -1,8 +1,8 @@
 from discord.ext import commands
 
 from utils.i18n import _, locale
-from utils.player import Player, PlayerException
-from utils.request import Request, RequestError
+from utils.player import Player
+from utils.request import Request
 from classes.converters import Hero
 
 
@@ -34,35 +34,21 @@ class Stats(commands.Cog):
         self.bot = bot
 
     async def show_stats_for(self, ctx, platform, username):
-        try:
-            data = await Request(platform=platform, username=username).get()
-        except RequestError as e:
-            return await ctx.send(e)
-
+        data = await Request(platform=platform, username=username).get()
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
             embed = profile.private()
         else:
-            try:
-                embed = profile.get_stats(ctx)
-            except PlayerException as e:
-                return await ctx.send(e)
+            embed = profile.get_stats(ctx)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     async def show_hero_stats_for(self, ctx, hero, platform, username):
-        try:
-            data = await Request(platform=platform, username=username).get()
-        except RequestError as e:
-            return await ctx.send(e)
-
+        data = await Request(platform=platform, username=username).get()
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
             embed = profile.private()
         else:
-            try:
-                embed = profile.get_hero(ctx, hero)
-            except PlayerException as e:
-                return await ctx.send(e)
+            embed = profile.get_hero(ctx, hero)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @commands.command(aliases=["rank", "sr"])
@@ -90,11 +76,7 @@ class Stats(commands.Cog):
         """
         )
         async with ctx.fetching():
-            try:
-                data = await Request(platform=platform, username=username).get()
-            except RequestError as e:
-                return await ctx.send(e)
-
+            data = await Request(platform=platform, username=username).get()
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
                 embed = profile.private()

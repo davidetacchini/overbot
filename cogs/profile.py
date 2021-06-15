@@ -12,7 +12,7 @@ from discord.ext import commands
 from utils.i18n import _, locale
 from utils.checks import is_premium, has_profile, can_add_profile
 from utils.player import Player
-from utils.request import Request, RequestError
+from utils.request import Request
 from utils.paginator import Link, Update
 from classes.converters import Hero, valid_index
 
@@ -363,11 +363,7 @@ class Profile(commands.Cog):
                 ctx, member=member, index=index
             )
 
-            try:
-                data = await Request(platform=platform, username=username).get()
-            except RequestError as e:
-                return await ctx.send(e)
-
+            data = await Request(platform=platform, username=username).get()
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
                 embed = profile.private()
@@ -465,12 +461,9 @@ class Profile(commands.Cog):
                 )
 
             id, platform, username = await self.get_profile(ctx)
-            try:
-                data = await Request(platform=platform, username=username).get()
-            except RequestError as e:
-                return await ctx.send(e)
-
+            data = await Request(platform=platform, username=username).get()
             profile = Player(data, platform=platform, username=username)
+
             if profile.is_private:
                 return await ctx.send(embed=profile.private())
 
