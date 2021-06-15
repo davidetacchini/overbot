@@ -76,7 +76,7 @@ class Bot(commands.AutoShardedBot):
             adapter=discord.AsyncWebhookAdapter(self.bot.session),
         )
 
-    def color(self, member_id: discord.Member = None):
+    def color(self, member_id: int = None):
         return self.embed_colors.get(member_id, config.main_color)
 
     def get_uptime(self, *, brief=False):
