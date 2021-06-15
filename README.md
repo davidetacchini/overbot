@@ -74,4 +74,4 @@ Note: It is recommended to run the latest stable version of [Python](https://www
 Contributing
 ------
 OverBot uses [black](https://pypi.org/project/black/), [isort](https://pypi.org/project/isort/) and [flake8](https://pypi.org/project/flake8/) as code style.
-If you want to contribute to OverBot, please run `make format` before submitting any pull request.
+If you want to contribute to OverBot, please run `./scripts/format.sh` before submitting any pull request.
