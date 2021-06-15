@@ -75,7 +75,7 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
-        async with ctx.fetching():
+        async with ctx.typing():
             data = await Request(platform=platform, username=username).get()
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
@@ -108,7 +108,7 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
-        async with ctx.fetching():
+        async with ctx.typing():
             await self.show_stats_for(ctx, platform, username)
 
     @commands.command()
@@ -143,7 +143,7 @@ class Stats(commands.Cog):
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
         )
-        async with ctx.fetching():
+        async with ctx.typing():
             await self.show_hero_stats_for(ctx, hero, platform, username)
 
 
