@@ -1,3 +1,6 @@
+import textwrap
+import traceback
+
 import discord
 from asyncpg import DataError
 from discord.ext import commands
@@ -15,7 +18,6 @@ class ErrorHandler(commands.Cog):
     @locale
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-
         if ctx.command and ctx.command.has_error_handler():
             return
 
@@ -75,12 +77,39 @@ class ErrorHandler(commands.Cog):
         ):
             if isinstance(error.original, DataError):
                 await ctx.send(_("The argument you entered cannot be handled."))
+            else:
+                e = error.original
+                embed = discord.Embed(color=discord.Color.red())
+                embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+                embed.add_field(name="Command", value=ctx.command.qualified_name)
+                content = textwrap.shorten(ctx.message.content, width=512)
+                embed.add_field(name="Content", value=content)
+                if ctx.guild:
+                    guild = f"{str(ctx.guild)} ({ctx.guild.id})"
+                    embed.add_field(name="Guild", value=guild, inline=False)
+                try:
+                    exc = "".join(
+                        traceback.format_exception(
+                            type(e), e, e.__traceback___, chain=False
+                        )
+                    )
+                except AttributeError:
+                    exc = "".join(traceback.format_exception(type(e), e, chain=False))
+                embed.description = f"```py\n{exc}\n```"
+                embed.timestamp = ctx.message.created_at
+                channel = self.bot.get_channel(775348334457782289)
+                await channel.send(embed=embed)
+            await ctx.send(
+                _(
+                    "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
+                )
+            )
 
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
                     _(
-                        'You haven\'t linked a profile yet. Use "{prefix}profile link" to do so.'
+                        'You haven\'t linked a profile yet. Use "{prefix}profile link" to start.'
                     ).format(prefix=ctx.prefix)
                 )
 

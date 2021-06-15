@@ -1,10 +1,9 @@
 import textwrap
-import traceback
 from datetime import datetime
 from contextlib import suppress
 
 import discord
-from discord.ext import menus, commands
+from discord.ext import commands
 
 
 class Events(commands.Cog):
@@ -112,38 +111,6 @@ class Events(commands.Cog):
                        ON CONFLICT (id) DO NOTHING;
                     """
             await self.bot.pool.execute(query, ctx.guild.id, self.bot.prefix)
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        if self.bot.debug:
-            return
-
-        if not isinstance(
-            error, (commands.CommandInvokeError, commands.ConversionError)
-        ):
-            return
-
-        error = error.original
-        if isinstance(error, (discord.Forbidden, discord.NotFound, menus.MenuError)):
-            return
-
-        embed = discord.Embed(title="Error", color=discord.Color.red())
-        embed.add_field(name="Command", value=ctx.command.qualified_name)
-        embed.add_field(name="Author", value=ctx.author)
-        if ctx.guild:
-            fmt = f"Guild: {ctx.guild} (ID: {ctx.guild.id})"
-            embed.add_field(name="Location", value=fmt, inline=False)
-        embed.add_field(
-            name="Content", value=textwrap.shorten(ctx.message.content, width=512)
-        )
-        exc = "".join(
-            traceback.format_exception(
-                type(error), error, error.__traceback__, chain=False
-            )
-        )
-        embed.description = f"```py\n{exc}\n```"
-        embed.timestamp = ctx.message.created_at
-        await self.webhook.send(embed=embed)
 
 
 def setup(bot):
