@@ -19,7 +19,7 @@ class Hero(commands.Converter):
         if hero is None:
             if _hero not in ctx.bot.hero_names:
                 raise commands.BadArgument(
-                    _("Unknown hero: **{hero}**.").format(hero=hero)
+                    _("Unknown hero: **{hero}**.").format(hero=argument)
                 )
             else:
                 return _hero
