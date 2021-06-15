@@ -129,7 +129,7 @@ class GroupHelp(menus.ListPageSource):
         super().__init__(entries=commands, per_page=5)
         self.group = group
         self.prefix = prefix
-        self.title = _("{command} Commands").format(command=self.group.qualified_name)
+        self.title = _("{group} Commands").format(group=self.group.qualified_name)
         self.description = self.group.description
 
     async def format_page(self, menu, commands):
