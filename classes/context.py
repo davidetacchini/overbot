@@ -38,7 +38,7 @@ class Context(commands.Context):
                 "reaction_add", check=check, timeout=timeout
             )
         except asyncio.TimeoutError:
-            raise NoChoice(_("You took too long to confirm."))
+            raise NoChoice() from None
         else:
             return not bool(reactions.index(str(reaction.emoji)))
         finally:
