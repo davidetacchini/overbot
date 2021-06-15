@@ -543,6 +543,7 @@ class Profile(commands.Cog):
         )
         profile = await self.get_profile(ctx, index=index)
         file, embed = await self.sr_graph(ctx, profile=profile)
+        await ctx.send(file=file, embed=embed)
 
 
 def setup(bot):
