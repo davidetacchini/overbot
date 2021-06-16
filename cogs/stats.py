@@ -25,7 +25,6 @@ def valid_platform(argument):
         platform = valid[argument.lower()]
     except KeyError:
         raise commands.BadArgument(_("Unknown platform.")) from None
-
     return platform
 
 
@@ -136,6 +135,7 @@ class Stats(commands.Cog):
         )
         async with ctx.typing():
             await self.show_stats_for(ctx, hero, platform, username)
+
 
 def setup(bot):
     bot.add_cog(Stats(bot))
