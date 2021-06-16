@@ -73,7 +73,7 @@ class Player:
         )
 
     @staticmethod
-    def add_space(key):
+    def to_pascal(key):
         """From camel case to title (testTest -> Test Test)."""
         return (
             re.sub("([a-z])([A-Z])", r"\g<1> \g<2>", key)
@@ -103,8 +103,7 @@ class Player:
             return key.capitalize() + " (Most in game)"
         elif key == "average":
             return key.capitalize() + " (per 10 minutes)"
-        else:
-            return self.add_space(key)
+        return self.to_pascal(key)
 
     async def save_ratings(self, ctx, *, profile_id, **kwargs):
         tank = kwargs.get("tank", 0)
@@ -123,9 +122,9 @@ class Player:
         roles = await ctx.bot.pool.fetch(query, profile_id, requested_at)
 
         if roles:
-            # Assuming a user uses `-profile rating` multiple times within the same day,
-            # we don't want duplicate ratings. If only 1 rating differs, then we
-            # insert the new ratings into the database.
+            # Assuming a user uses `-profile rating` multiple times within
+            # the same day, we don't want duplicate ratings. If only 1 rating
+            # differs, then we insert the new ratings into the database.
             all_equals = False
             for t, d, s in roles:
                 if t == tank and d == damage and s == support:
@@ -192,10 +191,10 @@ class Player:
     def format_stats(self, embed, key, quickplay, competitive):
         if quickplay and quickplay[key]:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-            embed.add_field(name=_("Quickplay"), value=self.add_space(q_t))
+            embed.add_field(name=_("Quickplay"), value=self.to_pascal(q_t))
         if competitive and competitive[key]:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
-            embed.add_field(name=_("Competitive"), value=self.add_space(c_t))
+            embed.add_field(name=_("Competitive"), value=self.to_pascal(c_t))
 
     def get_stats(self, ctx, hero="allHeroes"):
         keys, quickplay, competitive = self.resolve_stats(hero)
