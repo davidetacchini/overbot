@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 21:25+0200\n"
+"POT-Creation-Date: 2021-06-16 19:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -365,10 +365,6 @@ msgstr ""
 msgid "Enter your Nintendo Switch ID:"
 msgstr ""
 
-#: cogs/profile.py:151
-msgid "You took too long to reply."
-msgstr ""
-
 #: cogs/profile.py:193
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
@@ -557,19 +553,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:46
+#: cogs/fun.py:23
 msgid "Unknown hero category."
 msgstr ""
 
-#: cogs/fun.py:67
+#: cogs/fun.py:44
 msgid "Unknown map category."
 msgstr ""
 
-#: cogs/fun.py:74
+#: cogs/fun.py:51
 msgid "Unknown meme category."
 msgstr ""
 
-#: cogs/fun.py:153
+#: cogs/fun.py:105
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -586,11 +582,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:172
+#: cogs/fun.py:124
 msgid "Returns a random role to play."
 msgstr ""
 
-#: cogs/fun.py:180
+#: cogs/fun.py:132
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -612,7 +608,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:205
+#: cogs/fun.py:157
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -848,44 +844,44 @@ msgid ""
 "{ratio}"
 msgstr ""
 
-#: utils/player.py:29
+#: utils/player.py:28
 msgid "This profile has no quick play nor competitive stats to display."
 msgstr ""
 
-#: utils/player.py:39
+#: utils/player.py:38
 #, python-brace-format
 msgid ""
 "This profile has no quick play nor competitive stast for **{hero}** to "
 "display."
 msgstr ""
 
-#: utils/player.py:154
+#: utils/player.py:153
 msgid "This profile is unranked."
 msgstr ""
 
-#: utils/player.py:163
+#: utils/player.py:162
 #, python-brace-format
 msgid "Average: {average}"
 msgstr ""
 
-#: utils/player.py:196
+#: utils/player.py:195
 msgid "Quickplay"
 msgstr ""
 
-#: utils/player.py:199
+#: utils/player.py:198
 msgid "Competitive"
 msgstr ""
 
-#: utils/player.py:210 utils/player.py:225
+#: utils/player.py:212
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr ""
 
-#: utils/player.py:233
+#: utils/player.py:220
 msgid "This profile is set to private"
 msgstr ""
 
-#: utils/player.py:235
+#: utils/player.py:222
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
@@ -915,9 +911,11 @@ msgid ""
 "Something bad happened during the request. Please be patient and try again."
 msgstr ""
 
-#: utils/request.py:67 utils/request.py:73
+#: utils/request.py:66
 #, python-brace-format
-msgid "**{players}** accounts found under the name of `{username}`"
+msgid ""
+"**{players}** accounts found under the name of `{username}` playing on "
+"`{platform}`. Please be more specific."
 msgstr ""
 
 #: utils/paginator.py:21

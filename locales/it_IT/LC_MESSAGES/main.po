@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 21:14+0200\n"
+"POT-Creation-Date: 2021-06-16 17:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -398,10 +398,6 @@ msgstr "Inserisci il tuo Gamertag:"
 msgid "Enter your Nintendo Switch ID:"
 msgstr "Inserisci il tuo Nintendo Switch ID:"
 
-#: cogs/profile.py:151
-msgid "You took too long to reply."
-msgstr "Hai impiegato troppo tempo per rispondere."
-
 #: cogs/profile.py:193
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
@@ -638,19 +634,19 @@ msgstr ""
 "        Se nessun index viene dato, sarà utilizzato il profilo principale.\n"
 "        "
 
-#: cogs/fun.py:46
+#: cogs/fun.py:23
 msgid "Unknown hero category."
 msgstr "Categoria eroi sconosciuta."
 
-#: cogs/fun.py:67
+#: cogs/fun.py:44
 msgid "Unknown map category."
 msgstr "Categoria mappe sconosciuta."
 
-#: cogs/fun.py:74
+#: cogs/fun.py:51
 msgid "Unknown meme category."
 msgstr "Categoria meme sconosciuta."
 
-#: cogs/fun.py:153
+#: cogs/fun.py:105
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -667,11 +663,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:172
+#: cogs/fun.py:124
 msgid "Returns a random role to play."
 msgstr "Ritorna un ruolo casuale da giocare."
 
-#: cogs/fun.py:180
+#: cogs/fun.py:132
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -693,7 +689,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:205
+#: cogs/fun.py:157
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
@@ -1020,45 +1016,45 @@ msgstr ""
 "{index}. **{player}** Giocate: {played} | Vinte: {won} | Perse: {lost} | "
 "Rateo: {ratio}"
 
-#: utils/player.py:29
+#: utils/player.py:28
 msgid "This profile has no quick play nor competitive stats to display."
 msgstr ""
 "Questo profilo non possiede statistiche ne rapide ne competitive da mostrare."
 
-#: utils/player.py:39
+#: utils/player.py:38
 #, python-brace-format
 msgid ""
 "This profile has no quick play nor competitive stast for **{hero}** to "
 "display."
 msgstr ""
 
-#: utils/player.py:154
+#: utils/player.py:153
 msgid "This profile is unranked."
 msgstr "Questo profilo non è rankato."
 
-#: utils/player.py:163
+#: utils/player.py:162
 #, python-brace-format
 msgid "Average: {average}"
 msgstr "Media: {average}"
 
-#: utils/player.py:196
+#: utils/player.py:195
 msgid "Quickplay"
 msgstr "Rapida"
 
-#: utils/player.py:199
+#: utils/player.py:198
 msgid "Competitive"
 msgstr "Competitiva"
 
-#: utils/player.py:210 utils/player.py:225
+#: utils/player.py:212
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr "Pagina {current}/{total}"
 
-#: utils/player.py:233
+#: utils/player.py:220
 msgid "This profile is set to private"
 msgstr "Questo profilo è privato"
 
-#: utils/player.py:235
+#: utils/player.py:222
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
@@ -1095,10 +1091,12 @@ msgid ""
 msgstr ""
 "Qualcosa è andato storto durante la richiesta. Perfavore riprova ancora."
 
-#: utils/request.py:67 utils/request.py:73
+#: utils/request.py:66
 #, python-brace-format
-msgid "**{players}** accounts found under the name of `{username}`"
-msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
+msgid ""
+"**{players}** accounts found under the name of `{username}` playing on "
+"`{platform}`. Please be more specific."
+msgstr ""
 
 #: utils/paginator.py:21
 msgid "Took too long."
@@ -1120,6 +1118,13 @@ msgstr "Eroe sconosciuto: **{hero}**."
 #: classes/converters.py:32
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#~ msgid "You took too long to reply."
+#~ msgstr "Hai impiegato troppo tempo per rispondere."
+
+#, python-brace-format
+#~ msgid "**{players}** accounts found under the name of `{username}`"
+#~ msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
 
 #, python-brace-format
 #~ msgid "{command} Commands"
