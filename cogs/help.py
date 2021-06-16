@@ -78,7 +78,7 @@ class HelpMenu(menus.MenuPages):
         await self.message.edit(embed=embed)
 
         async def go_back_to_current_page():
-            await asyncio.sleep(30.0)
+            await asyncio.sleep(20.0)
             with suppress(discord.HTTPException, discord.NotFound):
                 await self.show_page(self.current_page)
 
