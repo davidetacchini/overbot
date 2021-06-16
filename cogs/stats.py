@@ -33,16 +33,7 @@ class Stats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def show_stats_for(self, ctx, platform, username):
-        data = await Request(platform=platform, username=username).get()
-        profile = Player(data, platform=platform, username=username)
-        if profile.is_private:
-            embed = profile.private()
-        else:
-            embed = profile.get_stats(ctx)
-        await self.bot.paginator.Paginator(pages=embed).start(ctx)
-
-    async def show_hero_stats_for(self, ctx, hero, platform, username):
+    async def show_stats_for(self, ctx, hero, platform, username):
         data = await Request(platform=platform, username=username).get()
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
@@ -109,7 +100,7 @@ class Stats(commands.Cog):
         """
         )
         async with ctx.typing():
-            await self.show_stats_for(ctx, platform, username)
+            await self.show_stats_for(ctx, "allHeroes", platform, username)
 
     @commands.command()
     @locale
@@ -144,8 +135,7 @@ class Stats(commands.Cog):
         """
         )
         async with ctx.typing():
-            await self.show_hero_stats_for(ctx, hero, platform, username)
-
+            await self.show_stats_for(ctx, hero, platform, username)
 
 def setup(bot):
     bot.add_cog(Stats(bot))
