@@ -15,7 +15,7 @@ from utils.i18n import _, locale
 from utils.checks import is_premium, has_profile, can_add_profile
 from utils.player import Player
 from utils.request import Request
-from utils.paginator import Link, Update
+from utils.paginator import Link, Update, NoChoice
 from classes.converters import Hero, valid_index
 
 MAX_NICKNAME_LENGTH = 32
@@ -148,7 +148,7 @@ class Profile(commands.Cog):
         try:
             message = await self.bot.wait_for("message", check=check, timeout=30.0)
         except asyncio.TimeoutError:
-            await ctx.send(_("You took too long to reply."))
+            raise NoChoice()
         else:
             return message.content.replace("#", "-")
 
