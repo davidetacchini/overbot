@@ -32,13 +32,16 @@ webhook = {
     "token": "",
 }
 
+"""The older commands count before renew the database."""
+old_commands_count = 0
+
 """OverBot private API used to share bot information to its website."""
 obapi = {
     "url": "",
     "token": "",
 }
 
-"""Discord Bot List (top.gg) authorization."""
+"""Top.gg authorization."""
 top_gg = {
     "url": "",
     "token": "",
@@ -62,7 +65,7 @@ version = "3.5.0"
 default_prefix = "-"
 
 """Default color used on most of the embeds"""
-main_color = 0xFA9C1D
+main_color = 0xFFA657
 
 # IGNORE
 
