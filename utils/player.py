@@ -196,7 +196,7 @@ class Player:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name=_("Competitive"), value=self.to_pascal(c_t))
 
-    def get_stats(self, ctx, hero="allHeroes"):
+    def get_stats(self, ctx, hero):
         keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
