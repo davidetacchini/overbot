@@ -6,13 +6,12 @@ import discord
 
 from utils.i18n import _
 
-SR = "<:sr:639897739920146437>"
-
 ROLES = {
     "tank": "<:tank:645784573141319722>",
     "damage": "<:damage:645784543093325824>",
     "support": "<:support:645784563322191902>",
 }
+SR = "<:sr:639897739920146437>"
 
 
 class PlayerException(Exception):
@@ -169,7 +168,7 @@ class Player:
 
         return embed
 
-    def resolve_stats(self, hero="allHeroes"):
+    def resolve_stats(self, hero):
         if not self.has_stats:
             raise NoStats()
 
@@ -198,29 +197,17 @@ class Player:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name=_("Competitive"), value=self.add_space(c_t))
 
-    def get_stats(self, ctx):
-        keys, quickplay, competitive = self.resolve_stats()
-
-        for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
-            embed.title = self.format_key(key)
-            embed.set_author(name=str(self), icon_url=self.avatar)
-            embed.set_thumbnail(url=self.level_icon)
-            embed.set_footer(
-                text=_("Page {current}/{total}").format(current=i, total=len(keys))
-            )
-            self.format_stats(embed, key, quickplay, competitive)
-            self.pages.append(embed)
-        return self.pages
-
-    def get_hero(self, ctx, hero):
+    def get_stats(self, ctx, hero="allHeroes"):
         keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
-            embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
+            if hero == "allHeroes":
+                embed.set_thumbnail(url=self.level_icon)
+            else:
+                embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
             embed.set_footer(
                 text=_("Page {current}/{total}").format(current=i, total=len(keys))
             )

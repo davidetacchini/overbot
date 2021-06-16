@@ -48,7 +48,7 @@ class Stats(commands.Cog):
         if profile.is_private:
             embed = profile.private()
         else:
-            embed = profile.get_hero(ctx, hero)
+            embed = profile.get_stats(ctx, hero)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @commands.command(aliases=["rank", "sr"])
