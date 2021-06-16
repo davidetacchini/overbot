@@ -77,7 +77,7 @@ class Bot(commands.AutoShardedBot):
         return discord.Webhook.partial(
             id=wh_id,
             token=wh_token,
-            adapter=discord.AsyncWebhookAdapter(self.bot.session),
+            adapter=discord.AsyncWebhookAdapter(self.session),
         )
 
     def color(self, member_id: int = None):
