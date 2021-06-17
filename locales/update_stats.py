@@ -8,12 +8,12 @@ def main():
 
         lookup = {k: v for k, v in enumerate(file)}
 
-        total = -1 # remove first occurence
+        total = -1  # remove first occurence
         empty = 0
         for index, line in enumerate(file):
             if line.startswith("msgstr"):
                 total += 1
-            if line == "msgstr \"\"\n":
+            if line == 'msgstr ""\n':
                 if lookup.get(index + 1, "\n") == "\n":
                     empty += 1
 
