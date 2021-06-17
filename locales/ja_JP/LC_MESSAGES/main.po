@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-16 17:29+0200\n"
+"POT-Creation-Date: 2021-06-17 18:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -286,11 +286,6 @@ msgstr ""
 msgid "Uptime"
 msgstr ""
 
-#: cogs/meta.py:135
-#, python-brace-format
-msgid "Made with discord.py v{discord_version}"
-msgstr ""
-
 #: cogs/overwatch.py:32
 msgid ""
 "Returns the current Overwatch servers status.\n"
@@ -423,7 +418,7 @@ msgstr ""
 #: cogs/profile.py:283
 #, python-brace-format
 msgid ""
-"Are you sure you want to unlink the following profile?\n"
+"This will unlink the following profile:\n"
 "Platform: `{platform}`\n"
 "Username: `{username}`"
 msgstr ""
@@ -524,26 +519,26 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:444
-msgid "Do you want to display your SR in your nickname?"
+#: cogs/profile.py:443
+msgid "This will display your SR in your nickname."
 msgstr ""
 
-#: cogs/profile.py:451
+#: cogs/profile.py:449
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:470
-msgid "Do you want to **remove** your SR in your nickname?"
+#: cogs/profile.py:467
+msgid "This will remove your SR in your nickname."
 msgstr ""
 
-#: cogs/profile.py:504
+#: cogs/profile.py:500
 msgid "I don't have enough data to create the graph."
 msgstr ""
 
-#: cogs/profile.py:537
+#: cogs/profile.py:533
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -689,7 +684,7 @@ msgstr ""
 msgid "Unknown platform."
 msgstr ""
 
-#: cogs/stats.py:58
+#: cogs/stats.py:48
 msgid ""
 "Returns player ratings.\n"
 "\n"
@@ -712,7 +707,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:91
+#: cogs/stats.py:81
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
@@ -735,7 +730,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:125
+#: cogs/stats.py:115
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -855,33 +850,33 @@ msgid ""
 "display."
 msgstr ""
 
-#: utils/player.py:153
+#: utils/player.py:152
 msgid "This profile is unranked."
 msgstr ""
 
-#: utils/player.py:162
+#: utils/player.py:161
 #, python-brace-format
 msgid "Average: {average}"
 msgstr ""
 
-#: utils/player.py:195
+#: utils/player.py:194
 msgid "Quickplay"
 msgstr ""
 
-#: utils/player.py:198
+#: utils/player.py:197
 msgid "Competitive"
 msgstr ""
 
-#: utils/player.py:212
+#: utils/player.py:211
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr ""
 
-#: utils/player.py:220
+#: utils/player.py:219
 msgid "This profile is set to private"
 msgstr ""
 
-#: utils/player.py:222
+#: utils/player.py:221
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
@@ -926,8 +921,8 @@ msgstr ""
 msgid "React with the platform you play on..."
 msgstr ""
 
-#: classes/context.py:20
-msgid "Confirmation"
+#: classes/context.py:23
+msgid "Are you sure?"
 msgstr ""
 
 #: classes/converters.py:22
