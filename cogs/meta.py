@@ -131,12 +131,6 @@ class Meta(commands.Cog):
             embed.add_field(name=_("Commands Run"), value=total_commands)
             embed.add_field(name=_("Lines of code"), value=self.bot.total_lines)
             embed.add_field(name=_("Uptime"), value=self.bot.get_uptime(brief=True))
-            embed.set_footer(
-                text=_("Made with discord.py v{discord_version}").format(
-                    discord_version=discord.__version__
-                ),
-                icon_url=self.bot.config.python_logo,
-            )
             await ctx.send(embed=embed)
 
 
