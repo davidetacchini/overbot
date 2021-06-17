@@ -9,6 +9,7 @@ cogs/fun.py
 cogs/server.py
 cogs/stats.py
 cogs/trivia.py
+cogs/member.py
 utils/player.py
 utils/request.py
 utils/paginator.py

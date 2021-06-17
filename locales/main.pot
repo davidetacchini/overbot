@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 18:52+0200\n"
+"POT-Creation-Date: 2021-06-17 19:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,7 +142,7 @@ msgstr ""
 msgid "{group} Commands"
 msgstr ""
 
-#: cogs/help.py:146 cogs/help.py:187
+#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:90
 msgid "No help found..."
 msgstr ""
 
@@ -837,6 +837,75 @@ msgstr ""
 msgid ""
 "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: "
 "{ratio}"
+msgstr ""
+
+#: cogs/member.py:16
+msgid ""
+"You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
+msgstr ""
+
+#: cogs/member.py:30
+msgid "Shows your current premium status."
+msgstr ""
+
+#: cogs/member.py:32
+msgid "Premium Status"
+msgstr ""
+
+#: cogs/member.py:48
+#, python-brace-format
+msgid ""
+"Your Status: `{member}`\n"
+"Server Status: `{guild}`"
+msgstr ""
+
+#: cogs/member.py:53
+#, python-brace-format
+msgid "[Upgrade to Premium]({premium})"
+msgstr ""
+
+#: cogs/member.py:74
+#, python-brace-format
+msgid ""
+"You can use `{prefix}settings [setting] [value]` to update the value of a "
+"specific setting: `{prefix}settings color blue` will set theembeds color to "
+"blue."
+msgstr ""
+
+#: cogs/member.py:80
+#, python-brace-format
+msgid "{member}'s Settings"
+msgstr ""
+
+#: cogs/member.py:104
+msgid "`[Premium]` Update your settings."
+msgstr ""
+
+#: cogs/member.py:113
+msgid ""
+"`[Premium]` Set a custom color for the embeds.\n"
+"\n"
+"        `<color>` - The color to use for the embeds. Enter `none` to reset.\n"
+"\n"
+"        Formats:\n"
+"\n"
+"        - Either 3 or 6 hex digit: #RGB or #RRGGBB\n"
+"        - Color code: green, white, red etc...\n"
+"\n"
+"        Note that few embeds won't change their color.\n"
+"        "
+msgstr ""
+
+#: cogs/member.py:131
+msgid "Color already set to default."
+msgstr ""
+
+#: cogs/member.py:133
+msgid "Color successfully reset."
+msgstr ""
+
+#: cogs/member.py:139
+msgid "Color successfully set."
 msgstr ""
 
 #: utils/player.py:28
