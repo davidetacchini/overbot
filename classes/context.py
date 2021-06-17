@@ -7,18 +7,21 @@ from discord.ext import commands
 from utils.i18n import _
 from utils.paginator import NoChoice
 
+CHECK = "<:check:855015016042725386>"
+XMARK = "<:xmark:855015043862233090>"
+
 
 class Context(commands.Context):
-    async def prompt(self, message, timeout=30.0, user=None):
+    async def prompt(self, text, user=None):
         user = user or self.author
-        reactions = ("✅", "❌")
+        reactions = (CHECK, XMARK)
 
         if user.id == self.bot.user.id:
             return False
 
         embed = discord.Embed(color=self.bot.color(user.id))
-        embed.title = _("Confirmation")
-        embed.description = message
+        embed.title = _("Are you sure?")
+        embed.description = text
         msg = await self.send(embed=embed)
 
         for emoji in reactions:
@@ -35,7 +38,7 @@ class Context(commands.Context):
 
         try:
             reaction, unused = await self.bot.wait_for(
-                "reaction_add", check=check, timeout=timeout
+                "reaction_add", check=check, timeout=30.0
             )
         except asyncio.TimeoutError:
             raise NoChoice() from None
