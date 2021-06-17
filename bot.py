@@ -255,7 +255,6 @@ def main():
         status=discord.Status.dnd,
         intents=intents,
         chunk_guilds_at_startup=False,
-        guild_ready_timeout=5,
     )
     loop = asyncio.get_event_loop()
 
