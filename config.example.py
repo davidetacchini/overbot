@@ -100,9 +100,6 @@ overwatch = {
     "map": "https://playoverwatch.com/en-us/maps",
 }
 
-"""Python logo."""
-python_logo = "https://i.imgur.com/6pg6Xv4.png"
-
 """Official website."""
 website = "https://overbot.netlify.app"
 
