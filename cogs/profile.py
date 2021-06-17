@@ -280,7 +280,7 @@ class Profile(commands.Cog):
 
         if not await ctx.prompt(
             _(
-                "Are you sure you want to unlink the following profile?\n"
+                "This will unlink the following profile:\n"
                 "Platform: `{platform}`\n"
                 "Username: `{username}`"
             ).format(platform=platform, username=username)
@@ -440,9 +440,7 @@ class Profile(commands.Cog):
         """
         )
         if not await self.has_nickname(ctx.author.id):
-            if not await ctx.prompt(
-                _("Do you want to display your SR in your nickname?")
-            ):
+            if not await ctx.prompt(_("This will display your SR in your nickname.")):
                 return
 
             if ctx.guild.me.top_role < ctx.author.top_role:
@@ -466,9 +464,7 @@ class Profile(commands.Cog):
             except Exception as e:
                 await ctx.send(e)
         else:
-            if await ctx.prompt(
-                _("Do you want to **remove** your SR in your nickname?")
-            ):
+            if await ctx.prompt(_("This will remove your SR in your nickname.")):
                 try:
                     await self.set_or_remove_nickname(ctx, remove=True)
                 except Exception as e:

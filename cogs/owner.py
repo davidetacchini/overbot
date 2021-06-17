@@ -136,7 +136,7 @@ class Owner(commands.Cog):
             f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
         if not await ctx.prompt(
-            f"This will update the following modules, are you sure?\n{updated_modules}"
+            f"This will update the following modules?\n{updated_modules}"
         ):
             return
 
