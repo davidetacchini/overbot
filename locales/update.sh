@@ -18,3 +18,4 @@ for locale in */; do
 
     msgfmt "$file.po" --output-file "$file.mo"; done
 
+python3 update_stats.py

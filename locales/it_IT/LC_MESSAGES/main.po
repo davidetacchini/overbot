@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-16 17:29+0200\n"
+"POT-Creation-Date: 2021-06-17 18:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,11 +306,6 @@ msgstr "Righe di codice"
 msgid "Uptime"
 msgstr "Tempo Online"
 
-#: cogs/meta.py:135
-#, python-brace-format
-msgid "Made with discord.py v{discord_version}"
-msgstr "Creato con discord.py v{discord_version}"
-
 #: cogs/overwatch.py:32
 msgid ""
 "Returns the current Overwatch servers status.\n"
@@ -473,13 +468,10 @@ msgstr ""
 #: cogs/profile.py:283
 #, python-brace-format
 msgid ""
-"Are you sure you want to unlink the following profile?\n"
+"This will unlink the following profile:\n"
 "Platform: `{platform}`\n"
 "Username: `{username}`"
 msgstr ""
-"Sei sicuro di volere rimuovere il seguente profilo?\n"
-"Piattaforma: `{platform}`\n"
-"Nome Utente: `{username}`"
 
 #: cogs/profile.py:291
 msgid "Profile successfully unlinked."
@@ -595,11 +587,11 @@ msgstr ""
 "stato utilizzato per il soprannome.\n"
 "        "
 
-#: cogs/profile.py:444
-msgid "Do you want to display your SR in your nickname?"
-msgstr "Vuoi mostrare il tuo SR nel tuo soprannome?"
+#: cogs/profile.py:443
+msgid "This will display your SR in your nickname."
+msgstr ""
 
-#: cogs/profile.py:451
+#: cogs/profile.py:449
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
@@ -610,15 +602,15 @@ msgstr ""
 "di questo server, non c'è alcun modo per me di aggiornare il tuo nickname, "
 "scusa!"
 
-#: cogs/profile.py:470
-msgid "Do you want to **remove** your SR in your nickname?"
-msgstr "Vuoi rimuove il tuo SR dal tuo soprannome?"
+#: cogs/profile.py:467
+msgid "This will remove your SR in your nickname."
+msgstr ""
 
-#: cogs/profile.py:504
+#: cogs/profile.py:500
 msgid "I don't have enough data to create the graph."
 msgstr "Non possiedo dati sufficienti per la creazione del grafico."
 
-#: cogs/profile.py:537
+#: cogs/profile.py:533
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -782,7 +774,7 @@ msgstr "{index}. **{guild}** ha eseguito un totale di **{commands}** comandi."
 msgid "Unknown platform."
 msgstr "Piattaforma sconosciuta."
 
-#: cogs/stats.py:58
+#: cogs/stats.py:48
 msgid ""
 "Returns player ratings.\n"
 "\n"
@@ -826,7 +818,7 @@ msgstr ""
 "        - nintendo-switch: Nintendo Switch ID (format: nome-codice)\n"
 "        "
 
-#: cogs/stats.py:91
+#: cogs/stats.py:81
 msgid ""
 "Returns player both quick play and competitive stats.\n"
 "\n"
@@ -870,7 +862,7 @@ msgstr ""
 "        - nintendo-switch: Nintendo Switch ID (format: nome-codice)\n"
 "        "
 
-#: cogs/stats.py:125
+#: cogs/stats.py:115
 msgid ""
 "Returns player both quick play and competitive stats for a given hero.\n"
 "\n"
@@ -1028,33 +1020,33 @@ msgid ""
 "display."
 msgstr ""
 
-#: utils/player.py:153
+#: utils/player.py:152
 msgid "This profile is unranked."
 msgstr "Questo profilo non è rankato."
 
-#: utils/player.py:162
+#: utils/player.py:161
 #, python-brace-format
 msgid "Average: {average}"
 msgstr "Media: {average}"
 
-#: utils/player.py:195
+#: utils/player.py:194
 msgid "Quickplay"
 msgstr "Rapida"
 
-#: utils/player.py:198
+#: utils/player.py:197
 msgid "Competitive"
 msgstr "Competitiva"
 
-#: utils/player.py:212
+#: utils/player.py:211
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr "Pagina {current}/{total}"
 
-#: utils/player.py:220
+#: utils/player.py:219
 msgid "This profile is set to private"
 msgstr "Questo profilo è privato"
 
-#: utils/player.py:222
+#: utils/player.py:221
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
@@ -1106,9 +1098,9 @@ msgstr "Hai impiegato troppo tempo."
 msgid "React with the platform you play on..."
 msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
-#: classes/context.py:20
-msgid "Confirmation"
-msgstr "Conferma"
+#: classes/context.py:23
+msgid "Are you sure?"
+msgstr ""
 
 #: classes/converters.py:22
 #, python-brace-format
@@ -1118,6 +1110,29 @@ msgstr "Eroe sconosciuto: **{hero}**."
 #: classes/converters.py:32
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
+
+#, python-brace-format
+#~ msgid "Made with discord.py v{discord_version}"
+#~ msgstr "Creato con discord.py v{discord_version}"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Are you sure you want to unlink the following profile?\n"
+#~ "Platform: `{platform}`\n"
+#~ "Username: `{username}`"
+#~ msgstr ""
+#~ "Sei sicuro di volere rimuovere il seguente profilo?\n"
+#~ "Piattaforma: `{platform}`\n"
+#~ "Nome Utente: `{username}`"
+
+#~ msgid "Do you want to display your SR in your nickname?"
+#~ msgstr "Vuoi mostrare il tuo SR nel tuo soprannome?"
+
+#~ msgid "Do you want to **remove** your SR in your nickname?"
+#~ msgstr "Vuoi rimuove il tuo SR dal tuo soprannome?"
+
+#~ msgid "Confirmation"
+#~ msgstr "Conferma"
 
 #~ msgid "You took too long to reply."
 #~ msgstr "Hai impiegato troppo tempo per rispondere."
