@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 18:47+0200\n"
+"POT-Creation-Date: 2021-06-17 19:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,7 +152,7 @@ msgstr "Pagina {current_page}/{maximum}"
 msgid "{group} Commands"
 msgstr "Comandi {group}"
 
-#: cogs/help.py:146 cogs/help.py:187
+#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:90
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
@@ -472,6 +472,9 @@ msgid ""
 "Platform: `{platform}`\n"
 "Username: `{username}`"
 msgstr ""
+"Ciò rimuoverà il seguente profilo:\n"
+"Piattaforma: `{platform}`\n"
+"Nome utente: `{username}"
 
 #: cogs/profile.py:291
 msgid "Profile successfully unlinked."
@@ -515,7 +518,7 @@ msgstr "Piattaforma"
 
 #: cogs/profile.py:333 utils/paginator.py:184
 msgid "Username"
-msgstr "Nome Utente"
+msgstr "Nome utente"
 
 #: cogs/profile.py:343
 msgid ""
@@ -589,7 +592,7 @@ msgstr ""
 
 #: cogs/profile.py:443
 msgid "This will display your SR in your nickname."
-msgstr ""
+msgstr "Ciò mostrerà il tuo SR come nickname."
 
 #: cogs/profile.py:449
 msgid ""
@@ -604,7 +607,7 @@ msgstr ""
 
 #: cogs/profile.py:467
 msgid "This will remove your SR in your nickname."
-msgstr ""
+msgstr "Ciò rimuoverà il tuo SR dal tuo nickname."
 
 #: cogs/profile.py:500
 msgid "I don't have enough data to create the graph."
@@ -1008,6 +1011,81 @@ msgstr ""
 "{index}. **{player}** Giocate: {played} | Vinte: {won} | Perse: {lost} | "
 "Rateo: {ratio}"
 
+#: cogs/member.py:16
+msgid ""
+"You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
+msgstr ""
+"Devi specificare un hex (E.g.: `#00ff00`) o un codice colore (E.g.: `red`)."
+
+#: cogs/member.py:30
+msgid "Shows your current premium status."
+msgstr "Mostra il tuo stato Premium corrente."
+
+#: cogs/member.py:32
+msgid "Premium Status"
+msgstr "Premium Status"
+
+#: cogs/member.py:48
+#, python-brace-format
+msgid ""
+"Your Status: `{member}`\n"
+"Server Status: `{guild}`"
+msgstr ""
+"Il tuo stato: `{member}`\n"
+"Stato del server: `{guild}`"
+
+#: cogs/member.py:53
+#, python-brace-format
+msgid "[Upgrade to Premium]({premium})"
+msgstr "[Passa a Premium]({premium})"
+
+#: cogs/member.py:74
+#, python-brace-format
+msgid ""
+"You can use `{prefix}settings [setting] [value]` to update the value of a "
+"specific setting: `{prefix}settings color blue` will set theembeds color to "
+"blue."
+msgstr ""
+"Usa `{prefix} settings [settaggio] [valore]` per aggiornare il valore di un "
+"settaggio specifico: `{prefix} settings color blue` imposterà il colore degli "
+"embed a blue."
+
+#: cogs/member.py:80
+#, python-brace-format
+msgid "{member}'s Settings"
+msgstr "Settaggi di {member}"
+
+#: cogs/member.py:104
+msgid "`[Premium]` Update your settings."
+msgstr "`[Premium]` Aggiorna i tuoi settaggi."
+
+#: cogs/member.py:113
+msgid ""
+"`[Premium]` Set a custom color for the embeds.\n"
+"\n"
+"        `<color>` - The color to use for the embeds. Enter `none` to reset.\n"
+"\n"
+"        Formats:\n"
+"\n"
+"        - Either 3 or 6 hex digit: #RGB or #RRGGBB\n"
+"        - Color code: green, white, red etc...\n"
+"\n"
+"        Note that few embeds won't change their color.\n"
+"        "
+msgstr ""
+
+#: cogs/member.py:131
+msgid "Color already set to default."
+msgstr "Il colore è già impostato su predefinito."
+
+#: cogs/member.py:133
+msgid "Color successfully reset."
+msgstr "Colore resettato con successo."
+
+#: cogs/member.py:139
+msgid "Color successfully set."
+msgstr "Colore impostate con successo."
+
 #: utils/player.py:28
 msgid "This profile has no quick play nor competitive stats to display."
 msgstr ""
@@ -1019,6 +1097,8 @@ msgid ""
 "This profile has no quick play nor competitive stast for **{hero}** to "
 "display."
 msgstr ""
+"Questo profilo non possiede statistiche ne rapide ne competitive per l'eroe "
+"**(hero}**"
 
 #: utils/player.py:152
 msgid "This profile is unranked."
@@ -1100,7 +1180,7 @@ msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
 #: classes/context.py:23
 msgid "Are you sure?"
-msgstr ""
+msgstr "Sei sicuro?"
 
 #: classes/converters.py:22
 #, python-brace-format
