@@ -25,9 +25,3 @@ class Hero(commands.Converter):
                 return _hero
         else:
             return hero
-
-
-def valid_index(argument):
-    if not argument.isdigit():
-        raise commands.BadArgument(_("Index must be a number."))
-    return int(argument)

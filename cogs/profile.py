@@ -16,7 +16,7 @@ from utils.checks import is_premium, has_profile, can_add_profile
 from utils.player import Player
 from utils.request import Request
 from utils.paginator import Link, Update, NoChoice
-from classes.converters import Hero, valid_index
+from classes.converters import Hero
 
 MAX_NICKNAME_LENGTH = 32
 ROLES = {
@@ -35,6 +35,12 @@ PLATFORMS = {
 async def chunker(entries, chunk):
     for x in range(0, len(entries), chunk):
         yield entries[x : x + chunk]
+
+
+def valid_index(argument):
+    if not argument.isdigit():
+        raise commands.BadArgument(_("Index must be a number."))
+    return int(argument)
 
 
 class Profile(commands.Cog):
