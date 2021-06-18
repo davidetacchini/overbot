@@ -8,6 +8,9 @@ from utils.checks import is_premium
 
 
 def valid_color(argument):
+    if argument.lower() == "none":
+        return None
+
     try:
         color = Color(argument).get_hex_l()
     except (AttributeError, ValueError):
@@ -122,7 +125,7 @@ class Member(commands.Cog):
         Note that few embeds won't change their color.
         """
         )
-        if color == "none":
+        if color is None:
             query = "UPDATE member SET embed_color = NULL WHERE id = $1;"
             await self.bot.pool.execute(query, ctx.author.id)
             try:
