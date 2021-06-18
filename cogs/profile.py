@@ -264,9 +264,9 @@ class Profile(commands.Cog):
         _(
             """Unlink an Overwatch profile from your Discord account.
 
-        `<index>` - The profile's index you want to unlink.
+        `<index>` - The profile's index to unlink.
 
-        You can't unlink your main profile if you have more than 1 profile linked.
+        You can't unlink the main profile if multiple profiles are linked.
         """
         )
         id, platform, username = await self.get_profile(ctx, index=index)
@@ -276,7 +276,7 @@ class Profile(commands.Cog):
             and len(profiles) > 1
         ):
             message = _(
-                "You can't unlink your main profile if you have multiple profiles set. "
+                "You can't unlink the main profile if multiple profiles are linked. "
                 'Use "{prefix}help profile main" for more info.'
             ).format(prefix=ctx.prefix)
             return await ctx.send(message)
@@ -303,7 +303,7 @@ class Profile(commands.Cog):
         _(
             """Update an Overwatch profile.
 
-        `<index>` - The profile's index you want to update.
+        `<index>` - The profile's index to update.
         """
         )
         id, platform, username = await self.get_profile(ctx, index=index)
@@ -326,7 +326,7 @@ class Profile(commands.Cog):
         _(
             """Update the main profile.
 
-        `<index>` - The profile's index you want to set as main.
+        `<index>` - The profile's index to set as main.
 
         Defaults to the first profile you have linked.
         """
@@ -348,11 +348,11 @@ class Profile(commands.Cog):
         _(
             """Shows a member's Overwatch ratings.
 
-        `[index]` - The profile's index you want to see the ranks for.
+        `[index]` - The profile's index to see the ratings for.
         `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no index is given then the profile used will be the main one.
-        If no member is given then the ranks returned will be yours.
+        If no member is given then the ratings returned will be yours.
 
         If you want to see a member's ratings, you must enter both the index and the member.
         """
@@ -383,7 +383,7 @@ class Profile(commands.Cog):
         _(
             """Shows a member's Overwatch both quick play and competitive stats.
 
-        `[index]` - The profile's index you want to see the stats for.
+        `[index]` - The profile's index to see the stats for.
         `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no index is given then the profile used will be the main one.
@@ -411,8 +411,8 @@ class Profile(commands.Cog):
         _(
             """Shows a member's Overwatch both quick play and competitive stats for a given hero.
 
-        `<hero>` - The name of the hero you want to see stats for.
-        `[index]` - The profile's index you want to see the ranks for.
+        `<hero>` - The name of the hero to see stats for.
+        `[index]` - The profile's index to see the stats for.
         `[member]` - The mention or the ID of a Discord member of the current server.
 
         If no index is given then the profile used will be the main one.
@@ -437,16 +437,16 @@ class Profile(commands.Cog):
     @locale
     async def nickname(self, ctx):
         _(
-            """Update your server nickname and set it to your SR.
+            """Show your SRs in your nickname.
 
         The nickname can only be set in one server.
 
-        The nickname will automatically be updated everytime `-profile rating` is used
-        and the profile is the main one.
+        The nickname will be updated automatically whenever `-profile rating` is used
+        and the profile matches the one set for the nickname.
         """
         )
         if not await self.has_nickname(ctx.author.id):
-            if not await ctx.prompt(_("This will display your SR in your nickname.")):
+            if not await ctx.prompt(_("This will display your SRs in your nickname.")):
                 return
 
             if ctx.guild.me.top_role < ctx.author.top_role:
@@ -538,7 +538,7 @@ class Profile(commands.Cog):
         _(
             """`[Premium]` Displays a profile's SR graph performance.
 
-        `[index]` - The profile's index you want to see the SR graph for.
+        `[index]` - The profile's index to see the SR graph for.
 
         If no index is given then the profile used will be the main one.
         """
