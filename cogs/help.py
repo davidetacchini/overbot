@@ -137,7 +137,7 @@ class GroupHelp(menus.ListPageSource):
     async def format_page(self, menu, commands):
         embed = discord.Embed(color=main_color)
         embed.title = self.title
-        embed.description = _(self.description)
+        embed.description = self.description
 
         for command in commands:
             signature = f"{command.qualified_name} {command.signature}"
