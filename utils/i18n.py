@@ -3,27 +3,26 @@
 import ast
 import gettext
 import inspect
-import os.path
 import contextvars
 
-from os import getcwd
+from os import path, getcwd
 from glob import glob
 from typing import Any, Callable
 
 BASE_DIR = getcwd()
-default_locale = "en_US"
-locale_dir = "locales"
+DEFAULT_LOCALE = "en_US"
+LOCALE_DIR = "locales"
 
 locales: frozenset[str] = frozenset(
     map(
-        os.path.basename,
-        filter(os.path.isdir, glob(os.path.join(BASE_DIR, locale_dir, "*"))),
+        path.basename,
+        filter(path.isdir, glob(path.join(BASE_DIR, LOCALE_DIR, "*"))),
     )
 )
 
 gettext_translations = {
     locale: gettext.translation(
-        "main", languages=(locale,), localedir=os.path.join(BASE_DIR, locale_dir)
+        "main", languages=(locale,), localedir=path.join(BASE_DIR, LOCALE_DIR)
     )
     for locale in locales
 }
@@ -38,7 +37,7 @@ def use_current_gettext(*args: Any, **kwargs: Any) -> str:
 
     locale = current_locale.get()
     return gettext_translations.get(
-        locale, gettext_translations[default_locale]
+        locale, gettext_translations[DEFAULT_LOCALE]
     ).gettext(*args, **kwargs)
 
 
@@ -77,4 +76,4 @@ current_locale: contextvars.ContextVar[str] = contextvars.ContextVar("i18n")
 _ = use_current_gettext
 locale = i18n_docstring
 
-current_locale.set(default_locale)
+current_locale.set(DEFAULT_LOCALE)
