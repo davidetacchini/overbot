@@ -1,8 +1,13 @@
+import os
+import re
 import json
+
+LOCALE_DIR = os.getcwd()
+LOCALE = re.compile("^[a-z]{2}_[A-Z]{2}$")
+locales = filter(lambda d: LOCALE.match(d), os.listdir(LOCALE_DIR))
 
 
 def main():
-    locales = ("it_IT", "en_US", "ru_RU", "ko_KR", "ja_JP", "de_DE", "fr_FR")
     results = {}
 
     for locale in locales:
@@ -24,7 +29,7 @@ def main():
         results[locale] = percentage
 
     with open("stats.json", "w") as fp:
-        json.dump(results, fp, indent=4)
+        json.dump(results, fp, sort_keys=True, indent=4)
 
 
 if __name__ == "__main__":
