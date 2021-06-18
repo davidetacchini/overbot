@@ -15,14 +15,11 @@ SR = "<:sr:639897739920146437>"
 
 
 class PlayerException(Exception):
-    """Base exception class for player.py."""
 
     pass
 
 
 class NoStats(PlayerException):
-    """Exception raised when a player has no stats to display."""
-
     def __init__(self):
         super().__init__(
             _("This profile has no quick play nor competitive stats to display.")
@@ -30,14 +27,33 @@ class NoStats(PlayerException):
 
 
 class NoHeroStats(PlayerException):
-    """Exception raised when a player has no quick play nor competitive stats for a given hero."""
-
     def __init__(self, hero):
         super().__init__(
             _(
                 "This profile has no quick play nor competitive stast for **{hero}** to display."
             ).format(hero=hero)
         )
+
+
+class RatingIcon:
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        v = self.value
+        if 0 < v < 1500:
+            return "<:bronze:632281015863214096>"
+        elif 1500 <= v < 2000:
+            return "<:silver:632281054211997718>"
+        elif 2000 <= v < 2500:
+            return "<:gold:632281064596832278>"
+        elif 2500 <= v < 3000:
+            return "<:platinum:632281092875091998>"
+        elif 3000 <= v < 3500:
+            return "<:diamond:632281105571119105>"
+        elif 3500 <= v < 4000:
+            return "<:master:632281117394993163>"
+        return "<:grandmaster:632281128966946826>"
 
 
 class Player:
@@ -81,22 +97,6 @@ class Player:
             .replace(" Most In Game", "")
             .title()
         )
-
-    @staticmethod
-    def get_rating_icon(rating):
-        if 0 < rating < 1500:
-            return "<:bronze:632281015863214096>"
-        elif 1500 <= rating < 2000:
-            return "<:silver:632281054211997718>"
-        elif 2000 <= rating < 2500:
-            return "<:gold:632281064596832278>"
-        elif 2500 <= rating < 3000:
-            return "<:platinum:632281092875091998>"
-        elif 3000 <= rating < 3500:
-            return "<:diamond:632281105571119105>"
-        elif 3500 <= rating < 4000:
-            return "<:master:632281117394993163>"
-        return "<:grandmaster:632281128966946826>"
 
     def format_key(self, key):
         if key == "best":
@@ -155,7 +155,7 @@ class Player:
         for key, value in ratings.items():
             embed.add_field(
                 name=f"{ROLES.get(key)} **{key.upper()}**",
-                value=f"{self.get_rating_icon(value)} **{value}**{SR}",
+                value=f"{str(RatingIcon(value))} **{value}**{SR}",
             )
         embed.set_footer(
             text=_("Average: {average}").format(average=self.data.get("rating")),
