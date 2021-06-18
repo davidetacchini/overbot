@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 19:24+0200\n"
+"POT-Creation-Date: 2021-06-18 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,7 @@ msgid "Unknown locale: **{locale}**"
 msgstr ""
 
 #: cogs/locale.py:64
-msgid "Displays your current language set and all the available languages."
+msgid "Displays the current language set and all the available languages."
 msgstr ""
 
 #: cogs/locale.py:66
@@ -449,11 +449,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:332 utils/paginator.py:129 utils/paginator.py:183
+#: cogs/profile.py:332 utils/paginator.py:130 utils/paginator.py:184
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:333 utils/paginator.py:184
+#: cogs/profile.py:333 utils/paginator.py:185
 msgid "Username"
 msgstr ""
 
@@ -986,7 +986,7 @@ msgstr ""
 msgid "Took too long."
 msgstr ""
 
-#: utils/paginator.py:130
+#: utils/paginator.py:131
 msgid "React with the platform you play on..."
 msgstr ""
 
