@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-18 13:15+0200\n"
+"POT-Creation-Date: 2021-06-18 22:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,90 +90,49 @@ msgstr ""
 "Questo comando ha riscontrato un problema. L'incidente è stato riportato e "
 "verrà fixato il prima possible!"
 
-#: cogs/help.py:61
-msgid "Using the bot"
-msgstr "Usare il bot"
-
-#: cogs/help.py:62
-msgid "Welcome to the help page!"
-msgstr "Benvenuto/a alla pagina di aiuto!"
-
-#: cogs/help.py:65
-msgid "<argument>"
-msgstr "<argomento>"
-
-#: cogs/help.py:65
-msgid "This means the argument is **required**."
-msgstr "Significa che l'argomento è **richiesto**."
-
-#: cogs/help.py:66
-msgid "[argument]"
-msgstr "[argomento]"
-
-#: cogs/help.py:66
-msgid "This means the argument is **optional**."
-msgstr "Significa che l'argomento è **opzionale**."
-
-#: cogs/help.py:67
-msgid "Note"
-msgstr "Nota"
-
-#: cogs/help.py:67
-msgid "You **must not** include the brackets in the argument."
-msgstr "**Non devi** includere le parentesi nell'argomento."
-
-#: cogs/help.py:74
-#, python-brace-format
-msgid "We were on page {current_page} before this message."
-msgstr "Ci trovavamo alla pagina {current_page} prima di questo messaggio."
-
-#: cogs/help.py:100
+#: cogs/help.py:71
 #, python-brace-format
 msgid ""
-"[Support server]({support}) - [View commands online]({website}) - [Help "
-"translating]({github})\n"
+"[Support]({support}) - [Commands]({website}) - [Translate]({github}) - "
+"[Premium]({premium})\n"
 "Use \"{prefix}help [command]\" for more info on a command\n"
 "Use \"{prefix}help [category]\" for more info on a category"
 msgstr ""
-"[Server di supporto]({support}) - [Vedi i comandi online]({website}) - "
-"[Aiuta a tradurre]({github})\n"
-"Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
-"Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria"
 
-#: cogs/help.py:111
+#: cogs/help.py:83
 msgid "Help"
 msgstr "Aiuto"
 
-#: cogs/help.py:122
+#: cogs/help.py:94
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr "Pagina {current_page}/{maximum}"
 
-#: cogs/help.py:134
+#: cogs/help.py:106
 #, python-brace-format
 msgid "{group} Commands"
 msgstr "Comandi {group}"
 
-#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:93
+#: cogs/help.py:118 cogs/help.py:159 cogs/member.py:93
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
-#: cogs/help.py:154
+#: cogs/help.py:126
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
 msgstr "Pagina {current_page}/{maximum} ({total_entries} comandi)"
 
-#: cogs/help.py:163
+#: cogs/help.py:135
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
 
-#: cogs/help.py:173
+#: cogs/help.py:145
 msgid "Shows help about the bot, a command, or a category."
 msgstr "Mostra la guida per il bot, un comando, o una categoria."
 
-#: cogs/help.py:190
+#: cogs/help.py:162
 msgid "Aliases"
 msgstr "Aliases"
 
@@ -370,32 +329,36 @@ msgstr "Overwatch Patch Notes"
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr "[Clicca qui per vedere le note della patch **{category}**]({link})"
 
-#: cogs/profile.py:66
+#: cogs/profile.py:42
+msgid "Index must be a number."
+msgstr "L'indice deve essere un numero."
+
+#: cogs/profile.py:72
 msgid "Invalid index."
 msgstr "Indice non valido."
 
-#: cogs/profile.py:111
+#: cogs/profile.py:117
 #, python-brace-format
 msgid "{profiles}/{limit} profiles"
 msgstr "{profiles}/{limit} profili"
 
-#: cogs/profile.py:131
+#: cogs/profile.py:137
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr "Inserisci il tuo BattleTag (formato: nome#0000):"
 
-#: cogs/profile.py:133
+#: cogs/profile.py:139
 msgid "Enter your Online ID:"
 msgstr "Inseriesci il tuo Online ID:"
 
-#: cogs/profile.py:135
+#: cogs/profile.py:141
 msgid "Enter your Gamertag:"
 msgstr "Inserisci il tuo Gamertag:"
 
-#: cogs/profile.py:137
+#: cogs/profile.py:143
 msgid "Enter your Nintendo Switch ID:"
 msgstr "Inserisci il tuo Nintendo Switch ID:"
 
-#: cogs/profile.py:193
+#: cogs/profile.py:199
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
@@ -403,19 +366,19 @@ msgstr ""
 "Non posso modificare i soprannomi in questo server. Concedimi il permesso "
 "`Gestire i soprannomi`."
 
-#: cogs/profile.py:197
+#: cogs/profile.py:203
 msgid "Something bad happened while updating your nickname."
 msgstr "Qualcosa è andato storto mentre cambiavo il tuo nickname."
 
-#: cogs/profile.py:204
+#: cogs/profile.py:210
 msgid "Nickname successfully set."
 msgstr "Nickname impostato con successo."
 
-#: cogs/profile.py:208
+#: cogs/profile.py:214
 msgid "Nickname successfully removed."
 msgstr "Soprannome rimosso con successo."
 
-#: cogs/profile.py:223
+#: cogs/profile.py:229
 msgid ""
 "List your profiles.\n"
 "\n"
@@ -429,45 +392,38 @@ msgstr ""
 "\n"
 "        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
 "\n"
-"        Se nessun membro viene dato, i profili visualizzati saranno i tuoi.\n"
+"        Se nessun membro viene fornito, i profili visualizzati saranno i "
+"tuoi.\n"
 "        "
 
-#: cogs/profile.py:239
+#: cogs/profile.py:245
 msgid "Link an Overwatch profile to your Discord account."
 msgstr "Collega un account Overwatch al tuo account Discord."
 
-#: cogs/profile.py:252
+#: cogs/profile.py:258
 msgid "Profile successfully linked."
 msgstr "Profilo collegato con successo."
 
-#: cogs/profile.py:259
+#: cogs/profile.py:265
 msgid ""
 "Unlink an Overwatch profile from your Discord account.\n"
 "\n"
-"        `<index>` - The profile's index you want to unlink.\n"
+"        `<index>` - The profile's index to unlink.\n"
 "\n"
-"        You can't unlink your main profile if you have more than 1 profile "
-"linked.\n"
+"        You can't unlink the main profile if multiple profiles are linked.\n"
 "        "
 msgstr ""
-"Rimuovi un account Overwatch dal tuo account Discord.\n"
-"\n"
-"        `<index>` - The profile's index you want to unlink.\n"
-"\n"
-"        Non puoi rimuovere il tuo profilo principale se ne hai più di uno "
-"collegato.\n"
-"        "
 
-#: cogs/profile.py:273
+#: cogs/profile.py:279
 #, python-brace-format
 msgid ""
-"You can't unlink your main profile if you have multiple profiles set. Use "
+"You can't unlink the main profile if multiple profiles are linked. Use "
 "\"{prefix}help profile main\" for more info."
 msgstr ""
-"Non puoi rimuovere il tuo profilo principale se ne hai più di uno collegato. "
-"Usa \"{prefix}help profile main\" per maggiori informazioni."
+"Non puoi rimuovere il profilo principale se molteplici profili sono "
+"collegati. Usa \"{prefix}help profile main\" per maggiori informazioni."
 
-#: cogs/profile.py:283
+#: cogs/profile.py:289
 #, python-brace-format
 msgid ""
 "This will unlink the following profile:\n"
@@ -476,73 +432,67 @@ msgid ""
 msgstr ""
 "Ciò rimuoverà il seguente profilo:\n"
 "Piattaforma: `{platform}`\n"
-"Nome utente: `{username}"
+"Nome utente: `{username}`"
 
-#: cogs/profile.py:291
+#: cogs/profile.py:297
 msgid "Profile successfully unlinked."
 msgstr "Profilo rimosso con successo."
 
-#: cogs/profile.py:298
+#: cogs/profile.py:304
 msgid ""
 "Update an Overwatch profile.\n"
 "\n"
-"        `<index>` - The profile's index you want to update.\n"
+"        `<index>` - The profile's index to update.\n"
 "        "
 msgstr ""
-"Aggiorna un tuo profilo Overwatch.\n"
+"Aggiorna un profilo Overwatch.\n"
 "\n"
 "        `<index>` - L'indice del profilo da aggiornare.\n"
 "        "
 
-#: cogs/profile.py:321
+#: cogs/profile.py:327
 msgid ""
 "Update the main profile.\n"
 "\n"
-"        `<index>` - The profile's index you want to set as main.\n"
+"        `<index>` - The profile's index to set as main.\n"
 "\n"
 "        Defaults to the first profile you have linked.\n"
 "        "
 msgstr ""
-"Aggiorna il profilo principale.\n"
-"\n"
-"        `<index>` - L'indice del profilo da impostare come principale.\n"
-"\n"
-"        Default: primo profilo collegato.\n"
-"        "
 
-#: cogs/profile.py:331
+#: cogs/profile.py:337
 msgid "Main profile successfully set to:"
 msgstr "Profilo principale impostato correttamente su:"
 
-#: cogs/profile.py:332 utils/paginator.py:130 utils/paginator.py:184
+#: cogs/profile.py:338 utils/paginator.py:130 utils/paginator.py:184
 msgid "Platform"
 msgstr "Piattaforma"
 
-#: cogs/profile.py:333 utils/paginator.py:185
+#: cogs/profile.py:339 utils/paginator.py:185
 msgid "Username"
 msgstr "Nome utente"
 
-#: cogs/profile.py:343
+#: cogs/profile.py:349
 msgid ""
 "Shows a member's Overwatch ratings.\n"
 "\n"
-"        `[index]` - The profile's index you want to see the ranks for.\n"
+"        `[index]` - The profile's index to see the ratings for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
 "current server.\n"
 "\n"
 "        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the ranks returned will be yours.\n"
+"        If no member is given then the ratings returned will be yours.\n"
 "\n"
 "        If you want to see a member's ratings, you must enter both the index "
 "and the member.\n"
 "        "
 msgstr ""
 
-#: cogs/profile.py:378
+#: cogs/profile.py:384
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats.\n"
 "\n"
-"        `[index]` - The profile's index you want to see the stats for.\n"
+"        `[index]` - The profile's index to see the stats for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
 "current server.\n"
 "\n"
@@ -554,13 +504,13 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:406
+#: cogs/profile.py:412
 msgid ""
 "Shows a member's Overwatch both quick play and competitive stats for a given "
 "hero.\n"
 "\n"
-"        `<hero>` - The name of the hero you want to see stats for.\n"
-"        `[index]` - The profile's index you want to see the ranks for.\n"
+"        `<hero>` - The name of the hero to see stats for.\n"
+"        `[index]` - The profile's index to see the stats for.\n"
 "        `[member]` - The mention or the ID of a Discord member of the "
 "current server.\n"
 "\n"
@@ -572,31 +522,23 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:434
+#: cogs/profile.py:440
 msgid ""
-"Update your server nickname and set it to your SR.\n"
+"Show your SRs in your nickname.\n"
 "\n"
 "        The nickname can only be set in one server.\n"
 "\n"
-"        The nickname will automatically be updated everytime `-profile "
+"        The nickname will be updated automatically whenever `-profile "
 "rating` is used\n"
-"        and the profile is the main one.\n"
+"        and the profile matches the one set for the nickname.\n"
 "        "
 msgstr ""
-"Visualizza il tuo SR nel tuo soprannome.\n"
-"\n"
-"        Il soprannome può essere impostato in un solo server alla volta.\n"
-"\n"
-"        Il soprannome verrà automaticamente aggiornato ogni qualvolta `-"
-"profile rating` viene utilizzato e il profilo corrisponde allo stesso che è "
-"stato utilizzato per il soprannome.\n"
-"        "
-
-#: cogs/profile.py:443
-msgid "This will display your SR in your nickname."
-msgstr "Ciò mostrerà il tuo SR come nickname."
 
 #: cogs/profile.py:449
+msgid "This will display your SRs in your nickname."
+msgstr ""
+
+#: cogs/profile.py:455
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
@@ -607,19 +549,19 @@ msgstr ""
 "di questo server, non c'è alcun modo per me di aggiornare il tuo nickname, "
 "scusa!"
 
-#: cogs/profile.py:467
+#: cogs/profile.py:473
 msgid "This will remove your SR in your nickname."
 msgstr "Ciò rimuoverà il tuo SR dal tuo nickname."
 
-#: cogs/profile.py:500
+#: cogs/profile.py:506
 msgid "I don't have enough data to create the graph."
 msgstr "Non possiedo dati sufficienti per la creazione del grafico."
 
-#: cogs/profile.py:533
+#: cogs/profile.py:539
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
-"        `[index]` - The profile's index you want to see the SR graph for.\n"
+"        `[index]` - The profile's index to see the SR graph for.\n"
 "\n"
 "        If no index is given then the profile used will be the main one.\n"
 "        "
@@ -628,7 +570,8 @@ msgstr ""
 "\n"
 "        `[index]` - L'indice del profilo per cui visualizzare il grafico.\n"
 "\n"
-"        Se nessun index viene dato, sarà utilizzato il profilo principale.\n"
+"        Se nessun index viene fornito, sarà utilizzato il profilo "
+"principale.\n"
 "        "
 
 #: cogs/fun.py:23
@@ -980,8 +923,8 @@ msgstr ""
 "\n"
 "        `[member]` - La menzione o l'ID di un membro del server corrente.\n"
 "\n"
-"        Se nessun membro viene dato, le statistiche ritornate saranno le "
-"tue.\n"
+"        Se nessun membro viene fornito, le statistiche visualizzate saranno "
+"le tue.\n"
 "        "
 
 #: cogs/trivia.py:138
@@ -1088,12 +1031,12 @@ msgstr "Colore resettato con successo."
 msgid "Color successfully set."
 msgstr "Colore impostate con successo."
 
-#: utils/player.py:28
+#: utils/player.py:25
 msgid "This profile has no quick play nor competitive stats to display."
 msgstr ""
 "Questo profilo non possiede statistiche ne rapide ne competitive da mostrare."
 
-#: utils/player.py:38
+#: utils/player.py:33
 #, python-brace-format
 msgid ""
 "This profile has no quick play nor competitive stast for **{hero}** to "
@@ -1138,16 +1081,16 @@ msgstr ""
 "opzione su Overwatch sotto la voce `Opzioni - Social`. Perfavore nota che "
 "questi cambiamenti potrebbero avere effetto entro 30 minuti."
 
-#: utils/request.py:18
+#: utils/request.py:15
 msgid "Player not found."
 msgstr "Giocatore non trovato."
 
-#: utils/request.py:26
+#: utils/request.py:21
 msgid "Wrong BattleTag format entered! Correct format: `name#0000`"
 msgstr ""
 "Il formato del BattleTag inserito non è valido! Formato corretto: `nome#0000`"
 
-#: utils/request.py:36
+#: utils/request.py:29
 msgid ""
 "The API is having internal server problems. Please be patient and try again "
 "later."
@@ -1155,17 +1098,17 @@ msgstr ""
 "L'API sta avendo dei problemi interni al server. Perfavore sii paziente e "
 "riprova ancora dopo."
 
-#: utils/request.py:46
+#: utils/request.py:37
 msgid "The API is under maintenance. Please be patient and try again later."
 msgstr "L'API è in manutenzione. Perfavore sii paziente e riprova più tardi."
 
-#: utils/request.py:56
+#: utils/request.py:45
 msgid ""
 "Something bad happened during the request. Please be patient and try again."
 msgstr ""
 "Qualcosa è andato storto durante la richiesta. Perfavore riprova ancora."
 
-#: utils/request.py:66
+#: utils/request.py:53
 #, python-brace-format
 msgid ""
 "**{players}** accounts found under the name of `{username}` playing on "
@@ -1189,65 +1132,17 @@ msgstr "Sei sicuro?"
 msgid "Unknown hero: **{hero}**."
 msgstr "Eroe sconosciuto: **{hero}**."
 
-#: classes/converters.py:32
-msgid "Index must be a number."
-msgstr "L'indice deve essere un numero."
-
-#, python-brace-format
-#~ msgid "Made with discord.py v{discord_version}"
-#~ msgstr "Creato con discord.py v{discord_version}"
-
-#, python-brace-format
 #~ msgid ""
-#~ "Are you sure you want to unlink the following profile?\n"
-#~ "Platform: `{platform}`\n"
-#~ "Username: `{username}`"
+#~ "Unlink an Overwatch profile from your Discord account.\n"
+#~ "\n"
+#~ "        `<index>` - The profile's index to unlink.\n"
+#~ "\n"
+#~ "        You can't unlink the main profile if multiple profiles are "
+#~ "linked.        "
 #~ msgstr ""
-#~ "Sei sicuro di volere rimuovere il seguente profilo?\n"
-#~ "Piattaforma: `{platform}`\n"
-#~ "Nome Utente: `{username}`"
-
-#~ msgid "Do you want to display your SR in your nickname?"
-#~ msgstr "Vuoi mostrare il tuo SR nel tuo soprannome?"
-
-#~ msgid "Do you want to **remove** your SR in your nickname?"
-#~ msgstr "Vuoi rimuove il tuo SR dal tuo soprannome?"
-
-#~ msgid "Confirmation"
-#~ msgstr "Conferma"
-
-#~ msgid "You took too long to reply."
-#~ msgstr "Hai impiegato troppo tempo per rispondere."
-
-#, python-brace-format
-#~ msgid "**{players}** accounts found under the name of `{username}`"
-#~ msgstr "**{players}** accounts trovati sotto il nome di `{username}`"
-
-#, python-brace-format
-#~ msgid "{command} Commands"
-#~ msgstr "Comandi {command}"
-
-#~ msgid ""
-#~ "Something bad happened while updating your nickname. Please try again."
-#~ msgstr ""
-#~ "Qualcosa è andato storto mentre cambiavo il tuo soprannome. Riprova "
-#~ "ancora."
-
-#~ msgid ""
-#~ "Nickname successfully set. Your SR will now be visible in your nickname "
-#~ "within this server."
-#~ msgstr ""
-#~ "Soprannome cambiato con successo. Il tuo SR sarà ora visibile nel tuo "
-#~ "soprannome all'interno di questo server."
-
-#~ msgid "Update the bot language."
-#~ msgstr "Aggiorna la lingua del bot."
-
-#~ msgid "Set the bot language"
-#~ msgstr "Imposta la lingua del bot"
-
-#~ msgid "You took too long to confirm."
-#~ msgstr "Hai impiegato troppo tempo per confermare."
-
-#~ msgid "Fetching..."
-#~ msgstr "Recupero..."
+#~ "Rimuovi un account Overwatch dal tuo account Discord.\n"
+#~ "\n"
+#~ "        `<index>` - L'indice del profilo da rimuovere.\n"
+#~ "\n"
+#~ "        Non puoi rimuovere il profilo principale se molteplici profili "
+#~ "sono collegati.        "
