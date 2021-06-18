@@ -394,7 +394,7 @@ class Profile(commands.Cog):
 
             cog = self.bot.get_cog("Stats")
             if cog:
-                await cog.show_stats_for(ctx, platform, username)
+                await cog.show_stats_for(ctx, "allHeroes", platform, username)
 
     @has_profile()
     @profile.command()
