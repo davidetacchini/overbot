@@ -1,7 +1,0 @@
-it_IT: 95.24%
-en_US: 0.0%
-ru_RU: 0.0%
-ko_KR: 0.0%
-ja_JP: 0.0%
-de_DE: 0.0%
-fr_FR: 0.0%

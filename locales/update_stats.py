@@ -1,3 +1,6 @@
+import json
+
+
 def main():
     locales = ("it_IT", "en_US", "ru_RU", "ko_KR", "ja_JP", "de_DE", "fr_FR")
     results = {}
@@ -20,10 +23,8 @@ def main():
         percentage = str(round(100 - ((100 * empty) / total), 2))
         results[locale] = percentage
 
-    with open("stats.txt", "w") as fp:
-        for key, value in results.items():
-            to_write = key + ": " + value + "%" + "\n"
-            fp.write(to_write)
+    with open("stats.json", "w") as fp:
+        json.dump(results, fp, indent=4)
 
 
 if __name__ == "__main__":
