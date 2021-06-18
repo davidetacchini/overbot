@@ -12,12 +12,12 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def send_log(self, color, message):
+    async def send_log(self, text, color):
         if self.bot.debug:
             return
 
         embed = discord.Embed(color=color)
-        embed.title = message
+        embed.title = text
         embed.timestamp = self.bot.timestamp
         await self.bot.webhook.send(embed=embed)
 
@@ -26,15 +26,13 @@ class Events(commands.Cog):
         game = discord.Game(f"{self.bot.prefix}help")
         await self.bot.change_presence(activity=game)
 
-    async def send_guild_log(self, embed, guild):
+    async def send_guild_log(self, guild, embed):
         """Sends information about a joined guild."""
         embed.title = guild.name
         if guild.icon:
             embed.set_thumbnail(url=guild.icon_url)
-        try:
+        with suppress(AttributeError):
             embed.add_field(name="Members", value=guild.member_count)
-        except AttributeError:
-            pass
         embed.add_field(name="Region", value=guild.region)
         embed.add_field(name="Shard ID", value=guild.shard_id + 1)
         embed.set_footer(text=f"ID: {guild.id}")
@@ -59,7 +57,7 @@ class Events(commands.Cog):
         )
 
         await self.change_presence()
-        await self.send_log(discord.Color.blue(), "Bot is online.")
+        await self.send_log("Bot is online.", discord.Color.blue())
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -73,7 +71,7 @@ class Events(commands.Cog):
             return
 
         embed = discord.Embed(color=discord.Color.green())
-        await self.send_guild_log(embed, guild)
+        await self.send_guild_log(guild, embed)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
@@ -85,7 +83,7 @@ class Events(commands.Cog):
             return
 
         embed = discord.Embed(color=discord.Color.red())
-        await self.send_guild_log(embed, guild)
+        await self.send_guild_log(guild, embed)
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
