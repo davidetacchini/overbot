@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 19:11+0200\n"
+"POT-Creation-Date: 2021-06-18 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr "Attendi `{seconds}s` prima di eseguire un altro comando."
 #: cogs/errors.py:55
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}s`."
-msgstr "Non puoi utilizzare il comando `{command}` per `{seconds}`"
+msgstr "Non puoi utilizzare il comando `{command}` per `{seconds}s`"
 
 #: cogs/errors.py:62
 msgid "This command can't be used in direct messages."
@@ -87,6 +87,8 @@ msgid ""
 "This command ran into an error. The incident has been reported and will be "
 "fixed as soon as possible!"
 msgstr ""
+"Questo comando ha riscontrato un problema. L'incidente è stato riportato e "
+"verrà fixato il prima possible!"
 
 #: cogs/help.py:61
 msgid "Using the bot"
@@ -140,7 +142,7 @@ msgstr ""
 
 #: cogs/help.py:111
 msgid "Help"
-msgstr "Guida"
+msgstr "Aiuto"
 
 #: cogs/help.py:122
 #, python-brace-format
@@ -185,7 +187,7 @@ msgstr "Ritorna il link di voto per il bot."
 
 #: cogs/links.py:25
 msgid "Returns bot invite link."
-msgstr "Ritorna il link per invitare il bot."
+msgstr "Ritorna il link di invito del bot."
 
 #: cogs/links.py:31
 msgid "Returns the bot GitHub repository."
@@ -197,8 +199,8 @@ msgid "Unknown locale: **{locale}**"
 msgstr "Locale sconosciuto: **{locale}**"
 
 #: cogs/locale.py:64
-msgid "Displays your current language set and all the available languages."
-msgstr "Mostra le lingue disponibili e la lingua che hai impostato."
+msgid "Displays the current language set and all the available languages."
+msgstr "Mostra la lingua impostata e tutte quelle disponibili."
 
 #: cogs/locale.py:66
 msgid "Available Languages"
@@ -512,11 +514,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr "Profilo principale impostato correttamente su:"
 
-#: cogs/profile.py:332 utils/paginator.py:129 utils/paginator.py:183
+#: cogs/profile.py:332 utils/paginator.py:130 utils/paginator.py:184
 msgid "Platform"
 msgstr "Piattaforma"
 
-#: cogs/profile.py:333 utils/paginator.py:184
+#: cogs/profile.py:333 utils/paginator.py:185
 msgid "Username"
 msgstr "Nome utente"
 
@@ -1047,8 +1049,8 @@ msgid ""
 "blue."
 msgstr ""
 "Usa `{prefix} settings [settaggio] [valore]` per aggiornare il valore di un "
-"settaggio specifico: `{prefix} settings color blue` imposterà il colore degli "
-"embed a blue."
+"settaggio specifico: `{prefix} settings color blue` imposterà il colore "
+"degli embed a blue."
 
 #: cogs/member.py:80
 #, python-brace-format
@@ -1134,7 +1136,7 @@ msgid ""
 msgstr ""
 "I profili sono impostati come privati di default. Puoi modificare questa "
 "opzione su Overwatch sotto la voce `Opzioni - Social`. Perfavore nota che "
-"questi cambiamenti potrebbere avere effetto entro 30 minuti."
+"questi cambiamenti potrebbero avere effetto entro 30 minuti."
 
 #: utils/request.py:18
 msgid "Player not found."
@@ -1174,7 +1176,7 @@ msgstr ""
 msgid "Took too long."
 msgstr "Hai impiegato troppo tempo."
 
-#: utils/paginator.py:130
+#: utils/paginator.py:131
 msgid "React with the platform you play on..."
 msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
