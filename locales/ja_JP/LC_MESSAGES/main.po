@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-18 09:33+0200\n"
+"POT-Creation-Date: 2021-06-18 13:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,7 +142,7 @@ msgstr ""
 msgid "{group} Commands"
 msgstr ""
 
-#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:90
+#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:93
 msgid "No help found..."
 msgstr ""
 
@@ -839,32 +839,32 @@ msgid ""
 "{ratio}"
 msgstr ""
 
-#: cogs/member.py:16
+#: cogs/member.py:19
 msgid ""
 "You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
 msgstr ""
 
-#: cogs/member.py:30
+#: cogs/member.py:33
 msgid "Shows your current premium status."
 msgstr ""
 
-#: cogs/member.py:32
+#: cogs/member.py:35
 msgid "Premium Status"
 msgstr ""
 
-#: cogs/member.py:48
+#: cogs/member.py:51
 #, python-brace-format
 msgid ""
 "Your Status: `{member}`\n"
 "Server Status: `{guild}`"
 msgstr ""
 
-#: cogs/member.py:53
+#: cogs/member.py:56
 #, python-brace-format
 msgid "[Upgrade to Premium]({premium})"
 msgstr ""
 
-#: cogs/member.py:74
+#: cogs/member.py:77
 #, python-brace-format
 msgid ""
 "You can use `{prefix}settings [setting] [value]` to update the value of a "
@@ -872,16 +872,16 @@ msgid ""
 "blue."
 msgstr ""
 
-#: cogs/member.py:80
+#: cogs/member.py:83
 #, python-brace-format
 msgid "{member}'s Settings"
 msgstr ""
 
-#: cogs/member.py:104
+#: cogs/member.py:107
 msgid "`[Premium]` Update your settings."
 msgstr ""
 
-#: cogs/member.py:113
+#: cogs/member.py:116
 msgid ""
 "`[Premium]` Set a custom color for the embeds.\n"
 "\n"
@@ -896,15 +896,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/member.py:131
+#: cogs/member.py:134
 msgid "Color already set to default."
 msgstr ""
 
-#: cogs/member.py:133
+#: cogs/member.py:136
 msgid "Color successfully reset."
 msgstr ""
 
-#: cogs/member.py:139
+#: cogs/member.py:142
 msgid "Color successfully set."
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-18 09:33+0200\n"
+"POT-Creation-Date: 2021-06-18 13:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,7 +154,7 @@ msgstr "Pagina {current_page}/{maximum}"
 msgid "{group} Commands"
 msgstr "Comandi {group}"
 
-#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:90
+#: cogs/help.py:146 cogs/help.py:187 cogs/member.py:93
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
@@ -1013,21 +1013,21 @@ msgstr ""
 "{index}. **{player}** Giocate: {played} | Vinte: {won} | Perse: {lost} | "
 "Rateo: {ratio}"
 
-#: cogs/member.py:16
+#: cogs/member.py:19
 msgid ""
 "You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
 msgstr ""
 "Devi specificare un hex (E.g.: `#00ff00`) o un codice colore (E.g.: `red`)."
 
-#: cogs/member.py:30
+#: cogs/member.py:33
 msgid "Shows your current premium status."
 msgstr "Mostra il tuo stato Premium corrente."
 
-#: cogs/member.py:32
+#: cogs/member.py:35
 msgid "Premium Status"
 msgstr "Premium Status"
 
-#: cogs/member.py:48
+#: cogs/member.py:51
 #, python-brace-format
 msgid ""
 "Your Status: `{member}`\n"
@@ -1036,12 +1036,12 @@ msgstr ""
 "Il tuo stato: `{member}`\n"
 "Stato del server: `{guild}`"
 
-#: cogs/member.py:53
+#: cogs/member.py:56
 #, python-brace-format
 msgid "[Upgrade to Premium]({premium})"
 msgstr "[Passa a Premium]({premium})"
 
-#: cogs/member.py:74
+#: cogs/member.py:77
 #, python-brace-format
 msgid ""
 "You can use `{prefix}settings [setting] [value]` to update the value of a "
@@ -1052,16 +1052,16 @@ msgstr ""
 "settaggio specifico: `{prefix} settings color blue` imposterà il colore "
 "degli embed a blue."
 
-#: cogs/member.py:80
+#: cogs/member.py:83
 #, python-brace-format
 msgid "{member}'s Settings"
 msgstr "Settaggi di {member}"
 
-#: cogs/member.py:104
+#: cogs/member.py:107
 msgid "`[Premium]` Update your settings."
 msgstr "`[Premium]` Aggiorna i tuoi settaggi."
 
-#: cogs/member.py:113
+#: cogs/member.py:116
 msgid ""
 "`[Premium]` Set a custom color for the embeds.\n"
 "\n"
@@ -1076,15 +1076,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/member.py:131
+#: cogs/member.py:134
 msgid "Color already set to default."
 msgstr "Il colore è già impostato su predefinito."
 
-#: cogs/member.py:133
+#: cogs/member.py:136
 msgid "Color successfully reset."
 msgstr "Colore resettato con successo."
 
-#: cogs/member.py:139
+#: cogs/member.py:142
 msgid "Color successfully set."
 msgstr "Colore impostate con successo."
 
