@@ -2,26 +2,21 @@ from discord.ext import commands
 
 
 class ProfileNotLinked(commands.CheckFailure):
-    """Exception raised when a user have not linked a profile."""
 
     pass
 
 
 class ProfileLimitReached(commands.CheckFailure):
-    """Exception raised when a user try to link a 6th profile."""
-
     def __init__(self, limit):
         self.limit = limit
 
 
 class MemberIsNotPremium(commands.CheckFailure):
-    """Exception raised when a user is not premium."""
 
     pass
 
 
 class MemberOnCooldown(commands.CommandOnCooldown):
-    """Exception raised when a user is on cooldown (globally)."""
 
     pass
 
