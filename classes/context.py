@@ -7,14 +7,14 @@ from discord.ext import commands
 from utils.i18n import _
 from utils.paginator import NoChoice
 
-CHECK = "<:check:855015016042725386>"
-XMARK = "<:xmark:855015043862233090>"
-
 
 class Context(commands.Context):
+    CHECK = "<:check:855015016042725386>"
+    XMARK = "<:xmark:855015043862233090>"
+
     async def prompt(self, text, user=None):
         user = user or self.author
-        reactions = (CHECK, XMARK)
+        reactions = (self.CHECK, self.XMARK)
 
         if user.id == self.bot.user.id:
             return False
