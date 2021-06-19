@@ -441,7 +441,7 @@ class Profile(commands.Cog):
 
         The nickname can only be set in one server.
 
-        The nickname will be updated automatically whenever `-profile rating`
+        The nickname updates automatically whenever `profile rating`
         is used and the profile matches the one set for the nickname.
         """
         )
