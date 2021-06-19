@@ -16,7 +16,7 @@ def valid_color(argument):
     except (AttributeError, ValueError):
         raise commands.BadArgument(
             _(
-                "You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
+                "You need to specify a hex (e.g. `#00ff00`) or a color code (e.g. `red`)."
             )
         ) from None
     return int(color.lstrip("#"), 16)
