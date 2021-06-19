@@ -34,25 +34,15 @@ class Member(commands.Cog):
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = _("Premium Status")
 
-        is_premium = False
-
-        if ctx.author.id in self.bot.premiums:
-            member = "Active"
-            is_premium = True
-        else:
-            member = "N/A"
-
-        if ctx.guild.id in self.bot.premiums:
-            guild = "Active"
-            is_premium = True
-        else:
-            guild = "N/A"
+        member = "Active" if ctx.author.id in self.bot.premiums else "N/A"
+        guild = "Active" if ctx.guild.id in self.bot.premiums else "N/A"
 
         description = _("Your Status: `{member}`\nServer Status: `{guild}`").format(
             member=member, guild=guild
         )
 
-        if not is_premium:
+        to_check = (member, guild)
+        if all(x == "N/A" for x in to_check):
             link = _("[Upgrade to Premium]({premium})").format(
                 premium=self.bot.config.premium
             )
