@@ -92,40 +92,40 @@ msgstr ""
 
 #: cogs/help.py:61
 msgid "Using the bot"
-msgstr ""
+msgstr "Uso del bot"
 
 #: cogs/help.py:62
 msgid "Welcome to the help page!"
-msgstr ""
+msgstr "Benvenuta/o nella pagina di aiuto!"
 
 #: cogs/help.py:65
 msgid "<argument>"
-msgstr ""
+msgstr "<argomento>"
 
 #: cogs/help.py:65
 msgid "This means the argument is **required**."
-msgstr ""
+msgstr "Ciò significa the l'argomento è **richiesto**"
 
 #: cogs/help.py:66
 msgid "[argument]"
-msgstr ""
+msgstr "[argomento]"
 
 #: cogs/help.py:66
 msgid "This means the argument is **optional**."
-msgstr ""
+msgstr "Ciò significa che l'argomento è **opzionale**."
 
 #: cogs/help.py:67
 msgid "Note"
-msgstr ""
+msgstr "Nota"
 
 #: cogs/help.py:67
 msgid "You **must not** include the brackets in the argument."
-msgstr ""
+msgstr "Non **devi** includere le parentesi nell'argomento."
 
 #: cogs/help.py:74
 #, python-brace-format
 msgid "We were on page {current_page} before this message."
-msgstr ""
+msgstr "Eravamo alla pagina {current_page} prima di questo messaggio."
 
 #: cogs/help.py:100
 #, python-brace-format
@@ -135,11 +135,15 @@ msgid ""
 "Use \"{prefix}help [command]\" for more info on a command\n"
 "Use \"{prefix}help [category]\" for more info on a category\n"
 msgstr ""
+"[Supporto]({support}) - [Comandi]({website}) - [Traduci]({github}) - "
+"[Premium]({premium})\n"
+"Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
+"Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria\n"
 
 #: cogs/help.py:112
 #, python-brace-format
 msgid "{bot} Command List"
-msgstr ""
+msgstr "Lista Comandi {bot}"
 
 #: cogs/help.py:123
 #, python-brace-format
