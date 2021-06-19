@@ -27,15 +27,16 @@ class Server(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @locale
-    async def prefix(
-        self, ctx, prefix: commands.clean_content(escape_markdown=True) = None
-    ):
+    async def prefix(self, ctx, prefix):
         _(
             """Either see the prefix or change it.
 
         `[prefix]` - The new server prefix to use.
 
-        You must have Manage Server permission to use this command.
+        Surround the prefix with "" quotes if you want multiple
+        words or trailing spaces.
+
+        `Manage Server` permission is required to change the prefix.
         """
         )
         if prefix:
