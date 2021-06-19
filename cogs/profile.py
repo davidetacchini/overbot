@@ -228,9 +228,9 @@ class Profile(commands.Cog):
         _(
             """List your profiles.
 
-        `[member]` - The mention or the ID of a Discord member of the current server.
+        `[member]` - The mention or the ID of a Discord member.
 
-        If no member is given then the information returned will be yours.
+        If no member is given, the information returned will be yours.
         """
         )
         member = member or ctx.author
@@ -346,15 +346,15 @@ class Profile(commands.Cog):
         self, ctx, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's Overwatch ratings.
+            """Shows a member's ratings.
 
         `[index]` - The profile's index to see the ratings for.
-        `[member]` - The mention or the ID of a Discord member of the current server.
+        `[member]` - The mention or the ID of a Discord member.
 
-        If no index is given then the profile used will be the main one.
-        If no member is given then the ratings returned will be yours.
+        If no index is given, the profile used will be the main one.
+        If no member is given, the ratings returned will be yours.
 
-        If you want to see a member's ratings, you must enter both the index and the member.
+        Provide both the index and the member to see a member's ratings.
         """
         )
         async with ctx.typing():
@@ -381,15 +381,15 @@ class Profile(commands.Cog):
         self, ctx, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's Overwatch both quick play and competitive stats.
+            """Shows a member's general stats.
 
         `[index]` - The profile's index to see the stats for.
-        `[member]` - The mention or the ID of a Discord member of the current server.
+        `[member]` - The mention or the ID of a Discord member.
 
-        If no index is given then the profile used will be the main one.
-        If no member is given then the stats returned will be yours.
+        If no index is given, the profile used will be the main one.
+        If no member is given, the stats returned will be yours.
 
-        If you want to see a member's stats, you must enter both the index and the member.
+        Provide both the index and the member to see a member's ratings.
         """
         )
         async with ctx.typing():
@@ -409,16 +409,16 @@ class Profile(commands.Cog):
         self, ctx, hero: Hero, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's Overwatch both quick play and competitive stats for a given hero.
+            """Shows a member's general stats for a given hero.
 
         `<hero>` - The name of the hero to see stats for.
         `[index]` - The profile's index to see the stats for.
-        `[member]` - The mention or the ID of a Discord member of the current server.
+        `[member]` - The mention or the ID of a Discord member.
 
-        If no index is given then the profile used will be the main one.
-        If no member is given then the stats returned will be yours.
+        If no index is given, the profile used will be the main one.
+        If no member is given, the stats returned will be yours.
 
-        If you want to see a member's stats, you must enter both the index and the member.
+        Provide both the index and the member to see a member's ratings.
         """
         )
         async with ctx.typing():
@@ -441,8 +441,8 @@ class Profile(commands.Cog):
 
         The nickname can only be set in one server.
 
-        The nickname will be updated automatically whenever `-profile rating` is used
-        and the profile matches the one set for the nickname.
+        The nickname will be updated automatically whenever `-profile rating`
+        is used and the profile matches the one set for the nickname.
         """
         )
         if not await self.has_nickname(ctx.author.id):
@@ -540,7 +540,7 @@ class Profile(commands.Cog):
 
         `[index]` - The profile's index to see the SR graph for.
 
-        If no index is given then the profile used will be the main one.
+        If no index is given, the profile used will be the main one.
         """
         )
         profile = await self.get_profile(ctx, index=index)
