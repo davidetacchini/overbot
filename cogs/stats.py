@@ -33,7 +33,7 @@ class Stats(commands.Cog):
         self.bot = bot
 
     async def show_stats_for(self, ctx, hero, platform, username):
-        data = await Request(platform=platform, username=username).get()
+        data = await Request(platform, username).get()
         profile = Player(data, platform=platform, username=username)
         if profile.is_private:
             embed = profile.private()
@@ -66,7 +66,7 @@ class Stats(commands.Cog):
         """
         )
         async with ctx.typing():
-            data = await Request(platform=platform, username=username).get()
+            data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
                 embed = profile.private()
