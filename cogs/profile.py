@@ -154,7 +154,7 @@ class Profile(commands.Cog):
         try:
             message = await self.bot.wait_for("message", check=check, timeout=30.0)
         except asyncio.TimeoutError:
-            raise NoChoice()
+            raise NoChoice() from None
         else:
             return message.content.replace("#", "-")
 
