@@ -78,7 +78,7 @@ class Stats(commands.Cog):
     @locale
     async def stats(self, ctx, platform: valid_platform, *, username):
         _(
-            """Returns player both quick play and competitive stats.
+            """Returns player general stats.
 
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
@@ -112,9 +112,9 @@ class Stats(commands.Cog):
         username,
     ):
         _(
-            """Returns player both quick play and competitive stats for a given hero.
+            """Returns player general stats for a given hero.
 
-        `<hero>` - The name of the hero you want to see stats for.
+        `<hero>` - The name of the hero to get the stats for.
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
 

@@ -112,7 +112,7 @@ class Fun(commands.Cog):
         - support, heal, healer
         - tank
 
-        If no category is passed in, a random hero is chosen from all categories.
+        If no category is given, a random hero is chosen from all categories.
         """
         )
         hero = self.get_random_hero(category)
@@ -144,7 +144,7 @@ class Fun(commands.Cog):
         - deathmatch
         - team deathmatch, tdm
 
-        If no category is passed in, a random map is chosen from all categories.
+        If no category is given, a random map is chosen from all categories.
         """
         )
         _map = self.get_random_map(ctx, category)
@@ -156,7 +156,7 @@ class Fun(commands.Cog):
         _(
             """Returns a random Overwatch meme.
 
-        `[category]` - The category to get a random meme from. Defaults to `Hot`.
+        `[category]` - The category to get a random meme from. Defaults to `hot`.
 
         Categories:
 
@@ -165,7 +165,7 @@ class Fun(commands.Cog):
         - top
         - rising
 
-        All memes are taken from the subreddit r/Overwatch_Memes.
+        Memes are taken from the subreddit r/Overwatch_Memes.
         """
         )
         meme = await self.get_meme(category)
