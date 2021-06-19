@@ -97,18 +97,19 @@ class BotHelp(menus.ListPageSource):
 
     async def format_page(self, menu, cogs):
         description = _(
-            "[Support server]({support}) - [View commands online]({website}) - [Help translating]({github})\n"
+            "[Support]({support}) - [Commands]({website}) - [Translate]({github}) - [Premium]({premium})\n"
             'Use "{prefix}help [command]" for more info on a command\n'
-            'Use "{prefix}help [category]" for more info on a category'
+            'Use "{prefix}help [category]" for more info on a category\n'
         ).format(
             support=self.bot.config.support,
             website=self.bot.config.website + "/commands",
             github=self.bot.config.github["repo"],
+            premium=self.bot.config.premium,
             prefix=self.prefix,
         )
 
         embed = discord.Embed(color=main_color)
-        embed.title = _("Help")
+        embed.title = _("{bot} Command List").format(bot=self.bot.user.display_name)
         embed.description = description
 
         for cog in cogs:
@@ -141,11 +142,8 @@ class GroupHelp(menus.ListPageSource):
 
         for command in commands:
             signature = f"{command.qualified_name} {command.signature}"
-            embed.add_field(
-                name=signature,
-                value=_(command.short_doc) or _("No help found..."),
-                inline=False,
-            )
+            value = _(command.short_doc) or _("No help found...")
+            embed.add_field(name=signature, value=value, inline=False)
 
         maximum = self.get_max_pages()
         if maximum > 1:
@@ -175,9 +173,7 @@ class CustomHelpCommand(commands.HelpCommand):
         super().__init__(command_attrs=command_attrs)
 
     def get_command_signature(self, command):
-        parent = command.full_parent_name
-        fmt = command.name if not parent else f"{parent} {command.name}"
-        return f"{self.clean_prefix}{fmt} {command.signature}"
+        return f"{self.clean_prefix}{command.qualified_name} {command.signature}"
 
     def common_command_formatting(self, embed, command):
         embed.title = self.get_command_signature(command)
@@ -185,7 +181,7 @@ class CustomHelpCommand(commands.HelpCommand):
             embed.description = _(command.help)
         else:
             embed.description = _("No help found...")
-        if command.aliases and not isinstance(embed, GroupHelp):
+        if not isinstance(embed, GroupHelp) and command.aliases:
             aliases = ", ".join(map(lambda a: f"`{a}`", command.aliases))
             embed.add_field(name=_("Aliases"), value=aliases)
 
