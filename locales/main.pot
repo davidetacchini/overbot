@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-18 22:54+0200\n"
+"POT-Creation-Date: 2021-06-19 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,48 +82,86 @@ msgid ""
 "fixed as soon as possible!"
 msgstr ""
 
-#: cogs/help.py:71
+#: cogs/help.py:61
+msgid "Using the bot"
+msgstr ""
+
+#: cogs/help.py:62
+msgid "Welcome to the help page!"
+msgstr ""
+
+#: cogs/help.py:65
+msgid "<argument>"
+msgstr ""
+
+#: cogs/help.py:65
+msgid "This means the argument is **required**."
+msgstr ""
+
+#: cogs/help.py:66
+msgid "[argument]"
+msgstr ""
+
+#: cogs/help.py:66
+msgid "This means the argument is **optional**."
+msgstr ""
+
+#: cogs/help.py:67
+msgid "Note"
+msgstr ""
+
+#: cogs/help.py:67
+msgid "You **must not** include the brackets in the argument."
+msgstr ""
+
+#: cogs/help.py:74
+#, python-brace-format
+msgid "We were on page {current_page} before this message."
+msgstr ""
+
+#: cogs/help.py:100
 #, python-brace-format
 msgid ""
 "[Support]({support}) - [Commands]({website}) - [Translate]({github}) - "
 "[Premium]({premium})\n"
 "Use \"{prefix}help [command]\" for more info on a command\n"
-"Use \"{prefix}help [category]\" for more info on a category"
+"Use \"{prefix}help [category]\" for more info on a category\n"
 msgstr ""
 
-#: cogs/help.py:83
-msgid "Help"
+#: cogs/help.py:112
+#, python-brace-format
+msgid "{bot} Command List"
 msgstr ""
 
-#: cogs/help.py:94
+#: cogs/help.py:123
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr ""
 
-#: cogs/help.py:106
+#: cogs/help.py:135
 #, python-brace-format
 msgid "{group} Commands"
 msgstr ""
 
-#: cogs/help.py:118 cogs/help.py:159 cogs/member.py:93
+#: cogs/help.py:145 cogs/help.py:183 cogs/member.py:83
 msgid "No help found..."
 msgstr ""
 
-#: cogs/help.py:126
+#: cogs/help.py:152
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
 msgstr ""
 
-#: cogs/help.py:135
+#: cogs/help.py:161
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:145
+#: cogs/help.py:171
 msgid "Shows help about the bot, a command, or a category."
 msgstr ""
 
-#: cogs/help.py:162
+#: cogs/help.py:186
 msgid "Aliases"
 msgstr ""
 
@@ -349,10 +387,9 @@ msgstr ""
 msgid ""
 "List your profiles.\n"
 "\n"
-"        `[member]` - The mention or the ID of a Discord member of the "
-"current server.\n"
+"        `[member]` - The mention or the ID of a Discord member.\n"
 "\n"
-"        If no member is given then the information returned will be yours.\n"
+"        If no member is given, the information returned will be yours.\n"
 "        "
 msgstr ""
 
@@ -425,51 +462,44 @@ msgstr ""
 
 #: cogs/profile.py:349
 msgid ""
-"Shows a member's Overwatch ratings.\n"
+"Shows a member's ratings.\n"
 "\n"
 "        `[index]` - The profile's index to see the ratings for.\n"
-"        `[member]` - The mention or the ID of a Discord member of the "
-"current server.\n"
+"        `[member]` - The mention or the ID of a Discord member.\n"
 "\n"
-"        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the ratings returned will be yours.\n"
+"        If no index is given, the profile used will be the main one.\n"
+"        If no member is given, the ratings returned will be yours.\n"
 "\n"
-"        If you want to see a member's ratings, you must enter both the index "
-"and the member.\n"
+"        Provide both the index and the member to see a member's ratings.\n"
 "        "
 msgstr ""
 
 #: cogs/profile.py:384
 msgid ""
-"Shows a member's Overwatch both quick play and competitive stats.\n"
+"Shows a member's general stats.\n"
 "\n"
 "        `[index]` - The profile's index to see the stats for.\n"
-"        `[member]` - The mention or the ID of a Discord member of the "
-"current server.\n"
+"        `[member]` - The mention or the ID of a Discord member.\n"
 "\n"
-"        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the stats returned will be yours.\n"
+"        If no index is given, the profile used will be the main one.\n"
+"        If no member is given, the stats returned will be yours.\n"
 "\n"
-"        If you want to see a member's stats, you must enter both the index "
-"and the member.\n"
+"        Provide both the index and the member to see a member's ratings.\n"
 "        "
 msgstr ""
 
 #: cogs/profile.py:412
 msgid ""
-"Shows a member's Overwatch both quick play and competitive stats for a given "
-"hero.\n"
+"Shows a member's general stats for a given hero.\n"
 "\n"
 "        `<hero>` - The name of the hero to see stats for.\n"
 "        `[index]` - The profile's index to see the stats for.\n"
-"        `[member]` - The mention or the ID of a Discord member of the "
-"current server.\n"
+"        `[member]` - The mention or the ID of a Discord member.\n"
 "\n"
-"        If no index is given then the profile used will be the main one.\n"
-"        If no member is given then the stats returned will be yours.\n"
+"        If no index is given, the profile used will be the main one.\n"
+"        If no member is given, the stats returned will be yours.\n"
 "\n"
-"        If you want to see a member's stats, you must enter both the index "
-"and the member.\n"
+"        Provide both the index and the member to see a member's ratings.\n"
 "        "
 msgstr ""
 
@@ -479,9 +509,8 @@ msgid ""
 "\n"
 "        The nickname can only be set in one server.\n"
 "\n"
-"        The nickname will be updated automatically whenever `-profile "
-"rating` is used\n"
-"        and the profile matches the one set for the nickname.\n"
+"        The nickname updates automatically whenever `profile rating`\n"
+"        is used and the profile matches the one set for the nickname.\n"
 "        "
 msgstr ""
 
@@ -510,7 +539,7 @@ msgid ""
 "\n"
 "        `[index]` - The profile's index to see the SR graph for.\n"
 "\n"
-"        If no index is given then the profile used will be the main one.\n"
+"        If no index is given, the profile used will be the main one.\n"
 "        "
 msgstr ""
 
@@ -538,7 +567,7 @@ msgid ""
 "        - support, heal, healer\n"
 "        - tank\n"
 "\n"
-"        If no category is passed in, a random hero is chosen from all "
+"        If no category is given, a random hero is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
@@ -564,7 +593,7 @@ msgid ""
 "        - deathmatch\n"
 "        - team deathmatch, tdm\n"
 "\n"
-"        If no category is passed in, a random map is chosen from all "
+"        If no category is given, a random map is chosen from all "
 "categories.\n"
 "        "
 msgstr ""
@@ -574,7 +603,7 @@ msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
 "        `[category]` - The category to get a random meme from. Defaults to "
-"`Hot`.\n"
+"`hot`.\n"
 "\n"
 "        Categories:\n"
 "\n"
@@ -583,7 +612,7 @@ msgid ""
 "        - top\n"
 "        - rising\n"
 "\n"
-"        All memes are taken from the subreddit r/Overwatch_Memes.\n"
+"        Memes are taken from the subreddit r/Overwatch_Memes.\n"
 "        "
 msgstr ""
 
@@ -600,30 +629,33 @@ msgstr ""
 msgid "Prefix successfully set to `{prefix}`"
 msgstr ""
 
-#: cogs/server.py:34
+#: cogs/server.py:32
 msgid ""
 "Either see the prefix or change it.\n"
 "\n"
 "        `[prefix]` - The new server prefix to use.\n"
 "\n"
-"        You must have Manage Server permission to use this command.\n"
+"        Surround the prefix with \"\" quotes if you want multiple\n"
+"        words or trailing spaces.\n"
+"\n"
+"        `Manage Server` permission is required to change the prefix.\n"
 "        "
 msgstr ""
 
-#: cogs/server.py:46
+#: cogs/server.py:47
 msgid "`Manage Server` permission is required to change the prefix."
 msgstr ""
 
-#: cogs/server.py:53
+#: cogs/server.py:54
 #, python-brace-format
 msgid "Use \"{prefix}prefix [value]\" to change it."
 msgstr ""
 
-#: cogs/server.py:58
+#: cogs/server.py:59
 msgid "Prefixes"
 msgstr ""
 
-#: cogs/server.py:67
+#: cogs/server.py:68
 msgid ""
 "Shows OverBot's most active servers.\n"
 "\n"
@@ -633,15 +665,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:84
+#: cogs/server.py:85
 msgid "Most Active Servers"
 msgstr ""
 
-#: cogs/server.py:86
+#: cogs/server.py:87
 msgid "Tracking command usage since - 03/31/2021"
 msgstr ""
 
-#: cogs/server.py:97
+#: cogs/server.py:98
 #, python-brace-format
 msgid "{index}. **{guild}** ran a total of **{commands}** commands"
 msgstr ""
@@ -675,7 +707,7 @@ msgstr ""
 
 #: cogs/stats.py:81
 msgid ""
-"Returns player both quick play and competitive stats.\n"
+"Returns player general stats.\n"
 "\n"
 "        `<platform>` - The platform of the player to get stats for.\n"
 "        `<username>` - The username of the player to get stats for.\n"
@@ -698,9 +730,9 @@ msgstr ""
 
 #: cogs/stats.py:115
 msgid ""
-"Returns player both quick play and competitive stats for a given hero.\n"
+"Returns player general stats for a given hero.\n"
 "\n"
-"        `<hero>` - The name of the hero you want to see stats for.\n"
+"        `<hero>` - The name of the hero to get the stats for.\n"
 "        `<platform>` - The platform of the player to get stats for.\n"
 "        `<username>` - The username of the player to get stats for.\n"
 "\n"
@@ -807,7 +839,7 @@ msgstr ""
 
 #: cogs/member.py:19
 msgid ""
-"You need to specify a hex (E.g.: `#00ff00`) or a color code (E.g.: `red`)."
+"You need to specify a hex (e.g. `#00ff00`) or a color code (e.g. `red`)."
 msgstr ""
 
 #: cogs/member.py:33
@@ -818,19 +850,19 @@ msgstr ""
 msgid "Premium Status"
 msgstr ""
 
-#: cogs/member.py:51
+#: cogs/member.py:40
 #, python-brace-format
 msgid ""
 "Your Status: `{member}`\n"
 "Server Status: `{guild}`"
 msgstr ""
 
-#: cogs/member.py:56
+#: cogs/member.py:46
 #, python-brace-format
 msgid "[Upgrade to Premium]({premium})"
 msgstr ""
 
-#: cogs/member.py:77
+#: cogs/member.py:67
 #, python-brace-format
 msgid ""
 "You can use `{prefix}settings [setting] [value]` to update the value of a "
@@ -838,16 +870,16 @@ msgid ""
 "blue."
 msgstr ""
 
-#: cogs/member.py:83
+#: cogs/member.py:73
 #, python-brace-format
 msgid "{member}'s Settings"
 msgstr ""
 
-#: cogs/member.py:107
+#: cogs/member.py:97
 msgid "`[Premium]` Update your settings."
 msgstr ""
 
-#: cogs/member.py:116
+#: cogs/member.py:106
 msgid ""
 "`[Premium]` Set a custom color for the embeds.\n"
 "\n"
@@ -862,15 +894,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/member.py:134
+#: cogs/member.py:124
 msgid "Color already set to default."
 msgstr ""
 
-#: cogs/member.py:136
+#: cogs/member.py:126
 msgid "Color successfully reset."
 msgstr ""
 
-#: cogs/member.py:142
+#: cogs/member.py:132
 msgid "Color successfully set."
 msgstr ""
 
