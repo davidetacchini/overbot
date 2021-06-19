@@ -6,21 +6,16 @@ from utils.i18n import _
 
 
 class RequestError(Exception):
-    """Base exception class for request.py."""
 
     pass
 
 
 class NotFound(RequestError):
-    """Exception raised when a profile is not found."""
-
     def __init__(self):
         super().__init__(_("Player not found."))
 
 
 class BadRequest(RequestError):
-    """Exception raised when a request sucks."""
-
     def __init__(self):
         super().__init__(
             _("Wrong BattleTag format entered! Correct format: `name#0000`")
@@ -28,8 +23,6 @@ class BadRequest(RequestError):
 
 
 class InternalServerError(RequestError):
-    """Exception raised when the API returns 500 status code."""
-
     def __init__(self):
         super().__init__(
             _(
@@ -39,8 +32,6 @@ class InternalServerError(RequestError):
 
 
 class ServiceUnavailable(RequestError):
-    """Exception raised when the server API is under maintenance."""
-
     def __init__(self):
         super().__init__(
             _("The API is under maintenance. Please be patient and try again later.")
@@ -48,8 +39,6 @@ class ServiceUnavailable(RequestError):
 
 
 class UnexpectedError(RequestError):
-    """Exception raised when the response has an invalid mime type."""
-
     def __init__(self):
         super().__init__(
             _(
@@ -59,20 +48,11 @@ class UnexpectedError(RequestError):
 
 
 class TooManyAccounts(RequestError):
-    """Exception raised when the API found too many accounts under that name."""
-
     def __init__(self, platform, username, players):
-        if platform == "pc":
-            message = _(
-                f"**{players}** accounts found under the name of `{username}`"
-                f" playing on `{platform}`. Please be more specific by entering"
-                " the full BattleTag in the following format: `name#0000`"
-            )
-        else:
-            message = _(
-                f"**{players}** accounts found under the name of `{username}`"
-                f" playing on `{platform}`. Please be more specific."
-            )
+        message = _(
+            "**{players}** accounts found under the name of `{username}`"
+            " playing on `{platform}`. Please be more specific."
+        ).format(players=players, username=username, platform=platform)
         super().__init__(message)
 
 
@@ -124,12 +104,10 @@ class Request:
                     return await self.resolve_name(name)
 
     async def url(self):
-        """Returns the resolved url."""
         name = await self.get_name()
         return f"{config.base_url}/{self.platform}/{name}/complete"
 
     async def resolve_response(self, response):
-        """Resolve the response."""
         if response.status == 200:
             return await response.json()
         elif response.status == 400:
@@ -141,8 +119,7 @@ class Request:
         else:
             raise ServiceUnavailable()
 
-    async def response(self):
-        """Returns the aiohttp response."""
+    async def request(self):
         url = await self.url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
@@ -152,5 +129,4 @@ class Request:
                     raise UnexpectedError()
 
     async def get(self):
-        """Returns resolved response."""
-        return await self.response()
+        return await self.request()
