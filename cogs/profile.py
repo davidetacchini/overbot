@@ -363,7 +363,7 @@ class Profile(commands.Cog):
                 ctx, member=member, index=index
             )
 
-            data = await Request(platform=platform, username=username).get()
+            data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
             if profile.is_private:
                 embed = profile.private()
@@ -429,7 +429,7 @@ class Profile(commands.Cog):
 
             cog = self.bot.get_cog("Stats")
             if cog:
-                await cog.show_hero_stats_for(ctx, hero, platform, username)
+                await cog.show_stats_for(ctx, hero, platform, username)
 
     @has_profile()
     @profile.command(aliases=["nick"])
@@ -459,7 +459,7 @@ class Profile(commands.Cog):
                 )
 
             id, platform, username = await self.get_profile(ctx)
-            data = await Request(platform=platform, username=username).get()
+            data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
 
             if profile.is_private:
