@@ -58,35 +58,40 @@ class TooManyAccounts(RequestError):
 
 class Request:
 
-    __slots__ = ("platform", "username")
+    __slots__ = ("platform", "username", "username_l")
 
-    def __init__(self, *, platform: str, username: str):
+    def __init__(self, platform: str, username: str):
         self.platform = platform
         self.username = username
+        self.username_l = username.lower()
 
     @property
     def account_url(self):
         return config.overwatch["account"] + "/" + self.username + "/"
 
+    # TODO: refactor
     async def resolve_name(self, players):
         if len(players) == 1:
             return players[0]["urlName"]
         elif len(players) > 1:
             total_players = []
             for player in players:
-                if (
-                    player["name"].lower() == self.username.lower()
-                    and player["platform"] == self.platform
-                ):
+                if self.platform != "nintendo-switch":
+                    name = player["name"].lower()
+                else:
+                    name = player["urlName"]
+                if self.username_l == name and self.platform == player["platform"]:
                     return player["urlName"]
-                if player["platform"] == self.platform:
-                    total_players.append(player["name"].lower())
+                if self.platform == player["platform"]:
+                    total_players.append(name)
             if (
                 len(total_players) == 0
                 or "#" in self.username
-                and self.username.lower() not in total_players
+                and self.username_l not in total_players
             ):
                 raise NotFound()
+            elif len(total_players) == 1 and self.platform == "nintendo-switch":
+                return total_players[0]
             else:
                 raise TooManyAccounts(self.platform, self.username, len(total_players))
         else:
