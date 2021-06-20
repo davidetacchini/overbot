@@ -389,7 +389,7 @@ class Profile(commands.Cog):
         If no index is given, the profile used will be the main one.
         If no member is given, the stats returned will be yours.
 
-        Provide both the index and the member to see a member's ratings.
+        Provide both the index and the member to see a member's stats.
         """
         )
         async with ctx.typing():
@@ -418,7 +418,7 @@ class Profile(commands.Cog):
         If no index is given, the profile used will be the main one.
         If no member is given, the stats returned will be yours.
 
-        Provide both the index and the member to see a member's ratings.
+        Provide both the index and the member to see a member's stats.
         """
         )
         async with ctx.typing():
