@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from utils.i18n import _
-from utils.paginator import NoChoice
+from utils.exceptions import NoChoice, CannotAddReactions
 
 
 class Context(commands.Context):
@@ -13,6 +13,9 @@ class Context(commands.Context):
     XMARK = "\N{CROSS MARK}"
 
     async def prompt(self, text, user=None):
+        if not self.channel.permissions_for(self.me).add_reactions:
+            raise CannotAddReactions()
+
         user = user or self.author
         reactions = (self.CHECK, self.XMARK)
 

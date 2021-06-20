@@ -11,7 +11,7 @@ from utils import checks
 from utils.i18n import _, locale
 from utils.player import PlayerException
 from utils.request import RequestError
-from utils.paginator import NoChoice
+from utils.exceptions import NoChoice, CannotAddReactions
 
 
 class ErrorHandler(commands.Cog):
@@ -102,7 +102,7 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.CommandInvokeError) and hasattr(
             error, "original"
         ):
-            group = (RequestError, PlayerException, NoChoice)
+            group = (RequestError, PlayerException, NoChoice, CannotAddReactions)
             if isinstance(error.original, DataError):
                 await ctx.send(_("The argument you entered cannot be handled."))
             elif isinstance(error.original, group):
