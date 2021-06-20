@@ -13,9 +13,9 @@ from discord.ext import commands
 
 from utils.i18n import _, locale
 from utils.checks import is_premium, has_profile, can_add_profile
-from utils.player import Player
-from utils.request import Request
-from utils.paginator import Link, Update, NoChoice
+from classes.player import Player
+from classes.request import Request
+from classes.paginator import Link, Update, NoChoice
 from classes.converters import Hero
 
 MAX_NICKNAME_LENGTH = 32
