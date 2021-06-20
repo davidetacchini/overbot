@@ -6,7 +6,8 @@ from contextlib import suppress
 import discord
 
 from utils.i18n import _
-from utils.exceptions import NoChoice, CannotAddReactions
+
+from .exceptions import NoChoice, CannotAddReactions
 
 PLATFORMS = {
     "pc": "PC",

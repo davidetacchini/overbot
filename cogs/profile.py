@@ -15,8 +15,9 @@ from utils.i18n import _, locale
 from utils.checks import is_premium, has_profile, can_add_profile
 from classes.player import Player
 from classes.request import Request
-from classes.paginator import Link, Update, NoChoice
+from classes.paginator import Link, Update
 from classes.converters import Hero
+from classes.exceptions import NoChoice
 
 MAX_NICKNAME_LENGTH = 32
 ROLES = {
