@@ -9,9 +9,9 @@ from discord.ext.menus import MenuError
 
 from utils import checks
 from utils.i18n import _, locale
-from utils.player import PlayerException
-from utils.request import RequestError
-from utils.exceptions import NoChoice, CannotAddReactions
+from classes.player import PlayerException
+from classes.request import RequestError
+from classes.exceptions import NoChoice, CannotAddReactions
 
 
 class ErrorHandler(commands.Cog):

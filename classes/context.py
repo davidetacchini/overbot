@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from utils.i18n import _
-from utils.exceptions import NoChoice, CannotAddReactions
+from classes.exceptions import NoChoice, CannotAddReactions
 
 
 class Context(commands.Context):
