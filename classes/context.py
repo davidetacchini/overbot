@@ -9,8 +9,8 @@ from utils.paginator import NoChoice
 
 
 class Context(commands.Context):
-    CHECK = "<:check:855015016042725386>"
-    XMARK = "<:xmark:855015043862233090>"
+    CHECK = "\N{WHITE HEAVY CHECK MARK}"
+    XMARK = "\N{CROSS MARK}"
 
     async def prompt(self, text, user=None):
         user = user or self.author
