@@ -5,8 +5,8 @@ from contextlib import suppress
 
 import discord
 
-from config import main_color
 from utils.i18n import _
+from utils.exceptions import NoChoice, CannotAddReactions
 
 PLATFORMS = {
     "pc": "PC",
@@ -14,11 +14,6 @@ PLATFORMS = {
     "xbl": "Xbox",
     "nintendo-switch": "Switch",
 }
-
-
-class NoChoice(Exception):
-    def __init__(self):
-        super().__init__(_("Took too long."))
 
 
 class BasePaginator:
@@ -29,7 +24,6 @@ class BasePaginator:
         "title",
         "footer",
         "image",
-        "color",
         "reactions",
         "embed",
         "description",
@@ -54,7 +48,6 @@ class BasePaginator:
         self.image = image
         self.footer = footer
 
-        self.color = main_color
         self.reactions = None
         self.embed = None
         self.description = []
@@ -122,7 +115,9 @@ class BasePaginator:
             await self.cleanup()
 
     async def start(self, ctx):
-        raise NotImplementedError
+        if not ctx.channel.permissions_for(ctx.me).add_reactions:
+            raise CannotAddReactions()
+        return await self.paginator()
 
 
 class Link(BasePaginator):
@@ -153,8 +148,7 @@ class Link(BasePaginator):
             value = PLATFORMS.get(value)
             self.description.append(f"{key} - {value}")
         self.embed.description = "\n".join(self.description)
-
-        return await self.paginator()
+        await super().start(ctx)
 
 
 class Update(Link):
@@ -183,8 +177,7 @@ class Update(Link):
 
         self.embed.add_field(name=_("Platform"), value=self.platform)
         self.embed.add_field(name=_("Username"), value=self.username)
-
-        return await self.paginator()
+        await super().start(ctx)
 
 
 class Choose(BasePaginator):
@@ -211,5 +204,4 @@ class Choose(BasePaginator):
             self.description.append(f"{index}. {entry}")
 
         self.embed.description = "\n".join(self.description)
-
-        return await self.paginator()
+        await super().start(ctx)
