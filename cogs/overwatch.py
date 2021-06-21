@@ -9,10 +9,10 @@ from utils.scrape import (
     get_overwatch_patch_notes,
 )
 
-STATUSES = [
+STATUSES = (
     "no problems at overwatch",
     "user reports indicate no current problems at overwatch",
-]
+)
 
 
 class Overwatch(commands.Cog):
