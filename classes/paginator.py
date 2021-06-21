@@ -149,7 +149,7 @@ class Link(BasePaginator):
             value = PLATFORMS.get(value)
             self.description.append(f"{key} - {value}")
         self.embed.description = "\n".join(self.description)
-        await super().start(ctx)
+        return await super().start(ctx)
 
 
 class Update(Link):
@@ -178,7 +178,7 @@ class Update(Link):
 
         self.embed.add_field(name=_("Platform"), value=self.platform)
         self.embed.add_field(name=_("Username"), value=self.username)
-        await super().start(ctx)
+        return await super().start(ctx)
 
 
 class Choose(BasePaginator):
@@ -205,4 +205,4 @@ class Choose(BasePaginator):
             self.description.append(f"{index}. {entry}")
 
         self.embed.description = "\n".join(self.description)
-        await super().start(ctx)
+        return await super().start(ctx)
