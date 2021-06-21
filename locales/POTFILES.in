@@ -10,8 +10,8 @@ cogs/server.py
 cogs/stats.py
 cogs/trivia.py
 cogs/member.py
-utils/player.py
-utils/request.py
-utils/paginator.py
+classes/player.py
+classes/request.py
+classes/paginator.py
 classes/context.py
 classes/converters.py
