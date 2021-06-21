@@ -27,7 +27,7 @@ class Server(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @locale
-    async def prefix(self, ctx, prefix):
+    async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
         _(
             """Either see the prefix or change it.
 
