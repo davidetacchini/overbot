@@ -22,4 +22,4 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements-dev.txt
       - name: Lint
-        run: scripts/format.sh
+        run: ./scripts/format.sh
