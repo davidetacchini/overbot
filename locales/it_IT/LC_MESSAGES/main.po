@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-20 10:59+0200\n"
+"POT-Creation-Date: 2021-06-21 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -371,36 +371,36 @@ msgstr "Overwatch Patch Notes"
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr "[Clicca qui per vedere le note della patch **{category}**]({link})"
 
-#: cogs/profile.py:42
+#: cogs/profile.py:43
 msgid "Index must be a number."
 msgstr "L'indice deve essere un numero."
 
-#: cogs/profile.py:72
+#: cogs/profile.py:73
 msgid "Invalid index."
 msgstr "Indice non valido."
 
-#: cogs/profile.py:117
+#: cogs/profile.py:118
 #, python-brace-format
 msgid "{profiles}/{limit} profiles"
 msgstr "{profiles}/{limit} profili"
 
-#: cogs/profile.py:137
+#: cogs/profile.py:138
 msgid "Enter your BattleTag (format: name#0000):"
 msgstr "Inserisci il tuo BattleTag (formato: nome#0000):"
 
-#: cogs/profile.py:139
+#: cogs/profile.py:140
 msgid "Enter your Online ID:"
 msgstr "Inseriesci il tuo Online ID:"
 
-#: cogs/profile.py:141
+#: cogs/profile.py:142
 msgid "Enter your Gamertag:"
 msgstr "Inserisci il tuo Gamertag:"
 
-#: cogs/profile.py:143
+#: cogs/profile.py:144
 msgid "Enter your Nintendo Switch ID:"
 msgstr "Inserisci il tuo Nintendo Switch ID:"
 
-#: cogs/profile.py:199
+#: cogs/profile.py:200
 msgid ""
 "I can't change nicknames in this server. Grant me `Manage Nicknames` "
 "permission."
@@ -408,19 +408,19 @@ msgstr ""
 "Non posso modificare i soprannomi in questo server. Concedimi il permesso "
 "`Gestire i soprannomi`."
 
-#: cogs/profile.py:203
+#: cogs/profile.py:204
 msgid "Something bad happened while updating your nickname."
 msgstr "Qualcosa è andato storto mentre cambiavo il tuo nickname."
 
-#: cogs/profile.py:210
+#: cogs/profile.py:211
 msgid "Nickname successfully set."
 msgstr "Nickname impostato con successo."
 
-#: cogs/profile.py:214
+#: cogs/profile.py:215
 msgid "Nickname successfully removed."
 msgstr "Soprannome rimosso con successo."
 
-#: cogs/profile.py:229
+#: cogs/profile.py:230
 msgid ""
 "List your profiles.\n"
 "\n"
@@ -430,15 +430,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:245
+#: cogs/profile.py:246
 msgid "Link an Overwatch profile to your Discord account."
 msgstr "Collega un account Overwatch al tuo account Discord."
 
-#: cogs/profile.py:258
+#: cogs/profile.py:259
 msgid "Profile successfully linked."
 msgstr "Profilo collegato con successo."
 
-#: cogs/profile.py:265
+#: cogs/profile.py:266
 msgid ""
 "Unlink an Overwatch profile from your Discord account.\n"
 "\n"
@@ -448,7 +448,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:279
+#: cogs/profile.py:280
 #, python-brace-format
 msgid ""
 "You can't unlink the main profile if multiple profiles are linked. Use "
@@ -457,7 +457,7 @@ msgstr ""
 "Non puoi rimuovere il profilo principale se molteplici profili sono "
 "collegati. Usa \"{prefix}help profile main\" per maggiori informazioni."
 
-#: cogs/profile.py:289
+#: cogs/profile.py:290
 #, python-brace-format
 msgid ""
 "This will unlink the following profile:\n"
@@ -468,11 +468,11 @@ msgstr ""
 "Piattaforma: `{platform}`\n"
 "Nome utente: `{username}`"
 
-#: cogs/profile.py:297
+#: cogs/profile.py:298
 msgid "Profile successfully unlinked."
 msgstr "Profilo rimosso con successo."
 
-#: cogs/profile.py:304
+#: cogs/profile.py:305
 msgid ""
 "Update an Overwatch profile.\n"
 "\n"
@@ -484,7 +484,7 @@ msgstr ""
 "        `<index>` - L'indice del profilo da aggiornare.\n"
 "        "
 
-#: cogs/profile.py:327
+#: cogs/profile.py:328
 msgid ""
 "Update the main profile.\n"
 "\n"
@@ -494,19 +494,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:337
+#: cogs/profile.py:338
 msgid "Main profile successfully set to:"
 msgstr "Profilo principale impostato correttamente su:"
 
-#: cogs/profile.py:338 utils/paginator.py:130 utils/paginator.py:184
+#: cogs/profile.py:339 classes/paginator.py:126 classes/paginator.py:179
 msgid "Platform"
 msgstr "Piattaforma"
 
-#: cogs/profile.py:339 utils/paginator.py:185
+#: cogs/profile.py:340 classes/paginator.py:180
 msgid "Username"
 msgstr "Nome utente"
 
-#: cogs/profile.py:349
+#: cogs/profile.py:350
 msgid ""
 "Shows a member's ratings.\n"
 "\n"
@@ -520,7 +520,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:384
+#: cogs/profile.py:385
 msgid ""
 "Shows a member's general stats.\n"
 "\n"
@@ -534,7 +534,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:412
+#: cogs/profile.py:413
 msgid ""
 "Shows a member's general stats for a given hero.\n"
 "\n"
@@ -549,7 +549,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:440
+#: cogs/profile.py:441
 msgid ""
 "Show your SRs in your nickname.\n"
 "\n"
@@ -560,11 +560,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:449
+#: cogs/profile.py:450
 msgid "This will display your SRs in your nickname."
 msgstr ""
 
-#: cogs/profile.py:455
+#: cogs/profile.py:456
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
@@ -575,15 +575,15 @@ msgstr ""
 "di questo server, non c'è alcun modo per me di aggiornare il tuo nickname, "
 "scusa!"
 
-#: cogs/profile.py:473
+#: cogs/profile.py:474
 msgid "This will remove your SR in your nickname."
 msgstr "Ciò rimuoverà il tuo SR dal tuo nickname."
 
-#: cogs/profile.py:506
+#: cogs/profile.py:507
 msgid "I don't have enough data to create the graph."
 msgstr "Non possiedo dati sufficienti per la creazione del grafico."
 
-#: cogs/profile.py:539
+#: cogs/profile.py:540
 msgid ""
 "`[Premium]` Displays a profile's SR graph performance.\n"
 "\n"
@@ -593,19 +593,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:23
+#: cogs/fun.py:25
 msgid "Unknown hero category."
 msgstr "Categoria eroi sconosciuta."
 
-#: cogs/fun.py:44
+#: cogs/fun.py:46
 msgid "Unknown map category."
 msgstr "Categoria mappe sconosciuta."
 
-#: cogs/fun.py:51
+#: cogs/fun.py:53
 msgid "Unknown meme category."
 msgstr "Categoria meme sconosciuta."
 
-#: cogs/fun.py:105
+#: cogs/fun.py:107
 msgid ""
 "Returns a random hero to play.\n"
 "\n"
@@ -622,11 +622,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:124
+#: cogs/fun.py:126
 msgid "Returns a random role to play."
 msgstr "Ritorna un ruolo casuale da giocare."
 
-#: cogs/fun.py:132
+#: cogs/fun.py:134
 msgid ""
 "Returns a random map.\n"
 "\n"
@@ -648,12 +648,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/fun.py:157
+#: cogs/fun.py:159
 msgid ""
 "Returns a random Overwatch meme.\n"
 "\n"
-"        `[category]` - The category to get a random meme from. Defaults to "
-"`hot`.\n"
+"        `[category]` - The category to get a random meme from.\n"
 "\n"
 "        Categories:\n"
 "\n"
@@ -1003,12 +1002,12 @@ msgstr "Colore resettato con successo."
 msgid "Color successfully set."
 msgstr "Colore impostate con successo."
 
-#: utils/player.py:25
+#: classes/player.py:25
 msgid "This profile has no quick play nor competitive stats to display."
 msgstr ""
 "Questo profilo non possiede statistiche ne rapide ne competitive da mostrare."
 
-#: utils/player.py:33
+#: classes/player.py:33
 #, python-brace-format
 msgid ""
 "This profile has no quick play nor competitive stast for **{hero}** to "
@@ -1017,33 +1016,33 @@ msgstr ""
 "Questo profilo non possiede statistiche ne rapide ne competitive per l'eroe "
 "**(hero}**"
 
-#: utils/player.py:152
+#: classes/player.py:152
 msgid "This profile is unranked."
 msgstr "Questo profilo non è rankato."
 
-#: utils/player.py:161
+#: classes/player.py:161
 #, python-brace-format
 msgid "Average: {average}"
 msgstr "Media: {average}"
 
-#: utils/player.py:194
+#: classes/player.py:194
 msgid "Quickplay"
 msgstr "Rapida"
 
-#: utils/player.py:197
+#: classes/player.py:197
 msgid "Competitive"
 msgstr "Competitiva"
 
-#: utils/player.py:211
+#: classes/player.py:211
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr "Pagina {current}/{total}"
 
-#: utils/player.py:219
+#: classes/player.py:219
 msgid "This profile is set to private"
 msgstr "Questo profilo è privato"
 
-#: utils/player.py:221
+#: classes/player.py:221
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
@@ -1053,16 +1052,16 @@ msgstr ""
 "opzione su Overwatch sotto la voce `Opzioni - Social`. Perfavore nota che "
 "questi cambiamenti potrebbero avere effetto entro 30 minuti."
 
-#: utils/request.py:15
+#: classes/request.py:15
 msgid "Player not found."
 msgstr "Giocatore non trovato."
 
-#: utils/request.py:21
+#: classes/request.py:21
 msgid "Wrong BattleTag format entered! Correct format: `name#0000`"
 msgstr ""
 "Il formato del BattleTag inserito non è valido! Formato corretto: `nome#0000`"
 
-#: utils/request.py:29
+#: classes/request.py:29
 msgid ""
 "The API is having internal server problems. Please be patient and try again "
 "later."
@@ -1070,32 +1069,28 @@ msgstr ""
 "L'API sta avendo dei problemi interni al server. Perfavore sii paziente e "
 "riprova ancora dopo."
 
-#: utils/request.py:37
+#: classes/request.py:37
 msgid "The API is under maintenance. Please be patient and try again later."
 msgstr "L'API è in manutenzione. Perfavore sii paziente e riprova più tardi."
 
-#: utils/request.py:45
+#: classes/request.py:45
 msgid ""
 "Something bad happened during the request. Please be patient and try again."
 msgstr ""
 "Qualcosa è andato storto durante la richiesta. Perfavore riprova ancora."
 
-#: utils/request.py:53
+#: classes/request.py:53
 #, python-brace-format
 msgid ""
 "**{players}** accounts found under the name of `{username}` playing on "
 "`{platform}`. Please be more specific."
 msgstr ""
 
-#: utils/paginator.py:21
-msgid "Took too long."
-msgstr "Hai impiegato troppo tempo."
-
-#: utils/paginator.py:131
+#: classes/paginator.py:127
 msgid "React with the platform you play on..."
 msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
-#: classes/context.py:23
+#: classes/context.py:26
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
@@ -1103,6 +1098,9 @@ msgstr "Sei sicuro?"
 #, python-brace-format
 msgid "Unknown hero: **{hero}**."
 msgstr "Eroe sconosciuto: **{hero}**."
+
+#~ msgid "Took too long."
+#~ msgstr "Hai impiegato troppo tempo."
 
 #~ msgid "Help"
 #~ msgstr "Aiuto"
