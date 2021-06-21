@@ -121,7 +121,7 @@ class ErrorHandler(commands.Cog):
                         )
                     )
                 except AttributeError:
-                    print(e, e.__class__.__name__)
+                    exc = f"{type(e)} {e}"
                 embed.description = f"```py\n{exc}\n```"
                 embed.timestamp = ctx.message.created_at
                 if not self.bot.debug:
