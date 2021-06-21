@@ -6,6 +6,8 @@ from discord.ext import commands
 
 from utils.i18n import _, locale
 
+MEME_CATEGORIES = ("hot", "new", "top", "rising")
+
 
 def valid_hero_cat(argument):
     valid = {
@@ -47,7 +49,7 @@ def valid_map_cat(argument):
 
 def valid_meme_cat(argument):
     argument = argument.lower()
-    if argument not in ("hot", "new", "top", "rising"):
+    if argument not in MEME_CATEGORIES:
         raise commands.BadArgument(_("Unknown meme category."))
     return argument
 
@@ -152,11 +154,11 @@ class Fun(commands.Cog):
 
     @commands.command()
     @locale
-    async def meme(self, ctx, category: valid_meme_cat = "hot"):
+    async def meme(self, ctx, category: valid_meme_cat = None):
         _(
             """Returns a random Overwatch meme.
 
-        `[category]` - The category to get a random meme from. Defaults to `hot`.
+        `[category]` - The category to get a random meme from.
 
         Categories:
 
@@ -168,6 +170,7 @@ class Fun(commands.Cog):
         Memes are taken from the subreddit r/Overwatch_Memes.
         """
         )
+        category = category or secrets.choice(MEME_CATEGORIES)
         meme = await self.get_meme(category)
         embed = self.embed_meme(ctx, meme)
         await ctx.send(embed=embed)
