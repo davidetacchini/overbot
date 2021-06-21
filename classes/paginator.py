@@ -5,9 +5,11 @@ from contextlib import suppress
 
 import discord
 
+from discord.ext.menus import CannotAddReactions
+
 from utils.i18n import _
 
-from .exceptions import NoChoice, CannotAddReactions
+from .exceptions import NoChoice
 
 PLATFORMS = {
     "pc": "PC",

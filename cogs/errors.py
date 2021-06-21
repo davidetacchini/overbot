@@ -11,7 +11,7 @@ from utils import checks
 from utils.i18n import _, locale
 from classes.player import PlayerException
 from classes.request import RequestError
-from classes.exceptions import NoChoice, CannotAddReactions
+from classes.exceptions import NoChoice
 
 
 class ErrorHandler(commands.Cog):
@@ -64,9 +64,6 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.NotOwner):
             await ctx.send(_("It seems you do not own this bot."))
 
-        elif hasattr(error, "original") and isinstance(error, MenuError):
-            return
-
         elif hasattr(error, "original") and isinstance(
             error.original, discord.HTTPException
         ):
@@ -102,7 +99,7 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.CommandInvokeError) and hasattr(
             error, "original"
         ):
-            group = (RequestError, PlayerException, NoChoice, CannotAddReactions)
+            group = (RequestError, PlayerException, NoChoice, MenuError)
             if isinstance(error.original, DataError):
                 await ctx.send(_("The argument you entered cannot be handled."))
             elif isinstance(error.original, group):
@@ -124,13 +121,13 @@ class ErrorHandler(commands.Cog):
                         )
                     )
                 except AttributeError:
-                    print(e)
+                    print(e, e.__class__.__name__)
                 embed.description = f"```py\n{exc}\n```"
                 embed.timestamp = ctx.message.created_at
                 if not self.bot.debug:
                     await self.bot.webhook.send(embed=embed)
                 else:
-                    print(e)
+                    print(e, e.__class__.__name__)
                 await ctx.send(
                     _(
                         "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
