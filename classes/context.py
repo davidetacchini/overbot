@@ -3,9 +3,10 @@ import asyncio
 import discord
 
 from discord.ext import commands
+from discord.ext.menus import CannotAddReactions
 
 from utils.i18n import _
-from classes.exceptions import NoChoice, CannotAddReactions
+from classes.exceptions import NoChoice
 
 
 class Context(commands.Context):
