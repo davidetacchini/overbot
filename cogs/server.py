@@ -98,7 +98,7 @@ class Server(commands.Cog):
                     _(
                         "{index}. **{guild}** ran a total of **{commands}** commands"
                     ).format(
-                        placement=placement,
+                        index=index,
                         guild=str(cur_guild),
                         commands=guild["commands"],
                     )
