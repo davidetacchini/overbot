@@ -156,7 +156,6 @@ class Trivia(commands.Cog):
             board = []
             for index, player in enumerate(players, start=1):
                 cur_player = await self.bot.fetch_user(player["id"])
-                placement = self.get_placement(index)
                 ratio = self.get_player_ratio(player["won"], player["lost"])
                 board.append(
                     _(

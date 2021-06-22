@@ -93,7 +93,6 @@ class Server(commands.Cog):
                 cur_guild = self.bot.get_guild(guild["guild_id"])
                 if not cur_guild:
                     continue
-                placement = self.get_placement(index)
 
                 board.append(
                     _(
