@@ -161,7 +161,7 @@ class Trivia(commands.Cog):
                     _(
                         "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}"
                     ).format(
-                        placement=placement,
+                        index=index,
                         player=str(cur_player),
                         played=player["started"],
                         won=player["won"],
