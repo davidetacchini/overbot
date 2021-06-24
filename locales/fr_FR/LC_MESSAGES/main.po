@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-21 14:08+0200\n"
+"POT-Creation-Date: 2021-06-24 23:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,35 +48,35 @@ msgstr ""
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:79
+#: cogs/errors.py:76
 #, python-brace-format
 msgid ""
 "You haven't linked a profile yet. Use \"{prefix}profile link\" to start."
 msgstr ""
 
-#: cogs/errors.py:87
+#: cogs/errors.py:84
 #, python-brace-format
 msgid ""
 "Max profiles limit reached.\n"
 "[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
 msgstr ""
 
-#: cogs/errors.py:91
+#: cogs/errors.py:88
 msgid "Max profiles limit reached."
 msgstr ""
 
-#: cogs/errors.py:96
+#: cogs/errors.py:93
 #, python-brace-format
 msgid ""
 "This command requires a Premium membership.\n"
 "[Click here]({premium}) to have a look at the Premium plan."
 msgstr ""
 
-#: cogs/errors.py:107
+#: cogs/errors.py:104
 msgid "The argument you entered cannot be handled."
 msgstr ""
 
-#: cogs/errors.py:136
+#: cogs/errors.py:133
 msgid ""
 "This command ran into an error. The incident has been reported and will be "
 "fixed as soon as possible!"
@@ -452,11 +452,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:339 classes/paginator.py:126 classes/paginator.py:179
+#: cogs/profile.py:339 classes/paginator.py:128 classes/paginator.py:181
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:340 classes/paginator.py:180
+#: cogs/profile.py:340 classes/paginator.py:182
 msgid "Username"
 msgstr ""
 
@@ -628,7 +628,7 @@ msgstr ""
 msgid "Prefix successfully set to `{prefix}`"
 msgstr ""
 
-#: cogs/server.py:32
+#: cogs/server.py:34
 msgid ""
 "Either see the prefix or change it.\n"
 "\n"
@@ -641,20 +641,20 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:47
+#: cogs/server.py:49
 msgid "`Manage Server` permission is required to change the prefix."
 msgstr ""
 
-#: cogs/server.py:54
+#: cogs/server.py:56
 #, python-brace-format
 msgid "Use \"{prefix}prefix [value]\" to change it."
 msgstr ""
 
-#: cogs/server.py:59
+#: cogs/server.py:61
 msgid "Prefixes"
 msgstr ""
 
-#: cogs/server.py:68
+#: cogs/server.py:70
 msgid ""
 "Shows OverBot's most active servers.\n"
 "\n"
@@ -664,15 +664,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/server.py:85
+#: cogs/server.py:87
 msgid "Most Active Servers"
 msgstr ""
 
-#: cogs/server.py:87
+#: cogs/server.py:89
 msgid "Tracking command usage since - 03/31/2021"
 msgstr ""
 
-#: cogs/server.py:98
+#: cogs/server.py:99
 #, python-brace-format
 msgid "{index}. **{guild}** ran a total of **{commands}** commands"
 msgstr ""
@@ -829,7 +829,7 @@ msgstr ""
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:163
+#: cogs/trivia.py:162
 #, python-brace-format
 msgid ""
 "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: "
@@ -979,11 +979,11 @@ msgid ""
 "`{platform}`. Please be more specific."
 msgstr ""
 
-#: classes/paginator.py:127
+#: classes/paginator.py:129
 msgid "React with the platform you play on..."
 msgstr ""
 
-#: classes/context.py:26
+#: classes/context.py:27
 msgid "Are you sure?"
 msgstr ""
 
