@@ -24,7 +24,9 @@ class Trivia(commands.Cog):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
-        footer = _("You have 1 try and {timeout} seconds to respond.").format(timeout=timeout)
+        footer = _("You have 1 try and {timeout} seconds to respond.").format(
+            timeout=timeout
+        )
         answer = await Choose(
             shuffled,
             timeout=timeout,
