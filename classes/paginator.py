@@ -147,7 +147,6 @@ class Link(BasePaginator):
             "<:psn:679468542541693128>": "psn",
             "<:xbl:679469487623503930>": "xbl",
             "<:nsw:752653766377078817>": "nintendo-switch",
-            "<:nsw:2653766377078817>": "nintendo-switch",
             "❌": None,
         }
 
