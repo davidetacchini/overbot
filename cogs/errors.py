@@ -64,11 +64,6 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.NotOwner):
             await ctx.send(_("It seems you do not own this bot."))
 
-        elif hasattr(error, "original") and isinstance(
-            error.original, discord.HTTPException
-        ):
-            return
-
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
@@ -96,16 +91,17 @@ class ErrorHandler(commands.Cog):
                 )
                 await ctx.send(embed=embed)
 
-        elif isinstance(error, commands.CommandInvokeError) and hasattr(
-            error, "original"
-        ):
+        elif isinstance(error, commands.CommandInvokeError):
+            original = error.original
             group = (RequestError, PlayerException, NoChoice, MenuError)
-            if isinstance(error.original, DataError):
+            if isinstance(original, discord.HTTPException):
+                return
+            elif isinstance(original, DataError):
                 await ctx.send(_("The argument you entered cannot be handled."))
-            elif isinstance(error.original, group):
-                await ctx.send(error.original)
+            elif isinstance(original, group):
+                await ctx.send(original)
             else:
-                e = error.original
+                e = original
                 embed = discord.Embed(color=discord.Color.red())
                 embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
                 embed.add_field(name="Command", value=ctx.command.qualified_name)
