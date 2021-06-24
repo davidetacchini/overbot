@@ -1,7 +1,5 @@
 import asyncio
 
-from contextlib import suppress
-
 import discord
 
 from discord.ext import menus, commands
@@ -15,11 +13,10 @@ class HelpMenu(menus.MenuPages):
         super().__init__(source=source, timeout=90.0, check_embeds=True)
 
     async def finalize(self, timed_out):
-        with suppress(discord.HTTPException):
-            if timed_out:
-                await self.message.clear_reactions()
-            else:
-                await self.message.delete()
+        try:
+            await self.message.delete()
+        except discord.HTTPException:
+            pass
 
     def _skip_double_triangle_buttons(self):
         max_pages = self._source.get_max_pages()
@@ -79,8 +76,7 @@ class HelpMenu(menus.MenuPages):
 
         async def go_back_to_current_page():
             await asyncio.sleep(20.0)
-            with suppress(discord.HTTPException, discord.NotFound):
-                await self.show_page(self.current_page)
+            await self.show_page(self.current_page)
 
         self.bot.loop.create_task(go_back_to_current_page())
 

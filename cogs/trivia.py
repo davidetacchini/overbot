@@ -24,7 +24,9 @@ class Trivia(commands.Cog):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
-        footer = _(f"You have 1 try and {timeout} seconds to respond.")
+        footer = _("You have 1 try and {timeout} seconds to respond.").format(
+            timeout=timeout
+        )
         answer = await Choose(
             shuffled,
             timeout=timeout,
@@ -156,13 +158,12 @@ class Trivia(commands.Cog):
             board = []
             for index, player in enumerate(players, start=1):
                 cur_player = await self.bot.fetch_user(player["id"])
-                placement = self.get_placement(index)
                 ratio = self.get_player_ratio(player["won"], player["lost"])
                 board.append(
                     _(
                         "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}"
                     ).format(
-                        placement=placement,
+                        index=index,
                         player=str(cur_player),
                         played=player["started"],
                         won=player["won"],

@@ -93,13 +93,12 @@ class Server(commands.Cog):
                 cur_guild = self.bot.get_guild(guild["guild_id"])
                 if not cur_guild:
                     continue
-                placement = self.get_placement(index)
 
                 board.append(
                     _(
                         "{index}. **{guild}** ran a total of **{commands}** commands"
                     ).format(
-                        placement=placement,
+                        index=index,
                         guild=str(cur_guild),
                         commands=guild["commands"],
                     )

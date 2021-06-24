@@ -1,11 +1,10 @@
 import asyncio
 
 from typing import Union, Optional
-from contextlib import suppress
 
 import discord
 
-from discord.ext.menus import CannotAddReactions
+from discord.ext.menus import MenuError, CannotAddReactions
 
 from utils.i18n import _
 
@@ -19,6 +18,11 @@ PLATFORMS = {
 }
 
 
+class CannotUseExternalEmojis(MenuError):
+    def __init__(self):
+        super().__init__("Bot cannot use external emojis in this channel.")
+
+
 class BasePaginator:
 
     __slots__ = (
@@ -27,7 +31,7 @@ class BasePaginator:
         "title",
         "footer",
         "image",
-        "reactions",
+        "emojis",
         "embed",
         "description",
         "ctx",
@@ -51,7 +55,7 @@ class BasePaginator:
         self.image = image
         self.footer = footer
 
-        self.reactions = None
+        self.emojis = None
         self.embed = None
         self.description = []
         self.ctx = None
@@ -77,34 +81,33 @@ class BasePaginator:
 
         return embed
 
-    def result(self, reaction):
+    def result(self, payload):
         raise NotImplementedError
 
     async def add_reactions(self):
-        for reaction in self.reactions:
+        for emoji in self.emojis:
             try:
-                await self.message.add_reaction(reaction)
-            except (discord.HTTPException, discord.Forbidden):
-                return
+                await self.message.add_reaction(emoji)
+            except (discord.NotFound, discord.HTTPException):
+                pass
 
     async def cleanup(self):
-        with suppress(discord.HTTPException, discord.Forbidden):
+        try:
             await self.message.delete()
+        except discord.HTTPException:
+            pass
 
-    async def paginator(self):
+    async def session(self):
         self.message = await self.ctx.send(embed=self.embed)
         self.bot.loop.create_task(self.add_reactions())
 
         def check(r, u):
-            if u.id != self.author.id:
-                return False
-            if u.id == self.bot.user.id:
-                return False
-            if r.message.id != self.message.id:
-                return False
-            if str(r.emoji) not in self.reactions:
-                return False
-            return True
+            return (
+                u.id == self.author.id
+                and u.id != self.bot.user.id
+                and r.message.id == self.message.id
+                and str(r.emoji) in self.emojis
+            )
 
         try:
             reaction, _ = await self.bot.wait_for(
@@ -117,10 +120,21 @@ class BasePaginator:
         finally:
             await self.cleanup()
 
-    async def start(self, ctx):
-        if not ctx.channel.permissions_for(ctx.me).add_reactions:
+    def _check_permissions(self, ctx):
+        permissions = ctx.channel.permissions_for(ctx.me)
+
+        if not permissions.send_messages:
+            return
+
+        if not permissions.add_reactions:
             raise CannotAddReactions()
-        return await self.paginator()
+
+        if not permissions.use_external_emojis:
+            raise CannotUseExternalEmojis()
+
+    async def start(self, ctx):
+        self._check_permissions(ctx)
+        return await self.session()
 
 
 class Link(BasePaginator):
@@ -128,7 +142,7 @@ class Link(BasePaginator):
         title = _("Platform")
         footer = _("React with the platform you play on...")
         super().__init__(title=title, footer=footer)
-        self.reactions = {
+        self.emojis = {
             "<:battlenet:679469162724196387>": "pc",
             "<:psn:679468542541693128>": "psn",
             "<:xbl:679469487623503930>": "xbl",
@@ -137,20 +151,23 @@ class Link(BasePaginator):
         }
 
     def result(self, reaction):
-        return self.reactions.get(str(reaction.emoji))
+        return self.emojis.get(str(reaction.emoji))
 
-    async def start(self, ctx):
-        self.ctx = ctx
-        self.bot = ctx.bot
-        self.author = ctx.author
+    def update_embed(self):
         self.embed = self.init_embed()
 
-        for key, value in self.reactions.items():
+        for key, value in self.emojis.items():
             if value is None:
                 continue
             value = PLATFORMS.get(value)
             self.description.append(f"{key} - {value}")
         self.embed.description = "\n".join(self.description)
+
+    async def start(self, ctx):
+        self.ctx = ctx
+        self.bot = ctx.bot
+        self.author = ctx.author
+        self.update_embed()
         return await super().start(ctx)
 
 
@@ -158,8 +175,8 @@ class Update(Link):
 
     __slots__ = ("platform", "username")
 
-    def __init__(self, platform, username, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, platform, username):
+        super().__init__()
         self.platform = platform
         self.username = username
 
@@ -167,34 +184,25 @@ class Update(Link):
         self.ctx = ctx
         self.bot = ctx.bot
         self.author = ctx.author
-        self.embed = self.init_embed()
+        self.update_embed()
 
-        for key, value in self.reactions.items():
-            if value is None:
-                continue
-            value = PLATFORMS.get(value)
-            self.description.append(f"{key} - {value}")
-
-        self.description.append("\nProfile to update:")
+        self.description.append(_("\nProfile to update:"))
         self.embed.description = "\n".join(self.description)
 
         self.embed.add_field(name=_("Platform"), value=self.platform)
         self.embed.add_field(name=_("Username"), value=self.username)
-        return await super().start(ctx)
+        return await super(Link, self).start(ctx)
 
 
 class Choose(BasePaginator):
-
-    __slots__ = ("entries", "timeout", "title", "image", "footer")
-
     def __init__(self, entries, *, timeout, title, image, footer):
         super().__init__(
             entries, timeout=timeout, title=title, image=image, footer=footer
         )
-        self.reactions = []
+        self.emojis = []
 
     def result(self, reaction):
-        return self.entries[self.reactions.index(str(reaction))]
+        return self.entries[self.emojis.index(str(reaction))]
 
     async def start(self, ctx):
         self.ctx = ctx
@@ -203,7 +211,7 @@ class Choose(BasePaginator):
         self.embed = self.init_embed()
 
         for index, entry in enumerate(self.entries, start=1):
-            self.reactions.append(f"{index}\u20e3")
+            self.emojis.append(f"{index}\u20e3")
             self.description.append(f"{index}. {entry}")
 
         self.embed.description = "\n".join(self.description)

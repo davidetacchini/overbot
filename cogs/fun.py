@@ -70,11 +70,11 @@ class Fun(commands.Cog):
     def get_random_map(self, ctx, category):
         maps = self.bot.maps
         if not category:
-            _map = secrets.choice(maps)
+            map_ = secrets.choice(maps)
         else:
             categorized_maps = [m for m in maps if category in m["types"]]
-            _map = secrets.choice(categorized_maps)
-        return _map["name"]
+            map_ = secrets.choice(categorized_maps)
+        return map_["name"]
 
     async def get_meme(self, category):
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
@@ -149,8 +149,8 @@ class Fun(commands.Cog):
         If no category is given, a random map is chosen from all categories.
         """
         )
-        _map = self.get_random_map(ctx, category)
-        await ctx.send(_map)
+        map_ = self.get_random_map(ctx, category)
+        await ctx.send(map_)
 
     @commands.command()
     @locale
