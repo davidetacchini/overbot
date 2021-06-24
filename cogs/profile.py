@@ -121,11 +121,11 @@ class Profile(commands.Cog):
             )
 
             description = []
-            for (id, platform, username) in chunk:
+            for (id_, platform, username) in chunk:
                 if platform == "pc":
                     username = username.replace("-", "#")
                 fmt = f"{index}. {PLATFORMS.get(platform)} - {username}"
-                if await self.is_main_profile(ctx.author.id, profile_id=id):
+                if await self.is_main_profile(ctx.author.id, profile_id=id_):
                     fmt += " `main`"
                 description.append(fmt)
                 index += 1
@@ -270,10 +270,10 @@ class Profile(commands.Cog):
         You can't unlink the main profile if multiple profiles are linked.
         """
         )
-        id, platform, username = await self.get_profile(ctx, index=index)
+        id_, platform, username = await self.get_profile(ctx, index=index)
         profiles = await self.get_profiles(ctx)
         if (
-            await self.is_main_profile(ctx.author.id, profile_id=id)
+            await self.is_main_profile(ctx.author.id, profile_id=id_)
             and len(profiles) > 1
         ):
             message = _(
@@ -294,7 +294,7 @@ class Profile(commands.Cog):
         ):
             return
 
-        await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id)
+        await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id_)
         await ctx.send(_("Profile successfully unlinked."))
 
     @has_profile()
@@ -307,7 +307,7 @@ class Profile(commands.Cog):
         `<index>` - The profile's index to update.
         """
         )
-        id, platform, username = await self.get_profile(ctx, index=index)
+        id_, platform, username = await self.get_profile(ctx, index=index)
         platform = await Update(platform, username).start(ctx)
         username = await self.get_player_username(ctx, platform)
 
@@ -317,7 +317,7 @@ class Profile(commands.Cog):
         if platform == "pc":
             username = username.replace("-", "#")
 
-        await self.update_profile(platform, username, profile_id=id)
+        await self.update_profile(platform, username, profile_id=id_)
         await ctx.send("Profile successfully updated.")
 
     @has_profile()
@@ -332,8 +332,8 @@ class Profile(commands.Cog):
         Defaults to the first profile you have linked.
         """
         )
-        id, platform, username = await self.get_profile(ctx, index=index)
-        await self.set_main_profile(ctx.author.id, profile_id=id)
+        id_, platform, username = await self.get_profile(ctx, index=index)
+        await self.set_main_profile(ctx.author.id, profile_id=id_)
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.description = _("Main profile successfully set to:")
         embed.add_field(name=_("Platform"), value=platform)
@@ -360,7 +360,7 @@ class Profile(commands.Cog):
         )
         async with ctx.typing():
             member = member or ctx.author
-            id, platform, username = await self.get_profile(
+            id_, platform, username = await self.get_profile(
                 ctx, member=member, index=index
             )
 
@@ -369,7 +369,7 @@ class Profile(commands.Cog):
             if profile.is_private:
                 embed = profile.private()
             else:
-                embed = await profile.get_ratings(ctx, save=True, profile_id=id)
+                embed = await profile.get_ratings(ctx, save=True, profile_id=id_)
                 # if the index is None that means it's the main profile
                 if not index and member.id == ctx.author.id:
                     await self.update_nickname_sr(ctx.author, profile=profile)
@@ -459,7 +459,7 @@ class Profile(commands.Cog):
                     )
                 )
 
-            id, platform, username = await self.get_profile(ctx)
+            id_, platform, username = await self.get_profile(ctx)
             data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
 
@@ -467,7 +467,7 @@ class Profile(commands.Cog):
                 return await ctx.send(embed=profile.private())
 
             try:
-                await self.set_or_remove_nickname(ctx, profile=profile, profile_id=id)
+                await self.set_or_remove_nickname(ctx, profile=profile, profile_id=id_)
             except Exception as e:
                 await ctx.send(e)
         else:
@@ -478,7 +478,7 @@ class Profile(commands.Cog):
                     await ctx.send(e)
 
     async def sr_graph(self, ctx, *, profile):
-        profile_id, platform, username = profile
+        id_, platform, username = profile
 
         query = """SELECT tank, damage, support, date
                    FROM rating
@@ -487,7 +487,7 @@ class Profile(commands.Cog):
                    WHERE profile.id = $1
                 """
 
-        ratings = await self.bot.pool.fetch(query, profile_id)
+        ratings = await self.bot.pool.fetch(query, id_)
 
         sns.set()
         sns.set_style("darkgrid")
