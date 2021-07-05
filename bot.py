@@ -196,7 +196,7 @@ class Bot(commands.AutoShardedBot):
     async def cache_maps(self):
         self.maps = await get_overwatch_maps()
 
-    async def cache_hero_names(self):
+    def cache_hero_names(self):
         self.hero_names = [str(h["key"]).lower() for h in self.heroes]
 
     async def cache_embed_colors(self):
@@ -219,7 +219,7 @@ class Bot(commands.AutoShardedBot):
         await self.cache_premiums()
         await self.cache_embed_colors()
         await self.cache_heroes()
-        await self.cache_hero_names()
+        self.cache_hero_names()
         await self.cache_maps()
 
         for extension in os.listdir("cogs"):
