@@ -15,6 +15,7 @@ def valid_platform(argument):
         "ps": "psn",
         "psn": "psn",
         "play": "psn",
+        "ps4": "psn",
         "playstation": "psn",
         "nsw": "nintendo-switch",
         "switch": "nintendo-switch",
