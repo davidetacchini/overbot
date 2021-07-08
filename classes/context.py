@@ -49,7 +49,10 @@ class Context(commands.Context):
         else:
             return not bool(reactions.index(str(reaction.emoji)))
         finally:
-            await self.bot.cleanup(msg)
+            try:
+                await msg.delete()
+            except discord.HTTPException:
+                pass
 
     def tick(self, opt, label=None):
         lookup = {
