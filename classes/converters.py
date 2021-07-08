@@ -5,7 +5,7 @@ from utils.i18n import _
 
 class Hero(commands.Converter):
     async def convert(self, ctx, argument):
-        _hero = argument.lower()
+        hero_ = argument.lower()
         aliases = {
             "soldier": "soldier76",
             "soldier-76": "soldier76",
@@ -15,13 +15,13 @@ class Hero(commands.Converter):
             "lúcio": "lucio",
         }
 
-        hero = aliases.get(_hero)
+        hero = aliases.get(hero_)
         if hero is None:
-            if _hero not in ctx.bot.hero_names:
+            if hero_ not in ctx.bot.hero_names:
                 raise commands.BadArgument(
                     _("Unknown hero: **{hero}**.").format(hero=argument)
                 )
             else:
-                return _hero
+                return hero_
         else:
             return hero
