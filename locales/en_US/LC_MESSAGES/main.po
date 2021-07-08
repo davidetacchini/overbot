@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-24 23:12+0200\n"
+"POT-Creation-Date: 2021-07-08 11:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: cogs/errors.py:35
+#: cogs/errors.py:40
 #, python-brace-format
 msgid "You are missing a required argument: `{argument}`"
 msgstr ""
 
-#: cogs/errors.py:41
+#: cogs/errors.py:46
 msgid "You are using a bad argument."
 msgstr ""
 
-#: cogs/errors.py:44
+#: cogs/errors.py:49
 msgid "You don't have enough permissions."
 msgstr ""
 
-#: cogs/errors.py:49
+#: cogs/errors.py:54
 #, python-brace-format
 msgid "You are on cooldown. Wait `{seconds}s` before running another command."
 msgstr ""
 
-#: cogs/errors.py:55
+#: cogs/errors.py:60
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}s`."
 msgstr ""
 
-#: cogs/errors.py:62
+#: cogs/errors.py:67
 msgid "This command can't be used in direct messages."
 msgstr ""
 
-#: cogs/errors.py:65
+#: cogs/errors.py:70
 msgid "It seems you do not own this bot."
 msgstr ""
 
@@ -72,54 +72,54 @@ msgid ""
 "[Click here]({premium}) to have a look at the Premium plan."
 msgstr ""
 
-#: cogs/errors.py:104
+#: cogs/errors.py:105
 msgid "The argument you entered cannot be handled."
 msgstr ""
 
-#: cogs/errors.py:133
+#: cogs/errors.py:136
 msgid ""
 "This command ran into an error. The incident has been reported and will be "
 "fixed as soon as possible!"
 msgstr ""
 
-#: cogs/help.py:61
+#: cogs/help.py:58
 msgid "Using the bot"
 msgstr ""
 
-#: cogs/help.py:62
+#: cogs/help.py:59
 msgid "Welcome to the help page!"
 msgstr ""
 
-#: cogs/help.py:65
+#: cogs/help.py:62
 msgid "<argument>"
 msgstr ""
 
-#: cogs/help.py:65
+#: cogs/help.py:62
 msgid "This means the argument is **required**."
 msgstr ""
 
-#: cogs/help.py:66
+#: cogs/help.py:63
 msgid "[argument]"
 msgstr ""
 
-#: cogs/help.py:66
+#: cogs/help.py:63
 msgid "This means the argument is **optional**."
 msgstr ""
 
-#: cogs/help.py:67
+#: cogs/help.py:64
 msgid "Note"
 msgstr ""
 
-#: cogs/help.py:67
+#: cogs/help.py:64
 msgid "You **must not** include the brackets in the argument."
 msgstr ""
 
-#: cogs/help.py:74
+#: cogs/help.py:71
 #, python-brace-format
 msgid "We were on page {current_page} before this message."
 msgstr ""
 
-#: cogs/help.py:100
+#: cogs/help.py:96
 #, python-brace-format
 msgid ""
 "[Support]({support}) - [Commands]({website}) - [Translate]({github}) - "
@@ -128,56 +128,60 @@ msgid ""
 "Use \"{prefix}help [category]\" for more info on a category\n"
 msgstr ""
 
-#: cogs/help.py:112
+#: cogs/help.py:108
 #, python-brace-format
 msgid "{bot} Command List"
 msgstr ""
 
-#: cogs/help.py:123
+#: cogs/help.py:119
 #, python-brace-format
 msgid "Page {current_page}/{maximum}"
 msgstr ""
 
-#: cogs/help.py:135
+#: cogs/help.py:131
 #, python-brace-format
 msgid "{group} Commands"
 msgstr ""
 
-#: cogs/help.py:145 cogs/help.py:183 cogs/member.py:83
+#: cogs/help.py:141 cogs/help.py:180 cogs/member.py:83
 msgid "No help found..."
 msgstr ""
 
-#: cogs/help.py:152
+#: cogs/help.py:148
 #, python-brace-format
 msgid "Page {current_page}/{maximum} ({total_entries} commands)"
 msgstr ""
 
-#: cogs/help.py:161
+#: cogs/help.py:157
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:171
+#: cogs/help.py:167 cogs/help.py:168
 msgid "Shows help about the bot, a command, or a category."
 msgstr ""
 
-#: cogs/help.py:186
+#: cogs/help.py:183
 msgid "Aliases"
+msgstr ""
+
+#: cogs/links.py:10
+msgid "Returns support server link."
 msgstr ""
 
 #: cogs/links.py:13
 msgid "Returns the official bot support server invite link."
 msgstr ""
 
-#: cogs/links.py:19
+#: cogs/links.py:16 cogs/links.py:19
 msgid "Returns bot vote link."
 msgstr ""
 
-#: cogs/links.py:25
+#: cogs/links.py:22 cogs/links.py:25
 msgid "Returns bot invite link."
 msgstr ""
 
-#: cogs/links.py:31
+#: cogs/links.py:28 cogs/links.py:31
 msgid "Returns the bot GitHub repository."
 msgstr ""
 
@@ -187,19 +191,27 @@ msgid "Unknown locale: **{locale}**"
 msgstr ""
 
 #: cogs/locale.py:64
-msgid "Displays the current language set and all the available languages."
+msgid "Shows the current language set."
 msgstr ""
 
-#: cogs/locale.py:66
+#: cogs/locale.py:68
+msgid "Shows the current language set and all the available languages."
+msgstr ""
+
+#: cogs/locale.py:70
 msgid "Available Languages"
 msgstr ""
 
-#: cogs/locale.py:69
+#: cogs/locale.py:73
 #, python-brace-format
 msgid "Current language set: {locale}"
 msgstr ""
 
 #: cogs/locale.py:80
+msgid "Update the bot language."
+msgstr ""
+
+#: cogs/locale.py:84
 msgid ""
 "Update the bot language.\n"
 "\n"
@@ -207,13 +219,17 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/locale.py:89
+#: cogs/locale.py:93
 #, python-brace-format
 msgid "Language successfully set to: `{locale}`"
 msgstr ""
 
+#: cogs/meta.py:21
+msgid "Shows bot latency."
+msgstr ""
+
 #: cogs/meta.py:24
-msgid "Displays the bot's current websocket latency and ACK."
+msgid "Shows bot current websocket latency and ACK."
 msgstr ""
 
 #: cogs/meta.py:26
@@ -224,12 +240,16 @@ msgstr ""
 msgid "Latency"
 msgstr ""
 
+#: cogs/meta.py:37
+msgid "Shows bot uptime."
+msgstr ""
+
 #: cogs/meta.py:40
 msgid "Shows how long the bot has been online."
 msgstr ""
 
-#: cogs/meta.py:74
-msgid "Displays the bot information."
+#: cogs/meta.py:70 cogs/meta.py:74
+msgid "Shows bot information."
 msgstr ""
 
 #: cogs/meta.py:78
@@ -287,17 +307,25 @@ msgstr ""
 msgid "Uptime"
 msgstr ""
 
-#: cogs/overwatch.py:32
+#: cogs/overwatch.py:26
+msgid "Shows Overwatch servers status."
+msgstr ""
+
+#: cogs/overwatch.py:31
 msgid ""
-"Returns the current Overwatch servers status.\n"
+"Shows Overwatch servers status.\n"
 "\n"
 "        You can use this command once every 30 seconds.\n"
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:61
+#: cogs/overwatch.py:55
+msgid "Shows the latest Overwatch news."
+msgstr ""
+
+#: cogs/overwatch.py:60
 msgid ""
-"Returns the latest Overwatch news.\n"
+"Shows the latest Overwatch news.\n"
 "\n"
 "        `[amount]` - The amount of news to return. Defaults to 4.\n"
 "\n"
@@ -305,21 +333,25 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:78
+#: cogs/overwatch.py:77
 msgid "Latest Overwatch News"
 msgstr ""
 
-#: cogs/overwatch.py:79
+#: cogs/overwatch.py:78
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr ""
 
-#: cogs/overwatch.py:93
+#: cogs/overwatch.py:92
 #, python-brace-format
 msgid "News {current}/{total} - {date}"
 msgstr ""
 
-#: cogs/overwatch.py:106
+#: cogs/overwatch.py:100
+msgid "Returns patch notes links."
+msgstr ""
+
+#: cogs/overwatch.py:105
 msgid ""
 "Returns patch notes links.\n"
 "\n"
@@ -327,11 +359,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:113
+#: cogs/overwatch.py:112
 msgid "Overwatch Patch Notes"
 msgstr ""
 
-#: cogs/overwatch.py:117
+#: cogs/overwatch.py:116
 #, python-brace-format
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr ""
@@ -383,14 +415,22 @@ msgstr ""
 msgid "Nickname successfully removed."
 msgstr ""
 
+#: cogs/profile.py:226
+msgid "Lists your profiles."
+msgstr ""
+
 #: cogs/profile.py:230
 msgid ""
 "List your profiles.\n"
 "\n"
 "        `[member]` - The mention or the ID of a Discord member.\n"
 "\n"
-"        If no member is given, the information returned will be yours.\n"
+"        If no member is given, the profiles returned will be yours.\n"
 "        "
+msgstr ""
+
+#: cogs/profile.py:243
+msgid "Link an Overwatch profile."
 msgstr ""
 
 #: cogs/profile.py:246
@@ -401,9 +441,13 @@ msgstr ""
 msgid "Profile successfully linked."
 msgstr ""
 
+#: cogs/profile.py:262
+msgid "Unlink a profile."
+msgstr ""
+
 #: cogs/profile.py:266
 msgid ""
-"Unlink an Overwatch profile from your Discord account.\n"
+"Unlink a profile.\n"
 "\n"
 "        `<index>` - The profile's index to unlink.\n"
 "\n"
@@ -430,12 +474,20 @@ msgstr ""
 msgid "Profile successfully unlinked."
 msgstr ""
 
+#: cogs/profile.py:301
+msgid "Update a profile."
+msgstr ""
+
 #: cogs/profile.py:305
 msgid ""
-"Update an Overwatch profile.\n"
+"Update a profile.\n"
 "\n"
 "        `<index>` - The profile's index to update.\n"
 "        "
+msgstr ""
+
+#: cogs/profile.py:324
+msgid "Update the main profile."
 msgstr ""
 
 #: cogs/profile.py:328
@@ -452,17 +504,21 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:339 classes/paginator.py:128 classes/paginator.py:181
+#: cogs/profile.py:339 classes/paginator.py:142 classes/paginator.py:192
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:340 classes/paginator.py:182
+#: cogs/profile.py:340 classes/paginator.py:193
 msgid "Username"
 msgstr ""
 
-#: cogs/profile.py:350
+#: cogs/profile.py:345
+msgid "Provides SRs information for a profile."
+msgstr ""
+
+#: cogs/profile.py:352
 msgid ""
-"Shows a member's ratings.\n"
+"Provides SRs information for a profile.\n"
 "\n"
 "        `[index]` - The profile's index to see the ratings for.\n"
 "        `[member]` - The mention or the ID of a Discord member.\n"
@@ -474,9 +530,13 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:385
+#: cogs/profile.py:382
+msgid "Provides general stats for a profile."
+msgstr ""
+
+#: cogs/profile.py:389
 msgid ""
-"Shows a member's general stats.\n"
+"Provides general stats for a profile.\n"
 "\n"
 "        `[index]` - The profile's index to see the stats for.\n"
 "        `[member]` - The mention or the ID of a Discord member.\n"
@@ -488,9 +548,13 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:413
+#: cogs/profile.py:411
+msgid "Provides general hero stats for a profile."
+msgstr ""
+
+#: cogs/profile.py:417
 msgid ""
-"Shows a member's general stats for a given hero.\n"
+"Provides general hero stats for a profile.\n"
 "\n"
 "        `<hero>` - The name of the hero to see stats for.\n"
 "        `[index]` - The profile's index to see the stats for.\n"
@@ -503,9 +567,13 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:441
+#: cogs/profile.py:440
+msgid "Shows your SRs in your nickname."
+msgstr ""
+
+#: cogs/profile.py:445
 msgid ""
-"Show your SRs in your nickname.\n"
+"Shows your SRs in your nickname.\n"
 "\n"
 "        The nickname can only be set in one server.\n"
 "\n"
@@ -514,28 +582,32 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/profile.py:450
+#: cogs/profile.py:454
 msgid "This will display your SRs in your nickname."
 msgstr ""
 
-#: cogs/profile.py:456
+#: cogs/profile.py:460
 msgid ""
 "This server's owner needs to move the `OverBot` role higher, so I will be "
 "able to update your nickname. If you are this server's owner, there's not "
 "way for me to change your nickname, sorry!"
 msgstr ""
 
-#: cogs/profile.py:474
+#: cogs/profile.py:478
 msgid "This will remove your SR in your nickname."
 msgstr ""
 
-#: cogs/profile.py:507
+#: cogs/profile.py:511
 msgid "I don't have enough data to create the graph."
 msgstr ""
 
 #: cogs/profile.py:540
+msgid "Shows SRs performance graph."
+msgstr ""
+
+#: cogs/profile.py:544
 msgid ""
-"`[Premium]` Displays a profile's SR graph performance.\n"
+"`[Premium]` Shows SRs performance graph.\n"
 "\n"
 "        `[index]` - The profile's index to see the SR graph for.\n"
 "\n"
@@ -555,6 +627,10 @@ msgstr ""
 msgid "Unknown meme category."
 msgstr ""
 
+#: cogs/fun.py:103
+msgid "Returns a random hero."
+msgstr ""
+
 #: cogs/fun.py:107
 msgid ""
 "Returns a random hero to play.\n"
@@ -572,8 +648,16 @@ msgid ""
 "        "
 msgstr ""
 
+#: cogs/fun.py:123
+msgid "Returns a random role."
+msgstr ""
+
 #: cogs/fun.py:126
 msgid "Returns a random role to play."
+msgstr ""
+
+#: cogs/fun.py:130
+msgid "Returns a random map."
 msgstr ""
 
 #: cogs/fun.py:134
@@ -596,6 +680,10 @@ msgid ""
 "        If no category is given, a random map is chosen from all "
 "categories.\n"
 "        "
+msgstr ""
+
+#: cogs/fun.py:155
+msgid "Returns a random meme."
 msgstr ""
 
 #: cogs/fun.py:159
@@ -628,6 +716,10 @@ msgstr ""
 msgid "Prefix successfully set to `{prefix}`"
 msgstr ""
 
+#: cogs/server.py:27
+msgid "Either see or change the prefix."
+msgstr ""
+
 #: cogs/server.py:34
 msgid ""
 "Either see the prefix or change it.\n"
@@ -654,6 +746,10 @@ msgstr ""
 msgid "Prefixes"
 msgstr ""
 
+#: cogs/server.py:65
+msgid "Shows OverBot's most active servers."
+msgstr ""
+
 #: cogs/server.py:70
 msgid ""
 "Shows OverBot's most active servers.\n"
@@ -677,11 +773,15 @@ msgstr ""
 msgid "{index}. **{guild}** ran a total of **{commands}** commands"
 msgstr ""
 
-#: cogs/stats.py:27
+#: cogs/stats.py:28
 msgid "Unknown platform."
 msgstr ""
 
-#: cogs/stats.py:48
+#: cogs/stats.py:45
+msgid "Returns player ratings."
+msgstr ""
+
+#: cogs/stats.py:49
 msgid ""
 "Returns player ratings.\n"
 "\n"
@@ -691,7 +791,7 @@ msgid ""
 "        Platforms:\n"
 "\n"
 "        - pc, bnet\n"
-"        - playstation, ps, psn, play\n"
+"        - playstation, ps, psn, ps4, play\n"
 "        - xbox, xbl\n"
 "        - nintendo-switch, nsw, switch\n"
 "\n"
@@ -704,7 +804,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:81
+#: cogs/stats.py:78
+msgid "Returns player general stats"
+msgstr ""
+
+#: cogs/stats.py:82
 msgid ""
 "Returns player general stats.\n"
 "\n"
@@ -714,7 +818,7 @@ msgid ""
 "        Platforms:\n"
 "\n"
 "        - pc, bnet\n"
-"        - playstation, ps, psn, play\n"
+"        - playstation, ps, psn, ps4, play\n"
 "        - xbox, xbl\n"
 "        - nintendo-switch, nsw, switch\n"
 "\n"
@@ -727,7 +831,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/stats.py:115
+#: cogs/stats.py:105
+msgid "Returns player general stats for a given hero."
+msgstr ""
+
+#: cogs/stats.py:116
 msgid ""
 "Returns player general stats for a given hero.\n"
 "\n"
@@ -738,7 +846,7 @@ msgid ""
 "        Platforms:\n"
 "\n"
 "        - pc, bnet\n"
-"        - playstation, ps, psn, play\n"
+"        - playstation, ps, psn, ps4, play\n"
 "        - xbox, xbl\n"
 "        - nintendo-switch, nsw, switch\n"
 "\n"
@@ -756,55 +864,59 @@ msgstr ""
 msgid "You have 1 try and {timeout} seconds to respond."
 msgstr ""
 
-#: cogs/trivia.py:64
+#: cogs/trivia.py:66
 msgid "Correct!"
 msgstr ""
 
-#: cogs/trivia.py:65
+#: cogs/trivia.py:67
 msgid "+1 win"
 msgstr ""
 
-#: cogs/trivia.py:68
+#: cogs/trivia.py:70
 msgid "Wrong!"
 msgstr ""
 
-#: cogs/trivia.py:69
+#: cogs/trivia.py:71
 msgid "+1 loss"
 msgstr ""
 
-#: cogs/trivia.py:70
+#: cogs/trivia.py:72
 msgid "Correct answer"
 msgstr ""
 
-#: cogs/trivia.py:76
+#: cogs/trivia.py:76 cogs/trivia.py:80
 msgid "Play an Overwatch trivia game."
 msgstr ""
 
-#: cogs/trivia.py:94
+#: cogs/trivia.py:98
 msgid "This member has no stats to show."
 msgstr ""
 
-#: cogs/trivia.py:110
+#: cogs/trivia.py:114
 msgid "Total"
 msgstr ""
 
-#: cogs/trivia.py:111
+#: cogs/trivia.py:115
 msgid "Won"
 msgstr ""
 
-#: cogs/trivia.py:112
+#: cogs/trivia.py:116
 msgid "Lost"
 msgstr ""
 
-#: cogs/trivia.py:113
+#: cogs/trivia.py:117
 msgid "Ratio (W/L)"
 msgstr ""
 
-#: cogs/trivia.py:114
+#: cogs/trivia.py:118
 msgid "Unanswered"
 msgstr ""
 
 #: cogs/trivia.py:121
+msgid "Shows a member's trivia stats."
+msgstr ""
+
+#: cogs/trivia.py:125
 msgid ""
 "Shows trivia stats.\n"
 "\n"
@@ -815,21 +927,25 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/trivia.py:138
+#: cogs/trivia.py:137
+msgid "Shows top 10 trivia players."
+msgstr ""
+
+#: cogs/trivia.py:142
 msgid ""
-"Shows the best OverBot's trivia players.\n"
+"Shows top 10 trivia players.\n"
 "\n"
 "        It is based on games won.\n"
 "\n"
-"        This command can be used once per minute.\n"
+"        You can use this command once per minute.\n"
 "        "
 msgstr ""
 
-#: cogs/trivia.py:154
+#: cogs/trivia.py:158
 msgid "Best Trivia Players"
 msgstr ""
 
-#: cogs/trivia.py:162
+#: cogs/trivia.py:166
 #, python-brace-format
 msgid ""
 "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: "
@@ -841,8 +957,8 @@ msgid ""
 "You need to specify a hex (e.g. `#00ff00`) or a color code (e.g. `red`)."
 msgstr ""
 
-#: cogs/member.py:33
-msgid "Shows your current premium status."
+#: cogs/member.py:29 cogs/member.py:33
+msgid "Shows your premium status."
 msgstr ""
 
 #: cogs/member.py:35
@@ -874,8 +990,16 @@ msgstr ""
 msgid "{member}'s Settings"
 msgstr ""
 
+#: cogs/member.py:94
+msgid "Update your settings."
+msgstr ""
+
 #: cogs/member.py:97
 msgid "`[Premium]` Update your settings."
+msgstr ""
+
+#: cogs/member.py:102
+msgid "Set a custom color for the embeds."
 msgstr ""
 
 #: cogs/member.py:106
@@ -979,8 +1103,14 @@ msgid ""
 "`{platform}`. Please be more specific."
 msgstr ""
 
-#: classes/paginator.py:129
+#: classes/paginator.py:143
 msgid "React with the platform you play on..."
+msgstr ""
+
+#: classes/paginator.py:189
+msgid ""
+"\n"
+"Profile to update:"
 msgstr ""
 
 #: classes/context.py:27
