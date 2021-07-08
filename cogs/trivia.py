@@ -72,7 +72,9 @@ class Trivia(commands.Cog):
             embed.add_field(name=_("Correct answer"), value=correct_answer)
         return embed
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(
+        invoke_without_command=True, brief=_("Play an Overwatch trivia game.")
+    )
     @locale
     async def trivia(self, ctx):
         _("""Play an Overwatch trivia game.""")
@@ -116,7 +118,7 @@ class Trivia(commands.Cog):
         embed.add_field(name=_("Unanswered"), value=unanswered)
         return embed
 
-    @trivia.command()
+    @trivia.command(brief=_("Shows a member's trivia stats."))
     @locale
     async def stats(self, ctx, member: discord.Member = None):
         _(
@@ -132,16 +134,16 @@ class Trivia(commands.Cog):
         embed = self.embed_member_stats(member, stats)
         await ctx.send(embed=embed)
 
-    @trivia.command(aliases=["top"])
+    @trivia.command(brief=_("Shows top 10 trivia players."))
     @commands.cooldown(1, 60.0, commands.BucketType.member)
     @locale
     async def best(self, ctx):
         _(
-            """Shows the best OverBot's trivia players.
+            """Shows top 10 trivia players.
 
         It is based on games won.
 
-        This command can be used once per minute.
+        You can use this command once per minute.
         """
         )
         async with ctx.typing():

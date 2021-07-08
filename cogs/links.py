@@ -7,25 +7,25 @@ class Links(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(brief=_("Returns support server link."))
     @locale
     async def support(self, ctx):
         _("""Returns the official bot support server invite link.""")
         await ctx.send(self.bot.config.support)
 
-    @commands.command()
+    @commands.command(brief=_("Returns bot vote link."))
     @locale
     async def vote(self, ctx):
         _("""Returns bot vote link.""")
         await ctx.send(self.bot.config.vote)
 
-    @commands.command()
+    @commands.command(brief=_("Returns bot invite link."))
     @locale
     async def invite(self, ctx):
         _("""Returns bot invite link.""")
         await ctx.send(self.bot.config.invite)
 
-    @commands.command(aliases=["git"])
+    @commands.command(aliases=["git"], brief=_("Returns the bot GitHub repository."))
     @locale
     async def github(self, ctx):
         _("""Returns the bot GitHub repository.""")

@@ -30,6 +30,11 @@ class ErrorHandler(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             return
 
+        # TODO: handle HTTP exceptions properly HERE
+        elif hasattr(error, "original"):
+            if isinstance(error.original, (discord.Forbidden, discord.NotFound)):
+                return
+
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 _("You are missing a required argument: `{argument}`").format(
@@ -101,7 +106,6 @@ class ErrorHandler(commands.Cog):
             elif isinstance(original, group):
                 await ctx.send(original)
             else:
-                e = original
                 embed = discord.Embed(color=discord.Color.red())
                 embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
                 embed.add_field(name="Command", value=ctx.command.qualified_name)
@@ -113,17 +117,20 @@ class ErrorHandler(commands.Cog):
                 try:
                     exc = "".join(
                         traceback.format_exception(
-                            type(e), e, e.__traceback__, chain=False
+                            type(original),
+                            original,
+                            original.__traceback__,
+                            chain=False,
                         )
                     )
                 except AttributeError:
-                    exc = f"{type(e)} {e}"
+                    exc = f"{type(original)}\n{original}"
                 embed.description = f"```py\n{exc}\n```"
                 embed.timestamp = ctx.message.created_at
                 if not self.bot.debug:
                     await self.bot.webhook.send(embed=embed)
                 else:
-                    print(e, e.__class__.__name__)
+                    print(original, type(original))
                 await ctx.send(
                     _(
                         "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"

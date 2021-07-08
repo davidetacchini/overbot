@@ -9,27 +9,26 @@ from utils.scrape import (
     get_overwatch_patch_notes,
 )
 
-STATUSES = (
-    "no problems at overwatch",
-    "user reports indicate no current problems at overwatch",
-)
-
 
 class Overwatch(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.statuses = (
+            "no problems at overwatch",
+            "user reports indicate no current problems at overwatch",
+        )
 
     def format_overwatch_status(self, status):
-        if status.lower() in STATUSES:
+        if status.lower() in self.statuses:
             return (f"<:online:648186001361076243> {status}", discord.Color.green())
         return (f"<:dnd:648185968209428490> {status}", discord.Color.red())
 
-    @commands.command()
+    @commands.command(brief=_("Shows Overwatch servers status."))
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def status(self, ctx):
         _(
-            """Returns the current Overwatch servers status.
+            """Shows Overwatch servers status.
 
         You can use this command once every 30 seconds.
         """
@@ -53,12 +52,12 @@ class Overwatch(commands.Cog):
             embed.description = status
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(brief=_("Shows the latest Overwatch news."))
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def news(self, ctx, amount: int = 4):
         _(
-            """Returns the latest Overwatch news.
+            """Shows the latest Overwatch news.
 
         `[amount]` - The amount of news to return. Defaults to 4.
 
@@ -98,7 +97,7 @@ class Overwatch(commands.Cog):
 
             await self.bot.paginator.Paginator(pages=pages).start(ctx)
 
-    @commands.command()
+    @commands.command(brief=_("Returns patch notes links."))
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def patch(self, ctx):

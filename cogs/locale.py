@@ -58,10 +58,14 @@ class Locale(commands.Cog):
             self.bot.locales[member_id] = locale
         return locale
 
-    @commands.group(invoke_without_command=True, aliases=["locale", "lang"])
+    @commands.group(
+        invoke_without_command=True,
+        aliases=["locale", "lang"],
+        brief=_("Shows the current language set."),
+    )
     @locale
     async def language(self, ctx):
-        _("""Displays the current language set and all the available languages.""")
+        _("""Shows the current language set and all the available languages.""")
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = _("Available Languages")
         current_locale = self.bot.locales[ctx.author.id] or i18n.current_locale
@@ -73,7 +77,7 @@ class Locale(commands.Cog):
         embed.description = locales
         await ctx.send(embed=embed)
 
-    @language.command()
+    @language.command(brief=_("Update the bot language."))
     @locale
     async def set(self, ctx, locale: valid_locale):
         _(
