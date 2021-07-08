@@ -18,10 +18,10 @@ class Meta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["pong", "latency"])
+    @commands.command(aliases=["pong", "latency"], brief=_("Shows bot latency."))
     @locale
     async def ping(self, ctx):
-        _("""Displays the bot's current websocket latency and ACK.""")
+        _("""Shows bot current websocket latency and ACK.""")
         embed = discord.Embed(color=discord.Color.green())
         embed.title = _("Pinging...")
         start = time.monotonic()
@@ -34,7 +34,7 @@ class Meta(commands.Cog):
         embed.add_field(name="ACK", value=f"{ack}ms")
         await msg.edit(embed=embed)
 
-    @commands.command()
+    @commands.command(brief=_("Shows bot uptime."))
     @locale
     async def uptime(self, ctx):
         _("""Shows how long the bot has been online.""")
@@ -67,11 +67,11 @@ class Meta(commands.Cog):
 
     # Inspired by Rapptz/RoboDanny
     # https://github.com/Rapptz/RoboDanny
-    @commands.command(aliases=["info"])
+    @commands.command(aliases=["info"], brief=_("Shows bot information."))
     @commands.guild_only()
     @locale
     async def about(self, ctx):
-        _("""Displays the bot information.""")
+        _("""Shows bot information.""")
         async with ctx.typing():
             commits = self.get_latest_commits()
             embed = discord.Embed(color=self.bot.color(ctx.author.id))

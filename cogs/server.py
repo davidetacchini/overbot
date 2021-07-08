@@ -24,7 +24,7 @@ class Server(commands.Cog):
         await self.bot.pool.execute(query, prefix, ctx.guild.id)
         await ctx.send(_("Prefix successfully set to `{prefix}`").format(prefix=prefix))
 
-    @commands.command()
+    @commands.command(brief=_("Either see or change the prefix."))
     @commands.guild_only()
     @locale
     async def prefix(
@@ -62,7 +62,7 @@ class Server(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(brief=_("Shows OverBot's most active servers."))
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     @locale
     async def leaderboard(self, ctx):

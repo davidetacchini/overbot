@@ -14,8 +14,8 @@ def valid_platform(argument):
         "xbox": "xbl",
         "ps": "psn",
         "psn": "psn",
-        "play": "psn",
         "ps4": "psn",
+        "play": "psn",
         "playstation": "psn",
         "nsw": "nintendo-switch",
         "switch": "nintendo-switch",
@@ -42,7 +42,7 @@ class Stats(commands.Cog):
             embed = profile.get_stats(ctx, hero)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
-    @commands.command(aliases=["rank", "sr"])
+    @commands.command(aliases=["rank", "sr"], brief=_("Returns player ratings."))
     @locale
     async def rating(self, ctx, platform: valid_platform, *, username):
         _(
@@ -54,7 +54,7 @@ class Stats(commands.Cog):
         Platforms:
 
         - pc, bnet
-        - playstation, ps, psn, play
+        - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
@@ -75,7 +75,7 @@ class Stats(commands.Cog):
                 embed = await profile.get_ratings(ctx)
             await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(brief=_("Returns player general stats"))
     @locale
     async def stats(self, ctx, platform: valid_platform, *, username):
         _(
@@ -87,7 +87,7 @@ class Stats(commands.Cog):
         Platforms:
 
         - pc, bnet
-        - playstation, ps, psn, play
+        - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
@@ -102,7 +102,7 @@ class Stats(commands.Cog):
         async with ctx.typing():
             await self.show_stats_for(ctx, "allHeroes", platform, username)
 
-    @commands.command()
+    @commands.command(brief=_("Returns player general stats for a given hero."))
     @locale
     async def hero(
         self,
@@ -122,7 +122,7 @@ class Stats(commands.Cog):
         Platforms:
 
         - pc, bnet
-        - playstation, ps, psn, play
+        - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 

@@ -223,7 +223,7 @@ class Profile(commands.Cog):
             await member.edit(nick=nick)
 
     @has_profile()
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, brief=_("Lists your profiles."))
     @locale
     async def profile(self, ctx, member: discord.Member = None):
         _(
@@ -231,7 +231,7 @@ class Profile(commands.Cog):
 
         `[member]` - The mention or the ID of a Discord member.
 
-        If no member is given, the information returned will be yours.
+        If no member is given, the profiles returned will be yours.
         """
         )
         member = member or ctx.author
@@ -240,7 +240,7 @@ class Profile(commands.Cog):
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
     @can_add_profile()
-    @profile.command(aliases=["add"])
+    @profile.command(aliases=["add"], brief=_("Link an Overwatch profile."))
     @locale
     async def link(self, ctx):
         _("""Link an Overwatch profile to your Discord account.""")
@@ -259,11 +259,11 @@ class Profile(commands.Cog):
         await ctx.send(_("Profile successfully linked."))
 
     @has_profile()
-    @profile.command(aliases=["remove"])
+    @profile.command(aliases=["remove"], brief=_("Unlink a profile."))
     @locale
     async def unlink(self, ctx, index: valid_index):
         _(
-            """Unlink an Overwatch profile from your Discord account.
+            """Unlink a profile.
 
         `<index>` - The profile's index to unlink.
 
@@ -298,11 +298,11 @@ class Profile(commands.Cog):
         await ctx.send(_("Profile successfully unlinked."))
 
     @has_profile()
-    @profile.command()
+    @profile.command(brief=_("Update a profile."))
     @locale
     async def update(self, ctx, index: valid_index):
         _(
-            """Update an Overwatch profile.
+            """Update a profile.
 
         `<index>` - The profile's index to update.
         """
@@ -321,7 +321,7 @@ class Profile(commands.Cog):
         await ctx.send("Profile successfully updated.")
 
     @has_profile()
-    @profile.command()
+    @profile.command(brief=_("Update the main profile."))
     @locale
     async def main(self, ctx, index: valid_index):
         _(
@@ -341,13 +341,15 @@ class Profile(commands.Cog):
         await ctx.send(embed=embed)
 
     @has_profile()
-    @profile.command(aliases=["rank", "sr"])
+    @profile.command(
+        aliases=["rank", "sr"], brief=_("Provides SRs information for a profile.")
+    )
     @locale
     async def rating(
         self, ctx, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's ratings.
+            """Provides SRs information for a profile.
 
         `[index]` - The profile's index to see the ratings for.
         `[member]` - The mention or the ID of a Discord member.
@@ -376,13 +378,15 @@ class Profile(commands.Cog):
             await ctx.send(embed=embed)
 
     @has_profile()
-    @profile.command(aliases=["statistics"])
+    @profile.command(
+        aliases=["statistics"], brief=_("Provides general stats for a profile.")
+    )
     @locale
     async def stats(
         self, ctx, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's general stats.
+            """Provides general stats for a profile.
 
         `[index]` - The profile's index to see the stats for.
         `[member]` - The mention or the ID of a Discord member.
@@ -404,13 +408,13 @@ class Profile(commands.Cog):
                 await cog.show_stats_for(ctx, "allHeroes", platform, username)
 
     @has_profile()
-    @profile.command()
+    @profile.command(brief=_("Provides general hero stats for a profile."))
     @locale
     async def hero(
         self, ctx, hero: Hero, index: valid_index = None, member: discord.Member = None
     ):
         _(
-            """Shows a member's general stats for a given hero.
+            """Provides general hero stats for a profile.
 
         `<hero>` - The name of the hero to see stats for.
         `[index]` - The profile's index to see the stats for.
@@ -433,12 +437,12 @@ class Profile(commands.Cog):
                 await cog.show_stats_for(ctx, hero, platform, username)
 
     @has_profile()
-    @profile.command(aliases=["nick"])
+    @profile.command(aliases=["nick"], brief=_("Shows your SRs in your nickname."))
     @commands.guild_only()
     @locale
     async def nickname(self, ctx):
         _(
-            """Show your SRs in your nickname.
+            """Shows your SRs in your nickname.
 
         The nickname can only be set in one server.
 
@@ -533,11 +537,11 @@ class Profile(commands.Cog):
 
     @is_premium()
     @has_profile()
-    @profile.command()
+    @profile.command(brief=_("Shows SRs performance graph."))
     @locale
     async def graph(self, ctx, index: valid_index = None):
         _(
-            """`[Premium]` Displays a profile's SR graph performance.
+            """`[Premium]` Shows SRs performance graph.
 
         `[index]` - The profile's index to see the SR graph for.
 

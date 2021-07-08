@@ -138,7 +138,7 @@ class GroupHelp(menus.ListPageSource):
 
         for command in commands:
             signature = f"{command.qualified_name} {command.signature}"
-            value = _(command.short_doc) or _("No help found...")
+            value = _(command.brief) or _("No help found...")
             embed.add_field(name=signature, value=value, inline=False)
 
         maximum = self.get_max_pages()
@@ -164,6 +164,7 @@ class GroupHelp(menus.ListPageSource):
 class CustomHelpCommand(commands.HelpCommand):
     def __init__(self):
         command_attrs = dict(
+            brief=_("Shows help about the bot, a command, or a category."),
             help=_("Shows help about the bot, a command, or a category."),
         )
         super().__init__(command_attrs=command_attrs)

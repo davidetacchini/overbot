@@ -100,7 +100,7 @@ class Fun(commands.Cog):
         embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
         return embed
 
-    @commands.command(aliases=["htp"])
+    @commands.command(aliases=["htp"], brief=_("Returns a random hero."))
     @locale
     async def herotoplay(self, ctx, category: valid_hero_cat = None):
         _(
@@ -120,14 +120,14 @@ class Fun(commands.Cog):
         hero = self.get_random_hero(category)
         await ctx.send(hero)
 
-    @commands.command(aliases=["rtp"])
+    @commands.command(aliases=["rtp"], brief=_("Returns a random role."))
     @locale
     async def roletoplay(self, ctx):
         _("""Returns a random role to play.""")
         roles = ("Tank", "Damage", "Support", "Flex")
         await ctx.send(secrets.choice(roles))
 
-    @commands.command(aliases=["mtp"])
+    @commands.command(aliases=["mtp"], brief=_("Returns a random map."))
     @locale
     async def maptoplay(self, ctx, *, category: valid_map_cat = None):
         _(
@@ -152,7 +152,7 @@ class Fun(commands.Cog):
         map_ = self.get_random_map(ctx, category)
         await ctx.send(map_)
 
-    @commands.command()
+    @commands.command(brief=_("Returns a random meme."))
     @locale
     async def meme(self, ctx, category: valid_meme_cat = None):
         _(
