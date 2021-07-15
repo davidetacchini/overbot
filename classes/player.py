@@ -35,27 +35,6 @@ class NoHeroStats(PlayerException):
         )
 
 
-class RatingIcon:
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        v = self.value
-        if 0 < v < 1500:
-            return "<:bronze:632281015863214096>"
-        elif 1500 <= v < 2000:
-            return "<:silver:632281054211997718>"
-        elif 2000 <= v < 2500:
-            return "<:gold:632281064596832278>"
-        elif 2500 <= v < 3000:
-            return "<:platinum:632281092875091998>"
-        elif 3000 <= v < 3500:
-            return "<:diamond:632281105571119105>"
-        elif 3500 <= v < 4000:
-            return "<:master:632281117394993163>"
-        return "<:grandmaster:632281128966946826>"
-
-
 class Player:
 
     __slots__ = ("data", "platform", "username", "pages")
@@ -105,6 +84,22 @@ class Player:
             return key.capitalize() + " (per 10 minutes)"
         return self.to_pascal(key)
 
+    @staticmethod
+    def get_rating_icon(self, rating):
+        if 0 < rating < 1500:
+            return "<:bronze:632281015863214096>"
+        elif 1500 <= rating < 2000:
+            return "<:silver:632281054211997718>"
+        elif 2000 <= rating < 2500:
+            return "<:gold:632281064596832278>"
+        elif 2500 <= rating < 3000:
+            return "<:platinum:632281092875091998>"
+        elif 3000 <= rating < 3500:
+            return "<:diamond:632281105571119105>"
+        elif 3500 <= rating < 4000:
+            return "<:master:632281117394993163>"
+        return "<:grandmaster:632281128966946826>"
+
     async def save_ratings(self, ctx, *, profile_id, **kwargs):
         tank = kwargs.get("tank", 0)
         damage = kwargs.get("damage", 0)
@@ -153,9 +148,12 @@ class Player:
             return embed
 
         for key, value in ratings.items():
+            role_icon = ROLES.get(key)
+            role_name = key.upper()
+            rating_icon = self.get_rating_icon(value)
             embed.add_field(
-                name=f"{ROLES.get(key)} **{key.upper()}**",
-                value=f"{str(RatingIcon(value))} **{value}**{SR}",
+                name=f"{role_icon} **{role_name}**",
+                value=f"{rating_icon} **{value}**{SR}",
             )
         embed.set_footer(
             text=_("Average: {average}").format(average=self.data.get("rating")),
