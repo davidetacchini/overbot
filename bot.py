@@ -137,13 +137,15 @@ class Bot(commands.AutoShardedBot):
         pattern = re.compile(r"<@!?%s>" % user.id)
         return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), ctx.prefix)
 
-    def get_line_count(self):
+    def compute_sloc(self):
+        """Compute source lines of code."""
         for root, dirs, files in os.walk(os.getcwd()):
             [dirs.remove(d) for d in list(dirs) if d == "env"]
-            for name in files:
-                if name.endswith(".py"):
-                    with open(f"{root}/{name}") as f:
-                        self.total_lines += len(f.readlines())
+            for file in files:
+                if file.endswith(".py"):
+                    with open(f"{root}/{file}") as fp:
+                        nonblank = sum(1 for line in fp if line.rstrip())
+                        self.total_lines += nonblank
 
     def member_is_premium(self, member_id, guild_id):
         """Check for a member/guild to be premium."""
@@ -181,7 +183,6 @@ class Bot(commands.AutoShardedBot):
                    WHERE server.premium = true;
                 """
         ids = await self.pool.fetch(query)
-        # make a set of integers
         self.premiums = {i["id"] for i in ids}
 
     async def cache_heroes(self):
@@ -207,7 +208,7 @@ class Bot(commands.AutoShardedBot):
             **config.database, max_size=20, command_timeout=60.0
         )
 
-        self.get_line_count()
+        self.compute_sloc()
         # caching
         await self.cache_prefixes()
         await self.cache_premiums()
