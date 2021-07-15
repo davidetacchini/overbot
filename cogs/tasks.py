@@ -273,7 +273,8 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = await get_overwatch_news("en_US", amount=1)[0]
+            news = await get_overwatch_news("en_US", amount=1)
+            news = news[0]
         except AttributeError:
             return
         # Get the news id from the URL
