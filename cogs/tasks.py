@@ -273,25 +273,26 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            title, link, img, date = await get_overwatch_news("en_US", amount=1)
+            news = await get_overwatch_news("en_US", amount=1)[0]
         except AttributeError:
             return
         # Get the news id from the URL
-        news_id = re.search(r"\d+", link[0]).group(0)
+        news_id = re.search(r"\d+", news["link"]).group(0)
 
-        # Returns whether the news_id it's equals to the one stored in the database.
-        # If it's equals, that specific news has already been sent.
+        # Returns whether the news_id it's equals to the one
+        # stored in the database. If it is, that specific
+        # news has already been sent.
         if int(news_id) == await self.bot.pool.fetchval(
             "SELECT news_id FROM news WHERE id=1;"
         ):
             return
 
         embed = discord.Embed()
-        embed.title = title[0]
-        embed.url = link[0]
+        embed.title = news["title"]
+        embed.url = news["link"]
         embed.set_author(name="Blizzard Entertainment")
-        embed.set_image(url=f"https:{img[0]}")
-        embed.set_footer(text=date[0])
+        embed.set_image(url=f'https:{news["thumbnail"]}')
+        embed.set_footer(text=news["date"])
 
         channel = self.bot.get_channel(self.bot.config.news_channel)
 
@@ -300,8 +301,7 @@ class Tasks(commands.Cog):
 
         await channel.send(embed=embed)
 
-        # Once the latest news has been sent, update the older
-        # news_id stored in the database with the new one.
+        # update old news_id with new one
         await self.bot.pool.execute(
             "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
         )
