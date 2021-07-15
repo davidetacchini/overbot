@@ -85,7 +85,7 @@ class Player:
         return self.to_pascal(key)
 
     @staticmethod
-    def get_rating_icon(self, rating):
+    def get_rating_icon(rating):
         if 0 < rating < 1500:
             return "<:bronze:632281015863214096>"
         elif 1500 <= rating < 2000:
