@@ -144,8 +144,7 @@ class Bot(commands.AutoShardedBot):
             for file in files:
                 if file.endswith(".py"):
                     with open(f"{root}/{file}") as fp:
-                        nonblank = sum(1 for line in fp if line.rstrip())
-                        self.total_lines += nonblank
+                        self.total_lines += len(fp.readlines())
 
     def member_is_premium(self, member_id, guild_id):
         """Check for a member/guild to be premium."""
