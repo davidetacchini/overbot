@@ -30,11 +30,6 @@ class ErrorHandler(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             return
 
-        # TODO: handle HTTP exceptions properly HERE
-        elif hasattr(error, "original"):
-            if isinstance(error.original, (discord.Forbidden, discord.NotFound)):
-                return
-
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 _("You are missing a required argument: `{argument}`").format(
