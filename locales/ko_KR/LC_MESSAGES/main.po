@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-08 11:45+0200\n"
+"POT-Creation-Date: 2021-07-15 15:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -333,25 +333,25 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:77
+#: cogs/overwatch.py:75
 msgid "Latest Overwatch News"
 msgstr ""
 
-#: cogs/overwatch.py:78
+#: cogs/overwatch.py:76
 #, python-brace-format
 msgid "[Click here]({news})"
 msgstr ""
 
-#: cogs/overwatch.py:92
+#: cogs/overwatch.py:88
 #, python-brace-format
 msgid "News {current}/{total} - {date}"
 msgstr ""
 
-#: cogs/overwatch.py:100
+#: cogs/overwatch.py:96
 msgid "Returns patch notes links."
 msgstr ""
 
-#: cogs/overwatch.py:105
+#: cogs/overwatch.py:101
 msgid ""
 "Returns patch notes links.\n"
 "\n"
@@ -359,11 +359,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/overwatch.py:112
+#: cogs/overwatch.py:108
 msgid "Overwatch Patch Notes"
 msgstr ""
 
-#: cogs/overwatch.py:116
+#: cogs/overwatch.py:112
 #, python-brace-format
 msgid "[Click here to view **{category}** patch notes]({link})"
 msgstr ""
@@ -1040,33 +1040,33 @@ msgid ""
 "display."
 msgstr ""
 
-#: classes/player.py:152
+#: classes/player.py:147
 msgid "This profile is unranked."
 msgstr ""
 
-#: classes/player.py:161
+#: classes/player.py:159
 #, python-brace-format
 msgid "Average: {average}"
 msgstr ""
 
-#: classes/player.py:194
+#: classes/player.py:192
 msgid "Quickplay"
 msgstr ""
 
-#: classes/player.py:197
+#: classes/player.py:195
 msgid "Competitive"
 msgstr ""
 
-#: classes/player.py:211
+#: classes/player.py:209
 #, python-brace-format
 msgid "Page {current}/{total}"
 msgstr ""
 
-#: classes/player.py:219
+#: classes/player.py:217
 msgid "This profile is set to private"
 msgstr ""
 
-#: classes/player.py:221
+#: classes/player.py:219
 msgid ""
 "Profiles are set to private by default. You can modify this setting in "
 "Overwatch under `Options - Social`. Please note that these changes may take "
