@@ -66,12 +66,10 @@ class Overwatch(commands.Cog):
         )
         async with ctx.typing():
             pages = []
+            locale = self.bot.locales.get(ctx.author.id, "en_US")
 
             try:
-                locale = self.bot.locales.get(ctx.author.id)
-                titles, links, imgs, dates = await get_overwatch_news(
-                    locale, amount=abs(amount)
-                )
+                news = await get_overwatch_news(locale, amount=abs(amount))
             except Exception:
                 embed = discord.Embed(color=self.bot.color(ctx.author.id))
                 embed.title = _("Latest Overwatch News")
@@ -80,17 +78,15 @@ class Overwatch(commands.Cog):
                 )
                 return await ctx.send(embed=embed)
 
-            for i, (title, link, img, date) in enumerate(
-                zip(titles, links, imgs, dates), start=1
-            ):
+            for i, n in enumerate(news, start=1):
                 embed = discord.Embed(color=self.bot.color(ctx.author.id))
-                embed.title = title
-                embed.url = link
+                embed.title = n["title"]
+                embed.url = n["link"]
                 embed.set_author(name="Blizzard Entertainment")
-                embed.set_image(url=f"https:{img}")
+                embed.set_image(url=f'https:{n["thumbnail"]}')
                 embed.set_footer(
                     text=_("News {current}/{total} - {date}").format(
-                        current=i, total=len(titles), date=date
+                        current=i, total=len(news), date=n["date"]
                     )
                 )
                 pages.append(embed)
@@ -107,10 +103,10 @@ class Overwatch(commands.Cog):
         You can use this command once every 30 seconds.
         """
         )
-        locale = self.bot.locales[ctx.author.id].lower()
+        locale = self.bot.locales.get(ctx.author.id, "en_US")
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = _("Overwatch Patch Notes")
-        live, ptr, experimental = await get_overwatch_patch_notes(ctx)
+        live, ptr, experimental = await get_overwatch_patch_notes(locale)
         categories = {"live": live, "ptr": ptr, "experimental": experimental}
         for key, value in categories.items():
             text = _("[Click here to view **{category}** patch notes]({link})").format(
