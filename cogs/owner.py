@@ -165,7 +165,7 @@ class Owner(commands.Cog):
         await ctx.send("\n".join(f"{status} `{module}`" for status, module in statuses))
         # Update total line count since we have made changes.
         self.bot.total_lines = 0
-        self.bot.get_line_count()
+        self.bot.compute_sloc()
 
     @commands.command(aliases=["kys", "die"], hidden=True)
     async def shutdown(self, ctx):
