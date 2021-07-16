@@ -66,7 +66,7 @@ class Tasks(commands.Cog):
         cpu_freq = f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz"
         ram = f"{psutil.virtual_memory()[2]}%"
 
-        statistics = {
+        return {
             "host": {
                 "Postgres": pg_version,
                 "Python": py_version,
@@ -88,7 +88,6 @@ class Tasks(commands.Cog):
             },
             "shards": shards,
         }
-        return statistics
 
     async def get_bot_commands(self):
         all_commands = []
