@@ -91,7 +91,9 @@ class Member(commands.Cog):
         return embed
 
     @is_premium()
-    @commands.group(invoke_without_command=True, brief=_("Update your settings."))
+    @commands.group(
+        invoke_without_command=True, brief=_("`[Premium]` Update your settings.")
+    )
     @locale
     async def settings(self, ctx):
         _("""`[Premium]` Update your settings.""")
@@ -99,7 +101,7 @@ class Member(commands.Cog):
         await ctx.send(embed=embed)
 
     @is_premium()
-    @settings.command(brief=_("Set a custom color for the embeds."))
+    @settings.command(brief=_("`[Premium]` Set a custom color for the embeds."))
     @locale
     async def color(self, ctx, *, color: valid_color):
         _(
