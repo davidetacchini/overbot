@@ -537,7 +537,7 @@ class Profile(commands.Cog):
 
     @is_premium()
     @has_profile()
-    @profile.command(brief=_("Shows SRs performance graph."))
+    @profile.command(brief=_("`[Premium]` Shows SRs performance graph."))
     @locale
     async def graph(self, ctx, index: valid_index = None):
         _(
