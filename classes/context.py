@@ -2,8 +2,8 @@ import asyncio
 
 import discord
 
+from pygicord import CannotAddReactions
 from discord.ext import commands
-from discord.ext.menus import CannotAddReactions
 
 from utils.i18n import _
 from classes.exceptions import NoChoice
