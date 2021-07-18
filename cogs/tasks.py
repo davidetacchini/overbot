@@ -1,8 +1,6 @@
 import re
 import platform
 
-from contextlib import suppress
-
 import distro
 import psutil
 import discord
@@ -22,59 +20,55 @@ class Tasks(commands.Cog):
 
     def get_shards(self):
         shards = []
-        for i in range(self.bot.shard_count):
-            shard = self.bot.get_shard(i)
-            if not shard:
-                break
-            total_members = 0
+        for shard in self.bot.shards.values():
             guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
             try:
                 total_members = sum(g.member_count for g in guilds)
             except AttributeError:
-                total_members += 0
+                total_members = 0
             shards.append(
-                dict(
-                    id=shard.id + 1,
-                    latency=round(shard.latency * 1000, 2),
-                    guild_count=len(guilds),
-                    member_count=total_members,
-                )
+                {
+                    "id": shard.id + 1,
+                    "latency": round(shard.latency * 1000, 2),
+                    "guild_count": len(guilds),
+                    "member_count": total_members,
+                }
             )
         return shards
 
     async def get_bot_statistics(self):
         total_commands = await self.bot.total_commands()
+
         try:
             total_members = sum(g.member_count for g in self.bot.guilds)
         except AttributeError:
             total_members = 0
+
         large_servers = sum(1 for g in self.bot.guilds if g.large)
 
-        with suppress(OverflowError):
+        try:
             shards = self.get_shards()
             ping = f"{round(self.bot.latency * 1000, 2)}ms"
+        except OverflowError:
+            shards = []
+            ping = "N/A"
 
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
         pg_version = f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
-        py_version = platform.python_version()
 
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
-        cpu_perc = f"{psutil.cpu_percent()}%"
-        cpu_cores = psutil.cpu_count()
-        cpu_freq = f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz"
-        ram = f"{psutil.virtual_memory()[2]}%"
 
         return {
             "host": {
                 "Postgres": pg_version,
-                "Python": py_version,
+                "Python": platform.python_version(),
                 "OS": os_name + " " + os_version,
-                "CPU Percent": cpu_perc,
-                "CPU Cores": cpu_cores,
-                "CPU Frequency": cpu_freq,
-                "RAM Usage": ram,
+                "CPU Percent": f"{psutil.cpu_percent()}%",
+                "CPU Cores": psutil.cpu_count(),
+                "CPU Frequency": f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz",
+                "RAM Usage": f"{psutil.virtual_memory()[2]}%",
             },
             "bot": {
                 "Servers": len(self.bot.guilds),
@@ -94,19 +88,16 @@ class Tasks(commands.Cog):
         for command in self.bot.walk_commands():
             if command.hidden:
                 continue
-            is_premium = False
-            if command.short_doc.startswith("`[Premium]`"):
-                is_premium = True
             all_commands.append(
-                dict(
-                    cog=command.cog_name,
-                    name=command.qualified_name,
-                    aliases=command.aliases or None,
-                    signature=command.signature or None,
-                    is_premium=is_premium,
-                    short_desc=command.short_doc or "No help found...",
-                    long_desc=command.help or "No help found...",
-                )
+                {
+                    "cog": command.cog_name,
+                    "name": command.qualified_name,
+                    "aliases": command.aliases or None,
+                    "signature": command.signature or None,
+                    "is_premium": command.brief.startswith("`[Premium]`"),
+                    "short_desc": command.brief or "No help found...",
+                    "long_desc": command.help or "No help found...",
+                }
             )
         return all_commands
 
@@ -120,24 +111,21 @@ class Tasks(commands.Cog):
         guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
         servers = []
         for guild in guilds:
-            is_premium = False
             g = self.bot.get_guild(guild["guild_id"])
             if g is None:
                 continue
-            if g.id in self.bot.premiums:
-                is_premium = True
             servers.append(
-                dict(
-                    id=g.id,
-                    name=str(g),
-                    icon=str(g.icon_url_as(format="webp", size=128)),
-                    region=str(g.region),
-                    members=g.member_count,
-                    commands_run=guild["commands"],
-                    shard_id=g.shard_id + 1,
-                    joined_at=str(g.me.joined_at),
-                    is_premium=is_premium,
-                )
+                {
+                    "id": g.id,
+                    "name": str(g),
+                    "icon": str(g.icon_url_as(format="webp", size=128)),
+                    "region": str(g.region),
+                    "members": g.member_count,
+                    "commands_run": guild["commands"],
+                    "shard_id": g.shard_id + 1,
+                    "joined_at": str(g.me.joined_at),
+                    "is_premium": g.id in self.bot.premiums,
+                }
             )
         return servers
 
@@ -154,24 +142,19 @@ class Tasks(commands.Cog):
             "Authorization": self.bot.config.obapi["token"],
         }
 
-        payload_statistics = await self.get_bot_statistics()
-        payload_commands = await self.get_bot_commands()
-        payload_servers = await self.get_top_servers()
+        statistics = await self.get_bot_statistics()
+        commands = await self.get_bot_commands()
+        servers = await self.get_top_servers()
 
+        BASE_URL = self.bot.config.obapi["url"]
         await self.bot.session.post(
-            f'{self.bot.config.obapi["url"]}/statistics',
-            json=payload_statistics,
-            headers=headers,
+            f"{BASE_URL}/statistics", json=statistics, headers=headers
         )
         await self.bot.session.post(
-            f'{self.bot.config.obapi["url"]}/commands',
-            json=payload_commands,
-            headers=headers,
+            f"{BASE_URL}/commands", json=commands, headers=headers
         )
         await self.bot.session.post(
-            f'{self.bot.config.obapi["url"]}/servers',
-            json=payload_servers,
-            headers=headers,
+            f"{BASE_URL}/servers", json=servers, headers=headers
         )
 
     @tasks.loop(minutes=30.0)
