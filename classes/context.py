@@ -1,3 +1,4 @@
+import re
 import asyncio
 
 import discord
@@ -13,11 +14,17 @@ class Context(commands.Context):
     CHECK = "\N{WHITE HEAVY CHECK MARK}"
     XMARK = "\N{CROSS MARK}"
 
-    async def prompt(self, text, user=None):
+    @property
+    def clean_prefix(self):
+        user = self.guild.me if self.guild else self.bot.user
+        pattern = re.compile(r"<@!?%s>" % user.id)
+        return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), self.prefix)
+
+    async def prompt(self, text):
         if not self.channel.permissions_for(self.me).add_reactions:
             raise CannotAddReactions()
 
-        user = user or self.author
+        user = self.author
         reactions = (self.CHECK, self.XMARK)
 
         if user.id == self.bot.user.id:

@@ -54,7 +54,7 @@ class Server(commands.Cog):
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.set_footer(
                 text=_('Use "{prefix}prefix [value]" to change it.').format(
-                    prefix=self.bot.clean_prefix(ctx)
+                    prefix=ctx.clean_prefix
                 )
             )
             embed.add_field(
