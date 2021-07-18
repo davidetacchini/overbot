@@ -4,8 +4,8 @@ import traceback
 import discord
 
 from asyncpg import DataError
+from pygicord import PaginationError
 from discord.ext import commands
-from discord.ext.menus import MenuError
 
 from utils import checks
 from utils.i18n import _, locale
@@ -93,7 +93,7 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.CommandInvokeError):
             original = error.original
-            group = (RequestError, PlayerException, NoChoice, MenuError)
+            group = (RequestError, PlayerException, NoChoice, PaginationError)
             if isinstance(original, discord.HTTPException):
                 return
             elif isinstance(original, DataError):
