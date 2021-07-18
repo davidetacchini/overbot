@@ -4,7 +4,7 @@ from typing import Union, Optional
 
 import discord
 
-from discord.ext.menus import MenuError, CannotAddReactions
+from pygicord import CannotAddReactions, CannotUseExternalEmojis
 
 from utils.i18n import _
 
@@ -16,11 +16,6 @@ PLATFORMS = {
     "xbl": "Xbox",
     "nintendo-switch": "Switch",
 }
-
-
-class CannotUseExternalEmojis(MenuError):
-    def __init__(self):
-        super().__init__("Bot cannot use external emojis in this channel.")
 
 
 class BasePaginator:
@@ -44,7 +39,7 @@ class BasePaginator:
         self,
         entries: Optional[Union[list, tuple]] = None,
         *,
-        timeout: float = 30.0,
+        timeout: float = 60.0,
         title: Optional[str] = None,
         image: Optional[str] = None,
         footer: Optional[str] = None,
