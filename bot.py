@@ -1,5 +1,4 @@
 import os
-import re
 import asyncio
 import datetime
 
@@ -91,8 +90,6 @@ class Bot(commands.AutoShardedBot):
     async def on_message(self, message):
         if not self.is_ready():
             return
-        if message.author.bot:
-            return
         await self.process_commands(message)
 
     async def invoke(self, ctx):
@@ -105,11 +102,11 @@ class Bot(commands.AutoShardedBot):
         if not message.guild:
             return self.prefix
         try:
-            return commands.when_mentioned_or(self.prefixes[message.guild.id])(
-                self, message
-            )
+            prefix = self.prefixes[message.guild.id]
         except KeyError:
             return commands.when_mentioned_or(self.prefix)(self, message)
+        else:
+            return commands.when_mentioned_or(prefix)(self, message)
 
     async def get_or_fetch_member(self, member_id):
         guild = self.get_guild(config.support_server_id)
@@ -131,11 +128,6 @@ class Bot(commands.AutoShardedBot):
         if not members:
             return None
         return members[0]
-
-    def clean_prefix(self, ctx):
-        user = ctx.guild.me if ctx.guild else ctx.bot.user
-        pattern = re.compile(r"<@!?%s>" % user.id)
-        return pattern.sub("@%s" % user.display_name.replace("\\", r"\\"), ctx.prefix)
 
     def compute_sloc(self):
         """Compute source lines of code."""
