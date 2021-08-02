@@ -54,7 +54,7 @@ class HelpPaginator(Base):
         for name, value in entries:
             embed.add_field(name=name, value=value, inline=False)
 
-        embed.set_footer(text=_("Press any reaction to go back."))
+        embed.set_footer(text=_("Press one of the arrows to go back."))
         await self.message.edit(content=None, embed=embed)
 
 
