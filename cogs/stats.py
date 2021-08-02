@@ -36,7 +36,7 @@ class Stats(commands.Cog):
     async def show_stats_for(self, ctx, hero, platform, username):
         data = await Request(platform, username).get()
         profile = Player(data, platform=platform, username=username)
-        if profile.is_private:
+        if profile.is_private():
             embed = profile.private()
         else:
             embed = profile.get_stats(ctx, hero)
@@ -69,7 +69,7 @@ class Stats(commands.Cog):
         async with ctx.typing():
             data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
-            if profile.is_private:
+            if profile.is_private():
                 embed = profile.private()
             else:
                 embed = await profile.get_ratings(ctx)
