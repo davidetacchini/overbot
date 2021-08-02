@@ -368,7 +368,7 @@ class Profile(commands.Cog):
 
             data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
-            if profile.is_private:
+            if profile.is_private():
                 embed = profile.private()
             else:
                 embed = await profile.get_ratings(ctx, save=True, profile_id=id_)
@@ -467,7 +467,7 @@ class Profile(commands.Cog):
             data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
 
-            if profile.is_private:
+            if profile.is_private():
                 return await ctx.send(embed=profile.private())
 
             try:

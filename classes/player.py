@@ -56,20 +56,9 @@ class Player:
     def level_icon(self):
         return self.data["levelIcon"]
 
-    @property
-    def is_private(self):
-        return self.data["private"]
-
-    @property
-    def has_stats(self):
-        return (
-            self.data["quickPlayStats"]["careerStats"]
-            or self.data["competitiveStats"]["careerStats"]
-        )
-
     @staticmethod
     def to_pascal(key):
-        """From camel case to title (testTest -> Test Test)."""
+        """From camel case to pascal case (testTest -> Test Test)."""
         return (
             re.sub("([a-z])([A-Z])", r"\g<1> \g<2>", key)
             .replace(" Avg Per10Min", "")
@@ -99,6 +88,15 @@ class Player:
         elif 3500 <= rating < 4000:
             return "<:master:632281117394993163>"
         return "<:grandmaster:632281128966946826>"
+
+    def is_private(self):
+        return self.data["private"]
+
+    def has_stats(self):
+        return (
+            self.data["quickPlayStats"]["careerStats"]
+            or self.data["competitiveStats"]["careerStats"]
+        )
 
     async def save_ratings(self, ctx, *, profile_id, **kwargs):
         tank = kwargs.get("tank", 0)
@@ -166,7 +164,7 @@ class Player:
         return embed
 
     def resolve_stats(self, hero):
-        if not self.has_stats:
+        if not self.has_stats():
             raise NoStats()
 
         # quickplay stats
