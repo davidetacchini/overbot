@@ -86,12 +86,6 @@ class BasePaginator:
             except (discord.NotFound, discord.HTTPException):
                 pass
 
-    async def cleanup(self):
-        try:
-            await self.message.delete()
-        except discord.HTTPException:
-            pass
-
     async def session(self):
         self.message = await self.ctx.send(embed=self.embed)
         self.bot.loop.create_task(self.add_reactions())
@@ -113,7 +107,10 @@ class BasePaginator:
         else:
             return self.result(reaction)
         finally:
-            await self.cleanup()
+            try:
+                await self.message.delete()
+            except discord.HTTPException:
+                pass
 
     def _check_permissions(self, ctx):
         permissions = ctx.channel.permissions_for(ctx.me)
