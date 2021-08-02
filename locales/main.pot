@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-15 15:08+0200\n"
+"POT-Creation-Date: 2021-08-02 21:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,109 +17,108 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: cogs/errors.py:40
+#: cogs/errors.py:35
 #, python-brace-format
 msgid "You are missing a required argument: `{argument}`"
 msgstr ""
 
-#: cogs/errors.py:46
+#: cogs/errors.py:41
 msgid "You are using a bad argument."
 msgstr ""
 
-#: cogs/errors.py:49
+#: cogs/errors.py:44
 msgid "You don't have enough permissions."
 msgstr ""
 
-#: cogs/errors.py:54
+#: cogs/errors.py:49
 #, python-brace-format
 msgid "You are on cooldown. Wait `{seconds}s` before running another command."
 msgstr ""
 
-#: cogs/errors.py:60
+#: cogs/errors.py:55
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}s`."
 msgstr ""
 
-#: cogs/errors.py:67
+#: cogs/errors.py:62
 msgid "This command can't be used in direct messages."
 msgstr ""
 
-#: cogs/errors.py:70
+#: cogs/errors.py:65
 msgid "It seems you do not own this bot."
 msgstr ""
 
-#: cogs/errors.py:76
+#: cogs/errors.py:71
 #, python-brace-format
 msgid ""
 "You haven't linked a profile yet. Use \"{prefix}profile link\" to start."
 msgstr ""
 
-#: cogs/errors.py:84
+#: cogs/errors.py:79
 #, python-brace-format
 msgid ""
 "Max profiles limit reached.\n"
 "[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
 msgstr ""
 
-#: cogs/errors.py:88
+#: cogs/errors.py:83
 msgid "Max profiles limit reached."
 msgstr ""
 
-#: cogs/errors.py:93
+#: cogs/errors.py:88
 #, python-brace-format
 msgid ""
 "This command requires a Premium membership.\n"
 "[Click here]({premium}) to have a look at the Premium plan."
 msgstr ""
 
-#: cogs/errors.py:105
+#: cogs/errors.py:100
 msgid "The argument you entered cannot be handled."
 msgstr ""
 
-#: cogs/errors.py:136
+#: cogs/errors.py:131
 msgid ""
 "This command ran into an error. The incident has been reported and will be "
 "fixed as soon as possible!"
 msgstr ""
 
-#: cogs/help.py:58
+#: cogs/help.py:45
 msgid "Using the bot"
 msgstr ""
 
-#: cogs/help.py:59
+#: cogs/help.py:46
 msgid "Welcome to the help page!"
 msgstr ""
 
-#: cogs/help.py:62
+#: cogs/help.py:49
 msgid "<argument>"
 msgstr ""
 
-#: cogs/help.py:62
+#: cogs/help.py:49
 msgid "This means the argument is **required**."
 msgstr ""
 
-#: cogs/help.py:63
+#: cogs/help.py:50
 msgid "[argument]"
 msgstr ""
 
-#: cogs/help.py:63
+#: cogs/help.py:50
 msgid "This means the argument is **optional**."
 msgstr ""
 
-#: cogs/help.py:64
+#: cogs/help.py:51
 msgid "Note"
 msgstr ""
 
-#: cogs/help.py:64
+#: cogs/help.py:51
 msgid "You **must not** include the brackets in the argument."
 msgstr ""
 
-#: cogs/help.py:71
-#, python-brace-format
-msgid "We were on page {current_page} before this message."
+#: cogs/help.py:57
+msgid "Press one of the arrows to go back."
 msgstr ""
 
-#: cogs/help.py:96
+#: cogs/help.py:68
 #, python-brace-format
 msgid ""
 "[Support]({support}) - [Commands]({website}) - [Translate]({github}) - "
@@ -128,40 +127,40 @@ msgid ""
 "Use \"{prefix}help [category]\" for more info on a category\n"
 msgstr ""
 
-#: cogs/help.py:108
+#: cogs/help.py:85
 #, python-brace-format
 msgid "{bot} Command List"
 msgstr ""
 
-#: cogs/help.py:119
+#: cogs/help.py:95 classes/player.py:209
 #, python-brace-format
-msgid "Page {current_page}/{maximum}"
+msgid "Page {current}/{total}"
 msgstr ""
 
-#: cogs/help.py:131
+#: cogs/help.py:107
 #, python-brace-format
 msgid "{group} Commands"
 msgstr ""
 
-#: cogs/help.py:141 cogs/help.py:180 cogs/member.py:83
+#: cogs/help.py:112 cogs/help.py:149 cogs/member.py:83
 msgid "No help found..."
 msgstr ""
 
-#: cogs/help.py:148
+#: cogs/help.py:117
 #, python-brace-format
-msgid "Page {current_page}/{maximum} ({total_entries} commands)"
+msgid "Page {current_page}/{total_pages} ({total_commands} commands)"
 msgstr ""
 
-#: cogs/help.py:157
+#: cogs/help.py:126
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 
-#: cogs/help.py:167 cogs/help.py:168
+#: cogs/help.py:136 cogs/help.py:137
 msgid "Shows help about the bot, a command, or a category."
 msgstr ""
 
-#: cogs/help.py:183
+#: cogs/help.py:152
 msgid "Aliases"
 msgstr ""
 
@@ -504,11 +503,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr ""
 
-#: cogs/profile.py:339 classes/paginator.py:142 classes/paginator.py:192
+#: cogs/profile.py:339 classes/paginator.py:134 classes/paginator.py:184
 msgid "Platform"
 msgstr ""
 
-#: cogs/profile.py:340 classes/paginator.py:193
+#: cogs/profile.py:340 classes/paginator.py:185
 msgid "Username"
 msgstr ""
 
@@ -602,7 +601,7 @@ msgid "I don't have enough data to create the graph."
 msgstr ""
 
 #: cogs/profile.py:540
-msgid "Shows SRs performance graph."
+msgid "`[Premium]` Shows SRs performance graph."
 msgstr ""
 
 #: cogs/profile.py:544
@@ -990,19 +989,15 @@ msgstr ""
 msgid "{member}'s Settings"
 msgstr ""
 
-#: cogs/member.py:94
-msgid "Update your settings."
-msgstr ""
-
-#: cogs/member.py:97
+#: cogs/member.py:95 cogs/member.py:99
 msgid "`[Premium]` Update your settings."
 msgstr ""
 
-#: cogs/member.py:102
-msgid "Set a custom color for the embeds."
+#: cogs/member.py:104
+msgid "`[Premium]` Set a custom color for the embeds."
 msgstr ""
 
-#: cogs/member.py:106
+#: cogs/member.py:108
 msgid ""
 "`[Premium]` Set a custom color for the embeds.\n"
 "\n"
@@ -1017,15 +1012,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/member.py:124
+#: cogs/member.py:126
 msgid "Color already set to default."
 msgstr ""
 
-#: cogs/member.py:126
+#: cogs/member.py:128
 msgid "Color successfully reset."
 msgstr ""
 
-#: cogs/member.py:132
+#: cogs/member.py:134
 msgid "Color successfully set."
 msgstr ""
 
@@ -1055,11 +1050,6 @@ msgstr ""
 
 #: classes/player.py:195
 msgid "Competitive"
-msgstr ""
-
-#: classes/player.py:209
-#, python-brace-format
-msgid "Page {current}/{total}"
 msgstr ""
 
 #: classes/player.py:217
@@ -1103,17 +1093,17 @@ msgid ""
 "`{platform}`. Please be more specific."
 msgstr ""
 
-#: classes/paginator.py:143
+#: classes/paginator.py:135
 msgid "React with the platform you play on..."
 msgstr ""
 
-#: classes/paginator.py:189
+#: classes/paginator.py:181
 msgid ""
 "\n"
 "Profile to update:"
 msgstr ""
 
-#: classes/context.py:27
+#: classes/context.py:34
 msgid "Are you sure?"
 msgstr ""
 
