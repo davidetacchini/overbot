@@ -99,7 +99,7 @@ async def get_bot_help_pages(ctx, commands):
 
 
 async def get_group_help_pages(ctx, help_command, group, commands):
-    pages = [c async for c in pager(commands, 5)]
+    pages = [p async for p in pager(commands, 5)]
 
     all_pages = []
     for index, page in enumerate(pages, start=1):
