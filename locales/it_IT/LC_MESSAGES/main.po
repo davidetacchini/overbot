@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-15 15:08+0200\n"
+"POT-Creation-Date: 2021-08-02 21:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,38 +17,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: cogs/errors.py:40
+#: cogs/errors.py:35
 #, python-brace-format
 msgid "You are missing a required argument: `{argument}`"
 msgstr "Stai mancando un argomento richiesto: `{argument}`"
 
-#: cogs/errors.py:46
+#: cogs/errors.py:41
 msgid "You are using a bad argument."
 msgstr "Stai utilizzando un argomento sbagliato."
 
-#: cogs/errors.py:49
+#: cogs/errors.py:44
 msgid "You don't have enough permissions."
 msgstr "Non hai abbastanza permessi."
 
-#: cogs/errors.py:54
+#: cogs/errors.py:49
 #, python-brace-format
 msgid "You are on cooldown. Wait `{seconds}s` before running another command."
 msgstr "Attendi `{seconds}s` prima di eseguire un altro comando."
 
-#: cogs/errors.py:60
+#: cogs/errors.py:55
 #, python-brace-format
 msgid "You can't use `{command}` command for `{seconds}s`."
 msgstr "Non puoi utilizzare il comando `{command}` per `{seconds}s`"
 
-#: cogs/errors.py:67
+#: cogs/errors.py:62
 msgid "This command can't be used in direct messages."
 msgstr "Questo comando non può essere utilizzato nei messaggi privati."
 
-#: cogs/errors.py:70
+#: cogs/errors.py:65
 msgid "It seems you do not own this bot."
 msgstr "Sembra che tu non sia lo sviluppatore del bot."
 
-#: cogs/errors.py:76
+#: cogs/errors.py:71
 #, python-brace-format
 msgid ""
 "You haven't linked a profile yet. Use \"{prefix}profile link\" to start."
@@ -56,7 +56,7 @@ msgstr ""
 "Non hai ancora collegato un profilo. Usa \"{prefix}profile link\" per "
 "iniziare."
 
-#: cogs/errors.py:84
+#: cogs/errors.py:79
 #, python-brace-format
 msgid ""
 "Max profiles limit reached.\n"
@@ -65,11 +65,11 @@ msgstr ""
 "Limite massimo di profili raggiunto.\n"
 "[Passa a Premium]({premium}) per poter connettere fino a 25 profili."
 
-#: cogs/errors.py:88
+#: cogs/errors.py:83
 msgid "Max profiles limit reached."
 msgstr "Limite massimo di profili raggiunto."
 
-#: cogs/errors.py:93
+#: cogs/errors.py:88
 #, python-brace-format
 msgid ""
 "This command requires a Premium membership.\n"
@@ -78,11 +78,11 @@ msgstr ""
 "Questo comando richiede un piano Premium.\n"
 "[Clicca qui]({premium}) per dare un'occhiata al piano Premium."
 
-#: cogs/errors.py:105
+#: cogs/errors.py:100
 msgid "The argument you entered cannot be handled."
 msgstr "L'argomento che hai inserito non può essere gestito."
 
-#: cogs/errors.py:136
+#: cogs/errors.py:131
 msgid ""
 "This command ran into an error. The incident has been reported and will be "
 "fixed as soon as possible!"
@@ -90,44 +90,43 @@ msgstr ""
 "Questo comando ha riscontrato un problema. L'incidente è stato riportato e "
 "verrà fixato il prima possible!"
 
-#: cogs/help.py:58
+#: cogs/help.py:45
 msgid "Using the bot"
 msgstr "Uso del bot"
 
-#: cogs/help.py:59
+#: cogs/help.py:46
 msgid "Welcome to the help page!"
 msgstr "Benvenuta/o nella pagina di aiuto!"
 
-#: cogs/help.py:62
+#: cogs/help.py:49
 msgid "<argument>"
 msgstr "<argomento>"
 
-#: cogs/help.py:62
+#: cogs/help.py:49
 msgid "This means the argument is **required**."
 msgstr "Ciò significa the l'argomento è **richiesto**"
 
-#: cogs/help.py:63
+#: cogs/help.py:50
 msgid "[argument]"
 msgstr "[argomento]"
 
-#: cogs/help.py:63
+#: cogs/help.py:50
 msgid "This means the argument is **optional**."
 msgstr "Ciò significa che l'argomento è **opzionale**."
 
-#: cogs/help.py:64
+#: cogs/help.py:51
 msgid "Note"
 msgstr "Nota"
 
-#: cogs/help.py:64
+#: cogs/help.py:51
 msgid "You **must not** include the brackets in the argument."
 msgstr "Non **devi** includere le parentesi nell'argomento."
 
-#: cogs/help.py:71
-#, python-brace-format
-msgid "We were on page {current_page} before this message."
-msgstr "Eravamo alla pagina {current_page} prima di questo messaggio."
+#: cogs/help.py:57
+msgid "Press one of the arrows to go back."
+msgstr "Premi una delle frecce per tornare indietro."
 
-#: cogs/help.py:96
+#: cogs/help.py:68
 #, python-brace-format
 msgid ""
 "[Support]({support}) - [Commands]({website}) - [Translate]({github}) - "
@@ -140,41 +139,41 @@ msgstr ""
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando\n"
 "Usa \"{prefix}help [category]\" per maggiori informazioni su una categoria\n"
 
-#: cogs/help.py:108
+#: cogs/help.py:85
 #, python-brace-format
 msgid "{bot} Command List"
 msgstr "Lista Comandi {bot}"
 
-#: cogs/help.py:119
+#: cogs/help.py:95 classes/player.py:209
 #, python-brace-format
-msgid "Page {current_page}/{maximum}"
-msgstr "Pagina {current_page}/{maximum}"
+msgid "Page {current}/{total}"
+msgstr "Pagina {current}/{total}"
 
-#: cogs/help.py:131
+#: cogs/help.py:107
 #, python-brace-format
 msgid "{group} Commands"
 msgstr "Comandi {group}"
 
-#: cogs/help.py:141 cogs/help.py:180 cogs/member.py:83
+#: cogs/help.py:112 cogs/help.py:149 cogs/member.py:83
 msgid "No help found..."
 msgstr "Nessun aiuto trovato..."
 
-#: cogs/help.py:148
+#: cogs/help.py:117
 #, python-brace-format
-msgid "Page {current_page}/{maximum} ({total_entries} commands)"
-msgstr "Pagina {current_page}/{maximum} ({total_entries} comandi)"
+msgid "Page {current_page}/{total_pages} ({total_commands} commands)"
+msgstr "Pagina {current_page}/{total_pages} ({total_commands} comandi)"
 
-#: cogs/help.py:157
+#: cogs/help.py:126
 #, python-brace-format
 msgid "Use \"{prefix}help [command]\" for more info on a command."
 msgstr ""
 "Usa \"{prefix}help [command]\" per maggiori informazioni su un comando."
 
-#: cogs/help.py:167 cogs/help.py:168
+#: cogs/help.py:136 cogs/help.py:137
 msgid "Shows help about the bot, a command, or a category."
 msgstr "Mostra la guida per il bot, un comando, o una categoria."
 
-#: cogs/help.py:183
+#: cogs/help.py:152
 msgid "Aliases"
 msgstr "Aliases"
 
@@ -552,11 +551,11 @@ msgstr ""
 msgid "Main profile successfully set to:"
 msgstr "Profilo principale impostato correttamente su:"
 
-#: cogs/profile.py:339 classes/paginator.py:142 classes/paginator.py:192
+#: cogs/profile.py:339 classes/paginator.py:134 classes/paginator.py:184
 msgid "Platform"
 msgstr "Piattaforma"
 
-#: cogs/profile.py:340 classes/paginator.py:193
+#: cogs/profile.py:340 classes/paginator.py:185
 msgid "Username"
 msgstr "Nome utente"
 
@@ -654,8 +653,8 @@ msgid "I don't have enough data to create the graph."
 msgstr "Non possiedo dati sufficienti per la creazione del grafico."
 
 #: cogs/profile.py:540
-msgid "Shows SRs performance graph."
-msgstr "Mostra un grafico dell'andamento degli SR."
+msgid "`[Premium]` Shows SRs performance graph."
+msgstr ""
 
 #: cogs/profile.py:544
 msgid ""
@@ -1063,19 +1062,15 @@ msgstr ""
 msgid "{member}'s Settings"
 msgstr "Settaggi di {member}"
 
-#: cogs/member.py:94
-msgid "Update your settings."
-msgstr "Aggiorna i tuoi settaggi."
-
-#: cogs/member.py:97
+#: cogs/member.py:95 cogs/member.py:99
 msgid "`[Premium]` Update your settings."
 msgstr "`[Premium]` Aggiorna i tuoi settaggi."
 
-#: cogs/member.py:102
-msgid "Set a custom color for the embeds."
-msgstr "Imposta un colore personalizzato per gli embeds."
+#: cogs/member.py:104
+msgid "`[Premium]` Set a custom color for the embeds."
+msgstr ""
 
-#: cogs/member.py:106
+#: cogs/member.py:108
 msgid ""
 "`[Premium]` Set a custom color for the embeds.\n"
 "\n"
@@ -1090,15 +1085,15 @@ msgid ""
 "        "
 msgstr ""
 
-#: cogs/member.py:124
+#: cogs/member.py:126
 msgid "Color already set to default."
 msgstr "Il colore è già impostato su predefinito."
 
-#: cogs/member.py:126
+#: cogs/member.py:128
 msgid "Color successfully reset."
 msgstr "Colore resettato con successo."
 
-#: cogs/member.py:132
+#: cogs/member.py:134
 msgid "Color successfully set."
 msgstr "Colore impostate con successo."
 
@@ -1132,11 +1127,6 @@ msgstr "Rapida"
 #: classes/player.py:195
 msgid "Competitive"
 msgstr "Competitiva"
-
-#: classes/player.py:209
-#, python-brace-format
-msgid "Page {current}/{total}"
-msgstr "Pagina {current}/{total}"
 
 #: classes/player.py:217
 msgid "This profile is set to private"
@@ -1186,11 +1176,11 @@ msgid ""
 "`{platform}`. Please be more specific."
 msgstr ""
 
-#: classes/paginator.py:143
+#: classes/paginator.py:135
 msgid "React with the platform you play on..."
 msgstr "Reagisci con la piattaforma sulla quale giochi..."
 
-#: classes/paginator.py:189
+#: classes/paginator.py:181
 msgid ""
 "\n"
 "Profile to update:"
@@ -1198,7 +1188,7 @@ msgstr ""
 "\n"
 "Profilo a aggiornare:"
 
-#: classes/context.py:27
+#: classes/context.py:34
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
@@ -1206,52 +1196,3 @@ msgstr "Sei sicuro?"
 #, python-brace-format
 msgid "Unknown hero: **{hero}**."
 msgstr "Eroe sconosciuto: **{hero}**."
-
-#~ msgid "Unlink an Overwatch profile."
-#~ msgstr "Scollega un profilo Overwatch."
-
-#~ msgid "Update an Overwatch profile."
-#~ msgstr "Aggiorna un profilo Overwatch."
-
-#~ msgid ""
-#~ "Update an Overwatch profile.\n"
-#~ "\n"
-#~ "        `<index>` - The profile's index to update.\n"
-#~ "        "
-#~ msgstr ""
-#~ "Aggiorna un profilo Overwatch.\n"
-#~ "\n"
-#~ "        `<index>` - L'indice del profilo da aggiornare.\n"
-#~ "        "
-
-#~ msgid "Shows a member's ratings."
-#~ msgstr "Mostra i ratings di un membro."
-
-#~ msgid "Shows a profile's general stats."
-#~ msgstr "Mostra le statistiche generali di un profilo."
-
-#~ msgid "Shows a profile's general stats for a given hero."
-#~ msgstr "Mostra le statistiche generali di un profilo per un dato eroe."
-
-#~ msgid ""
-#~ "`[Premium]` Shows a profile's SRs graph performance.\n"
-#~ "\n"
-#~ "        `[index]` - The profile's index to see the SR graph for.\n"
-#~ "\n"
-#~ "        If no index is given, the profile used will be the main one.\n"
-#~ "        "
-#~ msgstr ""
-#~ "`[Premium]` Mostra un grafico raffigurante l'andamento degli SRs di un "
-#~ "profilo.\n"
-#~ "\n"
-#~ "        `[index]` - L'indice del profilo di cui vedere l'andamento.\n"
-#~ "\n"
-#~ "        Se l'indice non viene passato, il profilo usato sarà il "
-#~ "principale.\n"
-#~ "        "
-
-#~ msgid "Shows a graph of a profile's SRs performance."
-#~ msgstr "Mostra un grafico dell'andamento degli SRs di un profilo."
-
-#~ msgid "Returns a random hero to play."
-#~ msgstr "Ritorna un eroe random."
