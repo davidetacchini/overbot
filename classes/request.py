@@ -49,10 +49,15 @@ class UnexpectedError(RequestError):
 
 class TooManyAccounts(RequestError):
     def __init__(self, platform, username, players):
+        if platform == "pc":
+            fmt = "BattleTag"
+        elif platform == "nintendo-switch":
+            fmt = "Nitendo ID"
         message = _(
             "**{players}** accounts found under the name of `{username}`"
-            " playing on `{platform}`. Please be more specific."
-        ).format(players=players, username=username, platform=platform)
+            " playing on `{platform}`. Please be more specific by entering"
+            " your full {fmt}."
+        ).format(players=players, username=username, platform=platform, fmt=fmt)
         super().__init__(message)
 
 
@@ -69,7 +74,6 @@ class Request:
     def account_url(self):
         return config.overwatch["account"] + "/" + self.username + "/"
 
-    # TODO: refactor
     async def resolve_name(self, players):
         if len(players) == 1:
             return players[0]["urlName"]
