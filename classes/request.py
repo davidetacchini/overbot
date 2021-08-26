@@ -118,7 +118,10 @@ class Request:
 
     async def resolve_response(self, response):
         if response.status == 200:
-            return await response.json()
+            data = await response.json()
+            if data.get("error"):
+                raise UnexpectedError()
+            return data
         elif response.status == 400:
             raise BadRequest()
         elif response.status == 404:
