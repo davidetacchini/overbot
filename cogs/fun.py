@@ -170,10 +170,14 @@ class Fun(commands.Cog):
         Memes are taken from the subreddit r/Overwatch_Memes.
         """
         )
-        category = category or secrets.choice(MEME_CATEGORIES)
-        meme = await self.get_meme(category)
-        embed = self.embed_meme(ctx, meme)
-        await ctx.send(embed=embed)
+        await ctx.send(
+            "This command is currently not available because **OverBot"
+            " has been rate limited by Reddit**. Sorry for the inconvenience."
+        )
+        # category = category or secrets.choice(MEME_CATEGORIES)
+        # meme = await self.get_meme(category)
+        # embed = self.embed_meme(ctx, meme)
+        # await ctx.send(embed=embed)
 
 
 def setup(bot):
