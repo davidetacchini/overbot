@@ -12,7 +12,6 @@ from discord.ext import commands
 
 import config
 
-from utils import i18n
 from utils.time import human_timedelta
 from utils.checks import global_cooldown
 from utils.scrape import get_overwatch_maps, get_overwatch_heroes
@@ -91,12 +90,6 @@ class Bot(commands.AutoShardedBot):
         if not self.is_ready():
             return
         await self.process_commands(message)
-
-    async def invoke(self, ctx):
-        member_id = ctx.message.author.id
-        locale = await self.get_cog("Locale").update_locale(member_id)
-        i18n.current_locale.set(locale)
-        await super().invoke(ctx)
 
     async def _get_prefix(self, bot, message):
         if not message.guild:
