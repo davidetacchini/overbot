@@ -135,7 +135,8 @@ class Owner(commands.Cog):
         updated_modules = "\n".join(
             f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
-        if not await ctx.prompt(f"This will update the following modules?\n{updated_modules}"):
+        prompt = await ctx.prompt(f"This will update the following modules?\n{updated_modules}")
+        if prompt:
             return
 
         statuses = []
