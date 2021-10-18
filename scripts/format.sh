@@ -1,4 +1,4 @@
 #!/bin/bash
 isort .
-black --exclude=env --line-length=88 .
+black --exclude=env --line-length=100 .
 flake8 .
