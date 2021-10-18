@@ -4,8 +4,6 @@ import discord
 
 from discord.ext import commands
 
-from utils.i18n import _, locale
-
 MEME_CATEGORIES = ("hot", "new", "top", "rising")
 
 
@@ -22,7 +20,7 @@ def valid_hero_cat(argument):
     try:
         category = valid[argument.lower()]
     except KeyError:
-        raise commands.BadArgument(_("Unknown hero category.")) from None
+        raise commands.BadArgument("Unknown hero category.") from None
     return category
 
 
@@ -43,14 +41,14 @@ def valid_map_cat(argument):
     try:
         category = valid[argument.lower()]
     except KeyError:
-        raise commands.BadArgument(_("Unknown map category.")) from None
+        raise commands.BadArgument("Unknown map category.") from None
     return category
 
 
 def valid_meme_cat(argument):
     argument = argument.lower()
     if argument not in MEME_CATEGORIES:
-        raise commands.BadArgument(_("Unknown meme category."))
+        raise commands.BadArgument("Unknown meme category.")
     return argument
 
 
@@ -100,11 +98,9 @@ class Fun(commands.Cog):
         embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
         return embed
 
-    @commands.command(aliases=["htp"], brief=_("Returns a random hero."))
-    @locale
+    @commands.command(aliases=["htp"], brief="Returns a random hero.")
     async def herotoplay(self, ctx, category: valid_hero_cat = None):
-        _(
-            """Returns a random hero to play.
+        """Returns a random hero to play.
 
         `[category]` - The category to get a random hero from.
 
@@ -116,22 +112,18 @@ class Fun(commands.Cog):
 
         If no category is given, a random hero is chosen from all categories.
         """
-        )
         hero = self.get_random_hero(category)
         await ctx.send(hero)
 
-    @commands.command(aliases=["rtp"], brief=_("Returns a random role."))
-    @locale
+    @commands.command(aliases=["rtp"], brief="Returns a random role.")
     async def roletoplay(self, ctx):
-        _("""Returns a random role to play.""")
+        """Returns a random role to play."""
         roles = ("Tank", "Damage", "Support", "Flex")
         await ctx.send(secrets.choice(roles))
 
-    @commands.command(aliases=["mtp"], brief=_("Returns a random map."))
-    @locale
+    @commands.command(aliases=["mtp"], brief="Returns a random map.")
     async def maptoplay(self, ctx, *, category: valid_map_cat = None):
-        _(
-            """Returns a random map.
+        """Returns a random map.
 
         `[category]` - The category to get a random map from.
 
@@ -148,15 +140,12 @@ class Fun(commands.Cog):
 
         If no category is given, a random map is chosen from all categories.
         """
-        )
         map_ = self.get_random_map(ctx, category)
         await ctx.send(map_)
 
-    @commands.command(brief=_("Returns a random meme."))
-    @locale
+    @commands.command(brief="Returns a random meme.")
     async def meme(self, ctx, category: valid_meme_cat = None):
-        _(
-            """Returns a random Overwatch meme.
+        """Returns a random Overwatch meme.
 
         `[category]` - The category to get a random meme from.
 
@@ -169,7 +158,6 @@ class Fun(commands.Cog):
 
         Memes are taken from the subreddit r/Overwatch_Memes.
         """
-        )
         await ctx.send(
             "This command is currently not available because **OverBot"
             " has been rate limited by Reddit**. Sorry for the inconvenience."

@@ -1,34 +1,28 @@
 from discord.ext import commands
 
-from utils.i18n import _, locale
-
 
 class Links(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(brief=_("Returns support server link."))
-    @locale
+    @commands.command(brief="Returns support server link.")
     async def support(self, ctx):
-        _("""Returns the official bot support server invite link.""")
+        """Returns the official bot support server invite link."""
         await ctx.send(self.bot.config.support)
 
-    @commands.command(brief=_("Returns bot vote link."))
-    @locale
+    @commands.command(brief="Returns bot vote link.")
     async def vote(self, ctx):
-        _("""Returns bot vote link.""")
+        """Returns bot vote link."""
         await ctx.send(self.bot.config.vote)
 
-    @commands.command(brief=_("Returns bot invite link."))
-    @locale
+    @commands.command(brief="Returns bot invite link.")
     async def invite(self, ctx):
-        _("""Returns bot invite link.""")
+        """Returns bot invite link."""
         await ctx.send(self.bot.config.invite)
 
-    @commands.command(aliases=["git"], brief=_("Returns the bot GitHub repository."))
-    @locale
+    @commands.command(aliases=["git"], brief="Returns the bot GitHub repository.")
     async def github(self, ctx):
-        _("""Returns the bot GitHub repository.""")
+        """Returns the bot GitHub repository."""
         await ctx.send(self.bot.config.github["repo"])
 
 

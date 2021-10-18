@@ -17,8 +17,8 @@ async def get_overwatch_status():
     return page.find(class_="entry-title").get_text()
 
 
-async def get_overwatch_news(locale, *, amount):
-    content = await fetch(config.overwatch["news"].format(locale))
+async def get_overwatch_news(amount):
+    content = await fetch(config.overwatch["news"])
     page = BeautifulSoup(content, features="html.parser")
     news = page.find("section", {"class", "NewsHeader-featured"})
     news = list(news)[:amount]
@@ -36,8 +36,8 @@ async def get_overwatch_news(locale, *, amount):
     return all_news
 
 
-async def get_overwatch_patch_notes(locale):
-    content = await fetch(config.overwatch["patch"].format(locale, ""))
+async def get_overwatch_patch_notes():
+    content = await fetch(config.overwatch["patch"])
     page = BeautifulSoup(content, features="html.parser")
     patch_notes = page.find("div", {"class": "PatchNotes-types"})
     types = patch_notes.find_all("button", {"class": "PatchNotes-type"})

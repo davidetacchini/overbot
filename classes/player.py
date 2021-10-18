@@ -4,8 +4,6 @@ from datetime import date
 
 import discord
 
-from utils.i18n import _
-
 ROLES = {
     "tank": "<:tank:645784573141319722>",
     "damage": "<:damage:645784543093325824>",
@@ -22,16 +20,14 @@ class PlayerException(Exception):
 class NoStats(PlayerException):
     def __init__(self):
         super().__init__(
-            _("This profile has no quick play nor competitive stats to display.")
+            "This profile has no quick play nor competitive stats to display."
         )
 
 
 class NoHeroStats(PlayerException):
     def __init__(self, hero):
         super().__init__(
-            _(
-                "This profile has no quick play nor competitive stast for **{hero}** to display."
-            ).format(hero=hero)
+            f"This profile has no quick play nor competitive stast for **{hero}** to display."
         )
 
 
@@ -142,7 +138,7 @@ class Player:
         ratings = self.resolve_ratings()
 
         if not ratings:
-            embed.description = _("This profile is unranked.")
+            embed.description = "This profile is unranked."
             return embed
 
         for key, value in ratings.items():
@@ -154,7 +150,7 @@ class Player:
                 value=f"{rating_icon} **{value}**{SR}",
             )
         embed.set_footer(
-            text=_("Average: {average}").format(average=self.data.get("rating")),
+            text="Average: {average}".format(average=self.data.get("rating")),
             icon_url=self.data.get("ratingIcon"),
         )
 
@@ -187,10 +183,10 @@ class Player:
     def format_stats(self, embed, key, quickplay, competitive):
         if quickplay and quickplay[key]:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-            embed.add_field(name=_("Quickplay"), value=self.to_pascal(q_t))
+            embed.add_field(name="Quickplay", value=self.to_pascal(q_t))
         if competitive and competitive[key]:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
-            embed.add_field(name=_("Competitive"), value=self.to_pascal(c_t))
+            embed.add_field(name="Competitive", value=self.to_pascal(c_t))
 
     def get_stats(self, ctx, hero):
         keys, quickplay, competitive = self.resolve_stats(hero)
@@ -203,17 +199,15 @@ class Player:
                 embed.set_thumbnail(url=self.level_icon)
             else:
                 embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
-            embed.set_footer(
-                text=_("Page {current}/{total}").format(current=i, total=len(keys))
-            )
+            embed.set_footer(text=f"Page {i}/{len(keys)}")
             self.format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
     def private(self):
         embed = discord.Embed(color=discord.Color.red())
-        embed.title = _("This profile is set to private")
-        embed.description = _(
+        embed.title = "This profile is set to private"
+        embed.description = (
             "Profiles are set to private by default."
             " You can modify this setting in Overwatch under `Options - Social`."
             " Please note that these changes may take effect after approximately 30 minutes."

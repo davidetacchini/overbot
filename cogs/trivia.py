@@ -6,7 +6,6 @@ import discord
 
 from discord.ext import commands
 
-from utils.i18n import _, locale
 from classes.paginator import Choose
 
 
@@ -24,9 +23,7 @@ class Trivia(commands.Cog):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
-        footer = _("You have 1 try and {timeout} seconds to respond.").format(
-            timeout=timeout
-        )
+        footer = f"You have 1 try and {timeout} seconds to respond."
         answer = await Choose(
             shuffled,
             timeout=timeout,
@@ -60,24 +57,21 @@ class Trivia(commands.Cog):
 
     def embed_result(self, member, *, won=True, correct_answer=None):
         embed = discord.Embed()
-        embed.set_author(name=str(member), icon_url=member.avatar_url)
+        embed.set_author(name=str(member), icon_url=member.display_avatar)
         if won:
             embed.color = discord.Color.green()
-            embed.title = _("Correct!")
-            embed.set_footer(text=_("+1 win"))
+            embed.title = "Correct!"
+            embed.set_footer(text="+1 win")
         else:
             embed.color = discord.Color.red()
-            embed.title = _("Wrong!")
-            embed.set_footer(text=_("+1 loss"))
-            embed.add_field(name=_("Correct answer"), value=correct_answer)
+            embed.title = "Wrong!"
+            embed.set_footer(text="+1 loss")
+            embed.add_field(name="Correct answer", value=correct_answer)
         return embed
 
-    @commands.group(
-        invoke_without_command=True, brief=_("Play an Overwatch trivia game.")
-    )
-    @locale
+    @commands.group(invoke_without_command=True, brief="Play an Overwatch trivia game.")
     async def trivia(self, ctx):
-        _("""Play an Overwatch trivia game.""")
+        """Play an Overwatch trivia game."""
         question = self.get_question()
         await self.update_member_games_started(ctx.author.id)
         result = await self.get_result(ctx, question)
@@ -95,7 +89,7 @@ class Trivia(commands.Cog):
         query = "SELECT * FROM trivia WHERE id = $1;"
         member_stats = await self.bot.pool.fetchrow(query, member.id)
         if not member_stats:
-            raise commands.BadArgument(_("This member has no stats to show."))
+            raise commands.BadArgument("This member has no stats to show.")
         return member_stats
 
     def get_player_ratio(self, won, lost):
@@ -108,44 +102,38 @@ class Trivia(commands.Cog):
 
     def embed_member_stats(self, member, stats):
         embed = discord.Embed(color=self.bot.color(member.id))
-        embed.set_author(name=str(member), icon_url=member.avatar_url)
+        embed.set_author(name=str(member), icon_url=member.display_avatar)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
         ratio = self.get_player_ratio(stats["won"], stats["lost"])
-        embed.add_field(name=_("Total"), value=stats["started"])
-        embed.add_field(name=_("Won"), value=stats["won"])
-        embed.add_field(name=_("Lost"), value=stats["lost"])
-        embed.add_field(name=_("Ratio (W/L)"), value="%.2f" % ratio)
-        embed.add_field(name=_("Unanswered"), value=unanswered)
+        embed.add_field(name="Total", value=stats["started"])
+        embed.add_field(name="Won", value=stats["won"])
+        embed.add_field(name="Lost", value=stats["lost"])
+        embed.add_field(name="Ratio (W/L)", value="%.2f" % ratio)
+        embed.add_field(name="Unanswered", value=unanswered)
         return embed
 
-    @trivia.command(brief=_("Shows a member's trivia stats."))
-    @locale
+    @trivia.command(brief="Shows a member's trivia stats.")
     async def stats(self, ctx, member: discord.Member = None):
-        _(
-            """Shows trivia stats.
+        """Shows trivia stats.
 
         `[member]` - The mention or the ID of a discord member of the current server.
 
         If no member is given then the stats returned will be yours.
         """
-        )
         member = member or ctx.author
         stats = await self.get_member_stats(member)
         embed = self.embed_member_stats(member, stats)
         await ctx.send(embed=embed)
 
-    @trivia.command(brief=_("Shows top 10 trivia players."))
+    @trivia.command(brief="Shows top 10 trivia players.")
     @commands.cooldown(1, 60.0, commands.BucketType.member)
-    @locale
     async def best(self, ctx):
-        _(
-            """Shows top 10 trivia players.
+        """Shows top 10 trivia players.
 
         It is based on games won.
 
         You can use this command once per minute.
         """
-        )
         async with ctx.typing():
             query = """SELECT id, started, won, lost
                        FROM trivia
@@ -155,16 +143,14 @@ class Trivia(commands.Cog):
                     """
             players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
-            embed.title = _("Best Trivia Players")
+            embed.title = "Best Trivia Players"
 
             board = []
             for index, player in enumerate(players, start=1):
                 cur_player = await self.bot.fetch_user(player["id"])
                 ratio = self.get_player_ratio(player["won"], player["lost"])
                 board.append(
-                    _(
-                        "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}"
-                    ).format(
+                    "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}".format(
                         index=index,
                         player=str(cur_player),
                         played=player["started"],
