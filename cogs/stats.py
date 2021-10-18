@@ -1,6 +1,5 @@
 from discord.ext import commands
 
-from utils.i18n import _, locale
 from classes.player import Player
 from classes.request import Request
 from classes.converters import Hero
@@ -25,7 +24,7 @@ def valid_platform(argument):
     try:
         platform = valid[argument.lower()]
     except KeyError:
-        raise commands.BadArgument(_("Unknown platform.")) from None
+        raise commands.BadArgument("Unknown platform.") from None
     return platform
 
 
@@ -42,11 +41,9 @@ class Stats(commands.Cog):
             embed = profile.get_stats(ctx, hero)
         await self.bot.paginator.Paginator(pages=embed).start(ctx)
 
-    @commands.command(aliases=["rank", "sr"], brief=_("Returns player ratings."))
-    @locale
+    @commands.command(aliases=["rank", "sr"], brief="Returns player ratings.")
     async def rating(self, ctx, platform: valid_platform, *, username):
-        _(
-            """Returns player ratings.
+        """Returns player ratings.
 
         `<platform>` - The platform of the player to get ranks for.
         `<username>` - The username of the player to get ranks for.
@@ -65,7 +62,6 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
-        )
         async with ctx.typing():
             data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
@@ -75,11 +71,9 @@ class Stats(commands.Cog):
                 embed = await profile.get_ratings(ctx)
             await ctx.send(embed=embed)
 
-    @commands.command(brief=_("Returns player general stats"))
-    @locale
+    @commands.command(brief="Returns player general stats")
     async def stats(self, ctx, platform: valid_platform, *, username):
-        _(
-            """Returns player general stats.
+        """Returns player general stats.
 
         `<platform>` - The platform of the player to get stats for.
         `<username>` - The username of the player to get stats for.
@@ -98,12 +92,10 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
-        )
         async with ctx.typing():
             await self.show_stats_for(ctx, "allHeroes", platform, username)
 
-    @commands.command(brief=_("Returns player general stats for a given hero."))
-    @locale
+    @commands.command(brief="Returns player general stats for a given hero.")
     async def hero(
         self,
         ctx,
@@ -112,8 +104,7 @@ class Stats(commands.Cog):
         *,
         username,
     ):
-        _(
-            """Returns player general stats for a given hero.
+        """Returns player general stats for a given hero.
 
         `<hero>` - The name of the hero to get the stats for.
         `<platform>` - The platform of the player to get stats for.
@@ -133,7 +124,6 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Switch ID (format: name-code)
         """
-        )
         async with ctx.typing():
             await self.show_stats_for(ctx, hero, platform, username)
 

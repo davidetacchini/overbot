@@ -8,7 +8,6 @@ from pygicord import PaginationError
 from discord.ext import commands
 
 from utils import checks
-from utils.i18n import _, locale
 from classes.player import PlayerException
 from classes.request import RequestError
 from classes.exceptions import NoChoice
@@ -18,7 +17,6 @@ class ErrorHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @locale
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if ctx.command and ctx.command.has_error_handler():
@@ -31,63 +29,56 @@ class ErrorHandler(commands.Cog):
             return
 
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(
-                _("You are missing a required argument: `{argument}`").format(
-                    argument=error.param.name
-                )
-            )
+            argument = error.param.name
+            await ctx.send(f"You are missing a required argument: `{argument}`")
 
         elif isinstance(error, commands.BadArgument):
-            await ctx.send(error or _("You are using a bad argument."))
+            await ctx.send(error or "You are using a bad argument.")
 
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.send(_("You don't have enough permissions."))
+            await ctx.send("You don't have enough permissions.")
 
         elif isinstance(error, checks.MemberOnCooldown):
+            seconds = round(error.retry_after, 2)
             await ctx.send(
-                _(
-                    "You are on cooldown. Wait `{seconds}s` before running another command."
-                ).format(seconds=round(error.retry_after, 2))
+                f"You are on cooldown. Wait `{seconds}s` before running another command."
             )
 
         elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(
-                _("You can't use `{command}` command for `{seconds}s`.").format(
-                    command=ctx.command.qualified_name,
-                    seconds=round(error.retry_after, 2),
-                )
-            )
+            command = ctx.command.qualified_name
+            seconds = round(error.retry_after, 2)
+            await ctx.send(f"You can't use `{command}` command for `{seconds}s`.")
 
         elif isinstance(error, commands.NoPrivateMessage):
-            await ctx.author.send(_("This command can't be used in direct messages."))
+            await ctx.author.send("This command can't be used in direct messages.")
 
         elif isinstance(error, commands.NotOwner):
-            await ctx.send(_("It seems you do not own this bot."))
+            await ctx.send("It seems you do not own this bot.")
 
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
-                    _(
-                        'You haven\'t linked a profile yet. Use "{prefix}profile link" to start.'
-                    ).format(prefix=ctx.prefix)
+                    f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile link" to start.'
                 )
 
             elif type(error) == checks.ProfileLimitReached:
                 if error.limit == 5:
+                    premium = self.bot.config.premium
                     embed = discord.Embed(color=discord.Color.red())
-                    embed.description = _(
-                        "Max profiles limit reached.\n[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
-                    ).format(premium=self.bot.config.premium)
+                    embed.description = (
+                        "Max profiles limit reached.\n"
+                        f"[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
+                    )
                     await ctx.send(embed=embed)
                 else:
-                    await ctx.send(_("Max profiles limit reached."))
+                    await ctx.send("Max profiles limit reached.")
 
             elif type(error) == checks.MemberIsNotPremium:
+                premium = self.bot.config.premium
                 embed = discord.Embed(color=discord.Color.red())
-                embed.description = _(
-                    "This command requires a Premium membership.\n[Click here]({premium}) to have a look at the Premium plan.".format(
-                        premium=self.bot.config.premium
-                    )
+                embed.description = (
+                    "This command requires a Premium membership.\n"
+                    f"[Click here]({premium}) to have a look at the Premium plan."
                 )
                 await ctx.send(embed=embed)
 
@@ -97,12 +88,14 @@ class ErrorHandler(commands.Cog):
             if isinstance(original, discord.HTTPException):
                 return
             elif isinstance(original, DataError):
-                await ctx.send(_("The argument you entered cannot be handled."))
+                await ctx.send("The argument you entered cannot be handled.")
             elif isinstance(original, group):
                 await ctx.send(original)
             else:
                 embed = discord.Embed(color=discord.Color.red())
-                embed.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+                embed.set_author(
+                    name=str(ctx.author), icon_url=ctx.author.display_avatar
+                )
                 embed.add_field(name="Command", value=ctx.command.qualified_name)
                 content = textwrap.shorten(ctx.message.content, width=512)
                 embed.add_field(name="Content", value=content)
@@ -127,9 +120,7 @@ class ErrorHandler(commands.Cog):
                 else:
                     print(original, type(original))
                 await ctx.send(
-                    _(
-                        "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
-                    )
+                    "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
                 )
 
 

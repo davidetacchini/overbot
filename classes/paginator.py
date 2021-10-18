@@ -6,8 +6,6 @@ import discord
 
 from pygicord import CannotAddReactions, CannotUseExternalEmojis
 
-from utils.i18n import _
-
 from .exceptions import NoChoice
 
 PLATFORMS = {
@@ -60,7 +58,7 @@ class BasePaginator:
 
     def init_embed(self):
         embed = discord.Embed(color=self.bot.color(self.author.id))
-        embed.set_author(name=str(self.author), icon_url=self.author.avatar_url)
+        embed.set_author(name=str(self.author), icon_url=self.author.display_avatar)
 
         if self.title:
             if len(self.title) <= 256:
@@ -131,8 +129,8 @@ class BasePaginator:
 
 class Link(BasePaginator):
     def __init__(self):
-        title = _("Platform")
-        footer = _("React with the platform you play on...")
+        title = "Platform"
+        footer = "React with the platform you play on..."
         super().__init__(title=title, footer=footer)
         self.emojis = {
             "<:battlenet:679469162724196387>": "pc",
@@ -178,11 +176,11 @@ class Update(Link):
         self.author = ctx.author
         self.update_embed()
 
-        self.description.append(_("\nProfile to update:"))
+        self.description.append("\nProfile to update:")
         self.embed.description = "\n".join(self.description)
 
-        self.embed.add_field(name=_("Platform"), value=self.platform)
-        self.embed.add_field(name=_("Username"), value=self.username)
+        self.embed.add_field(name="Platform", value=self.platform)
+        self.embed.add_field(name="Username", value=self.username)
         return await super(Link, self).start(ctx)
 
 

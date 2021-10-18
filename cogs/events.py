@@ -49,7 +49,7 @@ class Events(commands.Cog):
             -----------------
             Connection established.
             Logged in as {self.bot.user.display_name} - {self.bot.user.id}
-            Using discord.py {discord.__version__}
+            Using py-cord {discord.__version__}
             Running {self.bot.user.display_name} {self.bot.version} in {len(self.bot.guilds)} guilds
             -----------------
             """

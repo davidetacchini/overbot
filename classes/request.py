@@ -2,8 +2,6 @@ import aiohttp
 
 import config
 
-from utils.i18n import _
-
 
 class RequestError(Exception):
 
@@ -12,38 +10,32 @@ class RequestError(Exception):
 
 class NotFound(RequestError):
     def __init__(self):
-        super().__init__(_("Player not found."))
+        super().__init__("Player not found.")
 
 
 class BadRequest(RequestError):
     def __init__(self):
-        super().__init__(
-            _("Wrong BattleTag format entered! Correct format: `name#0000`")
-        )
+        super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
 
 
 class InternalServerError(RequestError):
     def __init__(self):
         super().__init__(
-            _(
-                "The API is having internal server problems. Please be patient and try again later."
-            )
+            "The API is having internal server problems. Please be patient and try again later."
         )
 
 
 class ServiceUnavailable(RequestError):
     def __init__(self):
         super().__init__(
-            _("The API is under maintenance. Please be patient and try again later.")
+            "The API is under maintenance. Please be patient and try again later."
         )
 
 
 class UnexpectedError(RequestError):
     def __init__(self):
         super().__init__(
-            _(
-                "Something bad happened during the request. Please be patient and try again."
-            )
+            "Something bad happened during the request. Please be patient and try again."
         )
 
 
@@ -53,11 +45,11 @@ class TooManyAccounts(RequestError):
             fmt = "BattleTag"
         elif platform == "nintendo-switch":
             fmt = "Nitendo ID"
-        message = _(
-            "**{players}** accounts found under the name of `{username}`"
-            " playing on `{platform}`. Please be more specific by entering"
-            " your full {fmt}."
-        ).format(players=players, username=username, platform=platform, fmt=fmt)
+        message = (
+            f"**{players}** accounts found under the name of `{username}`"
+            f" playing on `{platform}`. Please be more specific by entering"
+            f" your full {fmt}."
+        )
         super().__init__(message)
 
 
