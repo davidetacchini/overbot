@@ -46,7 +46,7 @@ class Commands(commands.Cog):
                     guild_id,
                     ctx.channel.id,
                     ctx.author.id,
-                    ctx.message.created_at,
+                    ctx.message.created_at.utcnow(),
                     ctx.prefix,
                     ctx.command_failed,
                 )
