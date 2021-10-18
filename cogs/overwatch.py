@@ -2,6 +2,7 @@ import discord
 
 from discord.ext import commands
 
+from utils import emojis
 from utils.scrape import get_overwatch_news, get_overwatch_status, get_overwatch_patch_notes
 
 
@@ -15,8 +16,8 @@ class Overwatch(commands.Cog):
 
     def format_overwatch_status(self, status):
         if status.lower() in self.statuses:
-            return (f"<:online:648186001361076243> {status}", discord.Color.green())
-        return (f"<:dnd:648185968209428490> {status}", discord.Color.red())
+            return (f"{emojis.online} {status}", discord.Color.green())
+        return (f"{emojis.dnd} {status}", discord.Color.red())
 
     @commands.command(brief="Shows Overwatch servers status.")
     @commands.cooldown(1, 30.0, commands.BucketType.member)

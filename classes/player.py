@@ -4,12 +4,13 @@ from datetime import date
 
 import discord
 
+from utils import emojis
+
 ROLES = {
-    "tank": "<:tank:645784573141319722>",
-    "damage": "<:damage:645784543093325824>",
-    "support": "<:support:645784563322191902>",
+    "tank": emojis.tank,
+    "damage": emojis.damage,
+    "support": emojis.support,
 }
-SR = "<:sr:639897739920146437>"
 
 
 class PlayerException(Exception):
@@ -70,18 +71,18 @@ class Player:
     @staticmethod
     def get_rating_icon(rating):
         if 0 < rating < 1500:
-            return "<:bronze:632281015863214096>"
+            return emojis.bronze
         elif 1500 <= rating < 2000:
-            return "<:silver:632281054211997718>"
+            return emojis.silver
         elif 2000 <= rating < 2500:
-            return "<:gold:632281064596832278>"
+            return emojis.gold
         elif 2500 <= rating < 3000:
-            return "<:platinum:632281092875091998>"
+            return emojis.platinum
         elif 3000 <= rating < 3500:
-            return "<:diamond:632281105571119105>"
+            return emojis.diamond
         elif 3500 <= rating < 4000:
-            return "<:master:632281117394993163>"
-        return "<:grandmaster:632281128966946826>"
+            return emojis.master
+        return emojis.grand_master
 
     def is_private(self):
         return self.data["private"]
@@ -145,7 +146,7 @@ class Player:
             rating_icon = self.get_rating_icon(value)
             embed.add_field(
                 name=f"{role_icon} **{role_name}**",
-                value=f"{rating_icon} **{value}**{SR}",
+                value=f"{rating_icon} **{value}**{emojis.sr}",
             )
         embed.set_footer(
             text="Average: {average}".format(average=self.data.get("rating")),
