@@ -48,10 +48,10 @@ git clone https://github.com/davidetacchini/overbot.git
 cd overbot
 python3 -m venv env
 source env/bin/activate
-pip install -U --upgrade pip setuptools # fix build failing
-pip install -U -r requirements.txt
+pip install --upgrade pip setuptools # fix build failing
+pip install -r requirements.txt
 ./scripts/init.sh
-python3 bot.py # or `systemctl start overbot`
+python3 bot.py
 ```
 
 **MacOS and Windows**
@@ -63,7 +63,7 @@ git clone https://github.com/davidetacchini/overbot.git
 3. Setup a virtual environment
 4. Install the dependencies
 ```bash
-pip install -U -r requirements.txt
+pip install -r requirements.txt
 ```
 5. Rename `config.example.py` to `config.py`
 6. Edit the `config.py` file
