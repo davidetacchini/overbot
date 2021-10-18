@@ -2,11 +2,10 @@ import re
 
 from discord.ext import commands
 
+from utils import emojis
+
 
 class Context(commands.Context):
-    CHECK = "\N{WHITE HEAVY CHECK MARK}"
-    XMARK = "\N{CROSS MARK}"
-
     @property
     def clean_prefix(self):
         user = self.guild.me if self.guild else self.bot.user
@@ -15,11 +14,11 @@ class Context(commands.Context):
 
     def tick(self, opt, label=None):
         lookup = {
-            True: "<:online:648186001361076243>",
-            False: "<:dnd:648185968209428490>",
-            None: "<:offline:648185992360099865>",
+            True: emojis.online,
+            False: emojis.dnd,
+            None: emojis.offline,
         }
-        emoji = lookup.get(opt, "<:dnd:648185968209428490>")
+        emoji = lookup.get(opt, emojis.dnd)
         if label is not None:
             return f"{emoji}: {label}"
         return emoji
