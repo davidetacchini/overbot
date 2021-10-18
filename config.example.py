@@ -59,7 +59,7 @@ discord_bots = {
 owner_id = 285502621295312896
 
 """The version of the Bot."""
-version = "3.5.0"
+version = "4.0.0"
 
 """Prefix used if custom is not set."""
 default_prefix = "-"
@@ -115,7 +115,7 @@ vote = "https://top.gg/bot/547546531666984961/vote"
 """Premium URL."""
 premium = "https://overbot.netlify.app/premium"
 
-"""Guilds to ignore when getting data from DB."""
+"""Guilds to ignore when getting data from the database."""
 ignored_guilds = (
     550685823784321035,
     638339745117896745,
