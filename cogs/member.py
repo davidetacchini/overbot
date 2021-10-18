@@ -37,9 +37,7 @@ class Member(commands.Cog):
 
         to_check = (member, guild)
         if all(x == "N/A" for x in to_check):
-            link = "[Upgrade to Premium]({premium})".format(
-                premium=self.bot.config.premium
-            )
+            link = "[Upgrade to Premium]({premium})".format(premium=self.bot.config.premium)
             description = description + "\n" + link
 
         embed.description = description
@@ -85,9 +83,7 @@ class Member(commands.Cog):
         return embed
 
     @is_premium()
-    @commands.group(
-        invoke_without_command=True, brief="`[Premium]` Update your settings."
-    )
+    @commands.group(invoke_without_command=True, brief="`[Premium]` Update your settings.")
     async def settings(self, ctx):
         """`[Premium]` Update your settings."""
         embed = await self.embed_member_settings(ctx, ctx.command)

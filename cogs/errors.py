@@ -93,9 +93,7 @@ class ErrorHandler(commands.Cog):
                 await ctx.send(original)
             else:
                 embed = discord.Embed(color=discord.Color.red())
-                embed.set_author(
-                    name=str(ctx.author), icon_url=ctx.author.display_avatar
-                )
+                embed.set_author(name=str(ctx.author), icon_url=ctx.author.display_avatar)
                 embed.add_field(name="Command", value=ctx.command.qualified_name)
                 content = textwrap.shorten(ctx.message.content, width=512)
                 embed.add_field(name="Content", value=content)

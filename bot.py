@@ -188,9 +188,7 @@ class Bot(commands.AutoShardedBot):
 
     async def start(self, *args, **kwargs):
         self.session = ClientSession(loop=self.loop)
-        self.pool = await asyncpg.create_pool(
-            **config.database, max_size=20, command_timeout=60.0
-        )
+        self.pool = await asyncpg.create_pool(**config.database, max_size=20, command_timeout=60.0)
 
         self.compute_sloc()
         # caching
@@ -206,13 +204,9 @@ class Bot(commands.AutoShardedBot):
                 try:
                     self.load_extension(f"cogs.{extension[:-3]}")
                 except Exception as e:
-                    print(
-                        f"[{colored('ERROR', 'red')}] {extension:20} failed its loading!\n[{e}]"
-                    )
+                    print(f"[{colored('ERROR', 'red')}] {extension:20} failed its loading!\n[{e}]")
                 else:
-                    print(
-                        f"[{colored('OK', 'green')}] {extension:20} successfully loaded"
-                    )
+                    print(f"[{colored('OK', 'green')}] {extension:20} successfully loaded")
         await super().start(config.token, reconnect=True)
 
     async def close(self):
