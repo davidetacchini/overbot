@@ -27,9 +27,7 @@ class InternalServerError(RequestError):
 
 class ServiceUnavailable(RequestError):
     def __init__(self):
-        super().__init__(
-            "The API is under maintenance. Please be patient and try again later."
-        )
+        super().__init__("The API is under maintenance. Please be patient and try again later.")
 
 
 class UnexpectedError(RequestError):

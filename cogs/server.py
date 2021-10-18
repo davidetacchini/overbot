@@ -22,9 +22,7 @@ class Server(commands.Cog):
 
     @commands.command(brief="Either see or change the prefix.")
     @commands.guild_only()
-    async def prefix(
-        self, ctx, prefix: commands.clean_content(escape_markdown=True) = None
-    ):
+    async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
         """Either see the prefix or change it.
 
         `[prefix]` - The new server prefix to use.
@@ -38,19 +36,13 @@ class Server(commands.Cog):
             if ctx.author.guild_permissions.manage_guild:
                 await self.set_prefix(ctx, prefix)
             else:
-                await ctx.send(
-                    "`Manage Server` permission is required to change the prefix."
-                )
+                await ctx.send("`Manage Server` permission is required to change the prefix.")
         else:
             query = "SELECT prefix FROM server WHERE id = $1;"
             pre = await self.bot.pool.fetchval(query, ctx.guild.id)
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
-            embed.set_footer(
-                text='Use "{ctx.clean_prefix}prefix [value]" to change it.'
-            )
-            embed.add_field(
-                name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`"
-            )
+            embed.set_footer(text='Use "{ctx.clean_prefix}prefix [value]" to change it.')
+            embed.add_field(name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`")
             await ctx.send(embed=embed)
 
     @commands.command(brief="Shows OverBot's most active servers.")
@@ -82,9 +74,7 @@ class Server(commands.Cog):
                 if not cur_guild:
                     continue
 
-                board.append(
-                    "{index}. **{guild}** ran a total of **{commands}** commands"
-                ).format(
+                board.append("{index}. **{guild}** ran a total of **{commands}** commands").format(
                     index=index,
                     guild=str(cur_guild),
                     commands=guild["commands"],

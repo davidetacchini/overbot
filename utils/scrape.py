@@ -28,9 +28,9 @@ async def get_overwatch_news(amount):
         cur_news = {}
         cur_news["title"] = n.find("h1", {"class": "Card-title"}).get_text()
         cur_news["link"] = "https://playoverwatch.com" + n["href"]
-        cur_news["thumbnail"] = n.find("div", {"class", "Card-thumbnail"})[
-            "style"
-        ].split("url(")[1][:-1]
+        cur_news["thumbnail"] = n.find("div", {"class", "Card-thumbnail"})["style"].split("url(")[
+            1
+        ][:-1]
         cur_news["date"] = n.find("p", {"class": "Card-date"}).get_text()
         all_news.append(cur_news)
     return all_news
@@ -66,16 +66,12 @@ async def get_overwatch_heroes():
     content = await fetch(config.overwatch["hero"])
     page = BeautifulSoup(content, features="html.parser")
 
-    heroes = [
-        h for h in page.find_all("div", {"class": "hero-portrait-detailed-container"})
-    ]
+    heroes = [h for h in page.find_all("div", {"class": "hero-portrait-detailed-container"})]
 
     all_heroes = []
     for h in heroes:
         cur_hero = {}
-        cur_hero["key"] = h.find("a", {"class": "hero-portrait-detailed"})[
-            "data-hero-id"
-        ]
+        cur_hero["key"] = h.find("a", {"class": "hero-portrait-detailed"})["data-hero-id"]
         cur_hero["name"] = h.find("span", {"class": "portrait-title"}).get_text()
         cur_hero["portrait"] = h.find("img", {"class": "portrait"})["src"]
         cur_hero["role"] = h["data-groups"][2:-2].lower()

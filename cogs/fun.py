@@ -82,8 +82,7 @@ class Fun(commands.Cog):
         memes = [
             meme
             for meme in memes["data"]["children"]
-            if not meme["data"]["secure_media"]
-            or not meme["data"]["is_reddit_media_domain"]
+            if not meme["data"]["secure_media"] or not meme["data"]["is_reddit_media_domain"]
         ]
         return secrets.choice(memes)
 

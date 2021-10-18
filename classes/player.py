@@ -19,9 +19,7 @@ class PlayerException(Exception):
 
 class NoStats(PlayerException):
     def __init__(self):
-        super().__init__(
-            "This profile has no quick play nor competitive stats to display."
-        )
+        super().__init__("This profile has no quick play nor competitive stats to display.")
 
 
 class NoHeroStats(PlayerException):

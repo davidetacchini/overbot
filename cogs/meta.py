@@ -38,12 +38,8 @@ class Meta(commands.Cog):
     @staticmethod
     def format_commit(commit):
         message, _, _ = commit.message.partition("\n")
-        commit_tz = datetime.timezone(
-            datetime.timedelta(minutes=commit.commit_time_offset)
-        )
-        commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(
-            commit_tz
-        )
+        commit_tz = datetime.timezone(datetime.timedelta(minutes=commit.commit_time_offset))
+        commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(commit_tz)
 
         offset = human_timedelta(
             commit_time.astimezone(datetime.timezone.utc).replace(tzinfo=None),
@@ -54,9 +50,7 @@ class Meta(commands.Cog):
     def get_latest_commits(self, count=3):
         repo = pygit2.Repository(".git")
         commits = list(
-            itertools.islice(
-                repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count
-            )
+            itertools.islice(repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count)
         )
         return "\n".join(self.format_commit(c) for c in commits)
 
@@ -82,9 +76,7 @@ class Meta(commands.Cog):
                 icon_url=owner.display_avatar,
             )
 
-            activity = (
-                f"{psutil.cpu_percent()}% CPU\n" f"{psutil.virtual_memory()[2]}% RAM\n"
-            )
+            activity = f"{psutil.cpu_percent()}% CPU\n" f"{psutil.virtual_memory()[2]}% RAM\n"
 
             os_name = distro.linux_distribution()[0]
             os_version = distro.linux_distribution()[1]

@@ -97,9 +97,7 @@ class BasePaginator:
             )
 
         try:
-            reaction, _ = await self.bot.wait_for(
-                "reaction_add", check=check, timeout=self.timeout
-            )
+            reaction, _ = await self.bot.wait_for("reaction_add", check=check, timeout=self.timeout)
         except asyncio.TimeoutError:
             raise NoChoice() from None
         else:
@@ -186,9 +184,7 @@ class Update(Link):
 
 class Choose(BasePaginator):
     def __init__(self, entries, *, timeout, title, image, footer):
-        super().__init__(
-            entries, timeout=timeout, title=title, image=image, footer=footer
-        )
+        super().__init__(entries, timeout=timeout, title=title, image=image, footer=footer)
         self.emojis = []
 
     def result(self, reaction):

@@ -2,11 +2,7 @@ import discord
 
 from discord.ext import commands
 
-from utils.scrape import (
-    get_overwatch_news,
-    get_overwatch_status,
-    get_overwatch_patch_notes,
-)
+from utils.scrape import get_overwatch_news, get_overwatch_status, get_overwatch_patch_notes
 
 
 class Overwatch(commands.Cog):
@@ -39,9 +35,7 @@ class Overwatch(commands.Cog):
             overwatch = await get_overwatch_status()
         except Exception:
             embed.color = self.bot.color(ctx.author.id)
-            embed.description = (
-                f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
-            )
+            embed.description = f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
         else:
             status, color = self.format_overwatch_status(str(overwatch).strip())
             embed.color = color

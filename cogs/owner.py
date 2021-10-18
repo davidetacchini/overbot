@@ -135,9 +135,7 @@ class Owner(commands.Cog):
         updated_modules = "\n".join(
             f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
-        if not await ctx.prompt(
-            f"This will update the following modules?\n{updated_modules}"
-        ):
+        if not await ctx.prompt(f"This will update the following modules?\n{updated_modules}"):
             return
 
         statuses = []
@@ -256,9 +254,7 @@ class Owner(commands.Cog):
             except Exception as e:
                 return await ctx.send(f"```prolog\n{e}```")
             if res:
-                await ctx.send(
-                    f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```"""
-                )
+                await ctx.send(f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```""")
             else:
                 await ctx.send("There are no results.")
 

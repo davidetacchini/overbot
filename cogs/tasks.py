@@ -147,15 +147,9 @@ class Tasks(commands.Cog):
         servers = await self.get_top_servers()
 
         BASE_URL = self.bot.config.obapi["url"]
-        await self.bot.session.post(
-            f"{BASE_URL}/statistics", json=statistics, headers=headers
-        )
-        await self.bot.session.post(
-            f"{BASE_URL}/commands", json=commands, headers=headers
-        )
-        await self.bot.session.post(
-            f"{BASE_URL}/servers", json=servers, headers=headers
-        )
+        await self.bot.session.post(f"{BASE_URL}/statistics", json=statistics, headers=headers)
+        await self.bot.session.post(f"{BASE_URL}/commands", json=commands, headers=headers)
+        await self.bot.session.post(f"{BASE_URL}/servers", json=servers, headers=headers)
 
     @tasks.loop(minutes=30.0)
     async def update(self):
@@ -234,9 +228,7 @@ class Tasks(commands.Cog):
 
         for dono in donations:
             if dono["product_id"] == product_server_id:
-                guild_id = int(
-                    dono["seller_customs"]["Server ID (to be set as premium)"]
-                )
+                guild_id = int(dono["seller_customs"]["Server ID (to be set as premium)"])
                 await self.set_premium_for(guild_id)
                 self.bot.premiums.add(guild_id)
             else:
@@ -247,12 +239,8 @@ class Tasks(commands.Cog):
             # endpoint to mark donation as processed
             url_mark = self.bot.config.dbot["mark"].format(dono["txn_id"])
             payload = {"markProcessed": True}
-            async with self.bot.session.post(
-                url_mark, json=payload, headers=headers
-            ) as r:
-                print(
-                    f'Donation {dono["txn_id"]} has been processed. Status {r.status}'
-                )
+            async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
+                print(f'Donation {dono["txn_id"]} has been processed. Status {r.status}')
 
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
@@ -272,9 +260,7 @@ class Tasks(commands.Cog):
         # Returns whether the news_id it's equals to the one
         # stored in the database. If it is, that specific
         # news has already been sent.
-        if int(news_id) == await self.bot.pool.fetchval(
-            "SELECT news_id FROM news WHERE id=1;"
-        ):
+        if int(news_id) == await self.bot.pool.fetchval("SELECT news_id FROM news WHERE id=1;"):
             return
 
         embed = discord.Embed()
@@ -292,9 +278,7 @@ class Tasks(commands.Cog):
         await channel.send(embed=embed)
 
         # update old news_id with new one
-        await self.bot.pool.execute(
-            "UPDATE news SET news_id=$1 WHERE id=1;", int(news_id)
-        )
+        await self.bot.pool.execute("UPDATE news SET news_id=$1 WHERE id=1;", int(news_id))
 
     def cog_unload(self):
         self.update.cancel()
