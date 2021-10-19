@@ -56,7 +56,7 @@ class Overwatch(commands.Cog):
             pages = []
 
             try:
-                news = await get_overwatch_news(amount=abs(amount))
+                news = await get_overwatch_news(abs(amount))
             except Exception:
                 embed = discord.Embed(color=self.bot.color(ctx.author.id))
                 embed.title = "Latest Overwatch News"
