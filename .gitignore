@@ -3,8 +3,7 @@ __pycache__/
 .DS_Store
 .vscode
 
-assets
-
+assets/questions.json
 config.py
 
 env
