@@ -21,7 +21,6 @@ class MemberOnCooldown(commands.CommandOnCooldown):
     pass
 
 
-# TODO: fix
 async def global_cooldown(ctx):
     member_id = ctx.author.id
     guild_id = ctx.guild.id if ctx.guild is not None else 0
