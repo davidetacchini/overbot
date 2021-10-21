@@ -31,9 +31,10 @@ async def global_cooldown(ctx):
         bucket = ctx.bot.premium_cooldown.get_bucket(ctx.message)
 
     retry_after = bucket.update_rate_limit()
+    type_ = commands.BucketType.member
 
     if retry_after:
-        raise MemberOnCooldown(bucket, retry_after)
+        raise MemberOnCooldown(bucket, retry_after, type_)
     else:
         return True
 
