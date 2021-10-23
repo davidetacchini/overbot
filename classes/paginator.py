@@ -125,63 +125,6 @@ class BasePaginator:
         return await self.session()
 
 
-class Link(BasePaginator):
-    def __init__(self):
-        title = "Platform"
-        footer = "React with the platform you play on..."
-        super().__init__(title=title, footer=footer)
-        self.emojis = {
-            "<:battlenet:679469162724196387>": "pc",
-            "<:psn:679468542541693128>": "psn",
-            "<:xbl:679469487623503930>": "xbl",
-            "<:nsw:752653766377078817>": "nintendo-switch",
-            "❌": None,
-        }
-
-    def result(self, reaction):
-        return self.emojis.get(str(reaction.emoji))
-
-    def update_embed(self):
-        self.embed = self.init_embed()
-
-        for key, value in self.emojis.items():
-            if value is None:
-                continue
-            value = PLATFORMS.get(value)
-            self.description.append(f"{key} - {value}")
-        self.embed.description = "\n".join(self.description)
-
-    async def start(self, ctx):
-        self.ctx = ctx
-        self.bot = ctx.bot
-        self.author = ctx.author
-        self.update_embed()
-        return await super().start(ctx)
-
-
-class Update(Link):
-
-    __slots__ = ("platform", "username")
-
-    def __init__(self, platform, username):
-        super().__init__()
-        self.platform = platform
-        self.username = username
-
-    async def start(self, ctx):
-        self.ctx = ctx
-        self.bot = ctx.bot
-        self.author = ctx.author
-        self.update_embed()
-
-        self.description.append("\nProfile to update:")
-        self.embed.description = "\n".join(self.description)
-
-        self.embed.add_field(name="Platform", value=self.platform)
-        self.embed.add_field(name="Username", value=self.username)
-        return await super(Link, self).start(ctx)
-
-
 class Choose(BasePaginator):
     def __init__(self, entries, *, timeout, title, image, footer):
         super().__init__(entries, timeout=timeout, title=title, image=image, footer=footer)
