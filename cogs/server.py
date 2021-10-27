@@ -12,7 +12,7 @@ class Server(commands.Cog):
             return await ctx.send("The prefix you are trying to set is already in use.")
         elif len(prefix) > 5:
             return await ctx.send("Prefix may not be longer than 5 characters.")
-        elif prefix == self.bot.prefix:
+        elif self.bot.prefixes.get(ctx.guild.id) and prefix == self.bot.prefix:
             del self.bot.prefixes[ctx.guild.id]
         else:
             self.bot.prefixes[ctx.guild.id] = prefix
