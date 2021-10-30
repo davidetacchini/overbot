@@ -4,7 +4,6 @@ import datetime
 
 import asyncpg
 import discord
-import pygicord
 
 from aiohttp import ClientSession
 from termcolor import colored
@@ -16,6 +15,7 @@ from utils.time import human_timedelta
 from utils.checks import global_cooldown
 from utils.scrape import get_overwatch_maps, get_overwatch_heroes
 from classes.context import Context
+from classes.paginator import Paginator
 
 try:
     import uvloop
@@ -31,7 +31,6 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, **kwargs):
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
-        self.paginator = pygicord
         self.total_lines = 0
 
         # caching
@@ -100,6 +99,10 @@ class Bot(commands.AutoShardedBot):
             return commands.when_mentioned_or(self.prefix)(self, message)
         else:
             return commands.when_mentioned_or(prefix)(self, message)
+
+    async def paginate(self, entries, *, ctx, **kwargs):
+        paginator = Paginator(entries, ctx=ctx, **kwargs)
+        await paginator.start()
 
     async def get_or_fetch_member(self, member_id):
         guild = self.get_guild(config.support_server_id)
