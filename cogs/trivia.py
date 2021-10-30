@@ -6,7 +6,7 @@ import discord
 
 from discord.ext import commands
 
-from classes.paginator import Choose
+from classes.paginator import choose_answer
 
 
 class Trivia(commands.Cog):
@@ -23,14 +23,12 @@ class Trivia(commands.Cog):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
-        footer = f"You have 1 try and {timeout} seconds to respond."
-        answer = await Choose(
-            shuffled,
-            timeout=timeout,
-            title=question["question"],
-            image=question["image_url"],
-            footer=footer,
-        ).start(ctx)
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+        embed.title = question["question"]
+        if question["image_url"]:
+            embed.set_image(url=question["image_url"])
+        embed.set_footer(text=f"You have 1 try and {timeout} seconds to respond.")
+        answer = await choose_answer(shuffled, ctx=ctx, timeout=timeout, embed=embed)
         return answer == question["correct_answer"]
 
     async def update_member_games_started(self, member_id):
