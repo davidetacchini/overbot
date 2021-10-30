@@ -78,7 +78,7 @@ class Overwatch(commands.Cog):
                 )
                 pages.append(embed)
 
-            await self.bot.paginator.Paginator(pages=pages).start(ctx)
+            await self.bot.paginate(pages, ctx=ctx)
 
     @commands.command(brief="Returns patch notes links.")
     @commands.cooldown(1, 30.0, commands.BucketType.member)

@@ -39,7 +39,7 @@ class Stats(commands.Cog):
             embed = profile.private()
         else:
             embed = profile.get_stats(ctx, hero)
-        await self.bot.paginator.Paginator(pages=embed).start(ctx)
+        await self.bot.paginate(embed, ctx=ctx)
 
     @commands.command(aliases=["rank", "sr"], brief="Returns player ratings.")
     async def rating(self, ctx, platform: valid_platform, *, username):
