@@ -1,5 +1,4 @@
 git+https://github.com/Pycord-Development/pycord
-pygicord
 termcolor
 psutil
 asyncpg
