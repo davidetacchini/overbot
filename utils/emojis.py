@@ -27,3 +27,5 @@ platinum = PartialEmoji(name="platinum", id=632281092875091998)
 diamond = PartialEmoji(name="diamon", id=632281105571119105)
 master = PartialEmoji(name="master", id=632281117394993163)
 grand_master = PartialEmoji(name="grandmaster", id=632281128966946826)
+
+check = "\N{WHITE HEAVY CHECK MARK}"
