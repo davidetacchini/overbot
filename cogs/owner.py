@@ -16,6 +16,8 @@ import discord
 
 from discord.ext import commands
 
+from utils import emojis
+
 
 class Arguments(ArgumentParser):
     def error(self, message):
@@ -45,7 +47,7 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await ctx.message.add_reaction(ctx.CHECK)
+            await ctx.message.add_reaction(emojis.check)
 
     @commands.command(hidden=True)
     async def unload(self, ctx, *, module: str):
@@ -55,7 +57,7 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await ctx.message.add_reaction(ctx.CHECK)
+            await ctx.message.add_reaction(emojis.check)
 
     @commands.group(name="reload", hidden=True, invoke_without_command=True)
     async def _reload(self, ctx, *, module):
@@ -65,7 +67,7 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await ctx.message.add_reaction(ctx.CHECK)
+            await ctx.message.add_reaction(emojis.check)
 
     @commands.command(hidden=True)
     async def rldconf(self, ctx):
@@ -74,7 +76,7 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await ctx.message.add_reaction(ctx.CHECK)
+            await ctx.message.add_reaction(emojis.check)
 
     async def run_process(self, command):
         try:
@@ -224,7 +226,7 @@ class Owner(commands.Cog):
         else:
             value = stdout.getvalue()
             with suppress(discord.Forbidden):
-                await ctx.message.add_reaction(ctx.CHECK)
+                await ctx.message.add_reaction(emojis.check)
 
             if not ret:
                 if value:
@@ -332,7 +334,7 @@ class Owner(commands.Cog):
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
-            await msg.add_reaction(ctx.CHECK)
+            await msg.add_reaction(emojis.check)
         except Exception as e:
             await msg.edit(content=f"""```prolog\n{e}```""")
 
