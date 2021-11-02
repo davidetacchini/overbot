@@ -23,12 +23,12 @@ class Server(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
-        """Either see the prefix or change it.
+        """Shows / Updates this server prefix.
 
         `[prefix]` - The new server prefix to use.
 
         Surround the prefix with "" quotes if you want multiple
-        words or trailing spaces.
+        words or trailing spaces. E.g. "ob ".
 
         `Manage Server` permission is required to change the prefix.
         """
@@ -57,6 +57,8 @@ class Server(commands.Cog):
         async with ctx.typing():
             query = """SELECT guild_id, COUNT(*) as commands
                        FROM command
+                       WHERE (created_at >= date_trunc('week', CURRENT_TIMESTAMP - INTERVAL '1 week') and
+                              created_at < date_trunc('week', CURRENT_TIMESTAMP))
                        GROUP BY guild_id
                        HAVING guild_id <> ALL($1::bigint[])
                        ORDER BY commands DESC
@@ -70,14 +72,11 @@ class Server(commands.Cog):
 
             board = []
             for index, guild in enumerate(guilds, start=1):
-                cur_guild = self.bot.get_guild(guild["guild_id"])
-                if not cur_guild:
+                g = self.bot.get_guild(guild["guild_id"])
+                if not g:
                     continue
-
-                board.append("{index}. **{guild}** ran a total of **{commands}** commands").format(
-                    index=index,
-                    guild=str(cur_guild),
-                    commands=guild["commands"],
+                board.append(
+                    "{index}. **{str(g)}** ran a total of **{guild['commands']}** commands"
                 )
             embed.description = "\n".join(board)
             await ctx.send(embed=embed)
