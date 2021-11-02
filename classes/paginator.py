@@ -5,19 +5,21 @@ import discord
 from utils import emojis
 from classes.context import Context
 
-from .exceptions import NoChoice
+PageT = Union[str, dict, discord.Embed]
 
 
 class Paginator(discord.ui.View):
     def __init__(self, entries: list[Union[discord.Embed, str]], *, ctx: "Context", **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(timeout=120.0, **kwargs)
         self.entries = entries
         self.ctx = ctx
-        self.current = 0
+        self.current: int = 0
         self.total = len(self.entries) - 1
-        self.message = None
+        self.message: discord.Message = None
+        self.clear_items()
+        self.fill_items()
 
-    async def interaction_check(self, interaction: discord.Interaction):
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.ctx.author.id:
             return True
         await interaction.response.send_message(
@@ -25,59 +27,116 @@ class Paginator(discord.ui.View):
         )
         return False
 
-    async def on_timeout(self):
+    async def on_timeout(self) -> None:
         if self.message:
             await self.message.delete()
 
-    def fill_items():
-        pass
+    def fill_items(self) -> None:
+        if self.total > 2:
+            self.add_item(self.first)
+        if self.total > 0:
+            self.add_item(self.previous)
+            self.add_item(self.stop_session)
+            self.add_item(self.next)
+        if self.total > 2:
+            self.add_item(self.last)
 
-    def update_labels():
-        pass
+    def _update_labels(self, page: PageT) -> None:
+        self.first.disabled = 0 <= page <= 1
+        self.previous.disabled = page == 0
+        self.next.disabled = page == self.total
+        self.last.disabled = self.total - 1 <= page <= self.total
 
-    async def start(self):
-        self.message = await self.ctx.send(embed=self.entries[0], view=self)
+    def _get_kwargs_from_page(self, page: PageT) -> dict:
+        if isinstance(page, dict):
+            return page
+        elif isinstance(page, discord.Embed):
+            return {"content": None, "embed": page}
+        elif isinstance(page, str):
+            return {"content": page, "embed": None}
+        else:
+            return {}
 
-    async def update(self, page):
-        await self.message.edit(embed=self.entries[page])
+    async def _update(self, interaction: discord.Interaction) -> None:
+        kwargs = self._get_kwargs_from_page(self.entries[self.current])
+        self._update_labels(self.current)
+        if kwargs:
+            if interaction.response.is_done():
+                if self.message:
+                    await self.message.edit(**kwargs, view=self)
+            else:
+                await interaction.response.edit_message(**kwargs, view=self)
+
+    async def start(self) -> None:
+        kwargs = self._get_kwargs_from_page(self.entries[0])
+        self._update_labels(0)
+        self.message = await self.ctx.send(**kwargs, view=self)
 
     @discord.ui.button(label="<<", style=discord.ButtonStyle.blurple)
-    async def first(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def first(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
         if self.current > 0:
             self.current = 0
-            await self.update(self.current)
+            await self._update(interaction)
 
     @discord.ui.button(label="<", style=discord.ButtonStyle.blurple)
-    async def previous(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def previous(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
         if self.current - 1 >= 0:
             self.current -= 1
-            await self.update(self.current)
+            await self._update(interaction)
 
     @discord.ui.button(label="Stop", style=discord.ButtonStyle.red)
-    async def stop_session(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def stop_session(
+        self, button: discord.ui.Button, interaction: discord.Interaction
+    ) -> None:
         await interaction.response.defer()
         await interaction.delete_original_message()
         self.stop()
 
     @discord.ui.button(label=">", style=discord.ButtonStyle.blurple)
-    async def next(self, button: discord.ui.Button, interaction: discord.Interaction):
-        if self.current + 1 < self.total:
+    async def next(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+        if self.current + 1 <= self.total:
             self.current += 1
-            await self.update(self.current)
+            await self._update(interaction)
 
     @discord.ui.button(label=">>", style=discord.ButtonStyle.blurple)
-    async def last(self, button: discord.ui.Button, interaction: discord.Interaction):
+    async def last(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
         if self.current < self.total:
             self.current = self.total
-            await self.update(self.current)
+            await self._update(interaction)
+
+
+class ProfileManagerView(Paginator):
+    def __init__(self, entries, **kwargs):
+        super().__init__(entries, **kwargs)
+        self.add_item(self.link)
+        self.add_item(self.unlink)
+        self.add_item(self.update)
+        self.action = None
+
+    async def _handle(self, interaction: discord.Interaction) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_message()
+        self.stop()
+
+    @discord.ui.button(label="Link", style=discord.ButtonStyle.green, row=1)
+    async def link(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+        self.action = "link"
+        await self._handle(interaction)
+
+    @discord.ui.button(label="Unlink", style=discord.ButtonStyle.red, row=1)
+    async def unlink(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+        self.action = "unlink"
+        await self._handle(interaction)
+
+    @discord.ui.button(label="Update", style=discord.ButtonStyle.grey, row=1)
+    async def update(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+        self.action = "update"
+        await self._handle(interaction)
 
 
 class ChooseSelect(discord.ui.Select):
-    async def callback(self, interaction: discord.Interaction):
-        self.view.choice = self.values[0]
-        await interaction.response.defer()
-        await interaction.delete_original_message()
-        self.view.stop()
+    async def callback(self, interaction: discord.Interaction) -> None:
+        await self.view.handle(interaction, self.values[0])
 
 
 class ChooseView(discord.ui.View):
@@ -87,14 +146,14 @@ class ChooseView(discord.ui.View):
         *,
         ctx: "Context",
         timeout: float = 120.0,
-    ):
+    ) -> None:
         super().__init__(timeout=timeout)
         self.entries = entries
         self.ctx = ctx
         self.choice: Optional[str] = None
         self.message: Optional[discord.Message] = None
 
-    async def interaction_check(self, interaction: discord.Interaction):
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.ctx.author.id:
             return True
         await interaction.response.send_message(
@@ -102,12 +161,50 @@ class ChooseView(discord.ui.View):
         )
         return False
 
-    async def on_timeout(self):
+    async def on_timeout(self) -> None:
         if self.message:
             await self.message.delete()
 
+    async def handle(self, interaction: discord.Interaction, selected: str) -> None:
+        self.choice = selected
+        await interaction.response.defer()
+        await interaction.delete_original_message()
+        self.stop()
 
-async def choose_answer(entries, *, ctx, timeout, embed):
+
+async def choose_profile(ctx: "Context", message: str, member: discord.Member = None) -> str:
+    view = ChooseView(ctx=ctx)
+    select = ChooseSelect(placeholder="Select a profile...")
+    view.add_item(select)
+
+    cog = ctx.bot.get_cog("Profile")
+    if cog:
+        profiles = await cog.get_profiles(ctx, member=member)
+
+    PLATFORMS = {
+        "pc": emojis.battlenet,
+        "psn": emojis.psn,
+        "xbl": emojis.xbl,
+        "nintendo-switch": emojis.switch,
+    }
+
+    for profile in profiles:
+        id_, platform, username = profile
+        emoji = PLATFORMS.get(platform)
+        select.add_option(label=f"{username}", value=id_, emoji=emoji)
+
+    view.message = await ctx.send(message, view=view)
+    await view.wait()
+    return view.choice
+
+
+async def choose_answer(
+    entries: list[Union[str, discord.Embed]],
+    *,
+    ctx: "Context",
+    timeout: float,
+    embed: discord.Embed,
+) -> str:
     view = ChooseView(entries, ctx=ctx, timeout=timeout)
     select = ChooseSelect(placeholder="Select the correct answer...")
     view.add_item(select)
@@ -121,7 +218,7 @@ async def choose_answer(entries, *, ctx, timeout, embed):
     return view.choice
 
 
-async def choose_platform(ctx):
+async def choose_platform(ctx: "Context") -> str:
     options = [
         discord.SelectOption(label="PC", value="pc", emoji=emojis.battlenet),
         discord.SelectOption(label="Playstation", value="psn", emoji=emojis.psn),
