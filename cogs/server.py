@@ -20,6 +20,18 @@ class Server(commands.Cog):
         await self.bot.pool.execute(query, prefix, ctx.guild.id)
         await ctx.send(f"Prefix successfully set to `{prefix}`")
 
+    async def get_top_guilds(self):
+        query = """SELECT guild_id, COUNT(*) as commands
+                   FROM command
+                   WHERE (created_at >= date_trunc('week', CURRENT_TIMESTAMP - INTERVAL '1 week') and
+                          created_at < date_trunc('week', CURRENT_TIMESTAMP))
+                   GROUP BY guild_id
+                   HAVING guild_id <> ALL($1::bigint[])
+                   ORDER BY commands DESC
+                   LIMIT 5;
+                """
+        return await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
+
     @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
@@ -55,16 +67,7 @@ class Server(commands.Cog):
         You can use this command once every 30 seconds.
         """
         async with ctx.typing():
-            query = """SELECT guild_id, COUNT(*) as commands
-                       FROM command
-                       WHERE (created_at >= date_trunc('week', CURRENT_TIMESTAMP - INTERVAL '1 week') and
-                              created_at < date_trunc('week', CURRENT_TIMESTAMP))
-                       GROUP BY guild_id
-                       HAVING guild_id <> ALL($1::bigint[])
-                       ORDER BY commands DESC
-                       LIMIT 5;
-                    """
-            guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
+            guilds = await self.get_weekly_most_active_guilds()
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.title = "Most Active Servers"
             embed.url = self.bot.config.website + "/#servers"
