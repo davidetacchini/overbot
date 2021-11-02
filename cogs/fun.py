@@ -97,9 +97,9 @@ class Fun(commands.Cog):
         embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
         return embed
 
-    @commands.command(aliases=["htp"], brief="Returns a random hero.")
+    @commands.command(aliases=["htp"])
     async def herotoplay(self, ctx, category: valid_hero_cat = None):
-        """Returns a random hero to play.
+        """Returns a random hero.
 
         `[category]` - The category to get a random hero from.
 
@@ -114,13 +114,13 @@ class Fun(commands.Cog):
         hero = self.get_random_hero(category)
         await ctx.send(hero)
 
-    @commands.command(aliases=["rtp"], brief="Returns a random role.")
+    @commands.command(aliases=["rtp"])
     async def roletoplay(self, ctx):
-        """Returns a random role to play."""
+        """Returns a random role."""
         roles = ("Tank", "Damage", "Support", "Flex")
         await ctx.send(secrets.choice(roles))
 
-    @commands.command(aliases=["mtp"], brief="Returns a random map.")
+    @commands.command(aliases=["mtp"])
     async def maptoplay(self, ctx, *, category: valid_map_cat = None):
         """Returns a random map.
 
@@ -142,7 +142,7 @@ class Fun(commands.Cog):
         map_ = self.get_random_map(ctx, category)
         await ctx.send(map_)
 
-    @commands.command(brief="Returns a random meme.")
+    @commands.command()
     async def meme(self, ctx, category: valid_meme_cat = None):
         """Returns a random Overwatch meme.
 

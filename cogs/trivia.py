@@ -67,7 +67,7 @@ class Trivia(commands.Cog):
             embed.add_field(name="Correct answer", value=correct_answer)
         return embed
 
-    @commands.group(invoke_without_command=True, brief="Play an Overwatch trivia game.")
+    @commands.group(invoke_without_command=True)
     async def trivia(self, ctx):
         """Play an Overwatch trivia game."""
         question = self.get_question()
@@ -110,7 +110,7 @@ class Trivia(commands.Cog):
         embed.add_field(name="Unanswered", value=unanswered)
         return embed
 
-    @trivia.command(brief="Shows a member's trivia stats.")
+    @trivia.command()
     async def stats(self, ctx, member: discord.Member = None):
         """Shows trivia stats.
 
@@ -123,7 +123,7 @@ class Trivia(commands.Cog):
         embed = self.embed_member_stats(member, stats)
         await ctx.send(embed=embed)
 
-    @trivia.command(brief="Shows top 10 trivia players.")
+    @trivia.command()
     @commands.cooldown(1, 60.0, commands.BucketType.member)
     async def best(self, ctx):
         """Shows top 10 trivia players.

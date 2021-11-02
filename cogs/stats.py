@@ -41,7 +41,7 @@ class Stats(commands.Cog):
             embed = profile.get_stats(ctx, hero)
         await self.bot.paginate(embed, ctx=ctx)
 
-    @commands.command(aliases=["rank", "sr"], brief="Returns player ratings.")
+    @commands.command(aliases=["rank", "sr"])
     async def rating(self, ctx, platform: valid_platform, *, username):
         """Returns player ratings.
 
@@ -71,7 +71,7 @@ class Stats(commands.Cog):
                 embed = await profile.get_ratings(ctx)
             await ctx.send(embed=embed)
 
-    @commands.command(brief="Returns player general stats")
+    @commands.command()
     async def stats(self, ctx, platform: valid_platform, *, username):
         """Returns player general stats.
 
@@ -95,7 +95,7 @@ class Stats(commands.Cog):
         async with ctx.typing():
             await self.show_stats_for(ctx, "allHeroes", platform, username)
 
-    @commands.command(brief="Returns player general stats for a given hero.")
+    @commands.command()
     async def hero(
         self,
         ctx,

@@ -20,7 +20,7 @@ class Server(commands.Cog):
         await self.bot.pool.execute(query, prefix, ctx.guild.id)
         await ctx.send(f"Prefix successfully set to `{prefix}`")
 
-    @commands.command(brief="Either see or change the prefix.")
+    @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
         """Either see the prefix or change it.
@@ -45,10 +45,10 @@ class Server(commands.Cog):
             embed.add_field(name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`")
             await ctx.send(embed=embed)
 
-    @commands.command(brief="Shows OverBot's most active servers.")
+    @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
     async def leaderboard(self, ctx):
-        """Shows OverBot's most active servers.
+        """Shows bot's weekly most active servers.
 
         It is based on commands runned.
 
