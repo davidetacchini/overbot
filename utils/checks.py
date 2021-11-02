@@ -65,7 +65,7 @@ def can_add_profile():
 
     async def predicate(ctx):
         profiles = await get_profiles(ctx)
-        limit = ctx.bot.get_max_profiles_limit(ctx)
+        limit = ctx.bot.get_profiles_limit(ctx, ctx.author.id)
 
         if len(profiles) >= limit:
             raise ProfileLimitReached(limit)
