@@ -94,8 +94,8 @@ class Tasks(commands.Cog):
                     "name": command.qualified_name,
                     "aliases": command.aliases or None,
                     "signature": command.signature or None,
-                    "is_premium": command.brief.startswith("`[Premium]`"),
-                    "short_desc": command.brief or "No help found...",
+                    "is_premium": command.short_doc.startswith("`[Premium]`"),
+                    "short_desc": command.short_doc or "No help found...",
                     "long_desc": command.help or "No help found...",
                 }
             )
