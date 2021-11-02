@@ -102,13 +102,7 @@ class Tasks(commands.Cog):
         return all_commands
 
     async def get_top_servers(self):
-        query = """SELECT guild_id, COUNT(*) as commands
-                   FROM command
-                   GROUP BY guild_id
-                   HAVING guild_id <> ALL($1::bigint[])
-                   ORDER BY commands DESC LIMIT 5;
-                """
-        guilds = await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
+        guilds = await self.bot.get_cog("Server").get_weekly_most_active_guilds()
         servers = []
         for guild in guilds:
             g = self.bot.get_guild(guild["guild_id"])
