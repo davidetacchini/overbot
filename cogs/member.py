@@ -23,7 +23,7 @@ class Member(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(brief="Shows your premium status.")
+    @commands.command()
     @commands.guild_only()
     async def premium(self, ctx):
         """Shows your premium status."""
@@ -83,14 +83,14 @@ class Member(commands.Cog):
         return embed
 
     @is_premium()
-    @commands.group(invoke_without_command=True, brief="`[Premium]` Update your settings.")
+    @commands.group(invoke_without_command=True)
     async def settings(self, ctx):
         """`[Premium]` Update your settings."""
         embed = await self.embed_member_settings(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @is_premium()
-    @settings.command(brief="`[Premium]` Set a custom color for the embeds.")
+    @settings.command()
     async def color(self, ctx, *, color: valid_color):
         """`[Premium]` Set a custom color for the embeds.
 
