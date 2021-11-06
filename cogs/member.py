@@ -81,7 +81,7 @@ class Member(commands.Cog):
     @is_premium()
     @commands.group(invoke_without_command=True)
     async def settings(self, ctx):
-        """`[Premium]` Update your settings."""
+        """`[Premium]` Manage your settings."""
         embed = await self.embed_member_settings(ctx, ctx.command)
         await ctx.send(embed=embed)
 
