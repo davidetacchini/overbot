@@ -11,6 +11,9 @@ PageT = Union[str, dict, discord.Embed]
 class Paginator(discord.ui.View):
     def __init__(self, entries: list[Union[discord.Embed, str]], *, ctx: "Context", **kwargs):
         super().__init__(timeout=120.0, **kwargs)
+        if not isinstance(entries, list):
+            entries = [entries]
+
         self.entries = entries
         self.ctx = ctx
         self.current: int = 0
