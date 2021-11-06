@@ -57,7 +57,7 @@ class Member(commands.Cog):
 
         description = (
             "You can use `{prefix}settings [setting] [value]` to update the value "
-            "of a specific setting: `{prefix}settings color blue` will set the"
+            "of a specific setting: `{prefix}settings color blue` will set the "
             "embeds color to blue."
         ).format(prefix=ctx.prefix)
 
@@ -66,7 +66,6 @@ class Member(commands.Cog):
         embed.set_author(name=author_name, icon_url=ctx.author.display_avatar)
         embed.description = description
 
-        value = ""
         for subcommand in subcommands:
             if subcommand.short_doc:
                 # remove `[Premium]` from docstring
@@ -74,11 +73,8 @@ class Member(commands.Cog):
             else:
                 short_doc = "No help found..."
 
-            name = subcommand.name.capitalize()
-            value += "**{name}** - `{setting}`\n*{description}*\n\n".format(
-                name=name, description=short_doc, setting=settings[subcommand.name]
-            )
-            embed.add_field(name="Your settings", value=value)
+            name = subcommand.name.capitalize() + " - " + f"`{settings[subcommand.name]}`"
+            embed.add_field(name=name, value=short_doc, inline=False)
 
         return embed
 
@@ -97,11 +93,8 @@ class Member(commands.Cog):
         `<color>` - The color to use for the embeds. Enter `none` to reset.
 
         Formats:
-
-        - Either 3 or 6 hex digit: #RGB or #RRGGBB
+        - Either 3 or 6 digit hex: #RGB or #RRGGBB
         - Color code: green, white, red etc...
-
-        Note that few embeds won't change their color.
         """
         if color is None:
             query = "UPDATE member SET embed_color = NULL WHERE id = $1;"
