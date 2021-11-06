@@ -39,19 +39,12 @@ class Trivia(commands.Cog):
                 """
         await self.bot.pool.execute(query, member_id)
 
-    async def update_member_games_won(self, member_id):
-        query = "UPDATE trivia SET won = won + 1 WHERE id = $1;"
-        await self.bot.pool.execute(query, member_id)
-
-    async def update_member_games_lost(self, member_id):
-        query = "UPDATE trivia SET lost = lost + 1 WHERE id = $1;"
-        await self.bot.pool.execute(query, member_id)
-
     async def update_member_stats(self, member_id, *, won=True):
         if won:
-            await self.update_member_games_won(member_id)
+            query = "UPDATE trivia SET won = won + 1 WHERE id = $1;"
         else:
-            await self.update_member_games_lost(member_id)
+            query = "UPDATE trivia SET lost = lost + 1 WHERE id = $1;"
+        await self.bot.pool.execute(query, member_id)
 
     def embed_result(self, member, *, won=True, correct_answer=None):
         embed = discord.Embed()
@@ -66,22 +59,6 @@ class Trivia(commands.Cog):
             embed.set_footer(text="+1 loss")
             embed.add_field(name="Correct answer", value=correct_answer)
         return embed
-
-    @commands.group(invoke_without_command=True)
-    async def trivia(self, ctx):
-        """Play an Overwatch trivia game."""
-        question = self.get_question()
-        await self.update_member_games_started(ctx.author.id)
-        result = await self.get_result(ctx, question)
-        if result:
-            await self.update_member_stats(ctx.author.id)
-            await ctx.send(embed=self.embed_result(ctx.author))
-        else:
-            await self.update_member_stats(ctx.author.id, won=False)
-            embed = self.embed_result(
-                ctx.author, won=False, correct_answer=question["correct_answer"]
-            )
-            await ctx.send(embed=embed)
 
     async def get_member_stats(self, member):
         query = "SELECT * FROM trivia WHERE id = $1;"
@@ -109,6 +86,22 @@ class Trivia(commands.Cog):
         embed.add_field(name="Ratio (W/L)", value="%.2f" % ratio)
         embed.add_field(name="Unanswered", value=unanswered)
         return embed
+
+    @commands.group(invoke_without_command=True)
+    async def trivia(self, ctx):
+        """Play an Overwatch trivia game."""
+        question = self.get_question()
+        await self.update_member_games_started(ctx.author.id)
+        result = await self.get_result(ctx, question)
+        if result:
+            await self.update_member_stats(ctx.author.id)
+            await ctx.send(embed=self.embed_result(ctx.author))
+        else:
+            await self.update_member_stats(ctx.author.id, won=False)
+            embed = self.embed_result(
+                ctx.author, won=False, correct_answer=question["correct_answer"]
+            )
+            await ctx.send(embed=embed)
 
     @trivia.command()
     async def stats(self, ctx, member: discord.Member = None):
