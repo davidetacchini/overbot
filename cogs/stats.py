@@ -36,9 +36,9 @@ class Stats(commands.Cog):
         data = await Request(platform, username).get()
         profile = Player(data, platform=platform, username=username)
         if profile.is_private():
-            embed = profile.private()
+            embed = profile.embed_private()
         else:
-            embed = profile.get_stats(ctx, hero)
+            embed = profile.embed_stats(ctx, hero)
         await self.bot.paginate(embed, ctx=ctx)
 
     @commands.command(aliases=["rank", "sr"])
@@ -66,9 +66,9 @@ class Stats(commands.Cog):
             data = await Request(platform, username).get()
             profile = Player(data, platform=platform, username=username)
             if profile.is_private():
-                embed = profile.private()
+                embed = profile.embed_private()
             else:
-                embed = await profile.get_ratings(ctx)
+                embed = await profile.embed_ratings(ctx)
             await ctx.send(embed=embed)
 
     @commands.command()
