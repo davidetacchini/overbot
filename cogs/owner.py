@@ -164,8 +164,8 @@ class Owner(commands.Cog):
                     statuses.append((ctx.tick(True), module))
 
         await ctx.send("\n".join(f"{status} `{module}`" for status, module in statuses))
-        # Update total line count since we have made changes.
-        self.bot.total_lines = 0
+        # update sloc because we have made changes
+        self.bot.sloc = 0
         self.bot.compute_sloc()
 
     @commands.command(aliases=["kys", "die"], hidden=True)

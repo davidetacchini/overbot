@@ -139,7 +139,7 @@ class Meta(commands.Cog):
                 value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
             )
             embed.add_field(name="Commands Run", value=total_commands)
-            embed.add_field(name="Lines of code", value=self.bot.total_lines)
+            embed.add_field(name="Lines of code", value=self.bot.sloc)
             embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
             await ctx.send(embed=embed)
 

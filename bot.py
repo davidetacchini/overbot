@@ -31,7 +31,7 @@ class Bot(commands.AutoShardedBot):
     def __init__(self, **kwargs):
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
-        self.total_lines = 0
+        self.sloc = 0
 
         # caching
         self.prefixes = {}
@@ -132,7 +132,7 @@ class Bot(commands.AutoShardedBot):
             for file in files:
                 if file.endswith(".py"):
                     with open(f"{root}/{file}") as fp:
-                        self.total_lines += len(fp.readlines())
+                        self.sloc += len(fp.readlines())
 
     def member_is_premium(self, member_id, guild_id):
         """Check for a member/guild to be premium."""
