@@ -194,6 +194,6 @@ class CustomHelp(commands.HelpCommand):
         await paginator.start()
 
     async def send_command_help(self, command):
-        embed = discord.Embed(color=self.context.bot.color(self.authod.id))
+        embed = discord.Embed(color=self.context.bot.color(self.context.author.id))
         self.common_command_formatting(embed, command)
         await self.context.send(embed=embed)
