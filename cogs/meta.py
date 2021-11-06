@@ -24,6 +24,26 @@ class Meta(commands.Cog):
     def cog_unload(self):
         self.bot.help_command = self.old_help_command
 
+    @commands.command()
+    async def support(self, ctx):
+        """Returns the official bot support server invite link."""
+        await ctx.send(self.bot.config.support)
+
+    @commands.command()
+    async def vote(self, ctx):
+        """Returns bot vote link."""
+        await ctx.send(self.bot.config.vote)
+
+    @commands.command()
+    async def invite(self, ctx):
+        """Returns bot invite link."""
+        await ctx.send(self.bot.config.invite)
+
+    @commands.command(aliases=["git"])
+    async def github(self, ctx):
+        """Returns the bot GitHub repository."""
+        await ctx.send(self.bot.config.github["repo"])
+
     @commands.command(aliases=["pong", "latency"])
     async def ping(self, ctx):
         """Shows bot current websocket latency and ACK."""
