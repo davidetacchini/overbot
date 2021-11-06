@@ -42,7 +42,7 @@ class TooManyAccounts(RequestError):
         if platform == "pc":
             fmt = "BattleTag"
         elif platform == "nintendo-switch":
-            fmt = "Nitendo ID"
+            fmt = "Nintendo Network ID"
         message = (
             f"**{players}** accounts found under the name of `{username}`"
             f" playing on `{platform}`. Please be more specific by entering"

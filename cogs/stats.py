@@ -60,7 +60,7 @@ class Stats(commands.Cog):
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
-        - nintendo-switch: Nintendo Switch ID (format: name-code)
+        - nintendo-switch: Nintendo Network ID
         """
         async with ctx.typing():
             data = await Request(platform, username).get()
@@ -90,7 +90,7 @@ class Stats(commands.Cog):
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
-        - nintendo-switch: Nintendo Switch ID (format: name-code)
+        - nintendo-switch: Nintendo Network ID
         """
         async with ctx.typing():
             await self.show_stats_for(ctx, "allHeroes", platform, username)
@@ -122,7 +122,7 @@ class Stats(commands.Cog):
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
-        - nintendo-switch: Nintendo Switch ID (format: name-code)
+        - nintendo-switch: Nintendo Network ID
         """
         async with ctx.typing():
             await self.show_stats_for(ctx, hero, platform, username)
