@@ -208,7 +208,7 @@ class Player:
         embed.title = "This profile is set to private"
         embed.description = (
             "Profiles are set to private by default."
-            " You can modify this setting in Overwatch under `Options - Social`."
+            " You can modify this setting in Overwatch under `Options > Social`."
             " Please note that these changes may take effect after approximately 30 minutes."
         )
         embed.set_author(name=str(self), icon_url=self.avatar)
