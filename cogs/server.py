@@ -20,11 +20,10 @@ class Server(commands.Cog):
         await self.bot.pool.execute(query, prefix, ctx.guild.id)
         await ctx.send(f"Prefix successfully set to `{prefix}`")
 
-    async def get_top_guilds(self):
+    async def get_weekly_top_guilds(self):
         query = """SELECT guild_id, COUNT(*) as commands
                    FROM command
-                   WHERE (created_at >= date_trunc('week', CURRENT_TIMESTAMP - INTERVAL '1 week') and
-                          created_at < date_trunc('week', CURRENT_TIMESTAMP))
+                   WHERE created_at > now() - '1 week'::interval
                    GROUP BY guild_id
                    HAVING guild_id <> ALL($1::bigint[])
                    ORDER BY commands DESC
@@ -35,12 +34,12 @@ class Server(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
-        """Shows / Updates this server prefix.
+        """Shows or updated this server's prefix.
 
         `[prefix]` - The new server prefix to use.
 
         Surround the prefix with "" quotes if you want multiple
-        words or trailing spaces. E.g. "ob ".
+        words or trailing spaces. E.g. "ob " -> `ob help`.
 
         `Manage Server` permission is required to change the prefix.
         """
@@ -53,13 +52,13 @@ class Server(commands.Cog):
             query = "SELECT prefix FROM server WHERE id = $1;"
             pre = await self.bot.pool.fetchval(query, ctx.guild.id)
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
-            embed.set_footer(text='Use "{ctx.clean_prefix}prefix [value]" to change it.')
+            embed.set_footer(text=f'Use "{ctx.clean_prefix}prefix [value]" to change it.')
             embed.add_field(name="Prefixes", value=f"1. {self.bot.user.mention}\n2. `{pre}`")
             await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
-    async def leaderboard(self, ctx):
+    async def weekly(self, ctx):
         """Shows bot's weekly most active servers.
 
         It is based on commands runned.
@@ -67,7 +66,7 @@ class Server(commands.Cog):
         You can use this command once every 30 seconds.
         """
         async with ctx.typing():
-            guilds = await self.get_weekly_most_active_guilds()
+            guilds = await self.get_weekly_top_guilds()
             embed = discord.Embed(color=self.bot.color(ctx.author.id))
             embed.title = "Most Active Servers"
             embed.url = self.bot.config.website + "/#servers"
@@ -79,7 +78,7 @@ class Server(commands.Cog):
                 if not g:
                     continue
                 board.append(
-                    "{index}. **{str(g)}** ran a total of **{guild['commands']}** commands"
+                    f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands"
                 )
             embed.description = "\n".join(board)
             await ctx.send(embed=embed)
