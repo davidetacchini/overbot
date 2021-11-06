@@ -130,34 +130,6 @@ class Player:
             ratings[key.lower()] = value["level"]
         return ratings
 
-    async def get_ratings(self, ctx, *, save=False, profile_id=None):
-        embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
-        embed.set_author(name=str(self), icon_url=self.avatar)
-
-        ratings = self.resolve_ratings()
-
-        if not ratings:
-            embed.description = "This profile is unranked."
-            return embed
-
-        for key, value in ratings.items():
-            role_icon = ROLES.get(key)
-            role_name = key.upper()
-            rating_icon = self.get_rating_icon(value)
-            embed.add_field(
-                name=f"{role_icon} **{role_name}**",
-                value=f"{rating_icon} **{value}**{emojis.sr}",
-            )
-        embed.set_footer(
-            text="Average: {average}".format(average=self.data.get("rating")),
-            icon_url=self.data.get("ratingIcon"),
-        )
-
-        if save:
-            await self.save_ratings(ctx, profile_id=profile_id, **ratings)
-
-        return embed
-
     def resolve_stats(self, hero):
         if not self.has_stats():
             raise NoStats()
@@ -187,7 +159,35 @@ class Player:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self.to_pascal(c_t))
 
-    def get_stats(self, ctx, hero):
+    async def embed_ratings(self, ctx, *, save=False, profile_id=None):
+        embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
+        embed.set_author(name=str(self), icon_url=self.avatar)
+
+        ratings = self.resolve_ratings()
+
+        if not ratings:
+            embed.description = "This profile is unranked."
+            return embed
+
+        for key, value in ratings.items():
+            role_icon = ROLES.get(key)
+            role_name = key.upper()
+            rating_icon = self.get_rating_icon(value)
+            embed.add_field(
+                name=f"{role_icon} **{role_name}**",
+                value=f"{rating_icon} **{value}**{emojis.sr}",
+            )
+        embed.set_footer(
+            text="Average: {average}".format(average=self.data.get("rating")),
+            icon_url=self.data.get("ratingIcon"),
+        )
+
+        if save:
+            await self.save_ratings(ctx, profile_id=profile_id, **ratings)
+
+        return embed
+
+    def embed_stats(self, ctx, hero):
         keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
@@ -203,7 +203,7 @@ class Player:
             self.pages.append(embed)
         return self.pages
 
-    def private(self):
+    def embed_private(self):
         embed = discord.Embed(color=discord.Color.red())
         embed.title = "This profile is set to private"
         embed.description = (
