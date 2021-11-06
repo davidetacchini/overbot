@@ -104,7 +104,6 @@ class Fun(commands.Cog):
         `[category]` - The category to get a random hero from.
 
         Categories:
-
         - damage, dps
         - support, heal, healer
         - tank
@@ -127,7 +126,6 @@ class Fun(commands.Cog):
         `[category]` - The category to get a random map from.
 
         Categories:
-
         - control
         - assault
         - escort
@@ -149,7 +147,6 @@ class Fun(commands.Cog):
         `[category]` - The category to get a random meme from.
 
         Categories:
-
         - hot
         - new
         - top
