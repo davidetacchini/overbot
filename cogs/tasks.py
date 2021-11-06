@@ -78,7 +78,7 @@ class Tasks(commands.Cog):
                 "Commands runned": total_commands,
                 "Uptime": str(self.bot.get_uptime(brief=True)),
                 "Websocket latency": ping,
-                "Lines of code": self.bot.total_lines,
+                "Lines of code": self.bot.sloc,
             },
             "shards": shards,
         }
