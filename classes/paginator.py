@@ -14,10 +14,13 @@ class Paginator(discord.ui.View):
         self.entries = entries
         self.ctx = ctx
         self.current: int = 0
-        self.total = len(self.entries) - 1
         self.message: discord.Message = None
         self.clear_items()
         self.fill_items()
+
+    @property
+    def total(self) -> None:
+        return len(self.entries) - 1
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.ctx.author.id:
@@ -29,7 +32,7 @@ class Paginator(discord.ui.View):
 
     async def on_timeout(self) -> None:
         if self.message:
-            await self.message.delete()
+            await self.message.edit(view=None)
 
     def fill_items(self) -> None:
         if self.total > 2:
@@ -177,9 +180,7 @@ async def choose_profile(ctx: "Context", message: str, member: discord.Member = 
     select = ChooseSelect(placeholder="Select a profile...")
     view.add_item(select)
 
-    cog = ctx.bot.get_cog("Profile")
-    if cog:
-        profiles = await cog.get_profiles(ctx, member=member)
+    profiles = await ctx.bot.get_cog("Profile").get_profiles(ctx, member)
 
     PLATFORMS = {
         "pc": emojis.battlenet,
