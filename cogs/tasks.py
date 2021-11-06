@@ -102,7 +102,7 @@ class Tasks(commands.Cog):
         return all_commands
 
     async def get_top_servers(self):
-        guilds = await self.bot.get_cog("Server").get_weekly_most_active_guilds()
+        guilds = await self.bot.get_cog("Server").get_weekly_top_guilds()
         servers = []
         for guild in guilds:
             g = self.bot.get_guild(guild["guild_id"])
