@@ -20,7 +20,7 @@ class HelpSelect(discord.ui.Select):
         self.__fill_options()
 
     def __fill_options(self) -> None:
-        self.add_option(label="Homepage", value="homepage", description="The main help page.")
+        self.add_option(label="Homepage", value="homepage")
         for cog, cmds in self.commands.items():
             if not cmds:
                 continue
