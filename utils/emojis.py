@@ -6,9 +6,9 @@ xbl = PartialEmoji(name="xbl", id=679469487623503930)
 switch = PartialEmoji(name="nsw", id=752653766377078817)
 
 # emojis for custom discord username (skill rating)
-u_tank = ("\N{SHIELD}",)
-u_damage = ("\N{CROSSED SWORDS}",)
-u_support = ("\N{HEAVY GREEK CROSS}",)
+u_tank = "\N{SHIELD}"
+u_damage = "\N{CROSSED SWORDS}"
+u_support = "\N{HEAVY GREEK CROSS}"
 
 tank = PartialEmoji(name="tank", id=645784573141319722)
 damage = PartialEmoji(name="damage", id=645784543093325824)
