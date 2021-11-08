@@ -11,11 +11,11 @@ class Overwatch(commands.Cog):
         self.bot = bot
 
     def format_overwatch_status(self, status):
-        STATUSES = (
+        lookup = (
             "no problems at overwatch",
             "user reports indicate no current problems at overwatch",
         )
-        if status.lower() in STATUSES:
+        if status.lower() in lookup:
             return (f"{emojis.online} {status}", discord.Color.green())
         return (f"{emojis.dnd} {status}", discord.Color.red())
 
