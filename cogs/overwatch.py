@@ -9,13 +9,13 @@ from utils.scrape import get_overwatch_news, get_overwatch_status, get_overwatch
 class Overwatch(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.statuses = (
+
+    def format_overwatch_status(self, status):
+        STATUSES = (
             "no problems at overwatch",
             "user reports indicate no current problems at overwatch",
         )
-
-    def format_overwatch_status(self, status):
-        if status.lower() in self.statuses:
+        if status.lower() in STATUSES:
             return (f"{emojis.online} {status}", discord.Color.green())
         return (f"{emojis.dnd} {status}", discord.Color.red())
 
