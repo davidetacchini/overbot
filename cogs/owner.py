@@ -272,14 +272,14 @@ class Owner(commands.Cog):
             nicknames = await self.bot.pool.fetchval("SELECT COUNT(*) FROM nickname")
 
             total_commands = await self.bot.total_commands()
-            played, won, lost, contribs = await self.bot.pool.fetchrow(
-                "SELECT SUM(started), SUM(won), SUM(lost), SUM(contribs) FROM trivia;"
+            played, won, lost = await self.bot.pool.fetchrow(
+                "SELECT SUM(started), SUM(won), SUM(lost) FROM trivia;"
             )
             bot_entries = (
                 ("Total profiles linked", profiles),
                 ("Total prefixes set", len(prefixes)),
                 ("Total profile ratings", ratings),
-                ("Total nicknames", nicknames),
+                ("Total nicknames set", nicknames),
                 ("Total guilds", guilds),
                 ("Total commands runned", total_commands),
             )
@@ -287,7 +287,6 @@ class Owner(commands.Cog):
                 ("Total games played", played),
                 ("Total games won", won),
                 ("Total games lost", lost),
-                ("Total contributions", contribs),
             )
 
             embed = discord.Embed(color=self.bot.color())
