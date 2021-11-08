@@ -1,4 +1,5 @@
 import os
+import sys
 import asyncio
 import datetime
 
@@ -17,12 +18,10 @@ from utils.scrape import get_overwatch_maps, get_overwatch_heroes
 from classes.context import Context
 from classes.paginator import Paginator
 
-try:
+if sys.platform == "linux":
     import uvloop
-except ImportError:
-    pass
-else:
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
+    uvloop.install()
 
 
 class Bot(commands.AutoShardedBot):
@@ -189,7 +188,7 @@ class Bot(commands.AutoShardedBot):
         self.embed_colors = embed_colors
 
     async def start(self, *args, **kwargs):
-        self.session = ClientSession(loop=self.loop)
+        self.session = ClientSession()
         self.pool = await asyncpg.create_pool(**config.database, max_size=20, command_timeout=60.0)
 
         self.compute_sloc()
@@ -232,14 +231,13 @@ def main():
         chunk_guilds_at_startup=False,
         guild_ready_timeout=5,
     )
-    loop = asyncio.get_event_loop()
 
     try:
-        loop.run_until_complete(bot.start())
+        bot.loop.run_until_complete(bot.start())
     except KeyboardInterrupt:
-        loop.run_until_complete(bot.close())
+        bot.loop.run_until_complete(bot.close())
     finally:
-        loop.close()
+        bot.loop.close()
 
 
 if __name__ == "__main__":
