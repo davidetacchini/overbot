@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.2
--- Dumped by pg_dump version 13.2
+-- Dumped from database version 14.0
+-- Dumped by pg_dump version 14.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -66,8 +66,6 @@ ALTER SEQUENCE public.command_id_seq OWNED BY public.command.id;
 
 CREATE TABLE public.member (
     id bigint NOT NULL,
-    main_profile integer,
-    locale character varying(5) DEFAULT 'en_US'::character varying NOT NULL,
     embed_color integer,
     premium boolean DEFAULT false NOT NULL
 );
@@ -196,8 +194,7 @@ CREATE TABLE public.trivia (
     id bigint NOT NULL,
     won integer DEFAULT 0 NOT NULL,
     lost integer DEFAULT 0 NOT NULL,
-    started integer DEFAULT 0 NOT NULL,
-    contribs integer DEFAULT 0 NOT NULL
+    started integer DEFAULT 0 NOT NULL
 );
 
 
@@ -294,14 +291,6 @@ ALTER TABLE ONLY public.rating
 
 ALTER TABLE ONLY public.server
     ADD CONSTRAINT server_pkey PRIMARY KEY (id);
-
-
---
--- Name: member member_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.member
-    ADD CONSTRAINT member_fkey FOREIGN KEY (main_profile) REFERENCES public.profile(id) ON UPDATE SET NULL ON DELETE SET NULL NOT VALID;
 
 
 --
