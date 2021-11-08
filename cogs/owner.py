@@ -269,7 +269,7 @@ class Owner(commands.Cog):
             prefixes = self.bot.prefixes
             guilds = await self.bot.pool.fetchval("SELECT COUNT(*) FROM server;")
             ratings = await self.bot.pool.fetchval("SELECT COUNT(*) FROM rating;")
-            nicknames = await self.bot.pool.fetchval("SELECT COUNT(*) FROM nickname")
+            nicknames = await self.bot.pool.fetchval("SELECT COUNT(*) FROM nickname;")
 
             total_commands = await self.bot.total_commands()
             played, won, lost = await self.bot.pool.fetchrow(
