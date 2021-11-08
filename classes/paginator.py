@@ -114,27 +114,33 @@ class Paginator(discord.ui.View):
 class ProfileManagerView(Paginator):
     def __init__(self, entries, **kwargs):
         super().__init__(entries, **kwargs)
+        self.action = None
+
+    def fill_items(self) -> None:
         self.add_item(self.link)
         self.add_item(self.unlink)
         self.add_item(self.update)
-        self.action = None
+        if self.total == 0:
+            self.stop_session.row = 1
+            self.add_item(self.stop_session)
+        super().fill_items()
 
     async def _handle(self, interaction: discord.Interaction) -> None:
         await interaction.response.defer()
         await interaction.delete_original_message()
         self.stop()
 
-    @discord.ui.button(label="Link", style=discord.ButtonStyle.green, row=1)
+    @discord.ui.button(label="Link", style=discord.ButtonStyle.blurple, row=1)
     async def link(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
         self.action = "link"
         await self._handle(interaction)
 
-    @discord.ui.button(label="Unlink", style=discord.ButtonStyle.red, row=1)
+    @discord.ui.button(label="Unlink", style=discord.ButtonStyle.blurple, row=1)
     async def unlink(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
         self.action = "unlink"
         await self._handle(interaction)
 
-    @discord.ui.button(label="Update", style=discord.ButtonStyle.grey, row=1)
+    @discord.ui.button(label="Update", style=discord.ButtonStyle.blurple, row=1)
     async def update(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
         self.action = "update"
         await self._handle(interaction)
