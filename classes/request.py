@@ -39,14 +39,15 @@ class UnexpectedError(RequestError):
 
 class TooManyAccounts(RequestError):
     def __init__(self, platform, username, players):
-        if platform == "pc":
-            fmt = "BattleTag"
-        elif platform == "nintendo-switch":
-            fmt = "Nintendo Network ID"
+        match platform:
+            case "pc":
+                what = "BattleTag"
+            case "nintendo-switch":
+                what = "Nintendo Network ID"
         message = (
             f"**{players}** accounts found under the name of `{username}`"
             f" playing on `{platform}`. Please be more specific by entering"
-            f" your full {fmt}."
+            f" your full {what}."
         )
         super().__init__(message)
 
@@ -107,19 +108,20 @@ class Request:
         return f"{config.base_url}/{self.platform}/{name}/complete"
 
     async def resolve_response(self, response):
-        if response.status == 200:
-            data = await response.json()
-            if data.get("error"):
-                raise UnexpectedError()
-            return data
-        elif response.status == 400:
-            raise BadRequest()
-        elif response.status == 404:
-            raise NotFound()
-        elif response.status == 500:
-            raise InternalServerError()
-        else:
-            raise ServiceUnavailable()
+        match response.status:
+            case 200:
+                data = await response.json()
+                if data.get("error"):
+                    raise UnexpectedError()
+                return data
+            case 400:
+                raise BadRequest()
+            case 404:
+                raise NotFound()
+            case 500:
+                raise InternalServerError()
+            case _:
+                raise ServiceUnavailable()
 
     async def request(self):
         url = await self.url()
