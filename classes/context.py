@@ -20,7 +20,8 @@ class PromptView(discord.ui.View):
         return False
 
     async def on_timeout(self):
-        await self.message.delete()
+        if self.message:
+            await self.message.delete()
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
     async def confirm(self, button, interaction):
