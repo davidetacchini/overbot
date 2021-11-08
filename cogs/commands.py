@@ -9,7 +9,7 @@ from discord.ext import tasks, commands
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._batch_lock = asyncio.Lock(loop=bot.loop)
+        self._batch_lock = asyncio.Lock()
         self._data_batch = []
 
         self.bulk_insert_loop.add_exception_type(PostgresConnectionError)
