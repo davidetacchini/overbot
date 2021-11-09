@@ -5,7 +5,7 @@ psn = PartialEmoji(name="psn", id=679468542541693128)
 xbl = PartialEmoji(name="xbl", id=679469487623503930)
 switch = PartialEmoji(name="nsw", id=752653766377078817)
 
-# emojis for custom discord username (skill rating)
+# emojis for custom nickname
 u_tank = "\N{SHIELD}"
 u_damage = "\N{CROSSED SWORDS}"
 u_support = "\N{HEAVY GREEK CROSS}"
