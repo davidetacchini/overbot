@@ -3,18 +3,19 @@ from typing import Union, Optional
 import discord
 
 from utils import emojis
+from utils.funcs import get_platform_emoji
 from classes.context import Context
 
 PageT = Union[str, dict, discord.Embed]
 
 
 class Paginator(discord.ui.View):
-    def __init__(self, entries: list[Union[discord.Embed, str]], *, ctx: "Context", **kwargs):
+    def __init__(self, pages: list[Union[discord.Embed, str]], *, ctx: "Context", **kwargs):
         super().__init__(timeout=120.0, **kwargs)
-        if not isinstance(entries, list):
-            entries = [entries]
+        if not isinstance(pages, list):
+            pages = [pages]
 
-        self.entries = entries
+        self.pages = pages
         self.ctx = ctx
         self.current: int = 0
         self.message: discord.Message = None
@@ -22,8 +23,8 @@ class Paginator(discord.ui.View):
         self.fill_items()
 
     @property
-    def total(self) -> None:
-        return len(self.entries) - 1
+    def total(self) -> int:
+        return len(self.pages) - 1
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.ctx.author.id:
@@ -64,7 +65,7 @@ class Paginator(discord.ui.View):
             return {}
 
     async def _update(self, interaction: discord.Interaction) -> None:
-        kwargs = self._get_kwargs_from_page(self.entries[self.current])
+        kwargs = self._get_kwargs_from_page(self.pages[self.current])
         self._update_labels(self.current)
         if kwargs:
             if interaction.response.is_done():
@@ -74,7 +75,7 @@ class Paginator(discord.ui.View):
                 await interaction.response.edit_message(**kwargs, view=self)
 
     async def start(self) -> None:
-        kwargs = self._get_kwargs_from_page(self.entries[0])
+        kwargs = self._get_kwargs_from_page(self.pages[0])
         self._update_labels(0)
         self.message = await self.ctx.send(**kwargs, view=self)
 
@@ -112,8 +113,8 @@ class Paginator(discord.ui.View):
 
 
 class ProfileManagerView(Paginator):
-    def __init__(self, entries, **kwargs):
-        super().__init__(entries, **kwargs)
+    def __init__(self, pages, **kwargs):
+        super().__init__(pages, **kwargs)
         self.action = None
 
     def fill_items(self) -> None:
@@ -191,16 +192,9 @@ async def choose_profile(ctx: "Context", message: str, member: discord.Member = 
 
     profiles = await ctx.bot.get_cog("Profile").get_profiles(ctx, member)
 
-    PLATFORMS = {
-        "pc": emojis.battlenet,
-        "psn": emojis.psn,
-        "xbl": emojis.xbl,
-        "nintendo-switch": emojis.switch,
-    }
-
     for profile in profiles:
         id_, platform, username = profile
-        emoji = PLATFORMS.get(platform)
+        emoji = get_platform_emoji(platform)
         select.add_option(label=f"{username}", value=id_, emoji=emoji)
 
     view.message = await ctx.send(message, view=view)
