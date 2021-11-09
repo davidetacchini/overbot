@@ -5,10 +5,11 @@ import discord
 
 from discord.ext import commands
 
+from utils.funcs import chunker
 from classes.context import Context
 from classes.paginator import Paginator
 
-EntriesT = list[Union[discord.Embed, str]]
+PagesT = list[Union[discord.Embed, str]]
 CommandsT = dict[commands.Cog, list[commands.Command]]
 
 
@@ -44,8 +45,8 @@ class HelpSelect(discord.ui.Select):
                     "This category has no commands to show.", ephemeral=True
                 )
 
-            entries = await get_group_help_pages(self.view.ctx, cog, commands)
-            await self.view.rebind(entries, interaction)
+            pages = await get_group_help_pages(self.view.ctx, cog, commands)
+            await self.view.rebind(pages, interaction)
 
 
 class HelpPaginator(Paginator):
@@ -54,17 +55,12 @@ class HelpPaginator(Paginator):
         self.add_item(HelpSelect(self.ctx.bot, commands))
         self.fill_items()
 
-    async def rebind(self, entries: EntriesT, interaction: discord.Interaction) -> None:
-        self.entries = entries
+    async def rebind(self, pages: PagesT, interaction: discord.Interaction) -> None:
+        self.pages = pages
         self.current = 0
-        kwargs = self._get_kwargs_from_page(self.entries[self.current])
+        kwargs = self._get_kwargs_from_page(self.pages[self.current])
         self._update_labels(0)
         await interaction.response.edit_message(**kwargs, view=self)
-
-
-async def pager(entries: EntriesT, per_page: int):
-    for x in range(0, len(entries), per_page):
-        yield entries[x : x + per_page]
 
 
 async def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
@@ -108,15 +104,15 @@ async def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
 
 
 async def get_group_help_pages(ctx: "Context", group: list[commands.Command], commands: CommandsT):
-    pages = [p async for p in pager(commands, 5)]
+    chunks = [c async for c in chunker(commands, per_page=5)]
 
-    all_pages = []
-    for index, page in enumerate(pages, start=1):
+    pages = []
+    for index, chunk in enumerate(chunks, start=1):
         embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
         embed.title = f"{group.qualified_name} Commands"
         embed.description = group.description
 
-        for command in page:
+        for command in chunk:
             signature = f"{command.qualified_name} {command.signature}"
             value = command.short_doc or "No help found..."
             embed.add_field(name=signature, value=value, inline=False)
@@ -133,8 +129,8 @@ async def get_group_help_pages(ctx: "Context", group: list[commands.Command], co
                     prefix=ctx.clean_prefix
                 )
             )
-        all_pages.append(embed)
-    return all_pages
+        pages.append(embed)
+    return pages
 
 
 class CustomHelp(commands.HelpCommand):
@@ -171,15 +167,15 @@ class CustomHelp(commands.HelpCommand):
             except KeyError:
                 commands[command.cog] = [command]
 
-        entries = await get_bot_homepage(ctx)
-        paginator = HelpPaginator(entries, ctx=self.context)
+        pages = await get_bot_homepage(ctx)
+        paginator = HelpPaginator(pages, ctx=self.context)
         paginator.add_categories(commands)
         await paginator.start()
 
     async def send_cog_help(self, cog):
         filtered = await self.filter_commands(cog.get_commands(), sort=True)
-        entries = await get_group_help_pages(self.context, cog, filtered)
-        paginator = HelpPaginator(entries, ctx=self.context)
+        pages = await get_group_help_pages(self.context, cog, filtered)
+        paginator = HelpPaginator(pages, ctx=self.context)
         await paginator.start()
 
     async def send_group_help(self, group):
@@ -188,9 +184,9 @@ class CustomHelp(commands.HelpCommand):
             return await self.send_command_help(group)
 
         filtered = await self.filter_commands(subcommands, sort=True)
-        entries = await get_group_help_pages(self.context, group, filtered)
-        self.common_command_formatting(entries, group)
-        paginator = HelpPaginator(entries, ctx=self.context)
+        pages = await get_group_help_pages(self.context, group, filtered)
+        self.common_command_formatting(pages, group)
+        paginator = HelpPaginator(pages, ctx=self.context)
         await paginator.start()
 
     async def send_command_help(self, command):
