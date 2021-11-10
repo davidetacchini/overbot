@@ -52,7 +52,7 @@ class Profile(commands.Cog):
 
         if not profiles:
             embed.description = "No profiles..."
-            return [embed]
+            return embed
 
         chunks = [c async for c in chunker(profiles, per_page=10)]
         index = 1  # avoid resetting index to 1 every page
@@ -106,7 +106,7 @@ class Profile(commands.Cog):
         member = member or ctx.author
         profiles = await self.get_profiles(ctx, member)
         entries = await self.list_profiles(ctx, member.id, profiles)
-        
+
         if member != ctx.author:
             return await self.bot.paginate(entries, ctx=ctx)
 
@@ -118,7 +118,7 @@ class Profile(commands.Cog):
 
         await view.start()
         await view.wait()
-        
+
         match view.action:
             case "link":
                 await self.link_profile(ctx)
