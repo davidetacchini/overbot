@@ -11,7 +11,7 @@ class ProfileLimitReached(commands.CheckFailure):
         self.limit = limit
 
 
-class MemberIsNotPremium(commands.CheckFailure):
+class MemberNotPremium(commands.CheckFailure):
 
     pass
 
@@ -83,7 +83,7 @@ def is_premium():
         to_check = (member_id, guild_id)
 
         if all(x not in ctx.bot.premiums for x in to_check):
-            raise MemberIsNotPremium()
+            raise MemberNotPremium()
         return True
 
     return commands.check(predicate)
