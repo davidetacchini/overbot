@@ -72,7 +72,7 @@ class ErrorHandler(commands.Cog):
                 else:
                     await ctx.send("Max profiles limit reached.")
 
-            elif type(error) == checks.MemberIsNotPremium:
+            elif type(error) == checks.MemberNotPremium:
                 premium = self.bot.config.premium
                 embed = discord.Embed(color=discord.Color.red())
                 embed.description = (
