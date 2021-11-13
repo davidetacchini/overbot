@@ -125,33 +125,32 @@ class Trivia(commands.Cog):
 
         You can use this command once per minute.
         """
-        async with ctx.typing():
-            query = """SELECT id, started, won, lost
-                       FROM trivia
-                       WHERE id <> $1
-                       ORDER BY won DESC
-                       LIMIT 10;
-                    """
-            players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
-            embed = discord.Embed(color=self.bot.color(ctx.author.id))
-            embed.title = "Best Trivia Players"
+        query = """SELECT id, started, won, lost
+                   FROM trivia
+                   WHERE id <> $1
+                   ORDER BY won DESC
+                   LIMIT 10;
+                """
+        players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+        embed.title = "Best Trivia Players"
 
-            board = []
-            for index, player in enumerate(players, start=1):
-                cur_player = await self.bot.fetch_user(player["id"])
-                ratio = self.get_player_ratio(player["won"], player["lost"])
-                board.append(
-                    "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}".format(
-                        index=index,
-                        player=str(cur_player),
-                        played=player["started"],
-                        won=player["won"],
-                        lost=player["lost"],
-                        ratio=round(ratio, 2),
-                    )
+        board = []
+        for index, player in enumerate(players, start=1):
+            cur_player = await self.bot.fetch_user(player["id"])
+            ratio = self.get_player_ratio(player["won"], player["lost"])
+            board.append(
+                "{index}. **{player}** Played: {played} | Won: {won} | Lost: {lost} | Ratio: {ratio}".format(
+                    index=index,
+                    player=str(cur_player),
+                    played=player["started"],
+                    won=player["won"],
+                    lost=player["lost"],
+                    ratio=round(ratio, 2),
                 )
-            embed.description = "\n".join(board)
-            await ctx.send(embed=embed)
+            )
+        embed.description = "\n".join(board)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

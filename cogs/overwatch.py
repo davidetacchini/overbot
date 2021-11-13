@@ -52,33 +52,32 @@ class Overwatch(commands.Cog):
 
         You can use this command once every 30 seconds.
         """
-        async with ctx.typing():
-            pages = []
+        pages = []
 
-            try:
-                news = await get_overwatch_news(abs(amount))
-            except Exception:
-                embed = discord.Embed(color=self.bot.color(ctx.author.id))
-                embed.title = "Latest Overwatch News"
-                embed.description = "[Click here]({news})".format(
-                    news=self.bot.config.overwatch["news"]
+        try:
+            news = await get_overwatch_news(abs(amount))
+        except Exception:
+            embed = discord.Embed(color=self.bot.color(ctx.author.id))
+            embed.title = "Latest Overwatch News"
+            embed.description = "[Click here]({news})".format(
+                news=self.bot.config.overwatch["news"]
+            )
+            return await ctx.send(embed=embed)
+
+        for i, n in enumerate(news, start=1):
+            embed = discord.Embed(color=self.bot.color(ctx.author.id))
+            embed.title = n["title"]
+            embed.url = n["link"]
+            embed.set_author(name="Blizzard Entertainment")
+            embed.set_image(url=f'https:{n["thumbnail"]}')
+            embed.set_footer(
+                text="News {current}/{total} - {date}".format(
+                    current=i, total=len(news), date=n["date"]
                 )
-                return await ctx.send(embed=embed)
+            )
+            pages.append(embed)
 
-            for i, n in enumerate(news, start=1):
-                embed = discord.Embed(color=self.bot.color(ctx.author.id))
-                embed.title = n["title"]
-                embed.url = n["link"]
-                embed.set_author(name="Blizzard Entertainment")
-                embed.set_image(url=f'https:{n["thumbnail"]}')
-                embed.set_footer(
-                    text="News {current}/{total} - {date}".format(
-                        current=i, total=len(news), date=n["date"]
-                    )
-                )
-                pages.append(embed)
-
-            await self.bot.paginate(pages, ctx=ctx)
+        await self.bot.paginate(pages, ctx=ctx)
 
     @commands.command()
     @commands.cooldown(1, 30.0, commands.BucketType.member)
