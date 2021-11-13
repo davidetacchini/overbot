@@ -186,20 +186,19 @@ class Profile(commands.Cog):
         profile_id = await choose_profile(ctx, message, member)
         id_, platform, username = await self.get_profile(profile_id)
 
-        async with ctx.typing():
-            data = await Request(platform, username).get()
-            profile = Player(data, platform=platform, username=username)
-            if profile.is_private():
-                embed = profile.embed_private()
-            else:
-                embed = await profile.embed_ratings(ctx, save=True, profile_id=id_)
-                # only updates nickname with the profile set for that purspose
-                query = "SELECT * FROM nickname WHERE profile_id = $1"
-                flag = await self.bot.pool.fetchrow(query, id_)
-                if flag and member.id == ctx.author.id:
-                    nick = Nickname(ctx, profile=profile)
-                    await nick.update()
-            await ctx.send(embed=embed)
+        data = await Request(platform, username).get()
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private():
+            embed = profile.embed_private()
+        else:
+            embed = await profile.embed_ratings(ctx, save=True, profile_id=id_)
+            # only updates nickname with the profile set for that purspose
+            query = "SELECT * FROM nickname WHERE profile_id = $1"
+            flag = await self.bot.pool.fetchrow(query, id_)
+            if flag and member.id == ctx.author.id:
+                nick = Nickname(ctx, profile=profile)
+                await nick.update()
+        await ctx.send(embed=embed)
 
     @has_profile()
     @profile.command(aliases=["statistics"])
@@ -215,8 +214,7 @@ class Profile(commands.Cog):
         profile_id = await choose_profile(ctx, message, member)
         _, platform, username = await self.get_profile(profile_id)
 
-        async with ctx.typing():
-            await self.bot.get_cog("Stats").show_stats_for(ctx, "allHeroes", platform, username)
+        await self.bot.get_cog("Stats").show_stats_for(ctx, "allHeroes", platform, username)
 
     @has_profile()
     @profile.command()
@@ -233,8 +231,7 @@ class Profile(commands.Cog):
         profile_id = await choose_profile(ctx, message, member)
         _, platform, username = await self.get_profile(profile_id)
 
-        async with ctx.typing():
-            await self.bot.get_cog("Stats").show_stats_for(ctx, hero, platform, username)
+        await self.bot.get_cog("Stats").show_stats_for(ctx, hero, platform, username)
 
     @has_profile()
     @profile.command(aliases=["nick"])

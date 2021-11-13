@@ -86,62 +86,61 @@ class Meta(commands.Cog):
     @commands.guild_only()
     async def about(self, ctx):
         """Shows bot information."""
-        async with ctx.typing():
-            commits = self.get_latest_commits()
-            embed = discord.Embed(color=self.bot.color(ctx.author.id))
-            embed.title = "Official Website"
-            embed.description = f"Latest Changes:\n{commits}"
-            embed.url = self.bot.config.website
-            embed.timestamp = ctx.message.created_at
+        commits = self.get_latest_commits()
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+        embed.title = "Official Website"
+        embed.description = f"Latest Changes:\n{commits}"
+        embed.url = self.bot.config.website
+        embed.timestamp = ctx.message.created_at
 
-            owner = await self.bot.get_or_fetch_member(self.bot.config.owner_id)
+        owner = await self.bot.get_or_fetch_member(self.bot.config.owner_id)
 
-            embed.set_author(
-                name=str(owner),
-                url=self.bot.config.github["profile"],
-                icon_url=owner.display_avatar,
-            )
+        embed.set_author(
+            name=str(owner),
+            url=self.bot.config.github["profile"],
+            icon_url=owner.display_avatar,
+        )
 
-            activity = f"{psutil.cpu_percent()}% CPU\n" f"{psutil.virtual_memory()[2]}% RAM\n"
+        activity = f"{psutil.cpu_percent()}% CPU\n" f"{psutil.virtual_memory()[2]}% RAM\n"
 
-            os_name = distro.linux_distribution()[0]
-            os_version = distro.linux_distribution()[1]
-            host = f"{os_name} {os_version}\n" f"Python {platform.python_version()}"
+        os_name = distro.linux_distribution()[0]
+        os_version = distro.linux_distribution()[1]
+        host = f"{os_name} {os_version}\n" f"Python {platform.python_version()}"
 
-            total_commands = await self.bot.total_commands()
-            total_members = 0
+        total_commands = await self.bot.total_commands()
+        total_members = 0
 
-            text = 0
-            voice = 0
-            guilds = 0
-            for guild in self.bot.guilds:
-                guilds += 1
-                try:
-                    total_members += guild.member_count
-                except AttributeError:
-                    pass
-                for channel in guild.channels:
-                    if isinstance(channel, discord.TextChannel):
-                        text += 1
-                    elif isinstance(channel, discord.VoiceChannel):
-                        voice += 1
+        text = 0
+        voice = 0
+        guilds = 0
+        for guild in self.bot.guilds:
+            guilds += 1
+            try:
+                total_members += guild.member_count
+            except AttributeError:
+                pass
+            for channel in guild.channels:
+                if isinstance(channel, discord.TextChannel):
+                    text += 1
+                elif isinstance(channel, discord.VoiceChannel):
+                    voice += 1
 
-            embed.add_field(name="Process", value=activity)
-            embed.add_field(name="Host", value=host)
-            embed.add_field(
-                name="Channels",
-                value=f"{text + voice} total\n{text} text\n{voice} voice",
-            )
-            embed.add_field(name="Members", value=total_members)
-            embed.add_field(name="Servers", value=len(self.bot.guilds))
-            embed.add_field(
-                name="Shards",
-                value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
-            )
-            embed.add_field(name="Commands Run", value=total_commands)
-            embed.add_field(name="Lines of code", value=self.bot.sloc)
-            embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
-            await ctx.send(embed=embed)
+        embed.add_field(name="Process", value=activity)
+        embed.add_field(name="Host", value=host)
+        embed.add_field(
+            name="Channels",
+            value=f"{text + voice} total\n{text} text\n{voice} voice",
+        )
+        embed.add_field(name="Members", value=total_members)
+        embed.add_field(name="Servers", value=len(self.bot.guilds))
+        embed.add_field(
+            name="Shards",
+            value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
+        )
+        embed.add_field(name="Commands Run", value=total_commands)
+        embed.add_field(name="Lines of code", value=self.bot.sloc)
+        embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
+        await ctx.send(embed=embed)
 
     async def get_weekly_top_guilds(self):
         query = """SELECT guild_id, COUNT(*) as commands
@@ -163,23 +162,22 @@ class Meta(commands.Cog):
 
         You can use this command once every 30 seconds.
         """
-        async with ctx.typing():
-            guilds = await self.get_weekly_top_guilds()
-            embed = discord.Embed(color=self.bot.color(ctx.author.id))
-            embed.title = "Most Active Servers"
-            embed.url = self.bot.config.website + "/#servers"
-            embed.set_footer(text="Tracking command usage since - 03/31/2021")
+        guilds = await self.get_weekly_top_guilds()
+        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+        embed.title = "Most Active Servers"
+        embed.url = self.bot.config.website + "/#servers"
+        embed.set_footer(text="Tracking command usage since - 03/31/2021")
 
-            board = []
-            for index, guild in enumerate(guilds, start=1):
-                g = self.bot.get_guild(guild["guild_id"])
-                if not g:
-                    continue
-                board.append(
-                    f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands"
-                )
-            embed.description = "\n".join(board)
-            await ctx.send(embed=embed)
+        board = []
+        for index, guild in enumerate(guilds, start=1):
+            g = self.bot.get_guild(guild["guild_id"])
+            if not g:
+                continue
+            board.append(
+                f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands"
+            )
+        embed.description = "\n".join(board)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
