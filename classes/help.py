@@ -100,7 +100,9 @@ async def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
     return pages
 
 
-async def get_group_help_pages(ctx: "Context", group: list[commands.Command], mapping: MappingT):
+async def get_group_help_pages(
+    ctx: "Context", group: Union[commands.Cog, commands.Group], mapping: MappingT
+):
     chunks = [c async for c in chunker(mapping, per_page=5)]
 
     pages = []
