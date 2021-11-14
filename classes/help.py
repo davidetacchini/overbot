@@ -1,5 +1,5 @@
 # partially inspired by https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/meta.py
-from typing import Union
+from typing import Union, Mapping
 
 import discord
 
@@ -10,23 +10,22 @@ from classes.context import Context
 from classes.paginator import Paginator
 
 PagesT = list[Union[discord.Embed, str]]
-CommandsT = dict[commands.Cog, list[commands.Command]]
+MappingT = Mapping[commands.Cog, list[commands.Command]]
 
 
 class HelpSelect(discord.ui.Select):
-    def __init__(self, bot: commands.AutoShardedBot, all_commands: CommandsT) -> None:
+    def __init__(self, bot: commands.AutoShardedBot, mapping: MappingT) -> None:
         super().__init__(placeholder="Select a category...")
         self.bot = bot
-        self.commands = all_commands
+        self.mapping = mapping
         self.__fill_options()
 
     def __fill_options(self) -> None:
         self.add_option(label="Homepage", value="homepage")
-        for cog, cmds in self.commands.items():
-            if not cmds:
+        for cog, commands_ in self.mapping.items():
+            if cog is None or len(commands_) == 0:
                 continue
-            description = cog.description.split("\n", 1)[0] or None
-            self.add_option(label=cog.qualified_name, description=description)
+            self.add_option(label=cog.qualified_name)
 
     async def callback(self, interaction: discord.Interaction) -> None:
         value = self.values[0]
@@ -38,21 +37,19 @@ class HelpSelect(discord.ui.Select):
                 return await interaction.response.send_message(
                     "Somehow this category does not exists.", ephemeral=True
                 )
-
-            commands = self.commands[cog]
+            commands = [c for c in cog.walk_commands()]
             if not commands:
                 return await interaction.response.send_message(
                     "This category has no commands to show.", ephemeral=True
                 )
-
             pages = await get_group_help_pages(self.view.ctx, cog, commands)
             await self.view.rebind(pages, interaction)
 
 
 class HelpPaginator(Paginator):
-    def add_categories(self, commands: CommandsT) -> None:
+    def add_categories(self, mapping: MappingT) -> None:
         self.clear_items()
-        self.add_item(HelpSelect(self.ctx.bot, commands))
+        self.add_item(HelpSelect(self.ctx.bot, mapping))
         self.fill_items()
 
     async def rebind(self, pages: PagesT, interaction: discord.Interaction) -> None:
@@ -103,8 +100,8 @@ async def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
     return pages
 
 
-async def get_group_help_pages(ctx: "Context", group: list[commands.Command], commands: CommandsT):
-    chunks = [c async for c in chunker(commands, per_page=5)]
+async def get_group_help_pages(ctx: "Context", group: list[commands.Command], mapping: MappingT):
+    chunks = [c async for c in chunker(mapping, per_page=5)]
 
     pages = []
     for index, chunk in enumerate(chunks, start=1):
@@ -121,7 +118,7 @@ async def get_group_help_pages(ctx: "Context", group: list[commands.Command], co
                     name="Page {current_page}/{total_pages} ({total_commands} commands)".format(
                         current_page=index,
                         total_pages=total,
-                        total_commands=len(commands),
+                        total_commands=len(mapping),
                     )
                 )
             embed.set_footer(
@@ -143,7 +140,9 @@ class CustomHelp(commands.HelpCommand):
     def get_command_signature(self, command: commands.Command) -> str:
         return f"{self.context.clean_prefix}{command.qualified_name} {command.signature}"
 
-    def common_command_formatting(self, embeds: list[discord.Embed], command: CommandsT) -> None:
+    def common_command_formatting(
+        self, embeds: list[discord.Embed], command: commands.Command
+    ) -> None:
         if not isinstance(embeds, list):
             embeds = [embeds]
         for embed in embeds:
@@ -154,22 +153,9 @@ class CustomHelp(commands.HelpCommand):
                 embed.add_field(name="Aliases", value=aliases)
 
     async def send_bot_help(self, mapping):
-        ctx = self.context
-        bot = self.context.bot
-        filtered = await self.filter_commands(bot.commands, sort=True)
-
-        commands = {}
-        for command in filtered:
-            if command.cog is None:
-                continue
-            try:
-                commands[command.cog].append(command)
-            except KeyError:
-                commands[command.cog] = [command]
-
-        pages = await get_bot_homepage(ctx)
+        pages = await get_bot_homepage(self.context)
         paginator = HelpPaginator(pages, ctx=self.context)
-        paginator.add_categories(commands)
+        paginator.add_categories(mapping)
         await paginator.start()
 
     async def send_cog_help(self, cog):
