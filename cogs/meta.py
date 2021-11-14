@@ -173,9 +173,7 @@ class Meta(commands.Cog):
             g = self.bot.get_guild(guild["guild_id"])
             if not g:
                 continue
-            board.append(
-                f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands"
-            )
+            board.append(f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands")
         embed.description = "\n".join(board)
         await ctx.send(embed=embed)
 
