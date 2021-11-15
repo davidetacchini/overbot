@@ -201,7 +201,7 @@ class Profile(commands.Cog):
         await ctx.send(embed=embed)
 
     @has_profile()
-    @profile.command(aliases=["statistics"])
+    @profile.command()
     async def stats(self, ctx: "Context", member: discord.Member = None) -> None:
         """Provides general stats for a profile.
 
@@ -234,10 +234,31 @@ class Profile(commands.Cog):
         await self.bot.get_cog("Stats").show_stats_for(ctx, hero, platform, username)
 
     @has_profile()
+    @profile.command()
+    async def summary(self, ctx: "Context", member: discord.Member = None) -> None:
+        """Provides summarized stats for a profile.
+
+        `[member]` - The mention or the ID of a Discord member.
+
+        If no member is given, the stats returned will be yours.
+        """
+        member = member or ctx.author
+        message = "Select a profile to view the summary for."
+        profile_id = await choose_profile(ctx, message, member)
+        _, platform, username = await self.get_profile(profile_id)
+        data = await Request(platform, username).get()
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private():
+            embed = profile.embed_private()
+        else:
+            embed = profile.embed_summary(ctx)
+        await ctx.send(embed=embed)
+
+    @has_profile()
     @profile.command(aliases=["nick"])
     @commands.guild_only()
     async def nickname(self, ctx: "Context") -> None:
-        """Shows / Remove your SRs in your nickname.
+        """Shows or remove your SRs in your nickname.
 
         The nickname can only be set in one server. It updates
         automatically whenever `profile rating` is used and the

@@ -62,11 +62,13 @@ class Player:
         )
 
     def format_key(self, key):
-        if key == "best":
-            return key.capitalize() + " (Most in game)"
-        elif key == "average":
-            return key.capitalize() + " (per 10 minutes)"
-        return self.to_pascal(key)
+        match key:
+            case "best":
+                return key.capitalize() + " (Most in game)"
+            case "average":
+                return key.capitalize() + " (per 10 minutes)"
+            case _:
+                return self.to_pascal(key)
 
     @staticmethod
     def get_rating_icon(rating):
@@ -154,7 +156,7 @@ class Player:
     def format_stats(self, embed, key, quickplay, competitive):
         if quickplay and quickplay[key]:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-            embed.add_field(name="Quickplay", value=self.to_pascal(q_t))
+            embed.add_field(name="Quick Play", value=self.to_pascal(q_t))
         if competitive and competitive[key]:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self.to_pascal(c_t))
@@ -174,8 +176,8 @@ class Player:
             role_name = key.upper()
             rating_icon = self.get_rating_icon(value)
             embed.add_field(
-                name=f"{role_icon} **{role_name}**",
-                value=f"{rating_icon} **{value}**{emojis.sr}",
+                name=f"{role_icon} {role_name}",
+                value=f"{rating_icon} {value}{emojis.sr}",
             )
         embed.set_footer(
             text="Average: {average}".format(average=self.data.get("rating")),
@@ -203,13 +205,66 @@ class Player:
             self.pages.append(embed)
         return self.pages
 
+    def embed_summary(self, ctx):
+        embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
+        embed.set_author(name=str(self), icon_url=self.avatar)
+        embed.set_thumbnail(url=self.level_icon)
+
+        ratings = self.resolve_ratings()
+
+        if ratings:
+            ratings_ = []
+            for key, value in ratings.items():
+                role_icon = ROLES.get(key.lower())
+                rating_icon = self.get_rating_icon(value)
+                ratings_.append(f"{role_icon} {rating_icon}{value}{emojis.sr}")
+            embed.description = " ".join(ratings_)
+
+        summary = {}
+        summary["level"] = str(self.data.get("prestige")) + str(self.data.get("level"))
+        summary["endorsement"] = self.data.get("endorsement")
+        summary["gamesWon"] = self.data.get("gamesWon")
+
+        for key, value in summary.items():
+            embed.add_field(name=self.to_pascal(key), value=value)
+
+        def format_dict(source):
+            d = {}
+            d["game"] = source.get("game")
+            to_keep = ("deaths", "eliminations", "damageDone")
+            d["combat"] = {k: v for k, v in source.get("combat").items() if k in to_keep}
+            d["awards"] = source.get("matchAwards")
+            return d
+
+        def format_embed(source, embed, *, category):
+            for key, value in source.items():
+                key = f"{self.to_pascal(key)} ({category.title()})"
+                if isinstance(value, dict):
+                    v = "\n".join(f"{k}: **{v}**" for k, v in value.items())
+                    embed.add_field(name=key, value=self.to_pascal(v))
+                else:
+                    embed.add_field(name=key, value=value)
+
+        q = self.data.get("quickPlayStats").get("careerStats").get("allHeroes")  # quick play
+        c = self.data.get("competitiveStats").get("careerStats").get("allHeroes")  # competitive
+
+        if q:
+            quickplay = format_dict(q)
+            format_embed(quickplay, embed, category="quick play")
+
+        if c:
+            competitive = format_dict(c)
+            format_embed(competitive, embed, category="competitive")
+
+        return embed
+
     def embed_private(self):
         embed = discord.Embed(color=discord.Color.red())
         embed.title = "This profile is set to private"
         embed.description = (
             "Profiles are set to private by default."
             " You can modify this setting in Overwatch under `Options > Social`."
-            " Please note that these changes may take effect after approximately 30 minutes."
+            " Please note that this change may take effect within approximately 30 minutes."
         )
         embed.set_author(name=str(self), icon_url=self.avatar)
         return embed

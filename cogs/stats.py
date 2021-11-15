@@ -62,14 +62,13 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Network ID
         """
-        async with ctx.typing():
-            data = await Request(platform, username).get()
-            profile = Player(data, platform=platform, username=username)
-            if profile.is_private():
-                embed = profile.embed_private()
-            else:
-                embed = await profile.embed_ratings(ctx)
-            await ctx.send(embed=embed)
+        data = await Request(platform, username).get()
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private():
+            embed = profile.embed_private()
+        else:
+            embed = await profile.embed_ratings(ctx)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def stats(self, ctx, platform: valid_platform, *, username):
@@ -92,8 +91,7 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Network ID
         """
-        async with ctx.typing():
-            await self.show_stats_for(ctx, "allHeroes", platform, username)
+        await self.show_stats_for(ctx, "allHeroes", platform, username)
 
     @commands.command()
     async def hero(
@@ -124,8 +122,36 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Network ID
         """
-        async with ctx.typing():
-            await self.show_stats_for(ctx, hero, platform, username)
+        await self.show_stats_for(ctx, hero, platform, username)
+
+    @commands.command()
+    async def summary(self, ctx, platform: valid_platform, *, username):
+        """Returns player summarized stats.
+
+        `<platform>` - The platform of the player to get stats for.
+        `<username>` - The username of the player to get stats for.
+
+        Platforms:
+
+        - pc, bnet
+        - playstation, ps, psn, ps4, play
+        - xbox, xbl
+        - nintendo-switch, nsw, switch
+
+        Username:
+
+        - pc: BattleTag (format: name#0000)
+        - playstation: Online ID
+        - xbox: Gamertag
+        - nintendo-switch: Nintendo Network ID
+        """
+        data = await Request(platform, username).get()
+        profile = Player(data, platform=platform, username=username)
+        if profile.is_private():
+            embed = profile.embed_private()
+        else:
+            embed = profile.embed_summary(ctx)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
