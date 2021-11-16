@@ -55,6 +55,14 @@ discord_bots = {
 
 # ENDIGNORE
 
+"""Premium consts."""
+PREMIUM_COOLDOWN = 1.5
+PREMIUM_PROFILES_LIMIT = 25
+
+"""Base consts."""
+BASE_COOLDOWN = 3.0
+BASE_PROFILES_LIMIT = 5
+
 """The owner's ID."""
 owner_id = 285502621295312896
 
