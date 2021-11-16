@@ -173,7 +173,7 @@ class Profile(commands.Cog):
         await ctx.send("Profile successfully updated.")
 
     @has_profile()
-    @profile.command(aliases=["rank", "sr"])
+    @profile.command(aliases=["sr"])
     async def rating(self, ctx: "Context", member: discord.Member = None) -> None:
         """Provides SRs information for a profile.
 
