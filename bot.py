@@ -1,6 +1,5 @@
 import os
 import sys
-import datetime
 
 import asyncpg
 import discord
@@ -40,17 +39,13 @@ class Bot(commands.AutoShardedBot):
         self.hero_names = []
 
         self.normal_cooldown = commands.CooldownMapping.from_cooldown(
-            1, 3, commands.BucketType.member
+            1, config.BASE_COOLDOWN, commands.BucketType.member
         )
         self.premium_cooldown = commands.CooldownMapping.from_cooldown(
-            1, 1.5, commands.BucketType.member
+            1, config.PREMIUM_COOLDOWN, commands.BucketType.member
         )
 
         self.add_check(global_cooldown, call_once=True)
-
-    @property
-    def timestamp(self):
-        return datetime.datetime.utcnow()
 
     @property
     def prefix(self):
@@ -135,17 +130,13 @@ class Bot(commands.AutoShardedBot):
     def member_is_premium(self, member_id, guild_id):
         """Check for a member/guild to be premium."""
         to_check = (member_id, guild_id)
-
-        if all(x not in self.premiums for x in to_check):
-            return False
-        return True
+        return any(x in self.premiums for x in to_check)
 
     def get_profiles_limit(self, ctx, member_id):
         guild_id = ctx.guild.id if ctx.guild is not None else 0
-        if self.member_is_premium(member_id, guild_id):
-            return 25
-        else:
-            return 5
+        if not self.member_is_premium(member_id, guild_id):
+            return config.BASE_LIMIT
+        return config.PREMIUM_LIMIT
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=Context)
