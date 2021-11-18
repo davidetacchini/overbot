@@ -220,21 +220,21 @@ class Tasks(commands.Cog):
         if not donations:
             return
 
-        for dono in donations:
-            if dono["product_id"] == product_server_id:
-                guild_id = int(dono["seller_customs"]["Server ID (to be set as premium)"])
+        for donation in donations:
+            if donation["product_id"] == product_server_id:
+                guild_id = int(donation["seller_customs"]["Server ID (to be set as premium)"])
                 await self.set_premium_for(guild_id)
                 self.bot.premiums.add(guild_id)
             else:
-                member_id = int(dono["buyer_id"])
+                member_id = int(donation["buyer_id"])
                 await self.set_premium_for(member_id, server=False)
                 self.bot.premiums.add(member_id)
 
             # endpoint to mark donation as processed
-            url_mark = self.bot.config.dbot["mark"].format(dono["txn_id"])
+            url_mark = self.bot.config.dbot["mark"].format(donation["txn_id"])
             payload = {"markProcessed": True}
             async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
-                print(f'Donation {dono["txn_id"]} has been processed. Status {r.status}')
+                print(f'Donation {donation["txn_id"]} has been processed. Status {r.status}')
 
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
@@ -244,7 +244,7 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = await get_overwatch_news("en_US", amount=1)
+            news = await get_overwatch_news(1)
             news = news[0]
         except AttributeError:
             return
