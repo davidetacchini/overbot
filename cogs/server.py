@@ -23,7 +23,7 @@ class Server(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, prefix: commands.clean_content(escape_markdown=True) = None):
-        """Shows or updated this server's prefix.
+        """Shows or updates this server's prefix.
 
         `[prefix]` - The new server prefix to use.
 
