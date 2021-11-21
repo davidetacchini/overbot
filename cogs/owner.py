@@ -59,8 +59,8 @@ class Owner(commands.Cog):
         else:
             await ctx.message.add_reaction(emojis.check)
 
-    @commands.group(name="reload", hidden=True, invoke_without_command=True)
-    async def _reload(self, ctx, *, module):
+    @commands.group(hidden=True, invoke_without_command=True)
+    async def reload(self, ctx, *, module):
         """Reloads a module."""
         try:
             self.bot.reload_extension(module)
@@ -69,8 +69,8 @@ class Owner(commands.Cog):
         else:
             await ctx.message.add_reaction(emojis.check)
 
-    @commands.command(hidden=True)
-    async def rldconf(self, ctx):
+    @reload.command(hidden=True)
+    async def config(self, ctx):
         try:
             importlib.reload(self.bot.config)
         except Exception as e:
@@ -119,7 +119,7 @@ class Owner(commands.Cog):
             self.bot.load_extension(module)
 
     # Source: https://github.com/Rapptz/RoboDanny
-    @_reload.command(name="all", hidden=True)
+    @reload.command(name="all", hidden=True)
     async def reload_all(self, ctx):
         """Reloads all modules, while pulling from git."""
 
