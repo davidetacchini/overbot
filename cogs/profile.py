@@ -351,9 +351,9 @@ class Profile(commands.Cog):
 
     @is_premium()
     @has_profile()
-    @profile.command()
+    @profile.command(extras={"premium": True})
     async def graph(self, ctx: "Context") -> None:
-        """`[Premium]` Shows SRs performance graph."""
+        """Shows SRs performance graph."""
         message = "Select a profile to view the SRs graph for."
         profile_id = await choose_profile(ctx, message, ctx.author)
         profile = await self.get_profile(profile_id)

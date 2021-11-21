@@ -67,28 +67,23 @@ class Member(commands.Cog):
         embed.description = description
 
         for subcommand in subcommands:
-            if subcommand.short_doc:
-                # remove `[Premium]` from docstring
-                short_doc = subcommand.short_doc[12:]
-            else:
-                short_doc = "No help found..."
-
+            short_doc = subcommand.short_doc or "No help found..."
             name = subcommand.name.capitalize() + " - " + f"`{settings[subcommand.name]}`"
             embed.add_field(name=name, value=short_doc, inline=False)
 
         return embed
 
     @is_premium()
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, extras={"premium": True})
     async def settings(self, ctx):
-        """`[Premium]` Manage your settings."""
+        """Manage your settings."""
         embed = await self.embed_member_settings(ctx, ctx.command)
         await ctx.send(embed=embed)
 
     @is_premium()
-    @settings.command()
+    @settings.command(extras={"premium": True})
     async def color(self, ctx, *, color: valid_color):
-        """`[Premium]` Set a custom color for the embeds.
+        """Set a custom color for the embeds.
 
         `<color>` - The color to use for the embeds. Enter `none` to reset.
 
