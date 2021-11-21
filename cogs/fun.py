@@ -89,9 +89,8 @@ class Fun(commands.Cog):
     def embed_meme(self, ctx, meme):
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
         embed.title = meme["data"]["title"]
-        embed.description = "{upvotes} upvotes - {comments} comments".format(
-            upvotes=meme["data"]["ups"], comments=meme["data"]["num_comments"]
-        )
+        upvotes, comments = meme["data"]["ups"], meme["data"]["num_comments"]
+        embed.description = f"{upvotes} upvotes - {comments} comments"
         embed.url = f'https://reddit.com{meme["data"]["permalink"]}'
         embed.set_image(url=meme["data"]["url"])
         embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
@@ -154,14 +153,10 @@ class Fun(commands.Cog):
 
         Memes are taken from the subreddit r/Overwatch_Memes.
         """
-        await ctx.send(
-            "This command is currently not available because **OverBot"
-            " has been rate limited by Reddit**. Sorry for the inconvenience."
-        )
-        # category = category or secrets.choice(MEME_CATEGORIES)
-        # meme = await self.get_meme(category)
-        # embed = self.embed_meme(ctx, meme)
-        # await ctx.send(embed=embed)
+        category = category or secrets.choice(MEME_CATEGORIES)
+        meme = await self.get_meme(category)
+        embed = self.embed_meme(ctx, meme)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
