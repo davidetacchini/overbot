@@ -4,7 +4,9 @@ import discord
 
 from utils import emojis
 from utils.funcs import get_platform_emoji
-from classes.context import Context
+
+from .context import Context
+from .exceptions import CannotEmbedLinks
 
 PageT = Union[str, dict, discord.Embed]
 
@@ -74,7 +76,15 @@ class Paginator(discord.ui.View):
             else:
                 await interaction.response.edit_message(**kwargs, view=self)
 
+    def _ensure_permissions(self):
+        permissions = self.ctx.channel.permissions_for(self.ctx.me)
+        if not permissions.send_messages:
+            return
+        if not permissions.embed_links:
+            raise CannotEmbedLinks
+
     async def start(self) -> None:
+        self._ensure_permissions()
         kwargs = self._get_kwargs_from_page(self.pages[0])
         self._update_labels(0)
         self.message = await self.ctx.send(**kwargs, view=self)
