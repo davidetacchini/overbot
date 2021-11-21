@@ -23,14 +23,15 @@ class HelpSelect(discord.ui.Select):
     def __fill_options(self) -> None:
         self.add_option(label="Homepage", value="homepage")
         for cog, commands_ in self.mapping.items():
-            if cog is None or len(commands_) == 0:
+            unwanted_cogs = ["Owner"]
+            if cog is None or len(commands_) == 0 or cog.qualified_name in unwanted_cogs:
                 continue
             self.add_option(label=cog.qualified_name)
 
     async def callback(self, interaction: discord.Interaction) -> None:
         value = self.values[0]
         if value == "homepage":
-            await self.view.rebind(get_bot_homepage(), interaction)
+            await self.view.rebind(get_bot_homepage(self.view.ctx), interaction)
         else:
             cog = self.bot.get_cog(value)
             if cog is None:
@@ -60,7 +61,7 @@ class HelpPaginator(Paginator):
         await interaction.response.edit_message(**kwargs, view=self)
 
 
-async def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
+def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
     pages = []
 
     # page 1
@@ -113,9 +114,11 @@ async def get_group_help_pages(
 
         for command in chunk:
             signature = f"{command.qualified_name} {command.signature}"
+            if command.extras.get("premium"):
+                signature += " :star:"
             value = command.short_doc or "No help found..."
             embed.add_field(name=signature, value=value, inline=False)
-            if (total := len(pages)) > 1:
+            if total := len(pages) > 1:
                 embed.set_author(
                     name="Page {current_page}/{total_pages} ({total_commands} commands)".format(
                         current_page=index,
@@ -155,7 +158,7 @@ class CustomHelp(commands.HelpCommand):
                 embed.add_field(name="Aliases", value=aliases)
 
     async def send_bot_help(self, mapping):
-        pages = await get_bot_homepage(self.context)
+        pages = get_bot_homepage(self.context)
         paginator = HelpPaginator(pages, ctx=self.context)
         paginator.add_categories(mapping)
         await paginator.start()
