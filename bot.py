@@ -135,8 +135,8 @@ class Bot(commands.AutoShardedBot):
     def get_profiles_limit(self, ctx, member_id):
         guild_id = ctx.guild.id if ctx.guild is not None else 0
         if not self.member_is_premium(member_id, guild_id):
-            return config.BASE_LIMIT
-        return config.PREMIUM_LIMIT
+            return config.BASE_PROFILES_LIMIT
+        return config.PREMIUM_PROFILES_LIMIT
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=Context)
