@@ -118,7 +118,7 @@ async def get_group_help_pages(
                 signature += " :star:"
             value = command.short_doc or "No help found..."
             embed.add_field(name=signature, value=value, inline=False)
-            if total := len(pages) > 1:
+            if (total := len(pages)) > 1:
                 embed.set_author(
                     name="Page {current_page}/{total_pages} ({total_commands} commands)".format(
                         current_page=index,
@@ -156,6 +156,16 @@ class CustomHelp(commands.HelpCommand):
             if command.aliases:
                 aliases = ", ".join(map(lambda a: f"`{a}`", command.aliases))
                 embed.add_field(name="Aliases", value=aliases)
+            if not isinstance(command, commands.Group):  # skip groups
+                if (cooldown := command.cooldown) is not None:
+                    embed.add_field(name="Cooldown", value=f"`{cooldown.per}s`")
+                else:
+                    cooldown = {
+                        "base": self.context.bot.config.BASE_COOLDOWN,
+                        "premium": self.context.bot.config.PREMIUM_COOLDOWN,
+                    }
+                    value = "\n".join(f"{k.capitalize()}: `{v}s`" for k, v in cooldown.items())
+                    embed.add_field(name="Cooldown", value=value)
 
     async def send_bot_help(self, mapping):
         pages = get_bot_homepage(self.context)
