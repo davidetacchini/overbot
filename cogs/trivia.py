@@ -121,9 +121,7 @@ class Trivia(commands.Cog):
     async def best(self, ctx):
         """Shows top 10 trivia players.
 
-        It is based on games won.
-
-        You can use this command once per minute.
+        Based on games won.
         """
         query = """SELECT id, started, won, lost
                    FROM trivia

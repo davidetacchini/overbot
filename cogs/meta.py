@@ -158,9 +158,7 @@ class Meta(commands.Cog):
     async def topweekly(self, ctx):
         """Shows bot's weekly most active servers.
 
-        It is based on commands runned.
-
-        You can use this command once every 30 seconds.
+        Based on commands runned.
         """
         guilds = await self.get_weekly_top_guilds()
         embed = discord.Embed(color=self.bot.color(ctx.author.id))
