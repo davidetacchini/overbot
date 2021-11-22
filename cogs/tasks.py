@@ -55,6 +55,7 @@ class Tasks(commands.Cog):
 
         async with self.bot.pool.acquire() as conn:
             pg_version = conn.get_server_version()
+
         pg_version = f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
 
         os_name = distro.linux_distribution()[0]
@@ -94,7 +95,7 @@ class Tasks(commands.Cog):
                     "name": command.qualified_name,
                     "aliases": command.aliases or None,
                     "signature": command.signature or None,
-                    "is_premium": command.extras.get("premium"),
+                    "is_premium": command.extras.get("premium") or False,
                     "short_desc": command.short_doc or "No help found...",
                     "long_desc": command.help or "No help found...",
                 }
