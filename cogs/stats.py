@@ -46,8 +46,8 @@ class Stats(commands.Cog):
     async def rating(self, ctx, platform: valid_platform, *, username):
         """Returns player ratings.
 
-        `<platform>` - The platform of the player to get ranks for.
-        `<username>` - The username of the player to get ranks for.
+        `<platform>` - The platform of the player to get the SRs for.
+        `<username>` - The username of the player to get the SRs for.
 
         Platforms:
         - pc, bnet
@@ -123,8 +123,8 @@ class Stats(commands.Cog):
     async def summary(self, ctx, platform: valid_platform, *, username):
         """Returns player summarized stats.
 
-        `<platform>` - The platform of the player to get stats for.
-        `<username>` - The username of the player to get stats for.
+        `<platform>` - The platform of the player to get the summary for.
+        `<username>` - The username of the player to get the summary for.
 
         Platforms:
         - pc, bnet
