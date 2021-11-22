@@ -23,8 +23,6 @@ class Overwatch(commands.Cog):
         """Shows the latest Overwatch news.
 
         `[amount]` - The amount of news to return. Defaults to 4.
-
-        You can use this command once a minute.
         """
         pages = []
 

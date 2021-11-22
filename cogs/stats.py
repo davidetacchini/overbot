@@ -49,14 +49,12 @@ class Stats(commands.Cog):
         `<username>` - The username of the player to get ranks for.
 
         Platforms:
-
         - pc, bnet
         - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
         Username:
-
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
@@ -78,14 +76,12 @@ class Stats(commands.Cog):
         `<username>` - The username of the player to get stats for.
 
         Platforms:
-
         - pc, bnet
         - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
         Username:
-
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
@@ -109,14 +105,12 @@ class Stats(commands.Cog):
         `<username>` - The username of the player to get stats for.
 
         Platforms:
-
         - pc, bnet
         - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
         Username:
-
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
@@ -132,14 +126,12 @@ class Stats(commands.Cog):
         `<username>` - The username of the player to get stats for.
 
         Platforms:
-
         - pc, bnet
         - playstation, ps, psn, ps4, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
         Username:
-
         - pc: BattleTag (format: name#0000)
         - playstation: Online ID
         - xbox: Gamertag
