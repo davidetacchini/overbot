@@ -14,6 +14,7 @@ def valid_platform(argument):
         "ps": "psn",
         "psn": "psn",
         "ps4": "psn",
+        "ps5": "psn",
         "play": "psn",
         "playstation": "psn",
         "nsw": "nintendo-switch",
@@ -50,7 +51,7 @@ class Stats(commands.Cog):
 
         Platforms:
         - pc, bnet
-        - playstation, ps, psn, ps4, play
+        - playstation, ps, psn, ps4, ps5, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
@@ -77,7 +78,7 @@ class Stats(commands.Cog):
 
         Platforms:
         - pc, bnet
-        - playstation, ps, psn, ps4, play
+        - playstation, ps, psn, ps4, ps5, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
@@ -106,7 +107,7 @@ class Stats(commands.Cog):
 
         Platforms:
         - pc, bnet
-        - playstation, ps, psn, ps4, play
+        - playstation, ps, psn, ps4, ps5, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
@@ -127,7 +128,7 @@ class Stats(commands.Cog):
 
         Platforms:
         - pc, bnet
-        - playstation, ps, psn, ps4, play
+        - playstation, ps, psn, ps4, ps5, play
         - xbox, xbl
         - nintendo-switch, nsw, switch
 
