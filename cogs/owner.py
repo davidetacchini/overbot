@@ -119,8 +119,8 @@ class Owner(commands.Cog):
             self.bot.load_extension(module)
 
     # Source: https://github.com/Rapptz/RoboDanny
-    @reload.command(name="all", hidden=True)
-    async def reload_all(self, ctx):
+    @reload.command(hidden=True)
+    async def all(self, ctx):
         """Reloads all modules, while pulling from git."""
 
         async with ctx.typing():
