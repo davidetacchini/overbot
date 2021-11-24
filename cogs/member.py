@@ -74,7 +74,7 @@ class Member(commands.Cog):
         return embed
 
     @is_premium()
-    @commands.group(invoke_without_command=True, extras={"premium": True})
+    @commands.group(invoke_without_command=True)
     async def settings(self, ctx):
         """Manage your settings."""
         embed = await self.embed_member_settings(ctx, ctx.command)
