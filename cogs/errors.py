@@ -65,12 +65,12 @@ class ErrorHandler(commands.Cog):
                     premium = self.bot.config.premium
                     embed = discord.Embed(color=discord.Color.red())
                     embed.description = (
-                        "Max profiles limit reached.\n"
+                        "Maximum limit of profiles reached.\n"
                         f"[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
                     )
                     await ctx.send(embed=embed)
                 else:
-                    await ctx.send("Max profiles limit reached.")
+                    await ctx.send("Maximum limit of profiles reached.")
 
             elif type(error) == checks.MemberNotPremium:
                 premium = self.bot.config.premium
