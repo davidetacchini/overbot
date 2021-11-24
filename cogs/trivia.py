@@ -117,7 +117,7 @@ class Trivia(commands.Cog):
         await ctx.send(embed=embed)
 
     @trivia.command()
-    @commands.cooldown(1, 60.0, commands.BucketType.member)
+    @commands.cooldown(1, 30.0, commands.BucketType.member)
     async def best(self, ctx):
         """Shows top 10 trivia players.
 
