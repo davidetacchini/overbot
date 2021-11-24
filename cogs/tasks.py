@@ -94,6 +94,7 @@ class Tasks(commands.Cog):
                     "cog": command.cog_name,
                     "name": command.qualified_name,
                     "aliases": command.aliases or None,
+                    "cooldown": command.cooldown.per if command.cooldown else None,
                     "signature": command.signature or None,
                     "is_premium": command.extras.get("premium") or False,
                     "short_desc": command.short_doc or "No help found...",
