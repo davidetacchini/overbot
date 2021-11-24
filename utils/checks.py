@@ -35,8 +35,7 @@ async def global_cooldown(ctx):
 
     if retry_after:
         raise MemberOnCooldown(bucket, retry_after, type_)
-    else:
-        return True
+    return True
 
 
 async def get_profiles(ctx):
