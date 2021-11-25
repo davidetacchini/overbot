@@ -77,7 +77,7 @@ class ErrorHandler(commands.Cog):
                 embed = discord.Embed(color=discord.Color.red())
                 embed.description = (
                     "This command requires a Premium membership.\n"
-                    f"[Click here]({premium}) to have a look at the Premium plan."
+                    f"[Click here]({premium}) to have a look at the Premium plans."
                 )
                 await ctx.send(embed=embed)
 
