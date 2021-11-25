@@ -80,9 +80,6 @@ main_color = 0xFFA657
 """OverBot's server ID."""
 support_server_id = 550685823784321035
 
-"""Overwatch news feed channel."""
-news_channel = 771489241288540220
-
 # ENDIGNORE
 
 """Hero portrait URL."""
