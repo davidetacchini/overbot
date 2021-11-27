@@ -54,12 +54,12 @@ async def get_overwatch_heroes():
 
     heroes = [h for h in page.find_all("div", class_="hero-portrait-detailed-container")]
 
-    all_heroes = []
+    all_heroes = {}
     for h in heroes:
-        cur_hero = {}
-        cur_hero["key"] = h.find("a", class_="hero-portrait-detailed")["data-hero-id"]
-        cur_hero["name"] = h.find("span", class_="portrait-title").get_text()
-        cur_hero["portrait"] = h.find("img", class_="portrait")["src"]
-        cur_hero["role"] = h["data-groups"][2:-2].lower()
-        all_heroes.append(cur_hero)
+        value = {}
+        value["name"] = h.find("span", class_="portrait-title").get_text()
+        value["portrait"] = h.find("img", class_="portrait")["src"]
+        value["role"] = h["data-groups"][2:-2].lower()
+        key = str(h.find("a", class_="hero-portrait-detailed")["data-hero-id"]).lower()
+        all_heroes[key] = value
     return all_heroes

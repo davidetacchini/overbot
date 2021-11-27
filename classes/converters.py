@@ -15,7 +15,7 @@ class Hero(commands.Converter):
 
         hero = aliases.get(hero_)
         if hero is None:
-            if hero_ not in ctx.bot.hero_names:
+            if ctx.bot.heroes.get(hero_) is None:
                 raise commands.BadArgument(f"Unknown hero: **{argument}**.")
             else:
                 return hero_

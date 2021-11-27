@@ -34,9 +34,8 @@ class Bot(commands.AutoShardedBot):
         self.prefixes = {}
         self.premiums = {}
         self.embed_colors = {}
-        self.heroes = []
+        self.heroes = {}
         self.maps = []
-        self.hero_names = []
 
         self.normal_cooldown = commands.CooldownMapping.from_cooldown(
             1, config.BASE_COOLDOWN, commands.BucketType.member
@@ -166,9 +165,6 @@ class Bot(commands.AutoShardedBot):
     async def cache_maps(self):
         self.maps = await get_overwatch_maps()
 
-    def cache_hero_names(self):
-        self.hero_names = [str(h["key"]).lower() for h in self.heroes]
-
     async def cache_embed_colors(self):
         embed_colors = {}
         query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
@@ -187,7 +183,6 @@ class Bot(commands.AutoShardedBot):
         await self.cache_premiums()
         await self.cache_embed_colors()
         await self.cache_heroes()
-        self.cache_hero_names()
         await self.cache_maps()
 
         for extension in os.listdir("cogs"):
