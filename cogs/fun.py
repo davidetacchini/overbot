@@ -57,7 +57,7 @@ class Fun(commands.Cog):
         self.bot = bot
 
     def get_random_hero(self, category):
-        heroes = self.bot.heroes
+        heroes = list(self.bot.heroes.values())
         if not category:
             hero = secrets.choice(heroes)
         else:
