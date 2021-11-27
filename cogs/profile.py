@@ -192,12 +192,12 @@ class Profile(commands.Cog):
             embed = profile.embed_private()
         else:
             embed = await profile.embed_ratings(ctx, save=True, profile_id=id_)
-            # only updates nickname with the profile set for that purspose
+            # only update the nickname if the profile matches the one
+            # selected for that purpose
             query = "SELECT * FROM nickname WHERE profile_id = $1"
             flag = await self.bot.pool.fetchrow(query, id_)
             if flag and member.id == ctx.author.id:
-                nick = Nickname(ctx, profile=profile)
-                await nick.update()
+                await Nickname(ctx, profile=profile).update()
         await ctx.send(embed=embed)
 
     @has_profile()
