@@ -32,9 +32,7 @@ class ServiceUnavailable(RequestError):
 
 class UnexpectedError(RequestError):
     def __init__(self):
-        super().__init__(
-            "Something bad happened during the request. Please be patient and try again."
-        )
+        super().__init__("Something bad happened. Please be patient and try again.")
 
 
 class TooManyAccounts(RequestError):
