@@ -16,6 +16,8 @@ ROLES = {
 
 
 class Nickname:
+    __slots__ = ("ctx", "profile", "member")
+
     def __init__(self, ctx: "Context", *, profile: Player = None) -> None:
         self.ctx = ctx
         self.profile = profile
