@@ -121,7 +121,9 @@ class Player:
                     all_equals = True
 
         if not roles or not all_equals:
-            query = "INSERT INTO rating (tank, damage, support, profile_id) VALUES ($1, $2, $3, $4);"
+            query = (
+                "INSERT INTO rating (tank, damage, support, profile_id) VALUES ($1, $2, $3, $4);"
+            )
             await ctx.bot.pool.execute(query, tank, damage, support, profile_id)
 
     def resolve_ratings(self):
