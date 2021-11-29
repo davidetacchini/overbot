@@ -13,16 +13,15 @@ from discord.ext import commands
 
 from utils.funcs import chunker, get_platform_emoji
 from utils.checks import is_premium, has_profile
-from classes.player import Player
 from classes.context import Context
-from classes.request import Request
+from classes.profile import Profile
 from classes.nickname import Nickname
 from classes.paginator import ProfileManagerView, choose_profile, choose_platform
 from classes.converters import Hero
 from classes.exceptions import NoChoice
 
 
-class Profile(commands.Cog):
+class ProfileCog(commands.Cog, name="Profile"):
     def __init__(self, bot):
         self.bot = bot
 
@@ -140,8 +139,7 @@ class Profile(commands.Cog):
 
     async def unlink_profile(self, ctx: "Context") -> None:
         message = "Select a profile to unlink."
-        profile_id = await choose_profile(ctx, message, ctx.author)
-        id_, platform, username = await self.get_profile(profile_id)
+        id_, platform, username = await choose_profile(ctx, message, ctx.author)
 
         if platform == "pc":
             username = username.replace("-", "#")
@@ -157,8 +155,7 @@ class Profile(commands.Cog):
 
     async def update_profile(self, ctx: "Context") -> None:
         message = "Select a profile to update."
-        profile_id = await choose_profile(ctx, message, ctx.author)
-        id_, platform, username = await self.get_profile(profile_id)
+        id_, _, _ = await choose_profile(ctx, message, ctx.author)
         platform = await choose_platform(ctx)
         username = await self.get_player_username(ctx, platform)
 
@@ -169,7 +166,7 @@ class Profile(commands.Cog):
             username = username.replace("-", "#")
 
         query = "UPDATE profile SET platform = $1, username = $2 WHERE id = $3;"
-        await self.bot.pool.execute(query, platform, username, int(profile_id))
+        await self.bot.pool.execute(query, platform, username, id_)
         await ctx.send("Profile successfully updated.")
 
     @has_profile()
@@ -183,19 +180,17 @@ class Profile(commands.Cog):
         """
         member = member or ctx.author
         message = "Select a profile to view the skill ratings for."
-        profile_id = await choose_profile(ctx, message, member)
-        id_, platform, username = await self.get_profile(profile_id)
-
-        data = await Request(platform, username).get()
-        profile = Player(data, platform=platform, username=username)
+        record = await choose_profile(ctx, message, member)
+        profile = Profile(ctx=ctx, record=record)
+        await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = await profile.embed_ratings(ctx, save=True, profile_id=id_)
+            embed = await profile.embed_ratings(save=True, profile_id=profile.id)
             # only update the nickname if the profile matches the one
             # selected for that purpose
             query = "SELECT * FROM nickname WHERE profile_id = $1"
-            flag = await self.bot.pool.fetchrow(query, id_)
+            flag = await self.bot.pool.fetchrow(query, profile.id)
             if flag and member.id == ctx.author.id:
                 await Nickname(ctx, profile=profile).update()
         await ctx.send(embed=embed)
@@ -211,9 +206,7 @@ class Profile(commands.Cog):
         """
         member = member or ctx.author
         message = "Select a profile to view the stats for."
-        profile_id = await choose_profile(ctx, message, member)
-        _, platform, username = await self.get_profile(profile_id)
-
+        _, platform, username = await choose_profile(ctx, message, member)
         await self.bot.get_cog("Stats").show_stats_for(ctx, "allHeroes", platform, username)
 
     @has_profile()
@@ -228,8 +221,7 @@ class Profile(commands.Cog):
         """
         member = member or ctx.author
         message = f"Select a profile to view **{hero}** stats for."
-        profile_id = await choose_profile(ctx, message, member)
-        _, platform, username = await self.get_profile(profile_id)
+        _, platform, username = await choose_profile(ctx, message, member)
 
         await self.bot.get_cog("Stats").show_stats_for(ctx, hero, platform, username)
 
@@ -244,14 +236,13 @@ class Profile(commands.Cog):
         """
         member = member or ctx.author
         message = "Select a profile to view the summary for."
-        profile_id = await choose_profile(ctx, message, member)
-        _, platform, username = await self.get_profile(profile_id)
-        data = await Request(platform, username).get()
-        profile = Player(data, platform=platform, username=username)
+        record = await choose_profile(ctx, message, member)
+        profile = Profile(ctx=ctx, record=record)
+        await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = profile.embed_summary(ctx)
+            embed = profile.embed_summary()
         await ctx.send(embed=embed)
 
     @has_profile()
@@ -277,17 +268,15 @@ class Profile(commands.Cog):
                 )
 
             message = "Select a profile to use for the nickname SRs."
-            profile_id = await choose_profile(ctx, message, ctx.author)
-            id_, platform, username = await self.get_profile(profile_id)
-            data = await Request(platform, username).get()
-            profile = Player(data, platform=platform, username=username)
+            record = await choose_profile(ctx, message, ctx.author)
+            profile = Profile(ctx=ctx, record=record)
             nick.profile = profile
 
             if profile.is_private():
                 return await ctx.send(embed=profile.embed_private())
 
             try:
-                await nick.set_or_remove(profile_id=id_)
+                await nick.set_or_remove(profile_id=profile.id)
             except Exception as e:
                 await ctx.send(e)
         else:
@@ -355,11 +344,10 @@ class Profile(commands.Cog):
     async def graph(self, ctx: "Context") -> None:
         """Shows SRs performance graph."""
         message = "Select a profile to view the SRs graph for."
-        profile_id = await choose_profile(ctx, message, ctx.author)
-        profile = await self.get_profile(profile_id)
+        profile = await choose_profile(ctx, message, ctx.author)
         file, embed = await self.sr_graph(ctx, profile)
         await ctx.send(file=file, embed=embed)
 
 
 def setup(bot):
-    bot.add_cog(Profile(bot))
+    bot.add_cog(ProfileCog(bot))

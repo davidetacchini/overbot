@@ -4,8 +4,8 @@ import discord
 
 from utils import emojis
 
-from .player import Player
 from .context import Context
+from .profile import Profile
 
 MAX_NICKNAME_LENGTH = 32
 ROLES = {
@@ -18,7 +18,7 @@ ROLES = {
 class Nickname:
     __slots__ = ("ctx", "profile", "member")
 
-    def __init__(self, ctx: "Context", *, profile: Player = None) -> None:
+    def __init__(self, ctx: "Context", *, profile: Profile = None) -> None:
         self.ctx = ctx
         self.profile = profile
         self.member: discord.Member = ctx.author
