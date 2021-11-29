@@ -1,5 +1,5 @@
 # partially inspired by https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/meta.py
-from typing import Union, Mapping
+from typing import Mapping
 
 import discord
 
@@ -9,7 +9,7 @@ from utils.funcs import chunker
 from classes.context import Context
 from classes.paginator import Paginator
 
-PagesT = list[Union[discord.Embed, str]]
+PagesT = list[discord.Embed | str]
 MappingT = Mapping[commands.Cog, list[commands.Command]]
 
 
@@ -102,7 +102,7 @@ def get_bot_homepage(ctx: "Context") -> list[discord.Embed]:
 
 
 async def get_group_help_pages(
-    ctx: "Context", group: Union[commands.Cog, commands.Group], mapping: MappingT
+    ctx: "Context", group: commands.Cog | commands.Group, mapping: MappingT
 ):
     chunks = [c async for c in chunker(mapping, per_page=5)]
 

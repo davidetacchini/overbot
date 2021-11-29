@@ -1,5 +1,3 @@
-from typing import Union, Optional
-
 import discord
 
 from utils import emojis
@@ -8,11 +6,11 @@ from utils.funcs import get_platform_emoji
 from .context import Context
 from .exceptions import CannotEmbedLinks
 
-PageT = Union[str, dict, discord.Embed]
+PageT = str | dict | discord.Embed
 
 
 class Paginator(discord.ui.View):
-    def __init__(self, pages: list[Union[discord.Embed, str]], *, ctx: "Context", **kwargs):
+    def __init__(self, pages: list[discord.Embed | str], *, ctx: "Context", **kwargs):
         super().__init__(timeout=120.0, **kwargs)
         if not isinstance(pages, list):
             pages = [pages]
@@ -165,7 +163,7 @@ class ChooseSelect(discord.ui.Select):
 class ChooseView(discord.ui.View):
     def __init__(
         self,
-        entries: Optional[list[str]] = None,
+        entries: None | list[str] = None,
         *,
         ctx: "Context",
         timeout: float = 120.0,
@@ -173,8 +171,8 @@ class ChooseView(discord.ui.View):
         super().__init__(timeout=timeout)
         self.entries = entries
         self.ctx = ctx
-        self.choice: Optional[str] = None
-        self.message: Optional[discord.Message] = None
+        self.choice: None | str = None
+        self.message: None | discord.Message = None
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.ctx.author.id:
@@ -209,11 +207,11 @@ async def choose_profile(ctx: "Context", message: str, member: discord.Member = 
 
     view.message = await ctx.send(message, view=view)
     await view.wait()
-    return view.choice
+    return await ctx.bot.get_cog("Profile").get_profile(view.choice)
 
 
 async def choose_answer(
-    entries: list[Union[str, discord.Embed]],
+    entries: list[str | discord.Embed],
     *,
     ctx: "Context",
     timeout: float,
