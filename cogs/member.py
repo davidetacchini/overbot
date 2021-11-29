@@ -70,7 +70,6 @@ class Member(commands.Cog):
 
         return embed
 
-    @is_premium()
     @commands.group(invoke_without_command=True)
     async def settings(self, ctx):
         """Manage your settings."""
