@@ -7,9 +7,6 @@ from utils.checks import is_premium
 
 
 def valid_color(argument):
-    if argument.lower() == "none":
-        return None
-
     try:
         color = Color(argument).get_hex_l()
     except (AttributeError, ValueError):
@@ -43,17 +40,17 @@ class Member(commands.Cog):
         embed.description = description
         await ctx.send(embed=embed)
 
-    async def get_member_settings(self, member_id):
-        color = self.bot.color(member_id)
-        color_value = str(hex(color)).replace("0x", "#")
-
-        return {
-            "color": color_value,
-        }
+    async def get_member_settings(self, ctx):
+        color = self.bot.color(ctx.author.id)
+        if color == self.bot.config.main_color:
+            color_value = "Default"
+        else:
+            color_value = str(hex(color)).replace("0x", "#")
+        return {"color": color_value}
 
     async def embed_member_settings(self, ctx, command):
         subcommands = getattr(command, "commands", None)
-        settings = await self.get_member_settings(ctx.author.id)
+        settings = await self.get_member_settings(ctx)
 
         description = (
             "You can use `{prefix}settings [setting] [value]` to update the value "
@@ -67,8 +64,8 @@ class Member(commands.Cog):
         embed.description = description
 
         for subcommand in subcommands:
-            short_doc = subcommand.short_doc or "No help found..."
             name = subcommand.name.capitalize() + " - " + f"`{settings[subcommand.name]}`"
+            short_doc = subcommand.short_doc or "No help found..."
             embed.add_field(name=name, value=short_doc, inline=False)
 
         return embed
@@ -82,10 +79,10 @@ class Member(commands.Cog):
 
     @is_premium()
     @settings.command(extras={"premium": True})
-    async def color(self, ctx, *, color: valid_color):
+    async def color(self, ctx, *, color: valid_color = None):
         """Set a custom color for the embeds.
 
-        `<color>` - The color to use for the embeds. Enter `none` to reset.
+        `<color>` - The color to use for the embeds. Leave blank to reset.
 
         Formats:
         - Either 3 or 6 digit hex: #RGB or #RRGGBB
