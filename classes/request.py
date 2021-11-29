@@ -10,7 +10,7 @@ class RequestError(Exception):
 
 class NotFound(RequestError):
     def __init__(self):
-        super().__init__("Player not found.")
+        super().__init__("Profile not found.")
 
 
 class BadRequest(RequestError):

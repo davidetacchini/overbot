@@ -7,7 +7,7 @@ from asyncpg import DataError
 from discord.ext import commands
 
 from utils import checks
-from classes.player import PlayerException
+from classes.profile import ProfileException
 from classes.request import RequestError
 from classes.exceptions import NoChoice, PaginationError
 
@@ -83,7 +83,7 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.CommandInvokeError):
             original = error.original
-            group = (RequestError, PlayerException, NoChoice, PaginationError)
+            group = (RequestError, ProfileException, NoChoice, PaginationError)
             if isinstance(original, discord.HTTPException):
                 return
             elif isinstance(original, DataError):

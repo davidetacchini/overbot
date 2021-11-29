@@ -4,7 +4,12 @@ from datetime import date
 
 import discord
 
+from asyncpg import Record
+
 from utils import emojis
+
+from .context import Context
+from .request import Request
 
 ROLES = {
     "tank": emojis.tank,
@@ -13,32 +18,51 @@ ROLES = {
 }
 
 
-class PlayerException(Exception):
+class ProfileException(Exception):
 
     pass
 
 
-class NoStats(PlayerException):
+class NoStats(ProfileException):
     def __init__(self):
         super().__init__("This profile has no quick play nor competitive stats to display.")
 
 
-class NoHeroStats(PlayerException):
+class NoHeroStats(ProfileException):
     def __init__(self, hero):
         super().__init__(
             f"This profile has no quick play nor competitive stast for **{hero}** to display."
         )
 
 
-class Player:
+class Profile:
 
-    __slots__ = ("data", "platform", "username", "pages")
+    __slots__ = ("data", "id", "platform", "username", "ctx", "record", "pages")
 
-    def __init__(self, data: dict, *, platform: str, username: str):
-        self.data = data
-        self.platform = platform
-        self.username = username
+    def __init__(
+        self,
+        platform: None | str = None,
+        username: None | str = None,
+        *,
+        ctx: "Context",
+        record: None | Record = None,
+    ):
+        self.data = None
+
+        if record:
+            self.id = record["id"]
+            self.platform = record["platform"]
+            self.username = record["username"]
+        else:
+            self.id = None
+            self.platform = platform
+            self.username = username
+
+        self.ctx = ctx
         self.pages = []
+
+    async def compute_data(self):
+        self.data = await Request(self.platform, self.username).get()
 
     def __str__(self):
         return self.data["name"]
@@ -95,7 +119,7 @@ class Player:
             or self.data["competitiveStats"]["careerStats"]
         )
 
-    async def save_ratings(self, ctx, *, profile_id, **kwargs):
+    async def save_ratings(self, profile_id, **kwargs):
         tank = kwargs.get("tank", 0)
         damage = kwargs.get("damage", 0)
         support = kwargs.get("support", 0)
@@ -109,7 +133,7 @@ class Player:
                 """
 
         requested_at = date.today()
-        roles = await ctx.bot.pool.fetch(query, profile_id, requested_at)
+        roles = await self.ctx.bot.pool.fetch(query, profile_id, requested_at)
 
         if roles:
             # Assuming a user uses `-profile rating` multiple times within
@@ -124,7 +148,7 @@ class Player:
             query = (
                 "INSERT INTO rating (tank, damage, support, profile_id) VALUES ($1, $2, $3, $4);"
             )
-            await ctx.bot.pool.execute(query, tank, damage, support, profile_id)
+            await self.ctx.bot.pool.execute(query, tank, damage, support, profile_id)
 
     def resolve_ratings(self):
         if not self.data["ratings"]:
@@ -163,8 +187,8 @@ class Player:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self.to_pascal(c_t))
 
-    async def embed_ratings(self, ctx, *, save=False, profile_id=None):
-        embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
+    async def embed_ratings(self, *, save=False, profile_id=None):
+        embed = discord.Embed(color=self.ctx.bot.color(self.ctx.author.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
 
         ratings = self.resolve_ratings()
@@ -187,28 +211,28 @@ class Player:
         )
 
         if save:
-            await self.save_ratings(ctx, profile_id=profile_id, **ratings)
+            await self.save_ratings(profile_id, **ratings)
 
         return embed
 
-    def embed_stats(self, ctx, hero):
+    def embed_stats(self, hero):
         keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
+            embed = discord.Embed(color=self.ctx.bot.color(self.ctx.author.id))
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             if hero == "allHeroes":
                 embed.set_thumbnail(url=self.level_icon)
             else:
-                embed.set_thumbnail(url=ctx.bot.config.hero_url.format(hero.lower()))
+                embed.set_thumbnail(url=self.ctx.bot.config.hero_url.format(hero.lower()))
             embed.set_footer(text=f"Page {i}/{len(keys)}")
             self.format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
-    def embed_summary(self, ctx):
-        embed = discord.Embed(color=ctx.bot.color(ctx.author.id))
+    def embed_summary(self):
+        embed = discord.Embed(color=self.ctx.bot.color(self.ctx.author.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
         embed.set_thumbnail(url=self.level_icon)
 

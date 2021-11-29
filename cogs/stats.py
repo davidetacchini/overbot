@@ -1,7 +1,6 @@
 from discord.ext import commands
 
-from classes.player import Player
-from classes.request import Request
+from classes.profile import Profile
 from classes.converters import Hero
 
 
@@ -34,12 +33,12 @@ class Stats(commands.Cog):
         self.bot = bot
 
     async def show_stats_for(self, ctx, hero, platform, username):
-        data = await Request(platform, username).get()
-        profile = Player(data, platform=platform, username=username)
+        profile = Profile(platform, username, ctx=ctx)
+        await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = profile.embed_stats(ctx, hero)
+            embed = profile.embed_stats(hero)
         await self.bot.paginate(embed, ctx=ctx)
 
     @commands.command(aliases=["sr"])
@@ -61,12 +60,12 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Network ID
         """
-        data = await Request(platform, username).get()
-        profile = Player(data, platform=platform, username=username)
+        profile = Profile(platform, username, ctx=ctx)
+        await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = await profile.embed_ratings(ctx)
+            embed = await profile.embed_ratings()
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -138,12 +137,12 @@ class Stats(commands.Cog):
         - xbox: Gamertag
         - nintendo-switch: Nintendo Network ID
         """
-        data = await Request(platform, username).get()
-        profile = Player(data, platform=platform, username=username)
+        profile = Profile(platform, username, ctx=ctx)
+        await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = profile.embed_summary(ctx)
+            embed = profile.embed_summary()
         await ctx.send(embed=embed)
 
 
