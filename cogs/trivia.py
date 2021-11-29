@@ -32,8 +32,8 @@ class Trivia(commands.Cog):
         return answer == question["correct_answer"]
 
     async def update_member_games_started(self, member_id):
-        query = """INSERT INTO trivia(id, started)
-                   VALUES($1, 1)
+        query = """INSERT INTO trivia (id, started)
+                   VALUES ($1, 1)
                    ON CONFLICT (id) DO
                    UPDATE SET started = trivia.started + 1;
                 """

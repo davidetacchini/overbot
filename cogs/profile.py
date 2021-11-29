@@ -134,7 +134,7 @@ class Profile(commands.Cog):
         if not username:
             return
 
-        query = "INSERT INTO profile(platform, username, member_id) VALUES($1, $2, $3);"
+        query = "INSERT INTO profile (platform, username, member_id) VALUES ($1, $2, $3);"
         await self.bot.pool.execute(query, platform, username, ctx.author.id)
         await ctx.send("Profile successfully linked.")
 
