@@ -71,7 +71,7 @@ class Nickname:
             await self.ctx.send("Something bad happened while updating your nickname.")
 
         if not remove:
-            query = "INSERT INTO nickname(id, server_id, profile_id) VALUES($1, $2, $3);"
+            query = "INSERT INTO nickname (id, server_id, profile_id) VALUES ($1, $2, $3);"
             await self.ctx.bot.pool.execute(query, self.member.id, self.ctx.guild.id, profile_id)
             await self.ctx.send("Nickname successfully set.")
         else:
