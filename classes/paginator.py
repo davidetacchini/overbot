@@ -221,6 +221,7 @@ async def choose_answer(
     select = ChooseSelect(placeholder="Select the correct answer...")
     view.add_item(select)
 
+    embed.description = ""
     for index, entry in enumerate(entries, start=1):
         select.add_option(label=entry)
         embed.description = f"{embed.description}{index}. {entry}\n"
