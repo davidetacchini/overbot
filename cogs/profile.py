@@ -71,12 +71,12 @@ class ProfileCog(commands.Cog, name="Profile"):
             pages.append(embed)
         return pages
 
-    async def get_player_username(self, ctx, platform):
+    async def get_player_username(self, ctx: "Context", platform: str):
         mention = ctx.author.mention
 
         match platform:
             case "pc":
-                await ctx.send(f"{mention}, enter your BattleTag (format: name#0000):")
+                await ctx.send(f"{mention}, enter your full BattleTag (format: name#0000):")
             case "psn":
                 await ctx.send(f"{mention}, enter your Online ID:")
             case "xbl":
@@ -189,7 +189,7 @@ class ProfileCog(commands.Cog, name="Profile"):
             embed = await profile.embed_ratings(save=True, profile_id=profile.id)
             # only update the nickname if the profile matches the one
             # selected for that purpose
-            query = "SELECT * FROM nickname WHERE profile_id = $1"
+            query = "SELECT * FROM nickname WHERE profile_id = $1;"
             flag = await self.bot.pool.fetchrow(query, profile.id)
             if flag and member.id == ctx.author.id:
                 await Nickname(ctx, profile=profile).update()
@@ -222,7 +222,6 @@ class ProfileCog(commands.Cog, name="Profile"):
         member = member or ctx.author
         message = f"Select a profile to view **{hero}** stats for."
         _, platform, username = await choose_profile(ctx, message, member)
-
         await self.bot.get_cog("Stats").show_stats_for(ctx, hero, platform, username)
 
     @has_profile()
@@ -321,7 +320,8 @@ class ProfileCog(commands.Cog, name="Profile"):
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
         fig.autofmt_xdate()
 
-        username = username.replace("-", "#")
+        if platform == "pc":
+            username = username.replace("-", "#")
         fig.suptitle(f"{username} - {platform}", fontsize="20")
         pyplot.legend(title="Roles", loc="upper right")
         pyplot.xlabel("Date")
