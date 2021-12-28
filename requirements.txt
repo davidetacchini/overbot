@@ -11,3 +11,4 @@ python-dateutil
 pandas
 seaborn
 colour
+lru_dict
