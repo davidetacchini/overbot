@@ -23,7 +23,7 @@ class HelpSelect(discord.ui.Select):
     def __fill_options(self) -> None:
         self.add_option(label="Homepage", value="homepage")
         for cog, commands_ in self.mapping.items():
-            unwanted_cogs = ["Owner"]
+            unwanted_cogs = ("Owner",)
             if cog is None or len(commands_) == 0 or cog.qualified_name in unwanted_cogs:
                 continue
             self.add_option(label=cog.qualified_name)
