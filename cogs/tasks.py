@@ -115,7 +115,6 @@ class Tasks(commands.Cog):
                     "id": g.id,
                     "name": str(g),
                     "icon": str(g.icon_url_as(format="webp", size=128)),
-                    "region": str(g.region),
                     "members": g.member_count,
                     "commands_run": guild["commands"],
                     "shard_id": g.shard_id + 1,
@@ -205,8 +204,7 @@ class Tasks(commands.Cog):
 
         await self.bot.wait_until_ready()
 
-        # endpoint to check for new donations
-        url_new = self.bot.config.dbot["new"]
+        url_new = self.bot.config.dbot["new"]  # endpoint to check for new donations
         product_server_id = self.bot.config.dbot["product_ids"]["server"]
 
         headers = {"Authorization": self.bot.config.dbot["api_key"]}
@@ -236,9 +234,10 @@ class Tasks(commands.Cog):
             url_mark = self.bot.config.dbot["mark"].format(donation["txn_id"])
             payload = {"markProcessed": True}
             async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
-                print(f'Donation {donation["txn_id"]} has been processed. Status {r.status}')
+                message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
+                await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
 
-    @tasks.loop(minutes=5.0)
+    @tasks.loop(seconds=5.0)
     async def send_overwatch_news(self):
         if self.bot.debug:
             return
@@ -246,17 +245,19 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = await get_overwatch_news(1)
-            news = news[0]
+            news = (await get_overwatch_news(1))[0]
         except AttributeError:
             return
-        # Get the news id from the URL
-        news_id = re.search(r"\d+", news["link"]).group(0)
 
-        # Returns whether the news_id it's equals to the one
-        # stored in the database. If it is, that specific
-        # news has already been sent.
-        if int(news_id) == await self.bot.pool.fetchval("SELECT news_id FROM news WHERE id=1;"):
+        # get the news id from the URL
+        latest_news_id = re.search(r"\d+", news["link"]).group(0)
+
+        # check whether the scraped news id is equals to the
+        # one stored in the file; if not then there's a news
+        file = open("assets/latest_news_id.txt", "r+")
+        file_news_id = file.readline()
+        if int(latest_news_id) == int(file_news_id):
+            file.close()
             return
 
         embed = discord.Embed()
@@ -266,15 +267,19 @@ class Tasks(commands.Cog):
         embed.set_image(url=f'https:{news["thumbnail"]}')
         embed.set_footer(text=news["date"])
 
-        channel = self.bot.get_channel(self.bot.config.news_channel)
+        records = await self.bot.pool.fetch("SELECT id FROM newsboard;")
+        for record in records:
+            channel_id = record["channel_id"]
+            channel = self.bot.get_channel(channel_id)
+            if not channel:
+                continue
+            await channel.send(embed=embed)
 
-        if not channel:
-            return
-
-        await channel.send(embed=embed)
-
-        # update old news_id with new one
-        await self.bot.pool.execute("UPDATE news SET news_id=$1 WHERE id=1;", int(news_id))
+        # update old news_id with latest one
+        file.seek(0)
+        file.write(latest_news_id)
+        file.truncate()
+        file.close()
 
     def cog_unload(self):
         self.update.cancel()
