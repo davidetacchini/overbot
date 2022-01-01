@@ -33,7 +33,6 @@ class Events(commands.Cog):
             embed.set_thumbnail(url=guild.icon_url)
         with suppress(AttributeError):
             embed.add_field(name="Members", value=guild.member_count)
-        embed.add_field(name="Region", value=guild.region)
         embed.add_field(name="Shard ID", value=guild.shard_id + 1)
         embed.set_footer(text=f"ID: {guild.id}")
         await self.bot.webhook.send(embed=embed)
@@ -61,8 +60,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        query = """INSERT INTO server(id, prefix)
-                   VALUES($1, $2)
+        query = """INSERT INTO server (id, prefix)
+                   VALUES ($1, $2)
                    ON CONFLICT (id) DO NOTHING;
                 """
         await self.bot.pool.execute(query, guild.id, self.bot.prefix)
@@ -99,6 +98,19 @@ class Events(commands.Cog):
                        ON CONFLICT (id) DO NOTHING;
                     """
             await self.bot.pool.execute(query, ctx.guild.id, self.bot.prefix)
+
+    @commands.Cog.listener()
+    async def on_guild_channel_delete(self, channel):
+        if not isinstance(channel, discord.TextChannel):
+            return
+
+        newsboard = await self.bot.get_cog("Overwatch").get_newsboard(channel.guild.id)
+        if newsboard.channel_id != channel.id:
+            return
+
+        async with self.bot.pool.acquire(timeout=300.0) as conn:
+            query = "DELETE FROM newsboard WHERE id = $1;"
+            await conn.execute(query, channel.id)
 
 
 def setup(bot):
