@@ -237,7 +237,7 @@ class Tasks(commands.Cog):
                 message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
                 await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
 
-    @tasks.loop(seconds=5.0)
+    @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
         if self.bot.debug:
             return
