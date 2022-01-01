@@ -252,7 +252,7 @@ class ProfileCog(commands.Cog, name="Profile"):
 
         The nickname can only be set in one server. It updates
         automatically whenever `profile rating` is used and the
-        profile matches the one set for the nickname.
+        profile selected matches the one set for the nickname.
         """
         nick = Nickname(ctx)
         if not await nick.exists():
