@@ -4,7 +4,7 @@ from utils import emojis
 from utils.funcs import get_platform_emoji
 
 from .context import Context
-from .exceptions import CannotEmbedLinks
+from .exceptions import NoChoice, CannotEmbedLinks
 
 PageT = str | dict | discord.Embed
 
@@ -207,7 +207,10 @@ async def choose_profile(ctx: "Context", message: str, member: discord.Member = 
 
     view.message = await ctx.send(message, view=view)
     await view.wait()
-    return await ctx.bot.get_cog("Profile").get_profile(view.choice)
+
+    if (choice := view.choice) is not None:
+        return await ctx.bot.get_cog("Profile").get_profile(choice)
+    raise NoChoice()
 
 
 async def choose_answer(
@@ -228,7 +231,10 @@ async def choose_answer(
 
     view.message = await ctx.send(embed=embed, view=view)
     await view.wait()
-    return view.choice
+
+    if (choice := view.choice) is not None:
+        return choice
+    raise NoChoice()
 
 
 async def choose_platform(ctx: "Context") -> str:
@@ -248,4 +254,7 @@ async def choose_platform(ctx: "Context") -> str:
 
     view.message = await ctx.send("Select a platform...", view=view)
     await view.wait()
-    return view.choice
+
+    if (choice := view.choice) is not None:
+        return choice
+    raise NoChoice()
