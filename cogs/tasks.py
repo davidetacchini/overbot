@@ -114,7 +114,7 @@ class Tasks(commands.Cog):
                 {
                     "id": g.id,
                     "name": str(g),
-                    "icon": str(g.icon),
+                    "icon": str(g.icon.with_static_format("webp").with_size(128)),
                     "members": g.member_count,
                     "commands_run": guild["commands"],
                     "shard_id": g.shard_id + 1,
