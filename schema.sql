@@ -222,11 +222,11 @@ ALTER TABLE ONLY public.rating ALTER COLUMN id SET DEFAULT nextval('public.ratin
 
 
 --
--- Name: trivia Trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+-- Name: trivia trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
 ALTER TABLE ONLY public.trivia
-    ADD CONSTRAINT "Trivia_pkey" PRIMARY KEY (id);
+    ADD CONSTRAINT trivia_pkey PRIMARY KEY (id);
 
 
 --
