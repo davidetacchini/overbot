@@ -4,6 +4,7 @@ __pycache__/
 .vscode
 
 assets/questions.json
+assets/latest_news_id.txt
 
 config.py
 
