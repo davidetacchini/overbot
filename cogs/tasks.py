@@ -269,7 +269,7 @@ class Tasks(commands.Cog):
 
         records = await self.bot.pool.fetch("SELECT id FROM newsboard;")
         for record in records:
-            channel_id = record["channel_id"]
+            channel_id = record["id"]
             channel = self.bot.get_channel(channel_id)
             if not channel:
                 continue
