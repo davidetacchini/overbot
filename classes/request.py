@@ -96,7 +96,7 @@ class Request:
             async with s.get(self.account_url) as r:
                 try:
                     name = await r.json()
-                except aiohttp.ContentTypeError:
+                except Exception:
                     raise UnexpectedError()
                 else:
                     return await self.resolve_name(name)
@@ -127,7 +127,7 @@ class Request:
             async with s.get(url) as r:
                 try:
                     return await self.resolve_response(r)
-                except aiohttp.client_exceptions.ClientPayloadError:
+                except Exception:
                     raise UnexpectedError()
 
     async def get(self):
