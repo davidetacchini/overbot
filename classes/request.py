@@ -127,7 +127,7 @@ class Request:
             async with s.get(url) as r:
                 try:
                     return await self.resolve_response(r)
-                except Exception:
+                except aiohttp.client_exceptions.ClientPayloadError:
                     raise UnexpectedError()
 
     async def get(self):
