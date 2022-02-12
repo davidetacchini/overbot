@@ -36,7 +36,10 @@ class Paginator(discord.ui.View):
 
     async def on_timeout(self) -> None:
         if self.message:
-            await self.message.edit(view=None)
+            try:
+                await self.message.edit(view=None)
+            except Exception:
+                pass
 
     def fill_items(self) -> None:
         if self.total > 2:
