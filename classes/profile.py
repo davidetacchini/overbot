@@ -5,6 +5,7 @@ from datetime import date
 import discord
 
 from asyncpg import Record
+from aiohttp.client_exceptions import ClientConnectorError
 
 from utils import emojis
 
@@ -64,7 +65,7 @@ class Profile:
     async def compute_data(self):
         try:
             self.data = await Request(self.platform, self.username).get()
-        except Exception:
+        except ClientConnectorError:
             raise UnexpectedError() from None
 
     def __str__(self):
