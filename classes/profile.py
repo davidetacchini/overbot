@@ -9,7 +9,7 @@ from asyncpg import Record
 from utils import emojis
 
 from .context import Context
-from .request import Request
+from .request import Request, UnexpectedError
 
 ROLES = {
     "tank": emojis.tank,
@@ -62,7 +62,10 @@ class Profile:
         self.pages = []
 
     async def compute_data(self):
-        self.data = await Request(self.platform, self.username).get()
+        try:
+            self.data = await Request(self.platform, self.username).get()
+        except Exception:
+            raise UnexpectedError() from None
 
     def __str__(self):
         return self.data["name"]
