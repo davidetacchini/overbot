@@ -1,5 +1,6 @@
 import os
 import sys
+import asyncio
 
 import asyncpg
 import discord
@@ -218,11 +219,9 @@ def main():
     )
 
     try:
-        bot.loop.run_until_complete(bot.start())
+        asyncio.run(bot.start())
     except KeyboardInterrupt:
-        bot.loop.run_until_complete(bot.close())
-    finally:
-        bot.loop.close()
+        asyncio.run(bot.close())
 
 
 if __name__ == "__main__":
