@@ -110,11 +110,15 @@ class Tasks(commands.Cog):
             g = self.bot.get_guild(guild["guild_id"])
             if g is None:
                 continue
+            if g.icon:
+                icon = str(g.icon.with_static_format("webp").with_size(128))
+            else:
+                icon = ""
             servers.append(
                 {
                     "id": g.id,
                     "name": str(g),
-                    "icon": str(g.icon.with_static_format("webp").with_size(128)),
+                    "icon": icon,
                     "members": g.member_count,
                     "commands_run": guild["commands"],
                     "shard_id": g.shard_id + 1,
