@@ -145,5 +145,5 @@ class Overwatch(commands.Cog):
         await ctx.send(f"Channel successfully created at {channel.mention}.")
 
 
-def setup(bot):
-    bot.add_cog(Overwatch(bot))
+async def setup(bot):
+    await bot.add_cog(Overwatch(bot))

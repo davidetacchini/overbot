@@ -349,5 +349,5 @@ class ProfileCog(commands.Cog, name="Profile"):
         await ctx.send(file=file, embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(ProfileCog(bot))
+async def setup(bot):
+    await bot.add_cog(ProfileCog(bot))

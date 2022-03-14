@@ -288,5 +288,5 @@ class Tasks(commands.Cog):
         self.send_overwatch_news.cancel()
 
 
-def setup(bot):
-    bot.add_cog(Tasks(bot))
+async def setup(bot):
+    await bot.add_cog(Tasks(bot))

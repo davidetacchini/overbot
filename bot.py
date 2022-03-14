@@ -189,7 +189,7 @@ class Bot(commands.AutoShardedBot):
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
                 try:
-                    self.load_extension(f"cogs.{extension[:-3]}")
+                    await self.load_extension(f"cogs.{extension[:-3]}")
                 except Exception as e:
                     print(f"[{colored('ERROR', 'red')}] {extension:20} failed its loading!\n[{e}]")
                 else:
