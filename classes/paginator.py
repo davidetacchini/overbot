@@ -200,6 +200,10 @@ async def choose_profile(ctx: "Context", message: str, member: discord.Member = 
 
     profiles = await ctx.bot.get_cog("Profile").get_profiles(ctx, member)
 
+    if len(profiles) == 1:
+        profile_id, _, _ = profiles[0]
+        return await ctx.bot.get_cog("Profile").get_profile(profile_id)
+
     for profile in profiles:
         id_, platform, username = profile
         emoji = get_platform_emoji(platform)
