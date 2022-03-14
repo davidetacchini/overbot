@@ -43,7 +43,7 @@ class Owner(commands.Cog):
     async def load(self, ctx, *, module: str):
         """Loads a module."""
         try:
-            self.bot.load_extension(module)
+            await self.bot.load_extension(module)
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
@@ -53,7 +53,7 @@ class Owner(commands.Cog):
     async def unload(self, ctx, *, module: str):
         """Unloads a module."""
         try:
-            self.bot.unload_extension(module)
+            await self.bot.unload_extension(module)
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
@@ -63,7 +63,7 @@ class Owner(commands.Cog):
     async def reload(self, ctx, *, module):
         """Reloads a module."""
         try:
-            self.bot.reload_extension(module)
+            await self.bot.reload_extension(module)
         except Exception as e:
             await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
@@ -112,11 +112,11 @@ class Owner(commands.Cog):
         ret.sort(reverse=True)
         return ret
 
-    def reload_or_load_extension(self, module):
+    async def reload_or_load_extension(self, module):
         try:
-            self.bot.reload_extension(module)
+            await self.bot.reload_extension(module)
         except commands.ExtensionNotLoaded:
-            self.bot.load_extension(module)
+            await self.bot.load_extension(module)
 
     # Source: https://github.com/Rapptz/RoboDanny
     @reload.command(hidden=True)
@@ -157,7 +157,7 @@ class Owner(commands.Cog):
                         statuses.append((ctx.tick(True), module))
             else:
                 try:
-                    self.reload_or_load_extension(module)
+                    await self.reload_or_load_extension(module)
                 except commands.ExtensionError:
                     statuses.append((ctx.tick(False), module))
                 else:
@@ -342,5 +342,5 @@ class Owner(commands.Cog):
             await ctx.send(file=discord.File("../backup.sql"), delete_after=15)
 
 
-def setup(bot):
-    bot.add_cog(Owner(bot))
+async def setup(bot):
+    await bot.add_cog(Owner(bot))
