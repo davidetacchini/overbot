@@ -99,7 +99,7 @@ class Paginator(discord.ui.View):
             self.current -= 1
             await self._update(interaction)
 
-    @discord.ui.button(label="Stop", style=discord.ButtonStyle.red)
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
     async def stop_session(
         self, button: discord.ui.Button, interaction: discord.Interaction
     ) -> None:
