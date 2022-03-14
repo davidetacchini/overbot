@@ -13,8 +13,8 @@
   <a href="https://pycqa.github.io/isort/" target="_blank">
     <img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336" alt="isort" />
   </a>
-  <a href="https://pypi.org/project/py-cord/" traget="_blank">
-    <img src="https://img.shields.io/pypi/v/py-cord?label=py-cord" alt="PyPI" />
+  <a href="https://pypi.org/project/discord.py/" traget="_blank">
+	<img src="https://img.shields.io/pypi/v/discord.py" alt="PyPI" />
   </a>
   <a href="https://ow-api.com/docs/" traget="_blank">
     <img src="https://img.shields.io/badge/API-ow--api-orange" alt="API" />
