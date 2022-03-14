@@ -208,6 +208,7 @@ def main():
     intents.members = True
     intents.reactions = True
     intents.messages = True
+    intents.message_content = True
 
     bot = Bot(
         case_insensitive=True,
