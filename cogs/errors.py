@@ -57,7 +57,7 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             if type(error) == checks.ProfileNotLinked:
                 await ctx.send(
-                    f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile link" to start.'
+                    f'You haven\'t linked a profile yet. Use "{ctx.prefix}profile" to start.'
                 )
 
             elif type(error) == checks.ProfileLimitReached:

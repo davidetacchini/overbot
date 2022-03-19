@@ -56,7 +56,7 @@ class Request:
 
     def __init__(self, platform: str, username: str):
         self.platform = platform
-        self.username = username
+        self.username = username.replace("#", "%23")
         self.username_l = username.lower()
 
     @property
@@ -65,7 +65,10 @@ class Request:
 
     async def resolve_name(self, players):
         if len(players) == 1:
-            return players[0]["urlName"]
+            try:
+                return players[0]["urlName"]
+            except Exception:
+                raise InternalServerError()
         elif len(players) > 1:
             total_players = []
             for player in players:
@@ -96,7 +99,7 @@ class Request:
             async with s.get(self.account_url) as r:
                 try:
                     name = await r.json()
-                except aiohttp.ContentTypeError:
+                except Exception:
                     raise UnexpectedError()
                 else:
                     return await self.resolve_name(name)

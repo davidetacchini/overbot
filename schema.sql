@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.0
--- Dumped by pg_dump version 14.0
+-- Dumped from database version 14.1
+-- Dumped by pg_dump version 14.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -74,17 +74,17 @@ CREATE TABLE public.member (
 ALTER TABLE public.member OWNER TO davide;
 
 --
--- Name: news; Type: TABLE; Schema: public; Owner: davide
+-- Name: newsboard; Type: TABLE; Schema: public; Owner: davide
 --
 
-CREATE TABLE public.news (
-    id integer DEFAULT 1 NOT NULL,
-    news_id integer DEFAULT 0 NOT NULL,
-    CONSTRAINT news_chk CHECK ((id = 1))
+CREATE TABLE public.newsboard (
+    id bigint NOT NULL,
+    server_id bigint NOT NULL,
+    member_id bigint NOT NULL
 );
 
 
-ALTER TABLE public.news OWNER TO davide;
+ALTER TABLE public.newsboard OWNER TO davide;
 
 --
 -- Name: nickname; Type: TABLE; Schema: public; Owner: davide
@@ -222,14 +222,6 @@ ALTER TABLE ONLY public.rating ALTER COLUMN id SET DEFAULT nextval('public.ratin
 
 
 --
--- Name: trivia trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.trivia
-    ADD CONSTRAINT trivia_pkey PRIMARY KEY (id);
-
-
---
 -- Name: command command_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -246,19 +238,11 @@ ALTER TABLE ONLY public.member
 
 
 --
--- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+-- Name: newsboard newsboard_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
 --
 
-ALTER TABLE ONLY public.news
-    ADD CONSTRAINT news_pkey PRIMARY KEY (id);
-
-
---
--- Name: news news_unq; Type: CONSTRAINT; Schema: public; Owner: davide
---
-
-ALTER TABLE ONLY public.news
-    ADD CONSTRAINT news_unq UNIQUE (id);
+ALTER TABLE ONLY public.newsboard
+    ADD CONSTRAINT newsboard_pkey PRIMARY KEY (id);
 
 
 --
@@ -294,6 +278,22 @@ ALTER TABLE ONLY public.server
 
 
 --
+-- Name: trivia trivia_pkey; Type: CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.trivia
+    ADD CONSTRAINT trivia_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: newsboard member_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.newsboard
+    ADD CONSTRAINT member_fkey FOREIGN KEY (member_id) REFERENCES public.member(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: profile profile_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
 --
 
@@ -323,6 +323,14 @@ ALTER TABLE ONLY public.rating
 
 ALTER TABLE ONLY public.nickname
     ADD CONSTRAINT server_fkey FOREIGN KEY (server_id) REFERENCES public.server(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: newsboard server_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davide
+--
+
+ALTER TABLE ONLY public.newsboard
+    ADD CONSTRAINT server_fkey FOREIGN KEY (server_id) REFERENCES public.server(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
