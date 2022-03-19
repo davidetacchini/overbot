@@ -110,11 +110,15 @@ class Tasks(commands.Cog):
             g = self.bot.get_guild(guild["guild_id"])
             if g is None:
                 continue
+            if g.icon:
+                icon = str(g.icon.with_static_format("webp").with_size(128))
+            else:
+                icon = ""
             servers.append(
                 {
                     "id": g.id,
                     "name": str(g),
-                    "icon": str(g.icon_url_as(format="webp", size=128)),
+                    "icon": icon,
                     "members": g.member_count,
                     "commands_run": guild["commands"],
                     "shard_id": g.shard_id + 1,
@@ -269,7 +273,7 @@ class Tasks(commands.Cog):
 
         records = await self.bot.pool.fetch("SELECT id FROM newsboard;")
         for record in records:
-            channel_id = record["channel_id"]
+            channel_id = record["id"]
             channel = self.bot.get_channel(channel_id)
             if not channel:
                 continue

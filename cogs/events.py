@@ -30,7 +30,7 @@ class Events(commands.Cog):
         """Sends information about a joined guild."""
         embed.title = guild.name
         if guild.icon:
-            embed.set_thumbnail(url=guild.icon_url)
+            embed.set_thumbnail(url=guild.icon.url)
         with suppress(AttributeError):
             embed.add_field(name="Members", value=guild.member_count)
         embed.add_field(name="Shard ID", value=guild.shard_id + 1)
