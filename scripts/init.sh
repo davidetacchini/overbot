@@ -5,17 +5,17 @@ bold=$(tput bold)
 reset=$(tput sgr0)
 
 if [ "$EUID" -ne 0 ]; then 
-	echo "${red}You must have root permission.${reset}"
-  	exit 1
+    echo "${red}You must have root permission.${reset}"
+    exit 1
 fi
 
 printf "${bold}Welcome to the OverBot Setup!${reset}\n\n"
 
 printf "Checking for the configuration file to be installed..."
 if [ ! -f "./config.example.py" ]; then
-	printf "\nInstalling the configuration file...\n"
-	curl https://raw.githubusercontent.com/davidetacchini/overbot/master/config.example.py -o config.py
-	printf "[${green}OK${reset}] configuration file successfully installed.\n"
+    printf "\nInstalling the configuration file...\n"
+    curl https://raw.githubusercontent.com/davidetacchini/overbot/master/config.example.py -o config.py
+    printf "[${green}OK${reset}] configuration file successfully installed.\n"
 else
     printf "Renaming config.example.py to config.py...\n"
     mv config.example.py config.py
