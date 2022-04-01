@@ -164,11 +164,11 @@ class Owner(commands.Cog):
                     statuses.append((ctx.tick(True), module))
 
         await ctx.send("\n".join(f"{status} `{module}`" for status, module in statuses))
-        # update sloc because we have made changes
+        # update sloc because it most likely has been changed
         self.bot.sloc = 0
         self.bot.compute_sloc()
 
-    @commands.command(aliases=["kys", "die"], hidden=True)
+    @commands.command(hidden=True)
     async def shutdown(self, ctx):
         """Kills the bot session."""
         await ctx.send("Successfully gone offline.")
@@ -264,48 +264,46 @@ class Owner(commands.Cog):
     @commands.command(hidden=True)
     async def admin(self, ctx):
         """Display an admin panel."""
-        try:
-            profiles = await self.bot.pool.fetchval("SELECT COUNT(*) FROM profile;")
-            prefixes = self.bot.prefixes
-            guilds = await self.bot.pool.fetchval("SELECT COUNT(*) FROM server;")
-            ratings = await self.bot.pool.fetchval("SELECT COUNT(*) FROM rating;")
-            nicknames = await self.bot.pool.fetchval("SELECT COUNT(*) FROM nickname;")
-
-            total_commands = await self.bot.total_commands()
-            played, won, lost = await self.bot.pool.fetchrow(
+        async with self.bot.pool.acquire() as conn:
+            profiles = await conn.fetchval("SELECT COUNT(*) FROM profile;")
+            guilds = await conn.fetchval("SELECT COUNT(*) FROM server;")
+            ratings = await conn.fetchval("SELECT COUNT(*) FROM rating;")
+            nicknames = await conn.fetchval("SELECT COUNT(*) FROM nickname;")
+            played, won, lost = await conn.fetchrow(
                 "SELECT SUM(started), SUM(won), SUM(lost) FROM trivia;"
             )
-            bot_entries = (
-                ("Total profiles linked", profiles),
-                ("Total prefixes set", len(prefixes)),
-                ("Total profile ratings", ratings),
-                ("Total nicknames set", nicknames),
-                ("Total guilds", guilds),
-                ("Total commands runned", total_commands),
-            )
-            trivia_entries = (
-                ("Total games played", played),
-                ("Total games won", won),
-                ("Total games lost", lost),
-            )
 
-            embed = discord.Embed(color=self.bot.color())
-            embed.title = "Admin Panel"
-            bot = []
-            trivia = []
+        prefixes = self.bot.prefixes
+        total_commands = await self.bot.total_commands()
+        bot_entries = (
+            ("Total profiles linked", profiles),
+            ("Total prefixes set", len(prefixes)),
+            ("Total profile ratings", ratings),
+            ("Total nicknames set", nicknames),
+            ("Total guilds", guilds),
+            ("Total commands runned", total_commands),
+        )
+        trivia_entries = (
+            ("Total games played", played),
+            ("Total games won", won),
+            ("Total games lost", lost),
+        )
 
-            for key, value in bot_entries:
-                bot.append(f"{key}: **{value}**\n")
+        embed = discord.Embed(color=self.bot.color())
+        embed.title = "Admin Panel"
+        bot = []
+        trivia = []
 
-            for key, value in trivia_entries:
-                trivia.append(f"{key}: **{value}**\n")
+        for key, value in bot_entries:
+            bot.append(f"{key}: **{value}**\n")
 
-            embed.add_field(name="Bot", value="".join(bot))
-            embed.add_field(name="Trivia", value="".join(trivia))
+        for key, value in trivia_entries:
+            trivia.append(f"{key}: **{value}**\n")
 
-            await ctx.send(embed=embed)
-        except Exception as e:
-            await ctx.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
+        embed.add_field(name="Bot", value="".join(bot))
+        embed.add_field(name="Trivia", value="".join(trivia))
+
+        await ctx.send(embed=embed)
 
     def get_backup_arguments(self, args):
         import shlex
