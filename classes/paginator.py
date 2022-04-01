@@ -46,7 +46,7 @@ class Paginator(discord.ui.View):
             self.add_item(self.first)
         if self.total > 0:
             self.add_item(self.previous)
-            self.add_item(self.stop_session)
+            self.add_item(self.quit_session)
             self.add_item(self.next)
         if self.total > 2:
             self.add_item(self.last)
@@ -91,33 +91,33 @@ class Paginator(discord.ui.View):
         self.message = await self.ctx.send(**kwargs, view=self)
 
     @discord.ui.button(label="<<", style=discord.ButtonStyle.blurple)
-    async def first(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def first(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current > 0:
             self.current = 0
             await self._update(interaction)
 
     @discord.ui.button(label="<", style=discord.ButtonStyle.blurple)
-    async def previous(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def previous(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current - 1 >= 0:
             self.current -= 1
             await self._update(interaction)
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
-    async def stop_session(
-        self, button: discord.ui.Button, interaction: discord.Interaction
+    async def quit_session(
+        self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
         await interaction.response.defer()
         await interaction.delete_original_message()
         self.stop()
 
     @discord.ui.button(label=">", style=discord.ButtonStyle.blurple)
-    async def next(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def next(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current + 1 <= self.total:
             self.current += 1
             await self._update(interaction)
 
     @discord.ui.button(label=">>", style=discord.ButtonStyle.blurple)
-    async def last(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def last(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current < self.total:
             self.current = self.total
             await self._update(interaction)
@@ -133,8 +133,8 @@ class ProfileManagerView(Paginator):
         self.add_item(self.unlink)
         self.add_item(self.update)
         if self.total == 0:
-            self.stop_session.row = 1
-            self.add_item(self.stop_session)
+            self.quit_session.row = 1
+            self.add_item(self.quit_session)
         super().fill_items()
 
     async def _handle(self, interaction: discord.Interaction) -> None:
@@ -143,17 +143,17 @@ class ProfileManagerView(Paginator):
         self.stop()
 
     @discord.ui.button(label="Link", style=discord.ButtonStyle.blurple, row=1)
-    async def link(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def link(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.action = "link"
         await self._handle(interaction)
 
     @discord.ui.button(label="Unlink", style=discord.ButtonStyle.blurple, row=1)
-    async def unlink(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def unlink(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.action = "unlink"
         await self._handle(interaction)
 
     @discord.ui.button(label="Update", style=discord.ButtonStyle.blurple, row=1)
-    async def update(self, button: discord.ui.Button, interaction: discord.Interaction) -> None:
+    async def update(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.action = "update"
         await self._handle(interaction)
 
@@ -203,6 +203,7 @@ async def choose_profile(ctx: "Context", message: str, member: discord.Member = 
 
     profiles = await ctx.bot.get_cog("Profile").get_profiles(ctx, member)
 
+    # if there only is a profile then just return it
     if len(profiles) == 1:
         profile_id, _, _ = profiles[0]
         return await ctx.bot.get_cog("Profile").get_profile(profile_id)
