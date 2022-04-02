@@ -170,7 +170,7 @@ class Bot(commands.AutoShardedBot):
             embed_colors[member_id] = color
         self.embed_colors = embed_colors
 
-    async def start(self, *args, **kwargs):
+    async def setup_hook(self):
         self.session = ClientSession()
         self.pool = await asyncpg.create_pool(**config.database, max_size=20, command_timeout=60.0)
 
@@ -190,7 +190,6 @@ class Bot(commands.AutoShardedBot):
                     print(f"[{colored('ERROR', 'red')}] {extension:20} failed its loading!\n[{e}]")
                 else:
                     print(f"[{colored('OK', 'green')}] {extension:20} successfully loaded")
-        await super().start(config.token, reconnect=True)
 
     async def close(self):
         await self.session.close()
@@ -204,7 +203,6 @@ def main():
     intents.members = True
     intents.reactions = True
     intents.messages = True
-    intents.message_content = True
 
     bot = Bot(
         case_insensitive=True,
@@ -215,10 +213,7 @@ def main():
         guild_ready_timeout=5,
     )
 
-    try:
-        asyncio.run(bot.start())
-    except KeyboardInterrupt:
-        asyncio.run(bot.close())
+    bot.run(bot.config.token, reconnect=True)
 
 
 if __name__ == "__main__":
