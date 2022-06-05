@@ -32,13 +32,14 @@ Self Hosting
 I would appreciate if you don't host my bot.
 However, if you want to test it out, the installation steps are as follows:
 
+**Note**: It is recommended to run the latest stable version of both [Python](https://www.python.org/doc/versions/) and [PostgreSQL](https://www.postgresql.org/docs/release/).
+
 1. **Set up the PostgreSQL database by running the `psql` command**
 ```sql
 CREATE DATABASE overbot;
 CREATE USER davide WITH PASSWORD 'password';
 GRANT ALL PRIVILEGES ON DATABASE overbot TO davide;
 ```
-Note: It is recommended to run the latest stable version of [PostgreSQL](https://www.postgresql.org/docs/release/)
 
 2. **Set up the bot and run it**
 
@@ -68,8 +69,6 @@ pip install -r requirements.txt
 5. Rename `config.example.py` to `config.py`
 6. Edit the `config.py` file
 7. Use `python3 bot.py` to run the bot
-
-Note: It is recommended to run the latest stable version of [Python](https://www.python.org/doc/versions/)
 
 Contributing
 ------
