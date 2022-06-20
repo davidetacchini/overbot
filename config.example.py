@@ -80,6 +80,9 @@ main_color = 0xFFA657
 """OverBot's server ID."""
 support_server_id = 550685823784321035
 
+"""Test guild for app commands testing and owner commands usage."""
+test_guild_id = None
+
 # ENDIGNORE
 
 """Hero portrait URL."""
