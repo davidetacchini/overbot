@@ -1,62 +1,36 @@
+from __future__ import annotations
+
 import secrets
+
+from typing import TYPE_CHECKING, Literal
 
 import discord
 
+from discord import app_commands
 from discord.ext import commands
 
-MEME_CATEGORIES = ("hot", "new", "top", "rising")
+if TYPE_CHECKING:
+    from bot import OverBot
 
-
-def valid_hero_cat(argument):
-    valid = {
-        "tank": "tank",
-        "damage": "damage",
-        "dps": "damage",
-        "support": "support",
-        "healer": "support",
-        "heal": "support",
-    }
-
-    try:
-        category = valid[argument.lower()]
-    except KeyError:
-        raise commands.BadArgument("Unknown hero category.") from None
-    return category
-
-
-def valid_map_cat(argument):
-    valid = {
-        "control": "control",
-        "assault": "assault",
-        "escort": "escort",
-        "capture the flag": "capture the flag",
-        "ctf": "capture the flag",
-        "hybrid": "hybrid",
-        "elimination": "elimination",
-        "deathmatch": "deathmatch",
-        "team deathmatch": "team deathmatch",
-        "tdm": "team deathmatch",
-    }
-
-    try:
-        category = valid[argument.lower()]
-    except KeyError:
-        raise commands.BadArgument("Unknown map category.") from None
-    return category
-
-
-def valid_meme_cat(argument):
-    argument = argument.lower()
-    if argument not in MEME_CATEGORIES:
-        raise commands.BadArgument("Unknown meme category.")
-    return argument
+HeroCategories = Literal["damage", "support", "tank"]
+MemeCategories = Literal["hot", "new", "top", "rising"]
+MapCategories = Literal[
+    "control",
+    "assault",
+    "escort",
+    "capture the flag",
+    "hybrid",
+    "elimination",
+    "deathmatch",
+    "team deathmatch",
+]
 
 
 class Fun(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: OverBot):
         self.bot = bot
 
-    def get_random_hero(self, category):
+    def get_random_hero(self, category: str) -> str:
         heroes = list(self.bot.heroes.values())
         if not category:
             hero = secrets.choice(heroes)
@@ -65,7 +39,7 @@ class Fun(commands.Cog):
             hero = secrets.choice(categorized_heroes)
         return hero["name"]
 
-    def get_random_map(self, ctx, category):
+    def get_random_map(self, category: str) -> str:
         maps = self.bot.maps
         if not category:
             map_ = secrets.choice(maps)
@@ -74,7 +48,7 @@ class Fun(commands.Cog):
             map_ = secrets.choice(categorized_maps)
         return map_["name"]
 
-    async def get_meme(self, category):
+    async def get_meme(self, category: str) -> dict:
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
         async with self.bot.session.get(url) as r:
             memes = await r.json()
@@ -86,8 +60,8 @@ class Fun(commands.Cog):
         ]
         return secrets.choice(memes)
 
-    def embed_meme(self, ctx, meme):
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+    def embed_meme(self, interaction: discord.Interaction, meme: dict) -> discord.Embed:
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = meme["data"]["title"]
         upvotes, comments = meme["data"]["ups"], meme["data"]["num_comments"]
         embed.description = f"{upvotes} upvotes - {comments} comments"
@@ -96,68 +70,37 @@ class Fun(commands.Cog):
         embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
         return embed
 
-    @commands.command(aliases=["htp"])
-    async def herotoplay(self, ctx, category: valid_hero_cat = None):
-        """Returns a random hero.
-
-        `[category]` - The category to get a random hero from.
-
-        Categories:
-        - damage, dps
-        - support, heal, healer
-        - tank
-
-        If no category is given, a random hero is chosen from all categories.
-        """
+    @app_commands.command()
+    @app_commands.describe(category="The category to get a random hero from")
+    async def herotoplay(self, interaction: discord.Interaction, category: HeroCategories = None):
+        """Returns a random hero"""
         hero = self.get_random_hero(category)
-        await ctx.send(hero)
+        await interaction.response.send_message(hero)
 
-    @commands.command(aliases=["rtp"])
-    async def roletoplay(self, ctx):
-        """Returns a random role."""
+    @app_commands.command()
+    async def roletoplay(self, interaction: discord.Interaction):
+        """Returns a random role"""
         roles = ("Tank", "Damage", "Support", "Flex")
-        await ctx.send(secrets.choice(roles))
+        await interaction.response.send_message(secrets.choice(roles))
 
-    @commands.command(aliases=["mtp"])
-    async def maptoplay(self, ctx, *, category: valid_map_cat = None):
-        """Returns a random map.
+    @app_commands.command()
+    @app_commands.describe(category="The category to get a random map from")
+    async def maptoplay(self, interaction: discord.Interaction, *, category: MapCategories = None):
+        """Returns a random map"""
+        map_ = self.get_random_map(category)
+        await interaction.response.send_message(map_)
 
-        `[category]` - The category to get a random map from.
-
-        Categories:
-        - control
-        - assault
-        - escort
-        - capture the flag, ctf
-        - hybrid
-        - elimination
-        - deathmatch
-        - team deathmatch, tdm
-
-        If no category is given, a random map is chosen from all categories.
-        """
-        map_ = self.get_random_map(ctx, category)
-        await ctx.send(map_)
-
-    @commands.command()
-    async def meme(self, ctx, category: valid_meme_cat = None):
-        """Returns a random Overwatch meme.
-
-        `[category]` - The category to get a random meme from.
-
-        Categories:
-        - hot
-        - new
-        - top
-        - rising
-
-        Memes are taken from the subreddit r/Overwatch_Memes.
-        """
-        category = category or secrets.choice(MEME_CATEGORIES)
+    # TODO: if no category then select a random one
+    @app_commands.command()
+    @app_commands.describe(category="The category to get a random meme from")
+    @app_commands.checks.cooldown(1, 5.0, key=lambda i: (i.guild_id, i.user.id))
+    async def meme(self, interaction: discord.Interaction, category: MemeCategories = None):
+        """Returns a random Overwatch meme"""
+        category = category or secrets.choice(("hot", "new", "top", "rising"))
         meme = await self.get_meme(category)
-        embed = self.embed_meme(ctx, meme)
-        await ctx.send(embed=embed)
+        embed = self.embed_meme(interaction, meme)
+        await interaction.response.send_message(embed=embed)
 
 
-async def setup(bot):
+async def setup(bot: OverBot):
     await bot.add_cog(Fun(bot))

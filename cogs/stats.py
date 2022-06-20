@@ -1,150 +1,113 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+import discord
+
+from discord import app_commands
 from discord.ext import commands
+from discord.app_commands import Choice
 
+from utils.funcs import hero_autocomplete
 from classes.profile import Profile
-from classes.converters import Hero
 
+if TYPE_CHECKING:
+    from bot import OverBot
 
-def valid_platform(argument):
-    valid = {
-        "pc": "pc",
-        "bnet": "pc",
-        "xbl": "xbl",
-        "xbox": "xbl",
-        "ps": "psn",
-        "psn": "psn",
-        "ps4": "psn",
-        "ps5": "psn",
-        "play": "psn",
-        "playstation": "psn",
-        "nsw": "nintendo-switch",
-        "switch": "nintendo-switch",
-        "nintendo-switch": "nintendo-switch",
-    }
-
-    try:
-        platform = valid[argument.lower()]
-    except KeyError:
-        raise commands.BadArgument("Unknown platform.") from None
-    return platform
+platforms = [
+    Choice(name="Battle.net", value="pc"),
+    Choice(name="PlayStation", value="psn"),
+    Choice(name="XBOX", value="xbl"),
+    Choice(name="Nintendo Switch", value="nintendo-switch"),
+]
 
 
 class Stats(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: OverBot):
         self.bot = bot
 
-    async def show_stats_for(self, ctx, hero, platform, username):
-        profile = Profile(platform, username, ctx=ctx)
+    async def show_stats_for(
+        self,
+        interaction: discord.Interaction,
+        hero: str,
+        platform: app_commands.Choice | str,
+        username: str,
+    ) -> None:
+        try:
+            platform = platform.value
+        except AttributeError:
+            platform = platform
+        profile = Profile(platform, username, interaction=interaction)
         await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
             embed = profile.embed_stats(hero)
-        await self.bot.paginate(embed, ctx=ctx)
+        await self.bot.paginate(embed, interaction=interaction)
 
-    @commands.command(aliases=["sr"])
-    async def rating(self, ctx, platform: valid_platform, *, username):
-        """Returns player ratings.
-
-        `<platform>` - The platform of the player to get the SRs for.
-        `<username>` - The username of the player to get the SRs for.
-
-        Platforms:
-        - pc, bnet
-        - playstation, ps, psn, ps4, ps5, play
-        - xbox, xbl
-        - nintendo-switch, nsw, switch
-
-        Username:
-        - pc: BattleTag (format: name#0000)
-        - playstation: Online ID
-        - xbox: Gamertag
-        - nintendo-switch: Nintendo Network ID
-        """
-        profile = Profile(platform, username, ctx=ctx)
+    @app_commands.command()
+    @app_commands.choices(platform=platforms)
+    @app_commands.describe(platform="The username of the player")
+    @app_commands.describe(username="The platform of the player")
+    async def ratings(
+        self, interaction: discord.Interaction, platform: Choice[str], *, username: str
+    ):
+        """Provides player ratings."""
+        await interaction.response.defer(thinking=True)
+        profile = Profile(platform.value, username, interaction=interaction)
         await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
             embed = await profile.embed_ratings()
-        await ctx.send(embed=embed)
+        await interaction.followup.send(embed=embed)
 
-    @commands.command()
-    async def stats(self, ctx, platform: valid_platform, *, username):
-        """Returns player general stats.
+    @app_commands.command()
+    @app_commands.choices(platform=platforms)
+    @app_commands.describe(platform="The username of the player")
+    @app_commands.describe(username="The platform of the player")
+    async def stats(
+        self, interaction: discord.Interaction, platform: Choice[str], *, username: str
+    ):
+        """Provides player general stats."""
+        await interaction.response.defer(thinking=True)
+        await self.show_stats_for(interaction, "allHeroes", platform, username)
 
-        `<platform>` - The platform of the player to get stats for.
-        `<username>` - The username of the player to get stats for.
-
-        Platforms:
-        - pc, bnet
-        - playstation, ps, psn, ps4, ps5, play
-        - xbox, xbl
-        - nintendo-switch, nsw, switch
-
-        Username:
-        - pc: BattleTag (format: name#0000)
-        - playstation: Online ID
-        - xbox: Gamertag
-        - nintendo-switch: Nintendo Network ID
-        """
-        await self.show_stats_for(ctx, "allHeroes", platform, username)
-
-    @commands.command()
+    @app_commands.command()
+    @app_commands.autocomplete(hero=hero_autocomplete)
+    @app_commands.choices(platform=platforms)
+    @app_commands.describe(hero="The hero name to see the stats for")
+    @app_commands.describe(platform="The username of the player")
+    @app_commands.describe(username="The platform of the player")
     async def hero(
         self,
-        ctx,
-        hero: Hero,
-        platform: valid_platform,
+        interaction: discord.Interaction,
+        hero: str,
+        platform: Choice[str],
         *,
-        username,
+        username: str,
     ):
-        """Returns player general stats for a given hero.
+        """Provides player general stats for a given hero."""
+        await interaction.response.defer(thinking=True)
+        await self.show_stats_for(interaction, hero, platform, username)
 
-        `<hero>` - The name of the hero to get the stats for.
-        `<platform>` - The platform of the player to get stats for.
-        `<username>` - The username of the player to get stats for.
-
-        Platforms:
-        - pc, bnet
-        - playstation, ps, psn, ps4, ps5, play
-        - xbox, xbl
-        - nintendo-switch, nsw, switch
-
-        Username:
-        - pc: BattleTag (format: name#0000)
-        - playstation: Online ID
-        - xbox: Gamertag
-        - nintendo-switch: Nintendo Network ID
-        """
-        await self.show_stats_for(ctx, hero, platform, username)
-
-    @commands.command()
-    async def summary(self, ctx, platform: valid_platform, *, username):
-        """Returns player summarized stats.
-
-        `<platform>` - The platform of the player to get the summary for.
-        `<username>` - The username of the player to get the summary for.
-
-        Platforms:
-        - pc, bnet
-        - playstation, ps, psn, ps4, ps5, play
-        - xbox, xbl
-        - nintendo-switch, nsw, switch
-
-        Username:
-        - pc: BattleTag (format: name#0000)
-        - playstation: Online ID
-        - xbox: Gamertag
-        - nintendo-switch: Nintendo Network ID
-        """
-        profile = Profile(platform, username, ctx=ctx)
+    @app_commands.command()
+    @app_commands.choices(platform=platforms)
+    @app_commands.describe(platform="The username of the player")
+    @app_commands.describe(username="The platform of the player")
+    async def summary(
+        self, interaction: discord.Interaction, platform: Choice[str], *, username: str
+    ):
+        """Provides player summarized stats."""
+        await interaction.response.defer(thinking=True)
+        profile = Profile(platform.value, username, interaction=interaction)
         await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
             embed = profile.embed_summary()
-        await ctx.send(embed=embed)
+        await interaction.followup.send(embed=embed)
 
 
-async def setup(bot):
+async def setup(bot: OverBot):
     await bot.add_cog(Stats(bot))
