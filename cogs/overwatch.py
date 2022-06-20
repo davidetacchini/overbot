@@ -1,22 +1,32 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import discord
 
+from discord import app_commands
 from discord.ext import commands
 
 from utils.cache import cache
 from utils.checks import is_premium
 from utils.scrape import get_overwatch_news
 
+if TYPE_CHECKING:
+    from asyncpg import Record
+
+    from bot import OverBot
+
 
 class Newsboard:
     __slots__ = ("guild_id", "bot", "record", "channel_id", "member_id")
 
-    def __init__(self, guild_id, bot, *, record=None):
+    def __init__(self, guild_id: int, bot: OverBot, *, record: None | Record = None) -> None:
         self.guild_id = guild_id
         self.bot = bot
 
         if record:
-            self.channel_id = record["id"]
-            self.member_id = record["member_id"]
+            self.channel_id: int = record["id"]
+            self.member_id: int = record["member_id"]
         else:
             self.channel_id = None
 
@@ -27,36 +37,34 @@ class Newsboard:
 
 
 class Overwatch(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: OverBot):
         self.bot = bot
 
-    @commands.command()
-    async def status(self, ctx):
-        """Returns Overwatch server status link."""
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+    @app_commands.command()
+    async def status(self, interaction: discord.Interaction):
+        """Returns Overwatch server status link"""
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
         embed.set_footer(text="downdetector.com")
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
-    @commands.command()
-    @commands.cooldown(1, 60.0, commands.BucketType.member)
-    async def news(self, ctx, amount: int = 4):
-        """Shows the latest Overwatch news.
-
-        `[amount]` - The amount of news to return. Defaults to 4.
-        """
+    @app_commands.command()
+    @app_commands.describe(amount="The amount of news to return. Defaults to 4")
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    async def news(self, interaction: discord.Interaction, amount: app_commands.Range[int, 1, 4]):
+        """Shows the latest Overwatch news"""
         pages = []
 
         try:
             news = await get_overwatch_news(abs(amount))
         except Exception:
-            embed = discord.Embed(color=self.bot.color(ctx.author.id))
+            embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
             embed.description = f"[Latest Overwatch News]({url})"
-            return await ctx.send(embed=embed)
+            return await interaction.response.send_message(embed=embed)
 
         for i, n in enumerate(news, start=1):
-            embed = discord.Embed(color=self.bot.color(ctx.author.id))
+            embed = discord.Embed(color=self.bot.color(interaction.user.id))
             embed.title = n["title"]
             embed.url = n["link"]
             embed.set_author(name="Blizzard Entertainment")
@@ -68,12 +76,12 @@ class Overwatch(commands.Cog):
             )
             pages.append(embed)
 
-        await self.bot.paginate(pages, ctx=ctx)
+        await self.bot.paginate(pages, interaction=interaction)
 
-    @commands.command()
-    async def patch(self, ctx):
-        """Returns Overwatch patch notes links."""
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+    @app_commands.command()
+    async def patch(self, interaction: discord.Interaction):
+        """Returns Overwatch patch notes links"""
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Overwatch Patch Notes"
         categories = ("Live", "PTR", "Experimental")
         description = []
@@ -81,69 +89,71 @@ class Overwatch(commands.Cog):
             link = self.bot.config.overwatch["patch"].format(category.lower())
             description.append(f"[{category}]({link})")
         embed.description = " - ".join(description)
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
     @cache()
-    async def get_newsboard(self, guild_id):
+    async def get_newsboard(self, guild_id: int) -> Newsboard:
         query = "SELECT * FROM newsboard WHERE server_id = $1;"
         record = await self.bot.pool.fetchrow(query, guild_id)
         return Newsboard(guild_id, self.bot, record=record)
 
-    async def _has_newsboard(self, member_id: int):
+    async def _has_newsboard(self, member_id: int) -> None | discord.Guild:
         query = "SELECT server_id FROM newsboard WHERE member_id = $1;"
         guild_id = await self.bot.pool.fetchval(query, member_id)
         return self.bot.get_guild(guild_id)
 
     @is_premium()
-    @commands.group(invoke_without_command=True, extras={"premium": True})
-    @commands.guild_only()
-    @commands.has_permissions(manage_channels=True)
-    async def newsboard(self, ctx):
-        """Creates an Overwatch news channel.
-
-        You must have Manage Channels permission to use this.
-        """
-        newsboard = await self.get_newsboard(ctx.guild.id)
+    @app_commands.command()
+    @app_commands.guild_only()
+    @app_commands.checks.has_permissions(manage_channels=True)
+    async def newsboard(self, interaction: discord.Interaction):
+        """Creates an Overwatch news channel"""
+        newsboard = await self.get_newsboard(interaction.guild.id)
         if newsboard.channel is not None:
-            return await ctx.send(
+            return await interaction.response.send_message(
                 f"This server already has a newsboard at {newsboard.channel.mention}."
             )
 
-        if guild := await self._has_newsboard(ctx.author.id):
-            if await ctx.prompt(
-                f"You have already set up a newsboard in **{str(guild)}**. Do you want to override it?"
-            ):
+        if guild := await self._has_newsboard(interaction.user.id):
+            payload = f"You have already set up a newsboard in **{str(guild)}**. Do you want to override it?"
+            if await self.bot.prompt(interaction, payload):
                 query = "DELETE FROM newsboard WHERE member_id = $1;"
-                await self.bot.pool.execute(query, ctx.author.id)
-                self.get_newsboard.invalidate(self, ctx.guild.id)
+                await interaction.client.pool.execute(query, interaction.user.id)
+                self.get_newsboard.invalidate(self, interaction.guild_id)
             else:
                 return
 
         name = "overwatch-news"
         topic = "Latest Overwatch news."
         overwrites = {
-            ctx.me: discord.PermissionOverwrite(
+            interaction.guild.me: discord.PermissionOverwrite(
                 read_messages=True, send_messages=True, embed_links=True
             ),
-            ctx.guild.default_role: discord.PermissionOverwrite(
+            interaction.guild.default_role: discord.PermissionOverwrite(
                 read_messages=True, send_messages=False, read_message_history=True
             ),
         }
-        reason = f"{ctx.author} created a text channel #overwatch-news"
+        reason = f"{interaction.user} created a text channel #overwatch-news"
 
         try:
-            channel = await ctx.guild.create_text_channel(
+            channel = await interaction.guild.create_text_channel(
                 name=name, overwrites=overwrites, topic=topic, reason=reason
             )
         except discord.Forbidden:
-            return await ctx.send("I don't have permissions to create the channel.")
+            return await interaction.response.send_message(
+                "I don't have permissions to create the channel."
+            )
         except discord.HTTPException:
-            return await ctx.send("Something bad happened. Please try again.")
+            return await interaction.response.send_message(
+                "Something bad happened. Please try again."
+            )
 
         query = "INSERT INTO newsboard (id, server_id, member_id) VALUES ($1, $2, $3);"
-        await self.bot.pool.execute(query, channel.id, ctx.guild.id, ctx.author.id)
-        await ctx.send(f"Channel successfully created at {channel.mention}.")
+        await self.bot.pool.execute(query, channel.id, interaction.guild_id, interaction.user.id)
+        await interaction.response.send_message(
+            f"Channel successfully created at {channel.mention}."
+        )
 
 
-async def setup(bot):
+async def setup(bot: OverBot):
     await bot.add_cog(Overwatch(bot))
