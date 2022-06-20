@@ -1,21 +1,33 @@
+from __future__ import annotations
+
 import time
 import datetime
 import platform
 import itertools
+
+from typing import TYPE_CHECKING
 
 import distro
 import psutil
 import pygit2
 import discord
 
+from discord import app_commands
 from discord.ext import commands
 
-from utils.time import human_timedelta
+import config
+
+from utils.time import format_relative
 from classes.help import CustomHelp
+
+if TYPE_CHECKING:
+    from asyncpg import Record
+
+    from bot import OverBot
 
 
 class Meta(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: OverBot):
         self.bot = bot
         self.old_help_command = bot.help_command
         bot.help_command = CustomHelp()
@@ -24,57 +36,52 @@ class Meta(commands.Cog):
     def cog_unload(self):
         self.bot.help_command = self.old_help_command
 
-    @commands.command()
-    async def support(self, ctx):
-        """Returns the official bot support server invite link."""
-        await ctx.send(self.bot.config.support)
+    @app_commands.command()
+    async def support(self, interaction: discord.Interaction):
+        """Returns the official bot support server invite link"""
+        await interaction.response.send_message(config.support)
 
-    @commands.command()
-    async def vote(self, ctx):
-        """Returns bot vote link."""
-        await ctx.send(self.bot.config.vote)
+    @app_commands.command()
+    async def vote(self, interaction: discord.Interaction):
+        """Returns bot vote link"""
+        await interaction.response.send_message(config.vote)
 
-    @commands.command()
-    async def invite(self, ctx):
-        """Returns bot invite link."""
-        await ctx.send(self.bot.config.invite)
+    @app_commands.command()
+    async def invite(self, interaction: discord.Interaction):
+        """Returns bot invite link"""
+        await interaction.response.send_message(config.invite)
 
-    @commands.command(aliases=["git"])
-    async def github(self, ctx):
-        """Returns the bot GitHub repository."""
-        await ctx.send(self.bot.config.github["repo"])
+    @app_commands.command()
+    async def github(self, interaction: discord.Interaction):
+        """Returns the bot GitHub repository"""
+        await interaction.response.send_message(config.github["repo"])
 
-    @commands.command(aliases=["pong", "latency"])
-    async def ping(self, ctx):
-        """Shows bot current websocket latency and ACK."""
-        embed = discord.Embed(color=discord.Color.green())
-        embed.title = "Pinging..."
+    @app_commands.command()
+    async def ping(self, interaction: discord.Interaction):
+        """Shows bot current websocket latency and ACK"""
         start = time.monotonic()
-        msg = await ctx.send(embed=embed)
-        embed.title = None
+        await interaction.response.defer(thinking=True)
         ack = round((time.monotonic() - start) * 1000, 2)
+        embed = discord.Embed(color=discord.Color.green())
         embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000, 2)}ms")
         embed.add_field(name="ACK", value=f"{ack}ms")
-        await msg.edit(embed=embed)
+        await interaction.followup.send(embed=embed)
 
-    @commands.command()
-    async def uptime(self, ctx):
-        """Shows how long the bot has been online."""
-        await ctx.send(f"Uptime: {self.bot.get_uptime()}")
+    @app_commands.command()
+    async def uptime(self, interaction: discord.Interaction):
+        """Shows how long the bot has been online"""
+        await interaction.response.send_message(f"Uptime: {self.bot.get_uptime()}")
 
     @staticmethod
-    def format_commit(commit):
+    def format_commit(commit: pygit2.Commit) -> str:
         message, _, _ = commit.message.partition("\n")
         commit_tz = datetime.timezone(datetime.timedelta(minutes=commit.commit_time_offset))
         commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(commit_tz)
 
-        offset = human_timedelta(
-            commit_time.astimezone(datetime.timezone.utc).replace(tzinfo=None),
-            accuracy=1,
-        )
+        offset = format_relative(commit_time.astimezone(datetime.timezone.utc))
         return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {message} ({offset})"
 
-    def get_latest_commits(self, count=3):
+    def get_latest_commits(self, count: int = 3) -> str:
         repo = pygit2.Repository(".git")
         commits = list(
             itertools.islice(repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count)
@@ -82,22 +89,23 @@ class Meta(commands.Cog):
         return "\n".join(self.format_commit(c) for c in commits)
 
     # inspired by https://github.com/Rapptz/RoboDanny
-    @commands.command(aliases=["info"])
-    @commands.guild_only()
-    async def about(self, ctx):
-        """Shows bot information."""
+    @app_commands.command()
+    @app_commands.guild_only()
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    async def about(self, interaction: discord.Interaction):
+        """Shows bot information"""
         commits = self.get_latest_commits()
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Official Website"
         embed.description = f"Latest Changes:\n{commits}"
-        embed.url = self.bot.config.website
-        embed.timestamp = ctx.message.created_at
+        embed.url = config.website
+        embed.timestamp = interaction.created_at
 
-        owner = await self.bot.get_or_fetch_member(self.bot.config.owner_id)
+        owner = await self.bot.get_or_fetch_member(config.owner_id)
 
         embed.set_author(
             name=str(owner),
-            url=self.bot.config.github["profile"],
+            url=config.github["profile"],
             icon_url=owner.display_avatar,
         )
 
@@ -135,14 +143,14 @@ class Meta(commands.Cog):
         embed.add_field(name="Servers", value=len(self.bot.guilds))
         embed.add_field(
             name="Shards",
-            value=f"{ctx.guild.shard_id + 1}/{self.bot.shard_count}",
+            value=f"{interaction.guild.shard_id + 1}/{self.bot.shard_count}",
         )
         embed.add_field(name="Commands Run", value=total_commands)
         embed.add_field(name="Lines of code", value=self.bot.sloc)
         embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
-    async def get_weekly_top_guilds(self):
+    async def get_weekly_top_guilds(self, bot: OverBot) -> list[Record]:
         query = """SELECT guild_id, COUNT(*) as commands
                    FROM command
                    WHERE created_at > now() - '1 week'::interval
@@ -151,19 +159,19 @@ class Meta(commands.Cog):
                    ORDER BY commands DESC
                    LIMIT 5;
                 """
-        return await self.bot.pool.fetch(query, self.bot.config.ignored_guilds)
+        return await bot.pool.fetch(query, config.ignored_guilds)
 
-    @commands.command()
-    @commands.cooldown(1, 30.0, commands.BucketType.member)
-    async def topweekly(self, ctx):
-        """Shows bot's weekly most active servers.
+    @app_commands.command()
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    async def topweekly(self, interaction: discord.Interaction):
+        """Shows bot's weekly most active servers
 
-        Based on commands runned.
+        Based on commands runned
         """
-        guilds = await self.get_weekly_top_guilds()
-        embed = discord.Embed(color=self.bot.color(ctx.author.id))
+        guilds = await self.get_weekly_top_guilds(self.bot)
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Most Active Servers"
-        embed.url = self.bot.config.website + "/#servers"
+        embed.url = config.website + "/#servers"
         embed.set_footer(text="Tracking command usage since - 03/31/2021")
 
         board = []
@@ -173,8 +181,8 @@ class Meta(commands.Cog):
                 continue
             board.append(f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands")
         embed.description = "\n".join(board)
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
 
-async def setup(bot):
+async def setup(bot: OverBot):
     await bot.add_cog(Meta(bot))
