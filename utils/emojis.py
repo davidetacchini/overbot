@@ -1,9 +1,9 @@
 from discord import PartialEmoji
 
-battlenet = PartialEmoji(name="battlenet", id=679469162724196387)
-psn = PartialEmoji(name="psn", id=679468542541693128)
+battlenet = PartialEmoji(name="battlenet", id=987411831834411048)
+psn = PartialEmoji(name="playsation", id=987413205049548870)
 xbl = PartialEmoji(name="xbl", id=679469487623503930)
-switch = PartialEmoji(name="nsw", id=752653766377078817)
+switch = PartialEmoji(name="switch", id=987411998574792784)
 
 # emojis for custom nickname
 u_tank = "\N{SHIELD}"
