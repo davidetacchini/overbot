@@ -1,22 +1,22 @@
+from typing import Any
+
 import discord
 
-from utils import emojis
-from utils.funcs import get_platform_emoji
-
-from .context import Context
-from .exceptions import NoChoice, CannotEmbedLinks
+from .exceptions import CannotEmbedLinks
 
 PageT = str | dict | discord.Embed
 
 
 class Paginator(discord.ui.View):
-    def __init__(self, pages: list[discord.Embed | str], *, ctx: "Context", **kwargs):
+    def __init__(
+        self, entries: list[discord.Embed | str], *, interaction: discord.Interaction, **kwargs: Any
+    ):
         super().__init__(timeout=120.0, **kwargs)
-        if not isinstance(pages, list):
-            pages = [pages]
+        if not isinstance(entries, list):
+            entries = [entries]
 
-        self.pages = pages
-        self.ctx = ctx
+        self.entries = entries
+        self.interaction = interaction
         self.current: int = 0
         self.message: discord.Message = None
         self.clear_items()
@@ -24,10 +24,10 @@ class Paginator(discord.ui.View):
 
     @property
     def total(self) -> int:
-        return len(self.pages) - 1
+        return len(self.entries) - 1
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if interaction.user and interaction.user.id == self.ctx.author.id:
+        if interaction.user and interaction.user.id == self.interaction.user.id:
             return True
         await interaction.response.send_message(
             "This command was not initiated by you.", ephemeral=True
@@ -68,7 +68,7 @@ class Paginator(discord.ui.View):
             return {}
 
     async def _update(self, interaction: discord.Interaction) -> None:
-        kwargs = self._get_kwargs_from_page(self.pages[self.current])
+        kwargs = self._get_kwargs_from_page(self.entries[self.current])
         self._update_labels(self.current)
         if kwargs:
             if interaction.response.is_done():
@@ -77,8 +77,8 @@ class Paginator(discord.ui.View):
             else:
                 await interaction.response.edit_message(**kwargs, view=self)
 
-    def _ensure_permissions(self):
-        permissions = self.ctx.channel.permissions_for(self.ctx.me)
+    def _ensure_permissions(self) -> None:
+        permissions = self.interaction.channel.permissions_for(self.interaction.guild.me)
         if not permissions.send_messages:
             return
         if not permissions.embed_links:
@@ -86,9 +86,12 @@ class Paginator(discord.ui.View):
 
     async def start(self) -> None:
         self._ensure_permissions()
-        kwargs = self._get_kwargs_from_page(self.pages[0])
+        kwargs = self._get_kwargs_from_page(self.entries[0])
         self._update_labels(0)
-        self.message = await self.ctx.send(**kwargs, view=self)
+        if self.interaction.response.is_done():
+            self.message = await self.interaction.followup.send(**kwargs, view=self)
+        else:
+            self.message = await self.interaction.response.send_message(**kwargs, view=self)
 
     @discord.ui.button(label="<<", style=discord.ButtonStyle.blurple)
     async def first(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
@@ -121,148 +124,3 @@ class Paginator(discord.ui.View):
         if self.current < self.total:
             self.current = self.total
             await self._update(interaction)
-
-
-class ProfileManagerView(Paginator):
-    def __init__(self, pages, **kwargs):
-        super().__init__(pages, **kwargs)
-        self.action = None
-
-    def fill_items(self) -> None:
-        self.add_item(self.link)
-        self.add_item(self.unlink)
-        self.add_item(self.update)
-        if self.total == 0:
-            self.quit_session.row = 1
-            self.add_item(self.quit_session)
-        super().fill_items()
-
-    async def _handle(self, interaction: discord.Interaction) -> None:
-        await interaction.response.defer()
-        await interaction.delete_original_message()
-        self.stop()
-
-    @discord.ui.button(label="Link", style=discord.ButtonStyle.blurple, row=1)
-    async def link(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-        self.action = "link"
-        await self._handle(interaction)
-
-    @discord.ui.button(label="Unlink", style=discord.ButtonStyle.blurple, row=1)
-    async def unlink(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-        self.action = "unlink"
-        await self._handle(interaction)
-
-    @discord.ui.button(label="Update", style=discord.ButtonStyle.blurple, row=1)
-    async def update(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-        self.action = "update"
-        await self._handle(interaction)
-
-
-class ChooseSelect(discord.ui.Select):
-    async def callback(self, interaction: discord.Interaction) -> None:
-        await self.view.handle(interaction, self.values[0])
-
-
-class ChooseView(discord.ui.View):
-    def __init__(
-        self,
-        entries: None | list[str] = None,
-        *,
-        ctx: "Context",
-        timeout: float = 120.0,
-    ) -> None:
-        super().__init__(timeout=timeout)
-        self.entries = entries
-        self.ctx = ctx
-        self.choice: None | str = None
-        self.message: None | discord.Message = None
-
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if interaction.user and interaction.user.id == self.ctx.author.id:
-            return True
-        await interaction.response.send_message(
-            "This command was not initiated by you.", ephemeral=True
-        )
-        return False
-
-    async def on_timeout(self) -> None:
-        if self.message:
-            await self.message.delete()
-
-    async def handle(self, interaction: discord.Interaction, selected: str) -> None:
-        self.choice = selected
-        await interaction.response.defer()
-        await interaction.delete_original_message()
-        self.stop()
-
-
-async def choose_profile(ctx: "Context", message: str, member: discord.Member = None) -> str:
-    view = ChooseView(ctx=ctx)
-    select = ChooseSelect(placeholder="Select a profile...")
-    view.add_item(select)
-
-    profiles = await ctx.bot.get_cog("Profile").get_profiles(ctx, member)
-
-    # if there only is a profile then just return it
-    if len(profiles) == 1:
-        profile_id, _, _ = profiles[0]
-        return await ctx.bot.get_cog("Profile").get_profile(profile_id)
-
-    for profile in profiles:
-        id_, platform, username = profile
-        emoji = get_platform_emoji(platform)
-        select.add_option(label=f"{username}", value=id_, emoji=emoji)
-
-    view.message = await ctx.send(message, view=view)
-    await view.wait()
-
-    if (choice := view.choice) is not None:
-        return await ctx.bot.get_cog("Profile").get_profile(choice)
-    raise NoChoice()
-
-
-async def choose_answer(
-    entries: list[str | discord.Embed],
-    *,
-    ctx: "Context",
-    timeout: float,
-    embed: discord.Embed,
-) -> str:
-    view = ChooseView(entries, ctx=ctx, timeout=timeout)
-    select = ChooseSelect(placeholder="Select the correct answer...")
-    view.add_item(select)
-
-    embed.description = ""
-    for index, entry in enumerate(entries, start=1):
-        select.add_option(label=entry)
-        embed.description = f"{embed.description}{index}. {entry}\n"
-
-    view.message = await ctx.send(embed=embed, view=view)
-    await view.wait()
-
-    if (choice := view.choice) is not None:
-        return choice
-    raise NoChoice()
-
-
-async def choose_platform(ctx: "Context") -> str:
-    options = [
-        discord.SelectOption(label="PC", value="pc", emoji=emojis.battlenet),
-        discord.SelectOption(label="Playstation", value="psn", emoji=emojis.psn),
-        discord.SelectOption(label="XBOX", value="xbl", emoji=emojis.xbl),
-        discord.SelectOption(label="Nintendo Switch", value="nintendo-switch", emoji=emojis.switch),
-    ]
-
-    view = ChooseView(ctx=ctx)
-    select = ChooseSelect(placeholder="Select a platform...")
-    view.add_item(select)
-
-    for option in options:
-        select.append_option(option)
-
-    view.message = await ctx.send("Select a platform...", view=view)
-    await view.wait()
-
-    if (choice := view.choice) is not None:
-        return choice
-    raise NoChoice()
