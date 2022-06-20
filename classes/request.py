@@ -9,42 +9,42 @@ class RequestError(Exception):
 
 
 class NotFound(RequestError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Profile not found.")
 
 
 class BadRequest(RequestError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
 
 
 class InternalServerError(RequestError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             "The API is having internal server problems. Please be patient and try again later."
         )
 
 
 class ServiceUnavailable(RequestError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("The API is under maintenance. Please be patient and try again later.")
 
 
 class UnexpectedError(RequestError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Something bad happened. Please be patient and try again.")
 
 
 class TooManyAccounts(RequestError):
-    def __init__(self, platform, username, players):
+    def __init__(self, platform: str, username: str, players: int) -> None:
         match platform:
             case "pc":
                 what = "BattleTag"
             case "nintendo-switch":
                 what = "Nintendo Network ID"
         message = (
-            f"**{players}** accounts found under the name of `{username}`"
-            f" playing on `{platform}`. Please be more specific by entering"
+            f"**{players}** accounts found named `{username}` playing"
+            f" on `{platform}`. Please be more specific by entering"
             f" your full {what}."
         )
         super().__init__(message)
@@ -57,13 +57,13 @@ class Request:
     def __init__(self, platform: str, username: str):
         self.platform = platform
         self.username = username.replace("#", "%23")
-        self.username_l = username.lower()
+        self.username_l: str = username.lower()
 
     @property
-    def account_url(self):
+    def account_url(self) -> str:
         return config.overwatch["account"] + "/" + self.username + "/"
 
-    async def resolve_name(self, players):
+    async def resolve_name(self, players: list[dict]) -> None | str:
         if len(players) == 1:
             try:
                 return players[0]["urlName"]
@@ -94,7 +94,7 @@ class Request:
             # return the username and let `resolve_response` handle it
             return self.username
 
-    async def get_name(self):
+    async def get_name(self) -> None | list[dict]:
         async with aiohttp.ClientSession() as s:
             async with s.get(self.account_url) as r:
                 try:
@@ -104,11 +104,11 @@ class Request:
                 else:
                     return await self.resolve_name(name)
 
-    async def url(self):
+    async def url(self) -> str:
         name = await self.get_name()
         return f"{config.base_url}/{self.platform}/{name}/complete"
 
-    async def resolve_response(self, response):
+    async def resolve_response(self, response) -> None | dict:
         match response.status:
             case 200:
                 data = await response.json()
@@ -124,7 +124,7 @@ class Request:
             case _:
                 raise ServiceUnavailable()
 
-    async def request(self):
+    async def get(self) -> None | dict:
         url = await self.url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
@@ -133,5 +133,5 @@ class Request:
                 except aiohttp.client_exceptions.ClientPayloadError:
                     raise UnexpectedError()
 
-    async def get(self):
-        return await self.request()
+    # async def get(self) -> None | dict:
+    #     return await self.request()

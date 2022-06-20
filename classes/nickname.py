@@ -1,11 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from contextlib import suppress
 
 import discord
 
 from utils import emojis
 
-from .context import Context
-from .profile import Profile
+if TYPE_CHECKING:
+    from bot import OverBot
+
+    from .profile import Profile
 
 MAX_NICKNAME_LENGTH = 32
 ROLES = {
@@ -16,19 +21,19 @@ ROLES = {
 
 
 class Nickname:
-    __slots__ = ("ctx", "profile", "member")
+    __slots__ = ("interaction", "profile", "member")
 
-    def __init__(self, ctx: "Context", *, profile: Profile = None) -> None:
-        self.ctx = ctx
-        self.profile = profile
-        self.member: discord.Member = ctx.author
+    def __init__(self, interaction: discord.Interaction, *, profile: None | Profile = None) -> None:
+        self.interaction: discord.Interaction = interaction
+        self.profile: Profile = profile
+        self.member: discord.Member = interaction.user
+        self.bot: OverBot = interaction.client
 
     async def exists(self) -> bool:
-        query = "SELECT id FROM nickname WHERE id = $1;"
-        ret = await self.ctx.bot.pool.fetchval(query, self.member.id)
-        return True if ret else False
+        query = "SELECT EXISTS (SELECT TRUE FROM nickname WHERE id = $1);"
+        return await self.bot.pool.fetchval(query, self.member.id)
 
-    async def _make(self) -> str:
+    async def _generate(self) -> str:
         ratings = self.profile.resolve_ratings()
         if not ratings:
             return f"{self.member.name[:21]} [Unranked]"
@@ -41,8 +46,8 @@ class Nickname:
         tmp = "[" + tmp[:-1] + "]"
 
         # dinamically assign the nickname's length based on
-        # player's SR. -1 indicates the space between
-        # the member's name and the SR
+        # player's SR. -1 indicates the space between the
+        # member's name and the SR
         x = MAX_NICKNAME_LENGTH - len(tmp) - 1
         name = self.member.name[:x]
         return name + " " + tmp
@@ -51,22 +56,23 @@ class Nickname:
         if not await self.exists():
             return
 
-        nick = await self._make()
+        nick = await self._generate()
         with suppress(Exception):
             await self.member.edit(nick=nick)
 
-    async def set_or_remove(self, *, profile_id: int = None, remove: bool = False) -> None:
+    async def set_or_remove(self, *, profile_id: None | int = None, remove: bool = False) -> None:
         if not remove:
-            nick = await self._make()
+            nick = await self._generate()
         else:
             nick = None
 
         try:
             await self.member.edit(nick=nick)
         except discord.Forbidden:
-            await self.ctx.send(
+            message = (
                 "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
             )
+            await self.interaction.followup.send(message)
         except discord.HTTPException:
             await self.ctx.send("Something bad happened while updating your nickname.")
 

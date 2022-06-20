@@ -1,16 +1,22 @@
+from __future__ import annotations
+
 import re
 
+from typing import TYPE_CHECKING, Any
 from datetime import date
 
 import discord
 
-from asyncpg import Record
 from aiohttp.client_exceptions import ClientConnectorError
 
 from utils import emojis
 
-from .context import Context
 from .request import Request, UnexpectedError
+
+if TYPE_CHECKING:
+    from asyncpg import Record
+
+    from bot import OverBot
 
 ROLES = {
     "tank": emojis.tank,
@@ -25,12 +31,12 @@ class ProfileException(Exception):
 
 
 class NoStats(ProfileException):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("This profile has no quick play nor competitive stats to display.")
 
 
 class NoHeroStats(ProfileException):
-    def __init__(self, hero):
+    def __init__(self, hero: str) -> None:
         super().__init__(
             f"This profile has no quick play nor competitive stast for **{hero}** to display."
         )
@@ -38,49 +44,50 @@ class NoHeroStats(ProfileException):
 
 class Profile:
 
-    __slots__ = ("data", "id", "platform", "username", "ctx", "record", "pages")
+    __slots__ = ("data", "id", "platform", "username", "interaction", "record", "bot", "pages")
 
     def __init__(
         self,
         platform: None | str = None,
         username: None | str = None,
         *,
-        ctx: "Context",
+        interaction: discord.Interaction,
         record: None | Record = None,
     ):
-        self.data = None
+        self.id: None | int = None
+        self.data: dict = None
 
         if record:
             self.id = record["id"]
             self.platform = record["platform"]
             self.username = record["username"]
         else:
-            self.id = None
             self.platform = platform
             self.username = username
 
-        self.ctx = ctx
-        self.pages = []
+        self.interaction = interaction
+        self.bot: OverBot = interaction.client
+        self.pages: list[discord.Embed] = []
 
-    async def compute_data(self):
+    async def compute_data(self) -> None:
         try:
             self.data = await Request(self.platform, self.username).get()
         except ClientConnectorError:
             raise UnexpectedError() from None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.data["name"]
 
     @property
-    def avatar(self):
+    def avatar(self) -> str:
         return self.data["icon"]
 
     @property
-    def level_icon(self):
+    def level_icon(self) -> str:
         return self.data["levelIcon"]
 
     @staticmethod
-    def to_pascal(key):
+    def to_pascal(key) -> str:
         """From camel case to pascal case (testTest -> Test Test)."""
         return (
             re.sub("([a-z])([A-Z])", r"\g<1> \g<2>", key)
@@ -89,7 +96,7 @@ class Profile:
             .title()
         )
 
-    def format_key(self, key):
+    def format_key(self, key: str) -> str:
         match key:
             case "best":
                 return key.capitalize() + " (Most in game)"
@@ -99,7 +106,7 @@ class Profile:
                 return self.to_pascal(key)
 
     @staticmethod
-    def get_rating_icon(rating):
+    def get_rating_icon(rating: int) -> discord.PartialEmoji:
         if 0 < rating < 1500:
             return emojis.bronze
         elif 1500 <= rating < 2000:
@@ -114,16 +121,18 @@ class Profile:
             return emojis.master
         return emojis.grand_master
 
-    def is_private(self):
+    def is_private(self) -> bool:
         return self.data["private"]
 
-    def has_stats(self):
+    def has_stats(self) -> bool:
         return (
-            self.data["quickPlayStats"]["careerStats"]
+            True
+            if self.data["quickPlayStats"]["careerStats"]
             or self.data["competitiveStats"]["careerStats"]
+            else False
         )
 
-    async def save_ratings(self, profile_id, **kwargs):
+    async def save_ratings(self, profile_id: int, **kwargs: Any) -> None:
         tank = kwargs.get("tank", 0)
         damage = kwargs.get("damage", 0)
         support = kwargs.get("support", 0)
@@ -137,7 +146,7 @@ class Profile:
                 """
 
         requested_at = date.today()
-        roles = await self.ctx.bot.pool.fetch(query, profile_id, requested_at)
+        roles = await self.bot.pool.fetch(query, profile_id, requested_at)
 
         if roles:
             # Assuming a user uses `-profile rating` multiple times within
@@ -152,9 +161,9 @@ class Profile:
             query = (
                 "INSERT INTO rating (tank, damage, support, profile_id) VALUES ($1, $2, $3, $4);"
             )
-            await self.ctx.bot.pool.execute(query, tank, damage, support, profile_id)
+            await self.bot.pool.execute(query, tank, damage, support, profile_id)
 
-    def resolve_ratings(self):
+    def resolve_ratings(self) -> None | dict[str, int]:
         if not self.data["ratings"]:
             return None
         ratings = {}
@@ -162,7 +171,7 @@ class Profile:
             ratings[key.lower()] = value["level"]
         return ratings
 
-    def resolve_stats(self, hero):
+    def resolve_stats(self, hero: str) -> None | tuple:
         if not self.has_stats():
             raise NoStats()
 
@@ -183,7 +192,13 @@ class Profile:
 
         return keys, q, c
 
-    def format_stats(self, embed, key, quickplay, competitive):
+    def format_stats(
+        self,
+        embed: discord.Embed,
+        key: str,
+        quickplay: None | dict[str | dict],
+        competitive: None | dict[str | dict],
+    ) -> None:
         if quickplay and quickplay[key]:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
             embed.add_field(name="Quick Play", value=self.to_pascal(q_t))
@@ -191,8 +206,10 @@ class Profile:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self.to_pascal(c_t))
 
-    async def embed_ratings(self, *, save=False, profile_id=None):
-        embed = discord.Embed(color=self.ctx.bot.color(self.ctx.author.id))
+    async def embed_ratings(
+        self, *, save: bool = False, profile_id: None | int = None
+    ) -> discord.Embed:
+        embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
 
         ratings = self.resolve_ratings()
@@ -219,24 +236,24 @@ class Profile:
 
         return embed
 
-    def embed_stats(self, hero):
+    def embed_stats(self, hero: str) -> list[discord.Embed]:
         keys, quickplay, competitive = self.resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
-            embed = discord.Embed(color=self.ctx.bot.color(self.ctx.author.id))
+            embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
             embed.title = self.format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             if hero == "allHeroes":
                 embed.set_thumbnail(url=self.level_icon)
             else:
-                embed.set_thumbnail(url=self.ctx.bot.config.hero_url.format(hero.lower()))
-            embed.set_footer(text=f"Page {i}/{len(keys)}")
+                embed.set_thumbnail(url=self.bot.config.hero_url.format(hero.lower()))
+            embed.set_footer(text=f"Page {i} of {len(keys)}")
             self.format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
-    def embed_summary(self):
-        embed = discord.Embed(color=self.ctx.bot.color(self.ctx.author.id))
+    def embed_summary(self) -> discord.Embed:
+        embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
         embed.set_thumbnail(url=self.level_icon)
 
@@ -258,7 +275,7 @@ class Profile:
         for key, value in summary.items():
             embed.add_field(name=self.to_pascal(key), value=value)
 
-        def format_dict(source):
+        def format_dict(source: dict):
             d = {}
             d["game"] = source.get("game")
             to_keep = ("deaths", "eliminations", "damageDone")
@@ -266,7 +283,7 @@ class Profile:
             d["awards"] = source.get("matchAwards")
             return d
 
-        def format_embed(source, embed, *, category):
+        def format_embed(source: dict, embed: discord.Embed, *, category: str):
             for key, value in source.items():
                 key = f"{self.to_pascal(key)} ({category.title()})"
                 if isinstance(value, dict):
@@ -288,7 +305,7 @@ class Profile:
 
         return embed
 
-    def embed_private(self):
+    def embed_private(self) -> discord.Embed:
         embed = discord.Embed(color=discord.Color.red())
         embed.title = "This profile is set to private"
         embed.description = (

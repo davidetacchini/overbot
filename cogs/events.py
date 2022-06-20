@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import textwrap
 
+from typing import TYPE_CHECKING
 from datetime import datetime
 from contextlib import suppress
 
@@ -7,9 +10,12 @@ import discord
 
 from discord.ext import commands
 
+if TYPE_CHECKING:
+    from bot import OverBot
+
 
 class Events(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: OverBot):
         self.bot = bot
 
     async def send_log(self, text, color):
@@ -21,12 +27,12 @@ class Events(commands.Cog):
         embed.timestamp = datetime.utcnow()
         await self.bot.webhook.send(embed=embed)
 
-    async def change_presence(self):
+    async def change_presence(self) -> None:
         await self.bot.wait_until_ready()
-        game = discord.Game(f"{self.bot.prefix}help")
+        game = discord.Game("/help")
         await self.bot.change_presence(activity=game)
 
-    async def send_guild_log(self, guild, embed):
+    async def send_guild_log(self, guild: discord.Guild, embed: discord.Embed) -> None:
         """Sends information about a joined guild."""
         embed.title = guild.name
         if guild.icon:
@@ -60,11 +66,11 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        query = """INSERT INTO server (id, prefix)
-                   VALUES ($1, $2)
+        query = """INSERT INTO server (id)
+                   VALUES ($1)
                    ON CONFLICT (id) DO NOTHING;
                 """
-        await self.bot.pool.execute(query, guild.id, self.bot.prefix)
+        await self.bot.pool.execute(query, guild.id)
 
         if self.bot.debug:
             return
@@ -74,8 +80,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        with suppress(KeyError):
-            del self.bot.prefixes[guild.id]
         await self.bot.pool.execute("DELETE FROM server WHERE id = $1;", guild.id)
 
         if self.bot.debug:
@@ -93,11 +97,11 @@ class Events(commands.Cog):
         await self.bot.pool.execute(query, ctx.author.id)
 
         if ctx.guild:
-            query = """INSERT INTO server (id, prefix)
-                       VALUES ($1, $2)
+            query = """INSERT INTO server (id)
+                       VALUES ($1)
                        ON CONFLICT (id) DO NOTHING;
                     """
-            await self.bot.pool.execute(query, ctx.guild.id, self.bot.prefix)
+            await self.bot.pool.execute(query, ctx.guild.id)
 
     @commands.Cog.listener()
     async def on_guild_channel_delete(self, channel):
@@ -113,5 +117,5 @@ class Events(commands.Cog):
             await conn.execute(query, channel.id)
 
 
-async def setup(bot):
+async def setup(bot: OverBot):
     await bot.add_cog(Events(bot))
