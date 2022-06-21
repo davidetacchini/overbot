@@ -44,7 +44,7 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
             else:
                 await send("Maximum limit of profiles reached.")
 
-        elif type(error) == checks.UserNotPremium:
+        elif type(error) == checks.MemberNotPremium:
             premium = bot.config.premium
             embed = discord.Embed(color=discord.Color.red())
             embed.description = (
