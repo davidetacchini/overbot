@@ -132,6 +132,3 @@ class Request:
                     return await self.resolve_response(r)
                 except aiohttp.client_exceptions.ClientPayloadError:
                     raise UnexpectedError()
-
-    # async def get(self) -> None | dict:
-    #     return await self.request()
