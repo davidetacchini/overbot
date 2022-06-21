@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import secrets
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, get_args
 
 import discord
 
@@ -90,13 +90,13 @@ class Fun(commands.Cog):
         map_ = self.get_random_map(category)
         await interaction.response.send_message(map_)
 
-    # TODO: if no category then select a random one
     @app_commands.command()
     @app_commands.describe(category="The category to get a random meme from")
     @app_commands.checks.cooldown(1, 5.0, key=lambda i: (i.guild_id, i.user.id))
     async def meme(self, interaction: discord.Interaction, category: MemeCategories = None):
         """Returns a random Overwatch meme"""
-        category = category or secrets.choice(("hot", "new", "top", "rising"))
+        categories = tuple(get_args(MemeCategories))
+        category = category or secrets.choice(categories)
         meme = await self.get_meme(category)
         embed = self.embed_meme(interaction, meme)
         await interaction.response.send_message(embed=embed)
