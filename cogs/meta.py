@@ -18,7 +18,6 @@ from discord.ext import commands
 import config
 
 from utils.time import format_relative
-from classes.help import CustomHelp
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -29,12 +28,6 @@ if TYPE_CHECKING:
 class Meta(commands.Cog):
     def __init__(self, bot: OverBot):
         self.bot = bot
-        self.old_help_command = bot.help_command
-        bot.help_command = CustomHelp()
-        bot.help_command.cog = self
-
-    def cog_unload(self):
-        self.bot.help_command = self.old_help_command
 
     @app_commands.command()
     async def support(self, interaction: discord.Interaction):
@@ -168,6 +161,7 @@ class Meta(commands.Cog):
 
         Based on commands runned
         """
+        await interaction.response.defer(thinking=True)
         guilds = await self.get_weekly_top_guilds(self.bot)
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Most Active Servers"
@@ -181,7 +175,7 @@ class Meta(commands.Cog):
                 continue
             board.append(f"{index}. **{str(g)}** ran a total of **{guild['commands']}** commands")
         embed.description = "\n".join(board)
-        await interaction.response.send_message(embed=embed)
+        await interaction.followup.send(embed=embed)
 
 
 async def setup(bot: OverBot):
