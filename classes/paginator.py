@@ -77,7 +77,7 @@ class Paginator(discord.ui.View):
             else:
                 await interaction.response.edit_message(**kwargs, view=self)
 
-    def _ensure_permissions(self) -> None:
+    def _ensure_bot_permissions(self) -> None:
         permissions = self.interaction.channel.permissions_for(self.interaction.guild.me)
         if not permissions.send_messages:
             return
@@ -85,7 +85,7 @@ class Paginator(discord.ui.View):
             raise CannotEmbedLinks
 
     async def start(self) -> None:
-        self._ensure_permissions()
+        self._ensure_bot_permissions()
         kwargs = self._get_kwargs_from_page(self.entries[0])
         self._update_labels(0)
         if self.interaction.response.is_done():
