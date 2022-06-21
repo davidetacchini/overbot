@@ -54,7 +54,15 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
             await send(embed=embed)
 
         elif type(error) == app_commands.NoPrivateMessage:
-            await interaction.user.send("This command can't be used in direct messages.")
+            await interaction.user.send("This command cannot be used in direct messages.")
+
+        elif type(error) == app_commands.MissingPermissions:
+            perms = ", ".join(map(lambda p: f"`{p}`", error.missing_permissions))
+            await send(f"You don't have enough permissions to run this command: {perms}")
+
+        elif type(error) == app_commands.BotMissingPermissions:
+            perms = ", ".join(map(lambda p: f"`{p}`", error.missing_permissions))
+            await send(f"I don't have enough permissions to run this command: {perms}")
 
         elif type(error) == app_commands.CommandOnCooldown:
             command = interaction.command.qualified_name
