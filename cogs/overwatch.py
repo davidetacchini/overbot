@@ -105,6 +105,7 @@ class Overwatch(commands.Cog):
     @is_premium()
     @app_commands.command()
     @app_commands.guild_only()
+    @app_commands.checks.bot_has_permissions(manage_channels=True)
     @app_commands.checks.has_permissions(manage_channels=True)
     async def newsboard(self, interaction: discord.Interaction):
         """Creates an Overwatch news channel"""
@@ -138,10 +139,6 @@ class Overwatch(commands.Cog):
         try:
             channel = await interaction.guild.create_text_channel(
                 name=name, overwrites=overwrites, topic=topic, reason=reason
-            )
-        except discord.Forbidden:
-            return await interaction.response.send_message(
-                "I don't have permissions to create the channel."
             )
         except discord.HTTPException:
             return await interaction.response.send_message(

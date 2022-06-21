@@ -68,19 +68,18 @@ class Nickname:
 
         try:
             await self.member.edit(nick=nick)
-        except discord.Forbidden:
-            message = (
-                "I can't change nicknames in this server. Grant me `Manage Nicknames` permission."
-            )
-            await self.interaction.followup.send(message)
         except discord.HTTPException:
-            await self.ctx.send("Something bad happened while updating your nickname.")
+            await self.interaction.followup.send(
+                "Something bad happened while updating your nickname."
+            )
 
         if not remove:
             query = "INSERT INTO nickname (id, server_id, profile_id) VALUES ($1, $2, $3);"
-            await self.ctx.bot.pool.execute(query, self.member.id, self.ctx.guild.id, profile_id)
-            await self.ctx.send("Nickname successfully set.")
+            await self.bot.pool.execute(
+                query, self.member.id, self.interaction.guild.id, profile_id
+            )
+            await self.interaction.followup.send("Nickname successfully set.")
         else:
             query = "DELETE FROM nickname WHERE id = $1;"
-            await self.ctx.bot.pool.execute(query, self.member.id)
-            await self.ctx.send("Nickname successfully removed.")
+            await self.bot.pool.execute(query, self.member.id)
+            await self.interaction.followup.send("Nickname successfully removed.")

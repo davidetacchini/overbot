@@ -182,6 +182,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     @has_profile()
     @profile.command()
     @app_commands.guild_only()
+    @app_commands.checks.bot_has_permissions(manage_nicknames=True)
     async def nickname(self, interaction: discord.Interaction):
         """Shows or remove your SRs in your nickname
 
@@ -189,6 +190,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         automatically whenever `profile rating` is used and the
         profile selected matches the one set for the nickname.
         """
+        await interaction.response.defer(thinking=True)
         nick = Nickname(interaction)
         if not await nick.exists():
             if not await self.bot.prompt(
@@ -197,7 +199,7 @@ class ProfileCog(commands.Cog, name="Profile"):
                 return
 
             if interaction.guild.me.top_role < interaction.user.top_role:
-                return await interaction.response.send_message(
+                return await interaction.followup.send(
                     "This server's owner needs to move the `OverBot` role higher, so I will "
                     "be able to update your nickname. If you are this server's owner, there's "
                     "not way for me to change your nickname, sorry!"
@@ -208,20 +210,20 @@ class ProfileCog(commands.Cog, name="Profile"):
             profile = Profile(interaction=interaction, record=record)
 
             if profile.is_private():
-                return await interaction.response.send_message(embed=profile.embed_private())
+                return await interaction.followup.send(embed=profile.embed_private())
 
             nick.profile = profile
 
             try:
                 await nick.set_or_remove(profile_id=profile.id)
             except Exception as e:
-                await interaction.response.send_message(e)
+                await interaction.followup.send(e)
         else:
             if await self.bot.prompt(interaction, "This will remove your SR in your nickname."):
                 try:
                     await nick.set_or_remove(remove=True)
                 except Exception as e:
-                    await interaction.response.send_message(e)
+                    await interaction.followup.send(e)
 
     async def sr_graph(self, interaction: discord.Interaction, profile: Record):
         id_, platform, username = profile
