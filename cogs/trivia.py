@@ -120,7 +120,7 @@ class Trivia(commands.Cog):
             await interaction.followup.send(embed=embed)
 
     @trivia.command()
-    async def stats(self, interaction: discord.Interaction, member: discord.Member = None):
+    async def stats(self, interaction: discord.Interaction, member: None | discord.Member = None):
         """Shows trivia stats.
 
         `[member]` - The mention or the ID of a discord member of the current server.
