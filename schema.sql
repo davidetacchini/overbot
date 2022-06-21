@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.1
--- Dumped by pg_dump version 14.1
+-- Dumped from database version 14.4
+-- Dumped by pg_dump version 14.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,9 +30,7 @@ CREATE TABLE public.command (
     guild_id bigint NOT NULL,
     channel_id bigint NOT NULL,
     author_id bigint NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    prefix text NOT NULL,
-    failed boolean NOT NULL
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -179,7 +177,6 @@ ALTER SEQUENCE public.rating_id_seq OWNED BY public.rating.id;
 
 CREATE TABLE public.server (
     id bigint NOT NULL,
-    prefix character varying(5) NOT NULL,
     premium boolean DEFAULT false NOT NULL
 );
 
