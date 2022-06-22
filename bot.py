@@ -12,7 +12,7 @@ from discord.ext import commands
 import config
 
 from utils import emojis
-from classes.ui import Prompt
+from classes.ui import PromptView
 from utils.time import human_timedelta
 from utils.errors import error_handler
 from utils.scrape import get_overwatch_maps, get_overwatch_heroes
@@ -90,7 +90,7 @@ class OverBot(commands.AutoShardedBot):
             kwargs = {"content": payload, "embed": None}
         elif isinstance(payload, discord.Embed):
             kwargs = {"content": None, "embed": payload}
-        view = Prompt(author_id=interaction.user.id)
+        view = PromptView(author_id=interaction.user.id)
         if interaction.response.is_done():
             view.message = await interaction.followup.send(**kwargs, view=view)
         else:

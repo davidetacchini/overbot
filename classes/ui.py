@@ -78,7 +78,7 @@ class ModalProfileUpdate(ui.Modal, title="Profile Update"):
         await interaction.response.send_message("Profile successfully updated.", ephemeral=True)
 
 
-class Prompt(discord.ui.View):
+class PromptView(discord.ui.View):
     def __init__(self, author_id):
         super().__init__()
         self.author_id = author_id
