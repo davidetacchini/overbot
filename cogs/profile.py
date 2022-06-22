@@ -281,7 +281,7 @@ class ProfileCog(commands.Cog, name="Profile"):
 
     @is_premium()
     @has_profile()
-    @profile.command()
+    @profile.command(extras=dict(premium=True))
     async def graph(self, interaction: discord.Interaction):
         """Shows SRs performance graph."""
         message = "Select a profile to view the SRs graph for."

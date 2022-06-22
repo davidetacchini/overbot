@@ -53,7 +53,7 @@ class Member(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @is_premium()
-    @app_commands.command()
+    @app_commands.command(extras=dict(premium=True))
     @app_commands.describe(color="The color to use for the embeds. Leave blank to reset")
     async def color(
         self,
