@@ -23,7 +23,7 @@ class ColorTransformer(app_commands.Transformer):
         try:
             color = Color.from_str(value)
         except ValueError:
-            raise InvalidColor()
+            raise InvalidColor() from None
         else:
             return color
 

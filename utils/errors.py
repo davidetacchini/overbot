@@ -8,9 +8,7 @@ from asyncpg import DataError
 from discord import app_commands
 
 from utils import checks
-from classes.profile import ProfileException
-from classes.request import RequestError
-from classes.exceptions import NoChoice, PaginationError
+from classes.exceptions import OverBotException
 
 
 async def error_handler(interaction: discord.Interaction, error: app_commands.AppCommandError):
@@ -71,10 +69,9 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
 
     elif isinstance(error, app_commands.CommandInvokeError):
         original = error.original
-        group = (RequestError, ProfileException, NoChoice, PaginationError)
         if isinstance(original, DataError):
             await send("The argument you entered cannot be handled.")
-        elif isinstance(original, group):
+        elif isinstance(original, OverBotException):
             await send(original)
         else:
             embed = discord.Embed(color=discord.Color.red())

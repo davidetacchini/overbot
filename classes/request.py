@@ -2,52 +2,7 @@ import aiohttp
 
 import config
 
-
-class RequestError(Exception):
-
-    pass
-
-
-class NotFound(RequestError):
-    def __init__(self) -> None:
-        super().__init__("Profile not found.")
-
-
-class BadRequest(RequestError):
-    def __init__(self) -> None:
-        super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
-
-
-class InternalServerError(RequestError):
-    def __init__(self) -> None:
-        super().__init__(
-            "The API is having internal server problems. Please be patient and try again later."
-        )
-
-
-class ServiceUnavailable(RequestError):
-    def __init__(self) -> None:
-        super().__init__("The API is under maintenance. Please be patient and try again later.")
-
-
-class UnexpectedError(RequestError):
-    def __init__(self) -> None:
-        super().__init__("Something bad happened. Please be patient and try again.")
-
-
-class TooManyAccounts(RequestError):
-    def __init__(self, platform: str, username: str, players: int) -> None:
-        match platform:
-            case "pc":
-                what = "BattleTag"
-            case "nintendo-switch":
-                what = "Nintendo Network ID"
-        message = (
-            f"**{players}** accounts found named `{username}` playing"
-            f" on `{platform}`. Please be more specific by entering"
-            f" your full {what}."
-        )
-        super().__init__(message)
+from . import exceptions as ex
 
 
 class Request:
@@ -68,7 +23,7 @@ class Request:
             try:
                 return players[0]["urlName"]
             except Exception:
-                raise InternalServerError()
+                raise ex.InternalServerError()
         elif len(players) > 1:
             total_players = []
             for player in players:
@@ -85,11 +40,11 @@ class Request:
                 or "#" in self.username
                 and self.username_l not in total_players
             ):
-                raise NotFound()
+                raise ex.NotFound()
             elif len(total_players) == 1 and self.platform == "nintendo-switch":
                 return total_players[0]
             else:
-                raise TooManyAccounts(self.platform, self.username, len(total_players))
+                raise ex.TooManyAccounts(self.platform, self.username, len(total_players))
         else:
             # return the username and let `resolve_response` handle it
             return self.username
@@ -100,7 +55,7 @@ class Request:
                 try:
                     name = await r.json()
                 except Exception:
-                    raise UnexpectedError()
+                    raise ex.UnexpectedError()
                 else:
                     return await self.resolve_name(name)
 
@@ -113,16 +68,16 @@ class Request:
             case 200:
                 data = await response.json()
                 if data.get("error"):
-                    raise UnexpectedError()
+                    raise ex.UnexpectedError()
                 return data
             case 400:
-                raise BadRequest()
+                raise ex.BadRequest()
             case 404:
-                raise NotFound()
+                raise ex.NotFound()
             case 500:
-                raise InternalServerError()
+                raise ex.InternalServerError()
             case _:
-                raise ServiceUnavailable()
+                raise ex.ServiceUnavailable()
 
     async def get(self) -> None | dict:
         url = await self.url()
@@ -131,4 +86,4 @@ class Request:
                 try:
                     return await self.resolve_response(r)
                 except aiohttp.client_exceptions.ClientPayloadError:
-                    raise UnexpectedError()
+                    raise ex.UnexpectedError()
