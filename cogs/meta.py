@@ -12,7 +12,7 @@ import psutil
 import pygit2
 import discord
 
-from discord import app_commands
+from discord import ui, app_commands
 from discord.ext import commands
 
 import config
@@ -35,21 +35,6 @@ class Meta(commands.Cog):
         await interaction.response.send_message(config.support)
 
     @app_commands.command()
-    async def vote(self, interaction: discord.Interaction):
-        """Returns bot vote link"""
-        await interaction.response.send_message(config.vote)
-
-    @app_commands.command()
-    async def invite(self, interaction: discord.Interaction):
-        """Returns bot invite link"""
-        await interaction.response.send_message(config.invite)
-
-    @app_commands.command()
-    async def github(self, interaction: discord.Interaction):
-        """Returns the bot GitHub repository"""
-        await interaction.response.send_message(config.github["repo"])
-
-    @app_commands.command()
     async def ping(self, interaction: discord.Interaction):
         """Shows bot current websocket latency and ACK"""
         start = time.monotonic()
@@ -59,11 +44,6 @@ class Meta(commands.Cog):
         embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000, 2)}ms")
         embed.add_field(name="ACK", value=f"{ack}ms")
         await interaction.followup.send(embed=embed)
-
-    @app_commands.command()
-    async def uptime(self, interaction: discord.Interaction):
-        """Shows how long the bot has been online"""
-        await interaction.response.send_message(f"Uptime: {self.bot.get_uptime()}")
 
     @staticmethod
     def format_commit(commit: pygit2.Commit) -> str:
@@ -86,12 +66,17 @@ class Meta(commands.Cog):
     @app_commands.guild_only()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
     async def about(self, interaction: discord.Interaction):
-        """Shows bot information"""
+        """Shows bot related information and useful links"""
         commits = self.get_latest_commits()
+
+        view = ui.View()
+        view.add_item(ui.Button(label="Website", url=config.website))
+        view.add_item(ui.Button(label="GitHub", url=config.github["repo"]))
+        view.add_item(ui.Button(label="Invite", url=config.invite))
+        view.add_item(ui.Button(label="Vote", url=config.vote))
+
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.title = "Official Website"
         embed.description = f"Latest Changes:\n{commits}"
-        embed.url = config.website
         embed.timestamp = interaction.created_at
 
         owner = await self.bot.get_or_fetch_member(config.owner_id)
@@ -141,7 +126,7 @@ class Meta(commands.Cog):
         embed.add_field(name="Commands Run", value=total_commands)
         embed.add_field(name="Lines of code", value=self.bot.sloc)
         embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, view=view)
 
     async def get_weekly_top_guilds(self, bot: OverBot) -> list[Record]:
         query = """SELECT guild_id, COUNT(*) as commands
