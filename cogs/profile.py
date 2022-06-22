@@ -17,6 +17,7 @@ from utils.funcs import chunker, hero_autocomplete, get_platform_emoji
 from utils.checks import is_premium, has_profile
 from classes.profile import Profile
 from classes.nickname import Nickname
+from classes.exceptions import CannotCreateGraph
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -251,7 +252,7 @@ class ProfileCog(commands.Cog, name="Profile"):
                 data.drop(row, axis=1, inplace=True)
 
         if len(data.columns) == 0:
-            raise commands.BadArgument("I don't have enough data to create the graph.")
+            raise CannotCreateGraph()
 
         fig, ax = pyplot.subplots()
         ax.xaxis_date()
@@ -281,7 +282,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     @is_premium()
     @has_profile()
     @profile.command()
-    async def graph(self, interaction: discord.Interaction):  # TODO: mark as premium command
+    async def graph(self, interaction: discord.Interaction):
         """Shows SRs performance graph."""
         message = "Select a profile to view the SRs graph for."
         profile = await select_profile(interaction, message)

@@ -11,7 +11,8 @@ from aiohttp.client_exceptions import ClientConnectorError
 
 from utils import emojis
 
-from .request import Request, UnexpectedError
+from .request import Request
+from .exceptions import NoStats, NoHeroStats, UnexpectedError
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -23,23 +24,6 @@ ROLES = {
     "damage": emojis.damage,
     "support": emojis.support,
 }
-
-
-class ProfileException(Exception):
-
-    pass
-
-
-class NoStats(ProfileException):
-    def __init__(self) -> None:
-        super().__init__("This profile has no quick play nor competitive stats to display.")
-
-
-class NoHeroStats(ProfileException):
-    def __init__(self, hero: str) -> None:
-        super().__init__(
-            f"This profile has no quick play nor competitive stast for **{hero}** to display."
-        )
 
 
 class Profile:
