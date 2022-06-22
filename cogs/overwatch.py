@@ -103,7 +103,7 @@ class Overwatch(commands.Cog):
         return self.bot.get_guild(guild_id)
 
     @is_premium()
-    @app_commands.command()
+    @app_commands.command(extras=dict(premium=True))
     @app_commands.guild_only()
     @app_commands.checks.bot_has_permissions(manage_channels=True)
     @app_commands.checks.has_permissions(manage_channels=True)
