@@ -64,9 +64,9 @@ class Member(commands.Cog):
         """Set a custom color for the embeds"""
         if color is None:
             query = "UPDATE member SET embed_color = NULL WHERE id = $1;"
-            await interaction.client.pool.execute(query, interaction.user.id)
+            await self.bot.pool.execute(query, interaction.user.id)
             try:
-                del interaction.client.embed_colors[interaction.user.id]
+                del self.bot.embed_colors[interaction.user.id]
             except KeyError:
                 return await interaction.response.send_message(
                     "Color already set to default.", ephemeral=True
@@ -78,8 +78,8 @@ class Member(commands.Cog):
 
         embed = discord.Embed(color=color)
         query = "UPDATE member SET embed_color = $1 WHERE id = $2;"
-        await interaction.client.pool.execute(query, color, interaction.user.id)
-        interaction.client.embed_colors[interaction.user.id] = color
+        await self.bot.pool.execute(query, color, interaction.user.id)
+        self.bot.embed_colors[interaction.user.id] = color
         embed.description = "Color successfully set."
         await interaction.response.send_message(embed=embed)
 
