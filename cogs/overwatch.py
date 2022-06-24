@@ -119,7 +119,7 @@ class Overwatch(commands.Cog):
             payload = f"You have already set up a newsboard in **{str(guild)}**. Do you want to override it?"
             if await self.bot.prompt(interaction, payload):
                 query = "DELETE FROM newsboard WHERE member_id = $1;"
-                await interaction.client.pool.execute(query, interaction.user.id)
+                await self.bot.pool.execute(query, interaction.user.id)
                 self.get_newsboard.invalidate(self, interaction.guild_id)
             else:
                 return
