@@ -67,7 +67,7 @@ BASE_PROFILES_LIMIT = 5
 owner_id = 285502621295312896
 
 """The version of the Bot."""
-version = "4.1.0"
+version = "5.0.0"
 
 """Prefix used if custom is not set."""
 default_prefix = "-"
