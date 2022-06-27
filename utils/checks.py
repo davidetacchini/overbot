@@ -25,6 +25,11 @@ class MemberNotPremium(app_commands.CheckFailure):
     pass
 
 
+class NotOwner(app_commands.CheckFailure):
+
+    pass
+
+
 async def get_profiles(interaction: discord.Interaction) -> list[Record]:
     query = """SELECT platform, username
                FROM profile
@@ -63,7 +68,7 @@ def can_add_profile():
 def is_premium():
     """Check for a user/server to be premium."""
 
-    async def predicate(interaction: discord.Interaction):
+    def predicate(interaction: discord.Interaction):
         member_id = interaction.user.id
         guild_id = interaction.guild.id if interaction.guild is not None else 0
         to_check = (member_id, guild_id)
@@ -71,5 +76,14 @@ def is_premium():
         if all(x not in interaction.client.premiums for x in to_check):
             raise MemberNotPremium()
         return True
+
+    return app_commands.check(predicate)
+
+
+def is_owner():
+    def predicate(interaction: discord.Interaction):
+        if interaction.user.id == interaction.client.owner.id:
+            return True
+        raise NotOwner()
 
     return app_commands.check(predicate)

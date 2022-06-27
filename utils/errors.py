@@ -6,7 +6,7 @@ from asyncpg import DataError
 from discord import app_commands
 
 from utils import checks
-from classes.exceptions import OverBotException
+from classes.exceptions import NoChoice, OverBotException
 
 
 async def error_handler(interaction: discord.Interaction, error: app_commands.AppCommandError):
@@ -17,6 +17,7 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
             kwargs = {"content": payload}
         elif isinstance(payload, discord.Embed):
             kwargs = {"embed": payload}
+
         if interaction.response.is_done():
             await interaction.followup.send(**kwargs, ephemeral=ephemeral)
         else:
@@ -53,6 +54,9 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
             )
             await send(embed)
 
+        elif type(error) == checks.NotOwner:
+            await send("You are not allowed to run this command.")
+
         elif type(error) == app_commands.NoPrivateMessage:
             await interaction.user.send("This command cannot be used in direct messages.")
 
@@ -73,8 +77,10 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
         original = error.original
         if isinstance(original, DataError):
             await send("The argument you entered cannot be handled.")
+        elif isinstance(original, NoChoice):
+            pass
         elif isinstance(original, OverBotException):
-            await send(original)
+            await send(str(original))
         else:
             embed = discord.Embed(color=discord.Color.red())
             embed.set_author(name=str(interaction.user), icon_url=interaction.user.display_avatar)
