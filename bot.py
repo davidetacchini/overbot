@@ -1,12 +1,12 @@
 import os
 import sys
+import logging
 
 import asyncpg
 import discord
 
 from aiohttp import ClientSession
 from discord import app_commands
-from termcolor import colored
 from discord.ext import commands
 
 import config
@@ -22,6 +22,9 @@ if sys.platform == "linux":
     import uvloop
 
     uvloop.install()
+
+
+log = logging.getLogger("discord")
 
 
 class OverBot(commands.AutoShardedBot):
@@ -176,10 +179,10 @@ class OverBot(commands.AutoShardedBot):
             if extension.endswith(".py"):
                 try:
                     await self.load_extension(f"cogs.{extension[:-3]}")
-                except Exception as e:
-                    print(f"[{colored('ERROR', 'red')}]{extension:20} failed its loading!\n[{e}]")
+                except Exception:
+                    log.exception(f"Extension {extension} failed its loading.")
                 else:
-                    print(f"[{colored('OK', 'green')}]{extension:20} successfully loaded")
+                    log.info(f"Extension {extension} successfully loaded.")
 
         self.tree.on_error = error_handler
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import logging
 import platform
 
 from typing import TYPE_CHECKING
@@ -15,6 +16,8 @@ from utils.scrape import get_overwatch_news
 
 if TYPE_CHECKING:
     from bot import OverBot
+
+log = logging.getLogger(__name__)
 
 
 class Tasks(commands.Cog):
@@ -241,6 +244,7 @@ class Tasks(commands.Cog):
             payload = {"markProcessed": True}
             async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
                 message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
+                log.info(message)
                 await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
 
     @check_subscriptions.before_loop
