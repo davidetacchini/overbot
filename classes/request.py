@@ -2,7 +2,14 @@ import aiohttp
 
 import config
 
-from . import exceptions as ex
+from .exceptions import (
+    NotFound,
+    BadRequest,
+    TooManyAccounts,
+    UnexpectedError,
+    ServiceUnavailable,
+    InternalServerError,
+)
 
 
 class Request:
@@ -23,7 +30,7 @@ class Request:
             try:
                 return players[0]["urlName"]
             except Exception:
-                raise ex.InternalServerError()
+                raise InternalServerError()
         elif len(players) > 1:
             total_players = []
             for player in players:
@@ -40,11 +47,11 @@ class Request:
                 or "#" in self.username
                 and self.username_l not in total_players
             ):
-                raise ex.NotFound()
+                raise NotFound()
             elif len(total_players) == 1 and self.platform == "nintendo-switch":
                 return total_players[0]
             else:
-                raise ex.TooManyAccounts(self.platform, self.username, len(total_players))
+                raise TooManyAccounts(self.platform, self.username, len(total_players))
         else:
             # return the username and let `resolve_response` handle it
             return self.username
@@ -55,7 +62,7 @@ class Request:
                 try:
                     name = await r.json()
                 except Exception:
-                    raise ex.UnexpectedError()
+                    raise UnexpectedError()
                 else:
                     return await self.resolve_name(name)
 
@@ -68,16 +75,16 @@ class Request:
             case 200:
                 data = await response.json()
                 if data.get("error"):
-                    raise ex.UnexpectedError()
+                    raise UnexpectedError()
                 return data
             case 400:
-                raise ex.BadRequest()
+                raise BadRequest()
             case 404:
-                raise ex.NotFound()
+                raise NotFound()
             case 500:
-                raise ex.InternalServerError()
+                raise InternalServerError()
             case _:
-                raise ex.ServiceUnavailable()
+                raise ServiceUnavailable()
 
     async def get(self) -> None | dict:
         url = await self.url()
@@ -86,4 +93,4 @@ class Request:
                 try:
                     return await self.resolve_response(r)
                 except aiohttp.client_exceptions.ClientPayloadError:
-                    raise ex.UnexpectedError()
+                    raise UnexpectedError()
