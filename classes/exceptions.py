@@ -5,8 +5,8 @@ class OverBotException(Exception):
 
 
 class NoChoice(OverBotException):
-    def __init__(self) -> None:
-        super().__init__("Took too long.")
+
+    pass
 
 
 class PaginationError(OverBotException):
