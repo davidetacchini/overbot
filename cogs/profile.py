@@ -50,15 +50,15 @@ class ProfileCog(commands.Cog, name="Profile"):
         return await self.bot.pool.fetchrow(query, int(profile_id))
 
     async def select_profile(
-        interaction: discord.Interaction, message: str, member: None | discord.Member = None
+        self, interaction: discord.Interaction, message: str, member: None | discord.Member = None
     ) -> str:
         member = member or interaction.user
-        profiles = await interaction.client.get_cog("Profile").get_profiles(interaction, member.id)
+        profiles = await self.get_profiles(interaction, member.id)
 
         # if there only is a profile then just return it
         if len(profiles) == 1:
             profile_id, _, _ = profiles[0]
-            return await interaction.client.get_cog("Profile").get_profile(profile_id)
+            return await self.get_profile(profile_id)
 
         view = SelectProfileView(profiles, author_id=interaction.user.id)
 
@@ -71,7 +71,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         choice = view.select.values[0] if len(view.select.values) else None
 
         if choice is not None:
-            return await interaction.client.get_cog("Profile").get_profile(choice)
+            return await self.get_profile(choice)
         raise NoChoice() from None
 
     async def list_profiles(
@@ -215,8 +215,8 @@ class ProfileCog(commands.Cog, name="Profile"):
 
     @has_profile()
     @profile.command()
-    @app_commands.guild_only()
     @app_commands.checks.bot_has_permissions(manage_nicknames=True)
+    @app_commands.guild_only()
     async def nickname(self, interaction: discord.Interaction):
         """Shows or remove your SRs in your nickname
 
@@ -306,13 +306,13 @@ class ProfileCog(commands.Cog, name="Profile"):
         file = discord.File(image, filename="graph.png")
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.set_author(name=str(interaction.user), icon_url=interaction.user.display_avatar)
+        embed.set_author(name=str(interaction.user), icon_url=interaction.user.display_avatar.url)
         embed.set_image(url="attachment://graph.png")
         return file, embed
 
-    @is_premium()
-    @has_profile()
     @profile.command(extras=dict(premium=True))
+    @has_profile()
+    @is_premium()
     async def graph(self, interaction: discord.Interaction):
         """Shows SRs performance graph."""
         await interaction.response.defer(thinking=True)
