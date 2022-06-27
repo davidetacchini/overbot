@@ -1,7 +1,5 @@
 import traceback
 
-from typing import Union
-
 import discord
 
 from asyncpg import DataError
@@ -14,11 +12,15 @@ from classes.exceptions import OverBotException
 async def error_handler(interaction: discord.Interaction, error: app_commands.AppCommandError):
     bot = interaction.client
 
-    async def send(payload: Union[str, discord.Embed], ephemeral: bool = True):
+    async def send(payload: str | discord.Embed, ephemeral: bool = True):
+        if isinstance(payload, str):
+            kwargs = {"content": payload}
+        elif isinstance(payload, discord.Embed):
+            kwargs = {"embed": payload}
         if interaction.response.is_done():
-            await interaction.followup.send(payload, ephemeral=ephemeral)
+            await interaction.followup.send(**kwargs, ephemeral=ephemeral)
         else:
-            await interaction.response.send_message(payload, ephemeral=ephemeral)
+            await interaction.response.send_message(**kwargs, ephemeral=ephemeral)
 
     if isinstance(error, app_commands.CommandNotFound):
         return
@@ -38,7 +40,7 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
                     "Maximum limit of profiles reached.\n"
                     f"[Upgrade to Premium]({premium}) to be able to link up to 25 profiles."
                 )
-                await send(embed=embed)
+                await send(embed)
             else:
                 await send("Maximum limit of profiles reached.")
 
@@ -49,7 +51,7 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
                 "This command requires a Premium membership.\n"
                 f"[Click here]({premium}) to have a look at the Premium plans."
             )
-            await send(embed=embed)
+            await send(embed)
 
         elif type(error) == app_commands.NoPrivateMessage:
             await interaction.user.send("This command cannot be used in direct messages.")
