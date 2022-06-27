@@ -158,7 +158,7 @@ class SelectProfilesView(SelectView):
     def __init__(self, profiles: list[Record], *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.choices: list[int] = []
-        placeholder = "Select a profile..."
+        placeholder = "Select at least a profile..."
         # Using min_values=0 to ensure that the view gets recomputed
         # even when the user deselect the previously selected profile(s).
         self.select = DropdownProfiles(
