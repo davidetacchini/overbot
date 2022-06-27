@@ -102,11 +102,11 @@ class Overwatch(commands.Cog):
         guild_id = await self.bot.pool.fetchval(query, member_id)
         return self.bot.get_guild(guild_id)
 
-    @is_premium()
     @app_commands.command(extras=dict(premium=True))
-    @app_commands.guild_only()
-    @app_commands.checks.bot_has_permissions(manage_channels=True)
     @app_commands.checks.has_permissions(manage_channels=True)
+    @app_commands.checks.bot_has_permissions(manage_channels=True)
+    @app_commands.guild_only()
+    @is_premium()
     async def newsboard(self, interaction: discord.Interaction):
         """Creates an Overwatch news channel"""
         newsboard = await self.get_newsboard(interaction.guild.id)
