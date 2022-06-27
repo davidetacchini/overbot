@@ -62,10 +62,7 @@ class Tasks(commands.Cog):
             shards = []
             ping = "N/A"
 
-        async with self.bot.pool.acquire() as conn:
-            pg_version = conn.get_server_version()
-
-        pg_version = f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
+        pg_version = await self.bot.get_pg_version()
 
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
