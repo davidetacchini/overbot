@@ -77,21 +77,20 @@ class Meta(commands.Cog):
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"Latest Changes:\n{commits}"
-        embed.timestamp = interaction.created_at
-
-        owner = await self.bot.get_or_fetch_member(config.owner_id)
 
         embed.set_author(
-            name=str(owner),
+            name=str(self.bot.owner),
             url=config.github["profile"],
-            icon_url=owner.display_avatar,
+            icon_url=self.bot.owner.display_avatar.url,
         )
 
         activity = f"{psutil.cpu_percent()}% CPU\n" f"{psutil.virtual_memory()[2]}% RAM\n"
 
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
-        host = f"{os_name} {os_version}\n" f"Python {platform.python_version()}"
+        py_version = platform.python_version()
+        pg_version = await self.bot.get_pg_version()
+        host = f"{os_name} {os_version}\n" f"Python {py_version}\n" f"PostgreSQL {pg_version}"
 
         total_commands = await self.bot.total_commands()
         total_members = 0
@@ -126,6 +125,9 @@ class Meta(commands.Cog):
         embed.add_field(name="Commands Run", value=total_commands)
         embed.add_field(name="Lines of code", value=self.bot.sloc)
         embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
+        embed.set_footer(
+            text=f"{self.bot.user.name} {config.version}", icon_url=self.bot.user.avatar
+        )
         await interaction.response.send_message(embed=embed, view=view)
 
     async def get_weekly_top_guilds(self, bot: OverBot) -> list[Record]:
