@@ -315,10 +315,11 @@ class ProfileCog(commands.Cog, name="Profile"):
     @profile.command(extras=dict(premium=True))
     async def graph(self, interaction: discord.Interaction):
         """Shows SRs performance graph."""
+        await interaction.response.defer(thinking=True)
         message = "Select a profile to view the SRs graph for."
         profile = await self.select_profile(interaction, message)
         file, embed = await self.sr_graph(interaction, profile)
-        await interaction.response.send_message(file=file, embed=embed)
+        await interaction.followup.send(file=file, embed=embed)
 
 
 async def setup(bot: OverBot):
