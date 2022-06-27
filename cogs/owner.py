@@ -19,6 +19,7 @@ from discord import ui, app_commands
 from discord.ext import commands
 
 from utils.funcs import module_autocomplete
+from utils.checks import is_owner
 
 if TYPE_CHECKING:
     from bot import OverBot
@@ -89,61 +90,61 @@ class Owner(commands.Cog):
     reload = app_commands.Group(name="reload", description="Reloads modules or the config file.")
 
     @app_commands.command()
+    @is_owner()
     async def clear(self, interaction: discord.Interaction, amount: int = 1):
         """Remove the given amount of messages"""
         amount += 1
         await interaction.channel.purge(limit=amount)
 
     @app_commands.command()
-    @app_commands.autocomplete(module=module_autocomplete)
+    @is_owner()
     async def load(self, interaction: discord.Interaction, *, module: str):
         """Loads a module"""
+        await interaction.response.defer(thinking=True)
         try:
             await self.bot.load_extension(module)
         except Exception as e:
-            await interaction.response.send_message(f"""```prolog\n{type(e).__name__}\n{e}```""")
+            await interaction.followup.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await interaction.response.send_message(
-                f"Module {module} successfully loaded.", ephemeral=True
-            )
+            await interaction.followup.send(f"Module {module} successfully loaded.")
 
     @app_commands.command()
     @app_commands.autocomplete(module=module_autocomplete)
+    @is_owner()
     async def unload(self, interaction: discord.Interaction, *, module: str):
         """Unloads a module"""
+        await interaction.response.defer(thinking=True)
         try:
             await self.bot.unload_extension(module)
         except Exception as e:
-            await interaction.response.send_message(f"""```prolog\n{type(e).__name__}\n{e}```""")
+            await interaction.followup.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await interaction.response.send_message(
-                f"Module {module} successfully unloaded.", ephemeral=True
-            )
+            await interaction.followup.send(f"Module {module} successfully unloaded.")
 
     @reload.command()
     @app_commands.autocomplete(module=module_autocomplete)
+    @is_owner()
     async def module(self, interaction: discord.Interaction, *, module: str):
         """Reloads a module"""
+        await interaction.response.defer(thinking=True)
         try:
             await self.bot.reload_extension(module)
         except Exception as e:
-            await interaction.response.send_message(f"""```prolog\n{type(e).__name__}\n{e}```""")
+            await interaction.followup.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await interaction.response.send_message(
-                f"Module {module} successfully reloaded.", ephemeral=True
-            )
+            await interaction.followup.send(f"Module {module} successfully reloaded.")
 
     @reload.command()
+    @is_owner()
     async def config(self, interaction: discord.Interaction):
         """Reloads the configuration file"""
+        await interaction.response.defer(thinking=True)
         try:
             importlib.reload(self.bot.config)
         except Exception as e:
-            await interaction.response.send_message(f"""```prolog\n{type(e).__name__}\n{e}```""")
+            await interaction.followup.send(f"""```prolog\n{type(e).__name__}\n{e}```""")
         else:
-            await interaction.response.send_message(
-                "Configuration successfully reloaded.", ephemeral=True
-            )
+            await interaction.followup.send("Configuration successfully reloaded.")
 
     # Source: https://github.com/Rapptz/RoboDanny
     @reload.command()
@@ -239,17 +240,20 @@ class Owner(commands.Cog):
             await self.bot.load_extension(module)
 
     @app_commands.command()
+    @is_owner()
     async def shutdown(self, interaction: discord.Interaction):
         """Kills the bot session"""
         await interaction.response.send_message("Going offline.")
         await self.bot.close()
 
     @app_commands.command()
+    @is_owner()
     async def exc(self, interaction: discord.Interaction):
         """Evaluates a code"""
         await interaction.response.send_modal(ModalExecuteCode())
 
     @app_commands.command()
+    @is_owner()
     async def speedtest(self, interaction: discord.Interaction):
         """Run a speedtest directly from Discord"""
         msg = await interaction.response.send_message("Running the speedtest...")
@@ -263,11 +267,13 @@ class Owner(commands.Cog):
         await msg.edit(content=f"""```prolog\n{ret}```""")
 
     @app_commands.command()
+    @is_owner()
     async def sql(self, interaction: discord.Interaction):
         """Run a query"""
         await interaction.response.send_modal(ModalExecuteSQL())
 
     @app_commands.command()
+    @is_owner()
     async def admin(self, interaction: discord.Interaction):
         """Display an admin panel"""
         async with self.bot.pool.acquire() as conn:
@@ -311,6 +317,7 @@ class Owner(commands.Cog):
 
     @app_commands.command()
     @app_commands.describe(file="Whether to get the file on Discord.")
+    @is_owner()
     async def backup(self, interaction: discord.Interaction, *, file: Literal["Yes", "No"] = "No"):
         """Generate a backup file of the database"""
         await interaction.response.send_message("Generating backup file...", ephemeral=True)
