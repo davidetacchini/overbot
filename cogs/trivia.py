@@ -11,7 +11,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import select_answer
+from classes.ui import SelectView, SelectAnswer
+from classes.exceptions import NoChoice
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -31,6 +32,29 @@ class Trivia(commands.Cog):
         shuffled = random.sample(questions, len(questions))
         return secrets.choice(shuffled)
 
+    async def get_answer(
+        entries: list[str | discord.Embed],
+        embed: discord.Embed,
+        *,
+        interaction: discord.Interaction,
+        timeout: float,
+    ) -> str:
+        view = SelectView(author_id=interaction.user.id, timeout=timeout)
+        select = SelectAnswer(placeholder="Select the correct answer...")
+        view.add_item(select)
+
+        embed.description = ""
+        for index, entry in enumerate(entries, start=1):
+            select.add_option(label=entry)
+            embed.description = f"{embed.description}{index}. {entry}\n"
+
+        view.message = await interaction.response.send_message(embed=embed, view=view)
+        await view.wait()
+
+        if (choice := select.values[0]) is not None:
+            return choice
+        raise NoChoice() from None
+
     async def get_result(self, interaction: discord.Interaction, question: dict) -> bool:
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
@@ -40,9 +64,7 @@ class Trivia(commands.Cog):
         if question["image_url"]:
             embed.set_image(url=question["image_url"])
         embed.set_footer(text=f"You have 1 try and {timeout} seconds to respond.")
-        answer = await select_answer(
-            shuffled, interaction=interaction, timeout=timeout, embed=embed
-        )
+        answer = await self.get_answer(shuffled, embed, interaction=interaction, timeout=timeout)
         return answer == question["correct_answer"]
 
     async def update_member_games_started(self, member_id: int) -> None:
