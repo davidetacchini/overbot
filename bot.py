@@ -28,11 +28,7 @@ class OverBot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
 
     def __init__(self, **kwargs):
-        super().__init__(
-            command_prefix=config.default_prefix,
-            allowed_mentions=discord.AllowedMentions.none(),
-            **kwargs,
-        )
+        super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
         self.sloc: int = 0
 
@@ -48,6 +44,10 @@ class OverBot(commands.AutoShardedBot):
         )
 
         self.TEST_GUILD: discord.Object = discord.Object(config.test_guild_id)
+
+    @property
+    def owner(self) -> discord.User:
+        return self.app_info.owner
 
     @property
     def version(self) -> str:
@@ -71,6 +71,12 @@ class OverBot(commands.AutoShardedBot):
     async def total_commands(self) -> int:
         total_commands = await self.pool.fetchval("SELECT COUNT(*) FROM command;")
         return total_commands + config.old_commands_count
+
+    async def get_pg_version(self) -> str:
+        async with self.pool.acquire() as con:
+            pg_version = con.get_server_version()
+
+        return f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
 
     async def on_message(self, message: discord.Message) -> None:
         if not self.is_ready():
@@ -106,27 +112,6 @@ class OverBot(commands.AutoShardedBot):
         }
         return lookup.get(opt, emojis.dnd)
 
-    async def get_or_fetch_member(self, member_id: int) -> None | discord.Member:
-        guild = self.get_guild(config.support_server_id)
-
-        member = guild.get_member(member_id)
-        if member is not None:
-            return member
-
-        shard = self.get_shard(guild.shard_id)
-        if shard.is_ws_ratelimited():
-            try:
-                member = await guild.fetch_member(member_id)
-            except discord.HTTPException:
-                return None
-            else:
-                return member
-
-        members = await guild.query_members(limit=1, user_ids=[member_id], cache=True)
-        if not members:
-            return None
-        return members[0]
-
     def compute_sloc(self) -> None:
         """Compute source lines of code."""
         for root, dirs, files in os.walk(os.getcwd()):
@@ -136,14 +121,14 @@ class OverBot(commands.AutoShardedBot):
                     with open(f"{root}/{file}") as fp:
                         self.sloc += len(fp.readlines())
 
-    def member_is_premium(self, member_id: int, guild_id: int):
+    def is_it_premium(self, member_id: int, guild_id: int):
         """Check for a member/guild to be premium."""
         to_check = (member_id, guild_id)
         return any(x in self.premiums for x in to_check)
 
     def get_profiles_limit(self, interaction: discord.Interaction, member_id: int) -> int:
         guild_id = interaction.guild.id if interaction.guild is not None else 0
-        if not self.member_is_premium(member_id, guild_id):
+        if not self.is_it_premium(member_id, guild_id):
             return config.BASE_PROFILES_LIMIT
         return config.PREMIUM_PROFILES_LIMIT
 
@@ -177,7 +162,10 @@ class OverBot(commands.AutoShardedBot):
         self.session = ClientSession()
         self.pool = await asyncpg.create_pool(**config.database, max_size=20, command_timeout=60.0)
 
+        self.app_info = await self.application_info()
+
         self.compute_sloc()
+
         # caching
         await self.cache_premiums()
         await self.cache_embed_colors()
@@ -217,13 +205,14 @@ def main() -> None:
     bot = OverBot(
         activity=discord.Game(name="Starting..."),
         status=discord.Status.dnd,
-        intents=intents,
+        allowed_mentions=discord.AllowedMentions.none(),
         application_id=550359245963526194,
+        intents=intents,
         chunk_guilds_at_startup=False,
         guild_ready_timeout=5,
     )
 
-    bot.run(bot.config.token, reconnect=True)
+    bot.run(config.token, reconnect=True)
 
 
 if __name__ == "__main__":
