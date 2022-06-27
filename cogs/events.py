@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import textwrap
+import logging
 
 from typing import TYPE_CHECKING
 from datetime import datetime
@@ -12,6 +12,8 @@ from discord.ext import commands
 
 if TYPE_CHECKING:
     from bot import OverBot
+
+log = logging.getLogger("discord")
 
 
 class Events(commands.Cog):
@@ -48,18 +50,7 @@ class Events(commands.Cog):
         if not hasattr(self.bot, "uptime"):
             self.bot.uptime = datetime.utcnow()
 
-        print(
-            textwrap.dedent(
-                f"""
-            -----------------
-            Connection established.
-            Logged in as {self.bot.user.display_name} - {self.bot.user.id}
-            Using {discord.__name__} {discord.__version__}
-            Running {self.bot.user.display_name} {self.bot.version} in {len(self.bot.guilds)} guilds
-            -----------------
-            """
-            )
-        )
+        log.info(f"Connected as {self.bot.user.display_name} in {len(self.bot.guilds)} guilds.")
 
         await self.change_presence()
         await self.send_log("Bot is online.", discord.Color.blue())
