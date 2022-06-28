@@ -33,6 +33,7 @@ class Trivia(commands.Cog):
         return secrets.choice(shuffled)
 
     async def get_answer(
+        self,
         entries: list[str | discord.Embed],
         embed: discord.Embed,
         *,
