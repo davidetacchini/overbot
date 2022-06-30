@@ -17,7 +17,7 @@ from utils.scrape import get_overwatch_news
 if TYPE_CHECKING:
     from bot import OverBot
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("overbot")
 
 
 class Tasks(commands.Cog):

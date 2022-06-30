@@ -13,7 +13,7 @@ from discord.ext import commands
 if TYPE_CHECKING:
     from bot import OverBot
 
-log = logging.getLogger("discord")
+log = logging.getLogger("overbot")
 
 
 class Events(commands.Cog):
