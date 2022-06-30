@@ -24,7 +24,7 @@ if sys.platform == "linux":
     uvloop.install()
 
 
-log = logging.getLogger("discord")
+log = logging.getLogger("overbot")
 
 
 class OverBot(commands.AutoShardedBot):
@@ -199,6 +199,13 @@ class OverBot(commands.AutoShardedBot):
 
 
 def main() -> None:
+    # setup bot logger
+    log = logging.getLogger("overbot")
+    log_handler = logging.StreamHandler()
+    log_handler.setFormatter(discord.client._ColourFormatter())
+    log.setLevel(logging.INFO)
+    log.addHandler(log_handler)
+
     intents = discord.Intents.none()
     intents.guilds = True
     intents.members = True
