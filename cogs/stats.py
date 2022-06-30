@@ -30,13 +30,9 @@ class Stats(commands.Cog):
         self,
         interaction: discord.Interaction,
         hero: str,
-        platform: app_commands.Choice | str,
+        platform: str,
         username: str,
     ) -> None:
-        try:
-            platform = platform.value
-        except AttributeError:
-            platform = platform
         profile = Profile(platform, username, interaction=interaction)
         await profile.compute_data()
         if profile.is_private():
@@ -71,7 +67,7 @@ class Stats(commands.Cog):
     ):
         """Provides player general stats."""
         await interaction.response.defer(thinking=True)
-        await self.show_stats_for(interaction, "allHeroes", platform, username)
+        await self.show_stats_for(interaction, "allHeroes", platform.value, username)
 
     @app_commands.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
@@ -89,7 +85,7 @@ class Stats(commands.Cog):
     ):
         """Provides player general stats for a given hero."""
         await interaction.response.defer(thinking=True)
-        await self.show_stats_for(interaction, hero, platform, username)
+        await self.show_stats_for(interaction, hero, platform.value, username)
 
     @app_commands.command()
     @app_commands.choices(platform=platforms)
