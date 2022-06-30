@@ -110,21 +110,21 @@ class ProfileCog(commands.Cog, name="Profile"):
         entries = await self.list_profiles(interaction, member, profiles)
         return await self.bot.paginate(entries, interaction=interaction)
 
-    @can_add_profile()
     @profile.command()
+    @can_add_profile()
     async def link(self, interaction: discord.Interaction):
         """Link an Overwatch profile"""
         await interaction.response.send_modal(ModalProfileLink())
 
-    @has_profile()
     @profile.command()
+    @has_profile()
     async def update(self, interaction: discord.Interaction):
         """Update an Overwatch profile"""
         profiles = await self.get_profiles(interaction, interaction.user.id)
         await interaction.response.send_modal(ModalProfileUpdate(profiles))
 
-    @has_profile()
     @profile.command()
+    @has_profile()
     async def unlink(self, interaction: discord.Interaction):
         """Unlink an Overwatch profile"""
         profiles = await self.get_profiles(interaction, interaction.user.id)
@@ -143,9 +143,9 @@ class ProfileCog(commands.Cog, name="Profile"):
             message = "Select at least a profile to unlink..."
             view.message = await interaction.response.send_message(message, view=view)
 
-    @has_profile()
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
+    @has_profile()
     async def ratings(self, interaction: discord.Interaction, member: None | discord.Member = None):
         """Provides SRs information for a profile"""
         await interaction.response.defer(thinking=True)
@@ -179,11 +179,11 @@ class ProfileCog(commands.Cog, name="Profile"):
             interaction, "allHeroes", platform, username
         )
 
-    @has_profile()
     @profile.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
     @app_commands.describe(hero="The name of the hero to see stats for")
     @app_commands.describe(member="The mention or the ID of a Discord member")
+    @has_profile()
     async def hero(
         self, interaction: discord.Interaction, hero: str, member: None | discord.Member = None
     ):
@@ -213,10 +213,10 @@ class ProfileCog(commands.Cog, name="Profile"):
             embed = profile.embed_summary()
         await interaction.followup.send(embed=embed)
 
-    @has_profile()
     @profile.command()
     @app_commands.checks.bot_has_permissions(manage_nicknames=True)
     @app_commands.guild_only()
+    @has_profile()
     async def nickname(self, interaction: discord.Interaction):
         """Shows or remove your SRs in your nickname
 
