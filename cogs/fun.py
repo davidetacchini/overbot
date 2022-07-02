@@ -48,7 +48,7 @@ class Fun(commands.Cog):
             map_ = secrets.choice(categorized_maps)
         return map_["name"]
 
-    async def get_meme(self, category: str) -> dict:
+    async def get_random_meme(self, category: str) -> dict:
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
         async with self.bot.session.get(url) as r:
             memes = await r.json()
@@ -97,7 +97,7 @@ class Fun(commands.Cog):
         """Returns a random Overwatch meme"""
         categories = tuple(get_args(MemeCategories))
         category = category or secrets.choice(categories)
-        meme = await self.get_meme(category)
+        meme = await self.get_random_meme(category)
         embed = self.embed_meme(interaction, meme)
         await interaction.response.send_message(embed=embed)
 
