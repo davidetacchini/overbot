@@ -236,7 +236,7 @@ class ProfileCog(commands.Cog, name="Profile"):
                 return await interaction.followup.send(
                     "This server's owner needs to move the `OverBot` role higher, so I will "
                     "be able to update your nickname. If you are this server's owner, there's "
-                    "not way for me to change your nickname, sorry!"
+                    "no way for me to change your nickname, sorry!"
                 )
 
             message = "Select a profile to use for the nickname SRs."
