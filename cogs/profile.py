@@ -226,38 +226,38 @@ class ProfileCog(commands.Cog, name="Profile"):
         """
         await interaction.response.defer(thinking=True)
         nick = Nickname(interaction)
-        if not await nick.exists():
-            if not await self.bot.prompt(
-                interaction, "This will display your SRs in your nickname."
-            ):
-                return
-
-            if interaction.guild.me.top_role < interaction.user.top_role:
-                return await interaction.followup.send(
-                    "This server's owner needs to move the `OverBot` role higher, so I will "
-                    "be able to update your nickname. If you are this server's owner, there's "
-                    "no way for me to change your nickname, sorry!"
-                )
-
-            message = "Select a profile to use for the nickname SRs."
-            record = await self.select_profile(interaction, message)
-            profile = Profile(interaction=interaction, record=record)
-
-            if profile.is_private():
-                return await interaction.followup.send(embed=profile.embed_private())
-
-            nick.profile = profile
-
-            try:
-                await nick.set_or_remove(profile_id=profile.id)
-            except Exception as e:
-                await interaction.followup.send(e)
-        else:
-            if await self.bot.prompt(interaction, "This will remove your SR in your nickname."):
+        if await nick.exists():
+            if await self.bot.prompt(interaction, "This will remove your SRs in your nickname."):
                 try:
                     await nick.set_or_remove(remove=True)
                 except Exception as e:
                     await interaction.followup.send(e)
+            return
+
+        if not await self.bot.prompt(interaction, "This will display your SRs in your nickname."):
+            return
+
+        if interaction.guild.me.top_role < interaction.user.top_role:
+            return await interaction.followup.send(
+                "This server's owner needs to move the `OverBot` role higher, so I will "
+                "be able to update your nickname. If you are this server's owner, there's "
+                "no way for me to change your nickname, sorry!"
+            )
+
+        message = "Select a profile to use for the nickname SRs."
+        record = await self.select_profile(interaction, message)
+        profile = Profile(interaction=interaction, record=record)
+        await profile.compute_data()
+
+        if profile.is_private():
+            return await interaction.followup.send(embed=profile.embed_private())
+
+        nick.profile = profile
+
+        try:
+            await nick.set_or_remove(profile_id=profile.id)
+        except Exception as e:
+            await interaction.followup.send(e)
 
     async def sr_graph(self, interaction: discord.Interaction, profile: Record):
         id_, platform, username = profile
