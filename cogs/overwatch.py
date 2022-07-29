@@ -23,25 +23,24 @@ class Newsboard:
     def __init__(self, guild_id: int, bot: OverBot, *, record: None | Record = None) -> None:
         self.guild_id = guild_id
         self.bot = bot
+        self.channel_id: None | int = None
 
         if record:
-            self.channel_id: int = record["id"]
+            self.channel_id = record["id"]
             self.member_id: int = record["member_id"]
-        else:
-            self.channel_id = None
 
     @property
-    def channel(self):
+    def channel(self) -> None | discord.TextChannel:
         guild = self.bot.get_guild(self.guild_id)
         return guild and guild.get_channel(self.channel_id)
 
 
 class Overwatch(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     @app_commands.command()
-    async def status(self, interaction: discord.Interaction):
+    async def status(self, interaction: discord.Interaction) -> None:
         """Returns Overwatch server status link"""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
@@ -53,7 +52,7 @@ class Overwatch(commands.Cog):
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
     async def news(
         self, interaction: discord.Interaction, amount: app_commands.Range[int, 1, 4] = 4
-    ):
+    ) -> None:
         """Shows the latest Overwatch news"""
         pages = []
 
@@ -81,7 +80,7 @@ class Overwatch(commands.Cog):
         await self.bot.paginate(pages, interaction=interaction)
 
     @app_commands.command()
-    async def patch(self, interaction: discord.Interaction):
+    async def patch(self, interaction: discord.Interaction) -> None:
         """Returns Overwatch patch notes links"""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Overwatch Patch Notes"
@@ -109,7 +108,7 @@ class Overwatch(commands.Cog):
     @app_commands.checks.bot_has_permissions(manage_channels=True)
     @app_commands.guild_only()
     @is_premium()
-    async def newsboard(self, interaction: discord.Interaction):
+    async def newsboard(self, interaction: discord.Interaction) -> None:
         """Creates an Overwatch news channel"""
         newsboard = await self.get_newsboard(interaction.guild.id)
         if newsboard.channel is not None:
@@ -128,6 +127,7 @@ class Overwatch(commands.Cog):
 
         name = "overwatch-news"
         topic = "Latest Overwatch news."
+
         overwrites = {
             interaction.guild.me: discord.PermissionOverwrite(
                 read_messages=True, send_messages=True, embed_links=True
@@ -140,7 +140,7 @@ class Overwatch(commands.Cog):
 
         try:
             channel = await interaction.guild.create_text_channel(
-                name=name, overwrites=overwrites, topic=topic, reason=reason
+                name=name, overwrites=overwrites, topic=topic, reason=reason  # type: ignore
             )
         except discord.HTTPException:
             return await interaction.response.send_message(
@@ -154,5 +154,5 @@ class Overwatch(commands.Cog):
         )
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Overwatch(bot))

@@ -20,18 +20,18 @@ from classes.nickname import Nickname
 from classes.exceptions import NoChoice, CannotCreateGraph
 
 if TYPE_CHECKING:
-    from asyncpg import Record
-
     from bot import OverBot
 
+Member = discord.User | discord.Member
 
-class ProfileCog(commands.Cog, name="Profile"):
-    def __init__(self, bot: OverBot):
+
+class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining about name
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     profile = app_commands.Group(name="profile", description="Your Overwatch profiles.")
 
-    async def get_profiles(self, interaction: discord.Interaction, member_id: int) -> list[Record]:
+    async def get_profiles(self, interaction: discord.Interaction, member_id: int) -> list[Profile]:
         limit = self.bot.get_profiles_limit(interaction, member_id)
         query = """SELECT profile.id, platform, username
                    FROM profile
@@ -40,25 +40,26 @@ class ProfileCog(commands.Cog, name="Profile"):
                    WHERE member.id = $1
                    LIMIT $2;
                 """
-        return await self.bot.pool.fetch(query, member_id, limit)
+        records = await self.bot.pool.fetch(query, member_id, limit)
+        return [Profile(interaction=interaction, record=r) for r in records]
 
-    async def get_profile(self, profile_id: str) -> Record:
+    async def get_profile(self, interaction: discord.Interaction, profile_id: str) -> Profile:
         query = """SELECT id, platform, username
                    FROM profile
                    WHERE id = $1;
                 """
-        return await self.bot.pool.fetchrow(query, int(profile_id))
+        record = await self.bot.pool.fetchrow(query, int(profile_id))
+        return Profile(interaction=interaction, record=record)
 
     async def select_profile(
-        self, interaction: discord.Interaction, message: str, member: None | discord.Member = None
-    ) -> str:
+        self, interaction: discord.Interaction, message: str, member: None | Member = None
+    ) -> Profile:
         member = member or interaction.user
         profiles = await self.get_profiles(interaction, member.id)
 
         # if there only is a profile then just return it
         if len(profiles) == 1:
-            profile_id, _, _ = profiles[0]
-            return await self.get_profile(profile_id)
+            return profiles[0]
 
         view = SelectProfileView(profiles, author_id=interaction.user.id)
 
@@ -71,12 +72,14 @@ class ProfileCog(commands.Cog, name="Profile"):
         choice = view.select.values[0] if len(view.select.values) else None
 
         if choice is not None:
-            return await self.get_profile(choice)
+            for profile in profiles:
+                if profile.id == int(choice):
+                    return profile
         raise NoChoice() from None
 
     async def list_profiles(
-        self, interaction: discord.Interaction, member: discord.Member, profiles: list[Record]
-    ) -> list[discord.Embed]:
+        self, interaction: discord.Interaction, member: Member, profiles: list[Profile]
+    ) -> discord.Embed | list[discord.Embed]:
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.set_author(name=member, icon_url=member.display_avatar)
 
@@ -95,48 +98,48 @@ class ProfileCog(commands.Cog, name="Profile"):
                 text=f"{len(profiles)}/{limit} profiles • Requested by {interaction.user}"
             )
             description = []
-            for (id_, platform, username) in chunk:
-                description.append(f"{get_platform_emoji(platform)} {username}")
+            for profile in chunk:
+                description.append(f"{get_platform_emoji(profile.platform)} {profile.username}")
             embed.description = "\n".join(description)
             pages.append(embed)
         return pages
 
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
-    async def list(self, interaction: discord.Interaction, member: None | discord.Member = None):
+    async def list(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """List your own or a member's profiles"""
         member = member or interaction.user
         profiles = await self.get_profiles(interaction, member.id)
         entries = await self.list_profiles(interaction, member, profiles)
-        return await self.bot.paginate(entries, interaction=interaction)
+        await self.bot.paginate(entries, interaction=interaction)
 
     @profile.command()
     @can_add_profile()
-    async def link(self, interaction: discord.Interaction):
+    async def link(self, interaction: discord.Interaction) -> None:
         """Link an Overwatch profile"""
         await interaction.response.send_modal(ModalProfileLink())
 
     @profile.command()
     @has_profile()
-    async def update(self, interaction: discord.Interaction):
+    async def update(self, interaction: discord.Interaction) -> None:
         """Update an Overwatch profile"""
         profiles = await self.get_profiles(interaction, interaction.user.id)
         await interaction.response.send_modal(ModalProfileUpdate(profiles))
 
     @profile.command()
     @has_profile()
-    async def unlink(self, interaction: discord.Interaction):
+    async def unlink(self, interaction: discord.Interaction) -> None:
         """Unlink an Overwatch profile"""
         profiles = await self.get_profiles(interaction, interaction.user.id)
         if len(profiles) == 1:
-            id_, platform, username = profiles[0]
+            profile = profiles[0]
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             embed.title = "Are you sure you want to unlink the following profile?"
-            embed.add_field(name="Platform", value=platform)
-            embed.add_field(name="Username", value=username)
+            embed.add_field(name="Platform", value=profile.platform)
+            embed.add_field(name="Username", value=profile.username)
 
             if await self.bot.prompt(interaction, embed):
-                await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", id_)
+                await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", profile.id)
                 await interaction.response.send_message("Profile successfully unlinked.")
         else:
             view = SelectProfilesView(profiles, author_id=interaction.user.id)
@@ -146,13 +149,12 @@ class ProfileCog(commands.Cog, name="Profile"):
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
     @has_profile()
-    async def ratings(self, interaction: discord.Interaction, member: None | discord.Member = None):
+    async def ratings(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides SRs information for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         message = "Select a profile to view the skill ratings for."
-        record = await self.select_profile(interaction, message, member)
-        profile = Profile(interaction=interaction, record=record)
+        profile = await self.select_profile(interaction, message, member)
         await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
@@ -163,21 +165,19 @@ class ProfileCog(commands.Cog, name="Profile"):
             query = "SELECT * FROM nickname WHERE profile_id = $1;"
             flag = await self.bot.pool.fetchrow(query, profile.id)
             if flag and member.id == interaction.user.id:
-                await Nickname(interaction, profile=profile).update()
+                await Nickname(interaction, bot=self.bot, profile=profile).update()
         await interaction.followup.send(embed=embed)
 
     @has_profile()
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
-    async def stats(self, interaction: discord.Interaction, member: None | discord.Member = None):
+    async def stats(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides general stats for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         message = "Select a profile to view the stats for."
-        _, platform, username = await self.select_profile(interaction, message, member)
-        await interaction.client.get_cog("Stats").show_stats_for(
-            interaction, "allHeroes", platform, username
-        )
+        profile = await self.select_profile(interaction, message, member)
+        await self.bot.get_cog("Stats").show_stats_for(interaction, "allHeroes", profile=profile)
 
     @profile.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
@@ -185,27 +185,24 @@ class ProfileCog(commands.Cog, name="Profile"):
     @app_commands.describe(member="The mention or the ID of a Discord member")
     @has_profile()
     async def hero(
-        self, interaction: discord.Interaction, hero: str, member: None | discord.Member = None
-    ):
+        self, interaction: discord.Interaction, hero: str, member: None | Member = None
+    ) -> None:
         """Provides general hero stats for a profile."""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         message = f"Select a profile to view **{hero}** stats for."
-        _, platform, username = await self.select_profile(interaction, message, member)
-        await interaction.client.get_cog("Stats").show_stats_for(
-            interaction, hero, platform, username
-        )
+        profile = await self.select_profile(interaction, message, member)
+        await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profile=profile)
 
     @has_profile()
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
-    async def summary(self, interaction: discord.Interaction, member: None | discord.Member = None):
+    async def summary(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides summarized stats for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         message = "Select a profile to view the summary for."
-        record = await self.select_profile(interaction, message, member)
-        profile = Profile(interaction=interaction, record=record)
+        profile = await self.select_profile(interaction, message, member)
         await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
@@ -217,7 +214,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     @app_commands.checks.bot_has_permissions(manage_nicknames=True)
     @app_commands.guild_only()
     @has_profile()
-    async def nickname(self, interaction: discord.Interaction):
+    async def nickname(self, interaction: discord.Interaction) -> None:
         """Shows or remove your SRs in your nickname
 
         The nickname can only be set in one server. It updates
@@ -225,19 +222,21 @@ class ProfileCog(commands.Cog, name="Profile"):
         profile selected matches the one set for the nickname.
         """
         await interaction.response.defer(thinking=True)
-        nick = Nickname(interaction)
+        nick = Nickname(interaction, bot=self.bot)
         if await nick.exists():
             if await self.bot.prompt(interaction, "This will remove your SRs in your nickname."):
                 try:
                     await nick.set_or_remove(remove=True)
                 except Exception as e:
-                    await interaction.followup.send(e)
+                    await interaction.followup.send(str(e))
             return
 
         if not await self.bot.prompt(interaction, "This will display your SRs in your nickname."):
             return
 
-        if interaction.guild.me.top_role < interaction.user.top_role:
+        author = interaction.user
+        me = interaction.guild.me
+        if isinstance(author, discord.Member) and me.top_role < author.top_role:
             return await interaction.followup.send(
                 "This server's owner needs to move the `OverBot` role higher, so I will "
                 "be able to update your nickname. If you are this server's owner, there's "
@@ -245,8 +244,7 @@ class ProfileCog(commands.Cog, name="Profile"):
             )
 
         message = "Select a profile to use for the nickname SRs."
-        record = await self.select_profile(interaction, message)
-        profile = Profile(interaction=interaction, record=record)
+        profile = await self.select_profile(interaction, message)
         await profile.compute_data()
 
         if profile.is_private():
@@ -257,11 +255,11 @@ class ProfileCog(commands.Cog, name="Profile"):
         try:
             await nick.set_or_remove(profile_id=profile.id)
         except Exception as e:
-            await interaction.followup.send(e)
+            await interaction.followup.send(str(e))
 
-    async def sr_graph(self, interaction: discord.Interaction, profile: Record):
-        id_, platform, username = profile
-
+    async def sr_graph(
+        self, interaction: discord.Interaction, profile: Profile
+    ) -> tuple[discord.File, discord.Embed]:
         query = """SELECT tank, damage, support, date
                    FROM rating
                    INNER JOIN profile
@@ -269,7 +267,7 @@ class ProfileCog(commands.Cog, name="Profile"):
                    WHERE profile.id = $1
                 """
 
-        ratings = await self.bot.pool.fetch(query, id_)
+        ratings = await self.bot.pool.fetch(query, profile.id)
 
         sns.set()
         sns.set_style("darkgrid")
@@ -294,7 +292,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
         fig.autofmt_xdate()
 
-        fig.suptitle(f"{username} - {platform}", fontsize="20")
+        fig.suptitle(f"{profile.username} - {profile.platform}", fontsize="20")
         pyplot.legend(title="Roles", loc="upper right")
         pyplot.xlabel("Date")
         pyplot.ylabel("SR")
@@ -313,7 +311,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     @profile.command(extras=dict(premium=True))
     @has_profile()
     @is_premium()
-    async def graph(self, interaction: discord.Interaction):
+    async def graph(self, interaction: discord.Interaction) -> None:
         """Shows SRs performance graph."""
         await interaction.response.defer(thinking=True)
         message = "Select a profile to view the SRs graph for."
@@ -322,5 +320,5 @@ class ProfileCog(commands.Cog, name="Profile"):
         await interaction.followup.send(file=file, embed=embed)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(ProfileCog(bot))

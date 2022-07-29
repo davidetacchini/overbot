@@ -17,7 +17,7 @@ from .exceptions import NoStats, NoHeroStats, UnexpectedError
 if TYPE_CHECKING:
     from asyncpg import Record
 
-    from bot import OverBot
+    Stat = dict[str, None | dict[str, Any]]
 
 ROLES = {
     "tank": emojis.tank,
@@ -37,9 +37,9 @@ class Profile:
         *,
         interaction: discord.Interaction,
         record: None | Record = None,
-    ):
+    ) -> None:
+        self.data: dict[str, Any] = {}
         self.id: None | int = None
-        self.data: dict = None
 
         if record:
             self.id = record["id"]
@@ -50,7 +50,7 @@ class Profile:
             self.username = username
 
         self.interaction = interaction
-        self.bot: OverBot = interaction.client
+        self.bot: Any = interaction.client
         self.pages: list[discord.Embed] = []
 
     async def compute_data(self) -> None:
@@ -71,7 +71,7 @@ class Profile:
         return self.data["levelIcon"]
 
     @staticmethod
-    def to_pascal(key) -> str:
+    def to_pascal(key: str) -> str:
         """From camel case to pascal case (testTest -> Test Test)."""
         return (
             re.sub("([a-z])([A-Z])", r"\g<1> \g<2>", key)
@@ -107,14 +107,6 @@ class Profile:
 
     def is_private(self) -> bool:
         return self.data["private"]
-
-    def has_stats(self) -> bool:
-        return (
-            True
-            if self.data["quickPlayStats"]["careerStats"]
-            or self.data["competitiveStats"]["careerStats"]
-            else False
-        )
 
     async def save_ratings(self, profile_id: int, **kwargs: Any) -> None:
         tank = kwargs.get("tank", 0)
@@ -155,17 +147,17 @@ class Profile:
             ratings[key.lower()] = value["level"]
         return ratings
 
-    def resolve_stats(self, hero: str) -> None | tuple:
-        if not self.has_stats():
-            raise NoStats()
-
+    def resolve_stats(self, hero: str) -> None | tuple[list[str], Stat, Stat]:
         # quickplay stats
         q = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
         # competitive stats
         c = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
 
-        if hero != "allHeroes" and not q and not c:
-            raise NoHeroStats(hero)
+        if not q and not c:
+            if hero == "allHeroes":
+                raise NoStats()
+            else:
+                raise NoHeroStats(hero)
 
         keys = list({*q, *c})
         keys.sort()
@@ -180,13 +172,13 @@ class Profile:
         self,
         embed: discord.Embed,
         key: str,
-        quickplay: None | dict[str | dict],
-        competitive: None | dict[str | dict],
+        quickplay: Stat,
+        competitive: Stat,
     ) -> None:
-        if quickplay and quickplay[key]:
+        if quickplay and quickplay[key] is not None:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
             embed.add_field(name="Quick Play", value=self.to_pascal(q_t))
-        if competitive and competitive[key]:
+        if competitive and competitive[key] is not None:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self.to_pascal(c_t))
 
@@ -215,7 +207,7 @@ class Profile:
             icon_url=self.data.get("ratingIcon"),
         )
 
-        if save:
+        if save and profile_id is not None:
             await self.save_ratings(profile_id, **ratings)
 
         return embed
@@ -252,14 +244,14 @@ class Profile:
             embed.description = " ".join(ratings_)
 
         summary = {}
-        summary["level"] = str(self.data.get("prestige")) + str(self.data.get("level"))
+        summary["level"] = int(str(self.data.get("prestige")) + str(self.data.get("level")))
         summary["endorsement"] = self.data.get("endorsement")
         summary["gamesWon"] = self.data.get("gamesWon")
 
         for key, value in summary.items():
             embed.add_field(name=self.to_pascal(key), value=value)
 
-        def format_dict(source: dict):
+        def format_dict(source: Stat) -> dict[str, Any]:
             d = {}
             d["game"] = source.get("game")
             to_keep = ("deaths", "eliminations", "damageDone")
@@ -267,7 +259,7 @@ class Profile:
             d["awards"] = source.get("matchAwards")
             return d
 
-        def format_embed(source: dict, embed: discord.Embed, *, category: str):
+        def format_embed(source: dict[str, Any], embed: discord.Embed, *, category: str) -> None:
             for key, value in source.items():
                 key = f"{self.to_pascal(key)} ({category.title()})"
                 if isinstance(value, dict):

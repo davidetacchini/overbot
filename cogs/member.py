@@ -29,12 +29,12 @@ class ColorTransformer(app_commands.Transformer):
 
 
 class Member(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     @app_commands.command()
     @app_commands.guild_only()
-    async def premium(self, interaction: discord.Interaction):
+    async def premium(self, interaction: discord.Interaction) -> None:
         """Shows your premium status"""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Premium Status"
@@ -60,7 +60,7 @@ class Member(commands.Cog):
         interaction: discord.Interaction,
         *,
         color: app_commands.Transform[str, ColorTransformer] = None,
-    ):
+    ) -> None:
         """Set a custom color for the embeds"""
         if color is None:
             query = "UPDATE member SET embed_color = NULL WHERE id = $1;"
@@ -76,13 +76,13 @@ class Member(commands.Cog):
                     "Color successfully reset.", ephemeral=True
                 )
 
-        embed = discord.Embed(color=color)
+        embed = discord.Embed(color=color)  # type: ignore # it gets transformed to Color
         query = "UPDATE member SET embed_color = $1 WHERE id = $2;"
         await self.bot.pool.execute(query, color, interaction.user.id)
-        self.bot.embed_colors[interaction.user.id] = color
+        self.bot.embed_colors[interaction.user.id] = color  # type: ignore
         embed.description = "Color successfully set."
         await interaction.response.send_message(embed=embed)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Member(bot))

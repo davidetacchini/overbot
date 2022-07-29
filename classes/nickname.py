@@ -21,17 +21,20 @@ ROLES = {
 
 
 class Nickname:
-    __slots__ = ("interaction", "profile", "member")
+    __slots__ = ("interaction", "bot", "profile", "member", "guild")
 
-    def __init__(self, interaction: discord.Interaction, *, profile: None | Profile = None) -> None:
-        self.interaction: discord.Interaction = interaction
-        self.profile: Profile = profile
-        self.member: discord.Member = interaction.user
-        self.bot: OverBot = interaction.client
+    def __init__(
+        self, interaction: discord.Interaction, *, bot: OverBot, profile: None | Profile = None
+    ) -> None:
+        self.interaction = interaction
+        self.bot: OverBot = bot
+        self.profile = profile
+        self.member: discord.Member = interaction.user  # type: ignore
+        self.guild: None | discord.Guild = interaction.guild
 
     async def exists(self) -> bool:
         query = "SELECT EXISTS (SELECT TRUE FROM nickname WHERE id = $1);"
-        return await self.bot.pool.fetchval(query, self.member.id)
+        return bool(await self.bot.pool.fetchval(query, self.member.id))
 
     async def _generate(self) -> str:
         ratings = self.profile.resolve_ratings()
@@ -75,9 +78,7 @@ class Nickname:
 
         if not remove:
             query = "INSERT INTO nickname (id, server_id, profile_id) VALUES ($1, $2, $3);"
-            await self.bot.pool.execute(
-                query, self.member.id, self.interaction.guild.id, profile_id
-            )
+            await self.bot.pool.execute(query, self.member.id, self.guild.id, profile_id)
             await self.interaction.followup.send("Nickname successfully set.")
         else:
             query = "DELETE FROM nickname WHERE id = $1;"

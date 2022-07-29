@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Sequence
 
 import discord
 
@@ -9,16 +9,20 @@ PageT = str | dict | discord.Embed
 
 class Paginator(discord.ui.View):
     def __init__(
-        self, entries: list[discord.Embed | str], *, interaction: discord.Interaction, **kwargs: Any
-    ):
+        self,
+        entries: discord.Embed | str | Sequence[discord.Embed | str],
+        *,
+        interaction: discord.Interaction,
+        **kwargs: Any
+    ) -> None:
         super().__init__(timeout=120.0, **kwargs)
-        if not isinstance(entries, list):
+        if isinstance(entries, (discord.Embed, str)):
             entries = [entries]
 
         self.entries = entries
         self.interaction = interaction
         self.current: int = 0
-        self.message: discord.Message = None
+        self.message: None | discord.Message = None
         self.clear_items()
         self.fill_items()
 
@@ -51,21 +55,19 @@ class Paginator(discord.ui.View):
         if self.total > 2:
             self.add_item(self.last)
 
-    def _update_labels(self, page: PageT) -> None:
+    def _update_labels(self, page: int) -> None:
         self.first.disabled = 0 <= page <= 1
         self.previous.disabled = page == 0
         self.next.disabled = page == self.total
         self.last.disabled = self.total - 1 <= page <= self.total
 
-    def _get_kwargs_from_page(self, page: PageT) -> dict:
+    def _get_kwargs_from_page(self, page: PageT) -> dict[str, Any]:
         if isinstance(page, dict):
             return page
         elif isinstance(page, discord.Embed):
             return {"content": None, "embed": page}
         elif isinstance(page, str):
             return {"content": page, "embed": None}
-        else:
-            return {}
 
     async def _update(self, interaction: discord.Interaction) -> None:
         kwargs = self._get_kwargs_from_page(self.entries[self.current])

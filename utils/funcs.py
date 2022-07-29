@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, AsyncGenerator
 
 from discord.app_commands import Choice
 
 from . import emojis
 
 if TYPE_CHECKING:
-    from discord import Embed, Interaction, PartialEmoji
+    from discord import Interaction, PartialEmoji
+
+    A_Generator = AsyncGenerator[list[Any] | tuple[Any, ...], None]
 
 
 def get_platform_emoji(platform: str) -> PartialEmoji:
@@ -20,15 +22,16 @@ def get_platform_emoji(platform: str) -> PartialEmoji:
     return lookup[platform]
 
 
-async def chunker(pages: str | dict | Embed, *, per_page: int):
+async def chunker(pages: list[Any] | tuple[Any], *, per_page: int) -> A_Generator:
     for x in range(0, len(pages), per_page):
         yield pages[x : x + per_page]
 
 
-async def hero_autocomplete(interaction: Interaction, current: str):
+async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
     # Just slice the list to return the first 25 heroes since the
     # limit of displayable choices is 25 whereas the heroes are 32.
-    heroes = interaction.client.heroes
+    bot: Any = interaction.client
+    heroes = bot.heroes
     # The api uses different names for these heroes.
     values = {
         "soldier-76": "soldier76",
@@ -42,8 +45,9 @@ async def hero_autocomplete(interaction: Interaction, current: str):
     ][:25]
 
 
-async def module_autocomplete(interaction: Interaction, current: str):
-    modules = interaction.client.extensions
+async def module_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
+    bot: Any = interaction.client
+    modules = bot.extensions
     return [
         Choice(name=module, value=module) for module in modules if current.lower() in module.lower()
     ]

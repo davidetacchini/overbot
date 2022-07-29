@@ -2,6 +2,8 @@ import os
 import sys
 import logging
 
+from typing import Any, Sequence
+
 import asyncpg
 import discord
 
@@ -30,16 +32,19 @@ log = logging.getLogger("overbot")
 class OverBot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
 
-    def __init__(self, **kwargs):
+    pool: asyncpg.Pool
+    app_info: discord.AppInfo
+
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(command_prefix=config.default_prefix, **kwargs)
         self.config = config
         self.sloc: int = 0
 
         # caching
-        self.premiums: dict[int, bool] = {}
+        self.premiums: set[int] = set()
         self.embed_colors: dict[int, int] = {}
-        self.heroes: dict[int, dict] = {}
-        self.maps: list[dict] = []
+        self.heroes: dict[str, dict[str, str]] = {}
+        self.maps: list[dict[str, str | list[str]]] = []
 
         self.normal_cooldown: app_commands.Cooldown = app_commands.Cooldown(1, config.BASE_COOLDOWN)
         self.premium_cooldown: app_commands.Cooldown = app_commands.Cooldown(
@@ -62,17 +67,17 @@ class OverBot(commands.AutoShardedBot):
 
     @property
     def webhook(self) -> discord.Webhook:
-        wh_id, wh_token = (config.webhook["id"], config.webhook["token"])
-        return discord.Webhook.partial(id=wh_id, token=wh_token, session=self.session)
+        wh_id, wh_token = config.webhook.values()
+        return discord.Webhook.partial(id=wh_id, token=wh_token, session=self.session)  # type: ignore
 
-    def color(self, member_id: None | int = None) -> int:
+    def color(self, member_id: int = 1) -> int:
         return self.embed_colors.get(member_id, config.main_color)
 
     def get_uptime(self, *, brief: bool = False) -> str:
         return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
 
     async def total_commands(self) -> int:
-        total_commands = await self.pool.fetchval("SELECT COUNT(*) FROM command;")
+        total_commands: int = await self.pool.fetchval("SELECT COUNT(*) FROM command;")
         return total_commands + config.old_commands_count
 
     async def get_pg_version(self) -> str:
@@ -87,18 +92,22 @@ class OverBot(commands.AutoShardedBot):
         await self.process_commands(message)
 
     async def paginate(
-        self, entries: list[discord.Embed | str], *, interaction: discord.Interaction, **kwargs
+        self,
+        entries: discord.Embed | str | Sequence[discord.Embed | str],
+        *,
+        interaction: discord.Interaction,
+        **kwargs: Any,
     ) -> None:
         paginator = Paginator(entries, interaction=interaction, **kwargs)
         await paginator.start()
 
     async def prompt(
-        self, interaction: discord.Interaction, payload: dict[None | str, None | discord.Embed]
-    ) -> bool:
+        self, interaction: discord.Interaction, payload: str | discord.Embed
+    ) -> None | bool:
         if isinstance(payload, str):
-            kwargs = {"content": payload, "embed": None}
+            kwargs: Any = {"content": payload}
         elif isinstance(payload, discord.Embed):
-            kwargs = {"content": None, "embed": payload}
+            kwargs = {"embed": payload}
         view = PromptView(author_id=interaction.user.id)
         if interaction.response.is_done():
             view.message = await interaction.followup.send(**kwargs, view=view)
@@ -107,7 +116,7 @@ class OverBot(commands.AutoShardedBot):
         await view.wait()
         return view.value
 
-    def tick(self, opt: bool) -> discord.PartialEmoji:
+    def tick(self, opt: None | bool) -> discord.PartialEmoji:
         lookup = {
             True: emojis.online,
             False: emojis.dnd,
@@ -118,13 +127,13 @@ class OverBot(commands.AutoShardedBot):
     def compute_sloc(self) -> None:
         """Compute source lines of code."""
         for root, dirs, files in os.walk(os.getcwd()):
-            [dirs.remove(d) for d in list(dirs) if d == "env"]
+            dirs[:] = set(dirs) - {"env"}
             for file in files:
                 if file.endswith(".py"):
                     with open(f"{root}/{file}") as fp:
                         self.sloc += len(fp.readlines())
 
-    def is_it_premium(self, member_id: int, guild_id: int):
+    def is_it_premium(self, member_id: int, guild_id: int) -> bool:
         """Check for a member/guild to be premium."""
         to_check = (member_id, guild_id)
         return any(x in self.premiums for x in to_check)

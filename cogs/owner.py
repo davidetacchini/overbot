@@ -10,7 +10,7 @@ import importlib
 import traceback
 import subprocess
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 from contextlib import redirect_stdout
 
 import discord
@@ -26,9 +26,9 @@ if TYPE_CHECKING:
 
 
 class ModalExecuteCode(ui.Modal, title="Execute a piece of code"):
-    body = ui.TextInput(label="Code", required=True, style=discord.TextStyle.long)
+    body: ui.TextInput = ui.TextInput(label="Code", required=True, style=discord.TextStyle.long)
 
-    async def on_submit(self, interaction: discord.Interaction):
+    async def on_submit(self, interaction: discord.Interaction) -> None:
         env = {
             "bot": interaction.client,
             "interaction": interaction,
@@ -42,7 +42,7 @@ class ModalExecuteCode(ui.Modal, title="Execute a piece of code"):
 
         stdout = io.StringIO()
 
-        body = self.body.value
+        body = self.body.value or ""
         to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
 
         try:
@@ -53,7 +53,7 @@ class ModalExecuteCode(ui.Modal, title="Execute a piece of code"):
         func = env["func"]
         try:
             with redirect_stdout(stdout):
-                ret = await func()
+                ret = await func()  # type: ignore
         except Exception:
             value = stdout.getvalue()
             await interaction.response.send_message(f"```py\n{value}{traceback.format_exc()}\n```")
@@ -67,10 +67,11 @@ class ModalExecuteCode(ui.Modal, title="Execute a piece of code"):
 
 
 class ModalExecuteSQL(ui.Modal, title="Execute SQL queries"):
-    query = ui.TextInput(label="Query", required=True, style=discord.TextStyle.long)
+    query: ui.TextInput = ui.TextInput(label="Query", required=True, style=discord.TextStyle.long)
 
-    async def on_submit(self, interaction: discord.Interaction):
-        async with interaction.client.pool.acquire() as conn:
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        bot: Any = interaction.client
+        async with bot.pool.acquire() as conn:
             try:
                 res = await conn.fetch(self.query.value)
             except Exception as e:
@@ -91,14 +92,15 @@ class Owner(commands.Cog):
 
     @app_commands.command()
     @is_owner()
-    async def clear(self, interaction: discord.Interaction, amount: int = 1):
+    async def clear(self, interaction: discord.Interaction, amount: int = 1) -> None:
         """Remove the given amount of messages"""
         amount += 1
-        await interaction.channel.purge(limit=amount)
+        if interaction.channel is not None and isinstance(interaction.channel, discord.TextChannel):
+            await interaction.channel.purge(limit=amount)
 
     @app_commands.command()
     @is_owner()
-    async def load(self, interaction: discord.Interaction, *, module: str):
+    async def load(self, interaction: discord.Interaction, *, module: str) -> None:
         """Loads a module"""
         await interaction.response.defer(thinking=True)
         try:
@@ -111,7 +113,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @app_commands.autocomplete(module=module_autocomplete)
     @is_owner()
-    async def unload(self, interaction: discord.Interaction, *, module: str):
+    async def unload(self, interaction: discord.Interaction, *, module: str) -> None:
         """Unloads a module"""
         await interaction.response.defer(thinking=True)
         try:
@@ -124,7 +126,7 @@ class Owner(commands.Cog):
     @reload.command()
     @app_commands.autocomplete(module=module_autocomplete)
     @is_owner()
-    async def module(self, interaction: discord.Interaction, *, module: str):
+    async def module(self, interaction: discord.Interaction, *, module: str) -> None:
         """Reloads a module"""
         await interaction.response.defer(thinking=True)
         try:
@@ -136,7 +138,7 @@ class Owner(commands.Cog):
 
     @reload.command()
     @is_owner()
-    async def config(self, interaction: discord.Interaction):
+    async def config(self, interaction: discord.Interaction) -> None:
         """Reloads the configuration file"""
         await interaction.response.defer(thinking=True)
         try:
@@ -148,7 +150,7 @@ class Owner(commands.Cog):
 
     # Source: https://github.com/Rapptz/RoboDanny
     @reload.command()
-    async def modules(self, interaction: discord.Interaction):
+    async def modules(self, interaction: discord.Interaction) -> None:
         """Reloads all modules, while pulling from git"""
         await interaction.response.defer(thinking=True)
         stdout, stderr = await self.run_process("git pull")
@@ -164,10 +166,8 @@ class Owner(commands.Cog):
         updated_modules = "\n".join(
             f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
-        prompt = await self.bot.prompt(
-            f"This will update the following modules?\n{updated_modules}"
-        )
-        if prompt:
+        message = f"This will update the following modules?\n{updated_modules}"
+        if await self.bot.prompt(interaction, message):
             return
 
         statuses = []
@@ -208,7 +208,7 @@ class Owner(commands.Cog):
         except NotImplementedError:
             process = subprocess.Popen(
                 command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-            )
+            )  # type: ignore
             result = await self.bot.loop.run_in_executor(None, process.communicate)
 
         return [output.decode() for output in result]
@@ -241,40 +241,39 @@ class Owner(commands.Cog):
 
     @app_commands.command()
     @is_owner()
-    async def shutdown(self, interaction: discord.Interaction):
+    async def shutdown(self, interaction: discord.Interaction) -> None:
         """Kills the bot session"""
         await interaction.response.send_message("Going offline.")
         await self.bot.close()
 
     @app_commands.command()
     @is_owner()
-    async def exc(self, interaction: discord.Interaction):
+    async def exc(self, interaction: discord.Interaction) -> None:
         """Evaluates a code"""
         await interaction.response.send_modal(ModalExecuteCode())
 
     @app_commands.command()
     @is_owner()
-    async def speedtest(self, interaction: discord.Interaction):
+    async def speedtest(self, interaction: discord.Interaction) -> None:
         """Run a speedtest directly from Discord"""
-        msg = await interaction.response.send_message("Running the speedtest...")
+        await interaction.response.send_message("Running the speedtest...")
         process = await asyncio.create_subprocess_shell(
             "speedtest-cli --simple",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        ret = await process.stdout.read()
-        ret = ret.decode("utf-8").strip()
-        await msg.edit(content=f"""```prolog\n{ret}```""")
+        ret = (await process.stdout.read()).decode("utf-8").strip()
+        await interaction.edit_original_message(content=f"""```prolog\n{ret}```""")
 
     @app_commands.command()
     @is_owner()
-    async def sql(self, interaction: discord.Interaction):
+    async def sql(self, interaction: discord.Interaction) -> None:
         """Run a query"""
         await interaction.response.send_modal(ModalExecuteSQL())
 
     @app_commands.command()
     @is_owner()
-    async def admin(self, interaction: discord.Interaction):
+    async def admin(self, interaction: discord.Interaction) -> None:
         """Display an admin panel"""
         async with self.bot.pool.acquire() as conn:
             profiles = await conn.fetchval("SELECT COUNT(*) FROM profile;")
@@ -318,7 +317,9 @@ class Owner(commands.Cog):
     @app_commands.command()
     @app_commands.describe(file="Whether to get the file on Discord.")
     @is_owner()
-    async def backup(self, interaction: discord.Interaction, *, file: Literal["Yes", "No"] = "No"):
+    async def backup(
+        self, interaction: discord.Interaction, *, file: Literal["Yes", "No"] = "No"
+    ) -> None:
         """Generate a backup file of the database"""
         await interaction.response.send_message("Generating backup file...", ephemeral=True)
 
@@ -337,5 +338,5 @@ class Owner(commands.Cog):
             await interaction.followup.send(file=discord.File("../backup.sql"), ephemeral=True)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Owner(bot), guild=bot.TEST_GUILD)
