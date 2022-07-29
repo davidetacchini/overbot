@@ -84,7 +84,7 @@ class Overwatch(commands.Cog):
         """Returns Overwatch patch notes links"""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Overwatch Patch Notes"
-        categories = ("Live", "PTR", "Experimental")
+        categories = ("Live", "PTR", "Experimental", "Beta")
         description = []
         for category in categories:
             link = self.bot.config.overwatch["patch"].format(category.lower())
