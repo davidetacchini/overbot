@@ -9,8 +9,9 @@ from typing import TYPE_CHECKING, Any
 import distro
 import psutil
 import discord
+import discord.ext.tasks as tasks  # avoid mypy error
 
-from discord.ext import tasks, commands  # type: ignore
+from discord.ext import commands
 
 from utils.scrape import get_overwatch_news
 
