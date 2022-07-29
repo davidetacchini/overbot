@@ -70,7 +70,9 @@ class OverBot(commands.AutoShardedBot):
         wh_id, wh_token = config.webhook.values()
         return discord.Webhook.partial(id=wh_id, token=wh_token, session=self.session)  # type: ignore
 
-    def color(self, member_id: int = 1) -> int:
+    def color(self, member_id: None | int = None) -> int:
+        if member_id is None:
+            return config.main_color
         return self.embed_colors.get(member_id, config.main_color)
 
     def get_uptime(self, *, brief: bool = False) -> str:
