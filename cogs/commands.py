@@ -5,9 +5,11 @@ import asyncio
 
 from typing import TYPE_CHECKING, Any
 
+import discord.ext.tasks as tasks  # avoid mypy error
+
 from asyncpg import PostgresConnectionError
 from discord import InteractionType
-from discord.ext import tasks, commands  # type: ignore
+from discord.ext import commands
 
 if TYPE_CHECKING:
     from discord import Interaction
