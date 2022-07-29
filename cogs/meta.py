@@ -26,16 +26,16 @@ if TYPE_CHECKING:
 
 
 class Meta(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     @app_commands.command()
-    async def support(self, interaction: discord.Interaction):
+    async def support(self, interaction: discord.Interaction) -> None:
         """Returns the official bot support server invite link"""
         await interaction.response.send_message(config.support)
 
     @app_commands.command()
-    async def ping(self, interaction: discord.Interaction):
+    async def ping(self, interaction: discord.Interaction) -> None:
         """Shows bot current websocket latency and ACK"""
         start = time.monotonic()
         await interaction.response.defer(thinking=True)
@@ -65,7 +65,7 @@ class Meta(commands.Cog):
     @app_commands.command()
     @app_commands.guild_only()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
-    async def about(self, interaction: discord.Interaction):
+    async def about(self, interaction: discord.Interaction) -> None:
         """Shows bot related information and useful links"""
         commits = self.get_latest_commits()
 
@@ -119,8 +119,7 @@ class Meta(commands.Cog):
         embed.add_field(name="Members", value=total_members)
         embed.add_field(name="Servers", value=len(self.bot.guilds))
         embed.add_field(
-            name="Shards",
-            value=f"{interaction.guild.shard_id + 1}/{self.bot.shard_count}",
+            name="Shards", value=f"{interaction.guild.shard_id + 1}/{self.bot.shard_count}"
         )
         embed.add_field(name="Commands Run", value=total_commands)
         embed.add_field(name="Lines of code", value=self.bot.sloc)
@@ -143,7 +142,7 @@ class Meta(commands.Cog):
 
     @app_commands.command()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
-    async def topweekly(self, interaction: discord.Interaction):
+    async def topweekly(self, interaction: discord.Interaction) -> None:
         """Shows bot's weekly most active servers
 
         Based on commands runned
@@ -165,5 +164,5 @@ class Meta(commands.Cog):
         await interaction.followup.send(embed=embed)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Meta(bot))

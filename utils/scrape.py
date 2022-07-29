@@ -11,7 +11,7 @@ async def fetch(url: str) -> bytes:
             return await r.read()
 
 
-async def get_overwatch_news(amount: int) -> list[dict]:
+async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
     content = await fetch(config.overwatch["news"])
     page = BeautifulSoup(content, features="html.parser")
     news = page.find("section", class_="NewsHeader-featured")
@@ -30,7 +30,7 @@ async def get_overwatch_news(amount: int) -> list[dict]:
     return all_news
 
 
-async def get_overwatch_maps() -> list[dict]:
+async def get_overwatch_maps() -> list[dict[str, str | list[str]]]:
     content = await fetch(config.overwatch["map"])
     page = BeautifulSoup(content, features="html.parser")
 
@@ -48,7 +48,7 @@ async def get_overwatch_maps() -> list[dict]:
     return all_maps
 
 
-async def get_overwatch_heroes() -> dict[str, dict]:
+async def get_overwatch_heroes() -> dict[str, dict[str, str]]:
     content = await fetch(config.overwatch["hero"])
     page = BeautifulSoup(content, features="html.parser")
 

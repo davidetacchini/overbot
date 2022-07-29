@@ -4,24 +4,30 @@ import re
 import logging
 import platform
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import distro
 import psutil
 import discord
 
-from discord.ext import tasks, commands
+from discord.ext import tasks, commands  # type: ignore
 
 from utils.scrape import get_overwatch_news
 
 if TYPE_CHECKING:
     from bot import OverBot
 
+    Shards = list[dict[str, Any]]
+    BotStats = dict[str, list[dict[str, Any]] | dict[str, Any]]
+    BotCommands = list[dict[str, Any]]
+    TopServers = list[dict[str, Any]]
+
+
 log = logging.getLogger("overbot")
 
 
 class Tasks(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     async def setup_hook(self) -> None:
@@ -30,7 +36,7 @@ class Tasks(commands.Cog):
         self.check_subscriptions.start()
         self.send_overwatch_news.start()
 
-    def get_shards(self) -> list[dict]:
+    def get_shards(self) -> Shards:
         shards = []
         for shard in self.bot.shards.values():
             guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
@@ -48,7 +54,7 @@ class Tasks(commands.Cog):
             )
         return shards
 
-    async def get_bot_stats(self) -> dict[str, dict]:
+    async def get_bot_stats(self) -> BotStats:
         total_commands = await self.bot.total_commands()
 
         try:
@@ -93,7 +99,7 @@ class Tasks(commands.Cog):
             "shards": shards,
         }
 
-    async def get_bot_commands(self) -> list[dict]:
+    async def get_bot_commands(self) -> BotCommands:
         all_commands = []
         for command in self.bot.walk_commands():
             if command.hidden:
@@ -112,7 +118,7 @@ class Tasks(commands.Cog):
             )
         return all_commands
 
-    async def get_top_servers(self) -> list[dict]:
+    async def get_top_servers(self) -> TopServers:
         guilds = await self.bot.get_cog("Meta").get_weekly_top_guilds(self.bot)
         servers = []
         for guild in guilds:
@@ -135,7 +141,7 @@ class Tasks(commands.Cog):
         return servers
 
     @tasks.loop(seconds=30.0)
-    async def update_private_api(self) -> None:
+    async def update_private_api(self):
         """POST bot stats to private API."""
         headers = {
             "Content-Type": "application/json",
@@ -300,12 +306,12 @@ class Tasks(commands.Cog):
 
         await self.bot.wait_until_ready()
 
-    def cog_unload(self):
+    def cog_unload(self) -> None:
         self.update_discord_portals.cancel()
         self.update_private_api.cancel()
         self.check_subscriptions.cancel()
         self.send_overwatch_news.cancel()
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Tasks(bot))

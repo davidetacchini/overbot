@@ -10,7 +10,7 @@ from utils import emojis
 from utils.funcs import get_platform_emoji
 
 if TYPE_CHECKING:
-    from asyncpg import Record
+    from .profile import Profile
 
 PLATFORMS = [
     discord.SelectOption(label="Battle.net", value="pc", emoji=emojis.battlenet),
@@ -21,34 +21,37 @@ PLATFORMS = [
 
 
 class ModalProfileLink(ui.Modal, title="Profile Link"):
-    platform = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
-    username = ui.TextInput(
+    platform: ui.Select = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
+    username: ui.TextInput = ui.TextInput(
         label="Username",
         style=discord.TextStyle.short,
         placeholder="Enter your username",
         required=True,
     )
 
-    async def on_submit(self, interaction: discord.Interaction):
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        bot: Any = interaction.client
         platform = self.platform.values[0]
         username = self.username.value
 
         query = "INSERT INTO profile (platform, username, member_id) VALUES ($1, $2, $3);"
-        await interaction.client.pool.execute(query, platform, username, interaction.user.id)
+        await bot.pool.execute(query, platform, username, interaction.user.id)
         await interaction.response.send_message("Profile successfully linked.", ephemeral=True)
 
 
 class ModalProfileUpdate(ui.Modal, title="Profile Update"):
-    def __init__(self, profiles: list[Record]):
+    def __init__(self, profiles: list[Profile]) -> None:
         super().__init__()
         self.profiles = profiles
         if len(profiles) > 1:
-            self.profile = DropdownProfiles(profiles, placeholder="Select a profile...")
+            self.profile: DropdownProfiles | Profile = DropdownProfiles(
+                profiles, placeholder="Select a profile..."
+            )
             self.add_item(self.profile)
         else:
             self.profile = profiles[0]
-        self.platform = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
-        self.username = ui.TextInput(
+        self.platform: ui.Select = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
+        self.username: ui.TextInput = ui.TextInput(
             label="Username",
             style=discord.TextStyle.short,
             placeholder="Enter your username",
@@ -57,45 +60,47 @@ class ModalProfileUpdate(ui.Modal, title="Profile Update"):
         self.add_item(self.platform)
         self.add_item(self.username)
 
-    async def on_submit(self, interaction: discord.Interaction):
-        platform = self.platform.values[0]
-        username = self.username.value
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        bot: Any = interaction.client
+        new_platform = self.platform.values[0]
+        new_username = self.username.value
 
-        try:
-            profile_id, _, _ = self.profile
-        except TypeError:
-            profile_id = self.profile.values[0]
+        if isinstance(self.profile, Profile):
+            profile_id = self.profile.id
+        else:
+            profile_id = int(self.profile.values[0])
 
         query = "UPDATE profile SET platform = $1, username = $2 WHERE id = $3;"
-        await interaction.client.pool.execute(query, platform, username, int(profile_id))
+        await bot.pool.execute(query, new_platform, new_username, profile_id)
         await interaction.response.send_message("Profile successfully updated.", ephemeral=True)
 
 
 class PromptView(discord.ui.View):
-    def __init__(self, author_id: int):
+    def __init__(self, author_id: int) -> None:
         super().__init__()
         self.author_id = author_id
+        self.message: None | discord.Message = None
         self.value: None | bool = None
 
-    async def interaction_check(self, interaction):
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
         await interaction.response.send_message("This prompt is not for you.", ephemeral=True)
         return False
 
-    async def on_timeout(self):
+    async def on_timeout(self) -> None:
         if self.message:
             await self.message.delete()
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
-    async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.value = True
         await interaction.response.defer()
         await interaction.delete_original_message()
         self.stop()
 
     @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red)
-    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.value = False
         await interaction.response.defer()
         await interaction.delete_original_message()
@@ -122,24 +127,23 @@ class SelectView(discord.ui.View):
 
 
 class DropdownProfiles(discord.ui.Select):
-    def __init__(self, profiles: list[Record], *args: Any, **kwargs: Any):
+    def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.profiles = profiles
         self.__fill_options()
 
-    def __fill_options(self):
+    def __fill_options(self) -> None:
         for profile in self.profiles:
-            id_, platform, username = profile
-            emoji = get_platform_emoji(platform)
-            self.add_option(label=f"{username}", value=id_, emoji=emoji)
+            emoji = get_platform_emoji(profile.platform)
+            self.add_option(label=profile.username, value=str(profile.id), emoji=emoji)
 
 
 class SelectProfileView(SelectView):
-    def __init__(self, profiles: list[Record], *args: Any, **kwargs: Any):
+    def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         placeholder = "Select a profile..."
         self.select = DropdownProfiles(profiles, placeholder=placeholder)
-        self.select.callback = self.select_callback
+        setattr(self.select, "callback", self.select_callback)
         self.add_item(self.select)
 
     async def select_callback(self, interaction: discord.Interaction) -> None:
@@ -155,16 +159,16 @@ class SelectProfileView(SelectView):
 
 
 class SelectProfilesView(SelectView):
-    def __init__(self, profiles: list[Record], *args: Any, **kwargs: Any):
+    def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.choices: list[int] = []
         placeholder = "Select at least a profile..."
         # Using min_values=0 to ensure that the view gets recomputed
-        # even when the user deselect the previously selected profile(s).
+        # even when the user unselects the previously selected profile(s).
         self.select = DropdownProfiles(
             profiles, min_values=0, max_values=len(profiles), placeholder=placeholder
         )
-        self.select.callback = self.select_callback
+        setattr(self.select, "callback", self.select_callback)
         self.add_item(self.select)
 
     async def select_callback(self, interaction: discord.Interaction) -> None:
@@ -175,9 +179,8 @@ class SelectProfilesView(SelectView):
     async def unlink(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.choices:
             await interaction.response.defer()
-            await interaction.client.pool.execute(
-                "DELETE FROM profile WHERE id = any($1::int[]);", self.choices
-            )
+            bot: Any = interaction.client
+            await bot.pool.execute("DELETE FROM profile WHERE id = any($1::int[]);", self.choices)
 
             if len(self.choices) == 1:
                 message = "Profile successfully unlinked."
@@ -199,7 +202,7 @@ class SelectProfilesView(SelectView):
 
 
 class SelectAnswer(discord.ui.Select):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
     async def callback(self, interaction: discord.Interaction) -> None:

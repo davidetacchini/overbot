@@ -1,4 +1,7 @@
+import logging
 import traceback
+
+from typing import Any
 
 import discord
 
@@ -8,13 +11,17 @@ from discord import app_commands
 from utils import checks
 from classes.exceptions import NoChoice, OverBotException
 
+log = logging.getLogger("overbot")
 
-async def error_handler(interaction: discord.Interaction, error: app_commands.AppCommandError):
-    bot = interaction.client
 
-    async def send(payload: str | discord.Embed, ephemeral: bool = True):
+async def error_handler(
+    interaction: discord.Interaction, error: app_commands.AppCommandError
+) -> None:
+    bot: Any = interaction.client
+
+    async def send(payload: str | discord.Embed, ephemeral: bool = True) -> None:
         if isinstance(payload, str):
-            kwargs = {"content": payload}
+            kwargs: Any = {"content": payload}
         elif isinstance(payload, discord.Embed):
             kwargs = {"embed": payload}
 
@@ -27,7 +34,7 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
         return
 
     elif isinstance(error, app_commands.TransformerError):
-        await send(error)
+        await send(str(error))
 
     elif isinstance(error, app_commands.CheckFailure):
         if type(error) == checks.ProfileNotLinked:
@@ -104,7 +111,7 @@ async def error_handler(interaction: discord.Interaction, error: app_commands.Ap
             if not bot.debug:
                 await bot.webhook.send(embed=embed)
             else:
-                print(original, type(original))
+                log.exception(original.__traceback__)
             await send(
                 "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
             )

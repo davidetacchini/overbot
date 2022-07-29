@@ -23,20 +23,22 @@ platforms = [
 
 
 class Stats(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     async def show_stats_for(
         self,
         interaction: discord.Interaction,
         hero: str,
-        platform: str,
-        username: str,
+        platform: None | str = None,
+        username: None | str = None,
+        *,
+        profile: None | Profile = None,
     ) -> None:
-        profile = Profile(platform, username, interaction=interaction)
+        profile = profile or Profile(platform, username, interaction=interaction)
         await profile.compute_data()
         if profile.is_private():
-            embed = profile.embed_private()
+            embed: discord.Embed | list[discord.Embed] = profile.embed_private()
         else:
             embed = profile.embed_stats(hero)
         await self.bot.paginate(embed, interaction=interaction)
@@ -47,7 +49,7 @@ class Stats(commands.Cog):
     @app_commands.describe(username="The platform of the player")
     async def ratings(
         self, interaction: discord.Interaction, platform: Choice[str], *, username: str
-    ):
+    ) -> None:
         """Provides player ratings."""
         await interaction.response.defer(thinking=True)
         profile = Profile(platform.value, username, interaction=interaction)
@@ -64,7 +66,7 @@ class Stats(commands.Cog):
     @app_commands.describe(username="The platform of the player")
     async def stats(
         self, interaction: discord.Interaction, platform: Choice[str], *, username: str
-    ):
+    ) -> None:
         """Provides player general stats."""
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, "allHeroes", platform.value, username)
@@ -82,7 +84,7 @@ class Stats(commands.Cog):
         platform: Choice[str],
         *,
         username: str,
-    ):
+    ) -> None:
         """Provides player general stats for a given hero."""
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, hero, platform.value, username)
@@ -93,7 +95,7 @@ class Stats(commands.Cog):
     @app_commands.describe(username="The platform of the player")
     async def summary(
         self, interaction: discord.Interaction, platform: Choice[str], *, username: str
-    ):
+    ) -> None:
         """Provides player summarized stats."""
         await interaction.response.defer(thinking=True)
         profile = Profile(platform.value, username, interaction=interaction)
@@ -105,5 +107,5 @@ class Stats(commands.Cog):
         await interaction.followup.send(embed=embed)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Stats(bot))

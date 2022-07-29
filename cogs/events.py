@@ -8,6 +8,7 @@ from contextlib import suppress
 
 import discord
 
+from discord import InteractionType
 from discord.ext import commands
 
 if TYPE_CHECKING:
@@ -17,10 +18,10 @@ log = logging.getLogger("overbot")
 
 
 class Events(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
-    async def send_log(self, text, color):
+    async def send_log(self, text: str, color: discord.Color) -> None:
         if self.bot.debug:
             return
 
@@ -46,7 +47,7 @@ class Events(commands.Cog):
         await self.bot.webhook.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         if not hasattr(self.bot, "uptime"):
             self.bot.uptime = datetime.utcnow()
 
@@ -56,7 +57,7 @@ class Events(commands.Cog):
         await self.send_log("Bot is online.", discord.Color.blue())
 
     @commands.Cog.listener()
-    async def on_guild_join(self, guild):
+    async def on_guild_join(self, guild: discord.Guild) -> None:
         query = """INSERT INTO server (id)
                    VALUES ($1)
                    ON CONFLICT (id) DO NOTHING;
@@ -70,7 +71,7 @@ class Events(commands.Cog):
         await self.send_guild_log(guild, embed)
 
     @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
+    async def on_guild_remove(self, guild: discord.Guild) -> None:
         await self.bot.pool.execute("DELETE FROM server WHERE id = $1;", guild.id)
 
         if self.bot.debug:
@@ -80,22 +81,23 @@ class Events(commands.Cog):
         await self.send_guild_log(guild, embed)
 
     @commands.Cog.listener()
-    async def on_command(self, ctx):
-        query = """INSERT INTO member (id)
-                   VALUES ($1)
-                   ON CONFLICT (id) DO NOTHING;
-                """
-        await self.bot.pool.execute(query, ctx.author.id)
-
-        if ctx.guild:
-            query = """INSERT INTO server (id)
+    async def on_interaction(self, interaction: discord.Interaction) -> None:
+        if interaction.type == InteractionType.application_command:
+            query = """INSERT INTO member (id)
                        VALUES ($1)
                        ON CONFLICT (id) DO NOTHING;
                     """
-            await self.bot.pool.execute(query, ctx.guild.id)
+            await self.bot.pool.execute(query, interaction.user.id)
+
+            if interaction.guild is not None:
+                query = """INSERT INTO server (id)
+                           VALUES ($1)
+                           ON CONFLICT (id) DO NOTHING;
+                        """
+                await self.bot.pool.execute(query, interaction.guild.id)
 
     @commands.Cog.listener()
-    async def on_guild_channel_delete(self, channel):
+    async def on_guild_channel_delete(self, channel: discord.abc.GuildChannel) -> None:
         if not isinstance(channel, discord.TextChannel):
             return
 
@@ -108,5 +110,5 @@ class Events(commands.Cog):
             await conn.execute(query, channel.id)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Events(bot))

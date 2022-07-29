@@ -4,7 +4,7 @@ import json
 import random
 import secrets
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import discord
 
@@ -19,22 +19,24 @@ if TYPE_CHECKING:
 
     from bot import OverBot
 
+Member = discord.User | discord.Member
+
 
 class Trivia(commands.Cog):
-    def __init__(self, bot: OverBot):
+    def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
     trivia = app_commands.Group(name="trivia", description="Play Overwatch trivia")
 
-    def get_question(self) -> str:
+    def get_question(self) -> dict[str, Any]:
         with open("assets/questions.json") as fp:
-            questions = json.loads(fp.read())
+            questions: list[dict[str, Any]] = json.loads(fp.read())
         shuffled = random.sample(questions, len(questions))
         return secrets.choice(shuffled)
 
     async def get_answer(
         self,
-        entries: list[str | discord.Embed],
+        entries: list[str],
         embed: discord.Embed,
         *,
         interaction: discord.Interaction,
@@ -56,8 +58,9 @@ class Trivia(commands.Cog):
             return choice
         raise NoChoice() from None
 
-    async def get_result(self, interaction: discord.Interaction, question: dict) -> bool:
-        entries = [question["correct_answer"]] + question["wrong_answers"]
+    async def get_result(self, interaction: discord.Interaction, question: dict[str, Any]) -> bool:
+        entries = list(question["correct_answer"])
+        entries.append(question["wrong_answers"])
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
@@ -66,7 +69,7 @@ class Trivia(commands.Cog):
             embed.set_image(url=question["image_url"])
         embed.set_footer(text=f"You have 1 try and {timeout} seconds to respond.")
         answer = await self.get_answer(shuffled, embed, interaction=interaction, timeout=timeout)
-        return answer == question["correct_answer"]
+        return bool(answer == question["correct_answer"])
 
     async def update_member_games_started(self, member_id: int) -> None:
         query = """INSERT INTO trivia (id, started)
@@ -84,22 +87,22 @@ class Trivia(commands.Cog):
         await self.bot.pool.execute(query, member_id)
 
     def embed_result(
-        self, member: discord.Member, *, won: bool = True, correct_answer: str = None
+        self, member: Member, *, won: bool = True, correct_answer: None | str = None
     ) -> discord.Embed:
         embed = discord.Embed()
-        embed.set_author(name=str(member), icon_url=member.display_avatar)
+        embed.set_author(name=str(member), icon_url=member.display_avatar.url)
         if won:
-            embed.color = discord.Color.green()
+            embed.colour = discord.Color.green()
             embed.title = "Correct!"
             embed.set_footer(text="+1 win")
         else:
-            embed.color = discord.Color.red()
+            embed.colour = discord.Color.red()
             embed.title = "Wrong!"
             embed.set_footer(text="+1 loss")
             embed.add_field(name="Correct answer", value=correct_answer)
         return embed
 
-    async def get_member_stats(self, member: discord.Member) -> Record:
+    async def get_member_stats(self, member: Member) -> Record:
         query = "SELECT * FROM trivia WHERE id = $1;"
         member_stats = await self.bot.pool.fetchrow(query, member.id)
         if not member_stats:
@@ -114,7 +117,7 @@ class Trivia(commands.Cog):
         except ZeroDivisionError:
             return 0
 
-    def embed_member_stats(self, member: discord.Member, stats: dict) -> discord.Embed:
+    def embed_member_stats(self, member: Member, stats: Record) -> discord.Embed:
         embed = discord.Embed(color=self.bot.color(member.id))
         embed.set_author(name=str(member), icon_url=member.display_avatar)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
@@ -127,12 +130,11 @@ class Trivia(commands.Cog):
         return embed
 
     @trivia.command()
-    async def play(self, interaction: discord.Interaction):
+    async def play(self, interaction: discord.Interaction) -> None:
         """Play an Overwatch trivia game."""
         question = self.get_question()
         await self.update_member_games_started(interaction.user.id)
-        result = await self.get_result(interaction, question)
-        if result:
+        if await self.get_result(interaction, question):
             await self.update_member_stats(interaction.user.id)
             await interaction.followup.send(embed=self.embed_result(interaction.user))
         else:
@@ -143,7 +145,7 @@ class Trivia(commands.Cog):
             await interaction.followup.send(embed=embed)
 
     @trivia.command()
-    async def stats(self, interaction: discord.Interaction, member: None | discord.Member = None):
+    async def stats(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Shows trivia stats.
 
         `[member]` - The mention or the ID of a discord member of the current server.
@@ -157,7 +159,7 @@ class Trivia(commands.Cog):
 
     @trivia.command()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
-    async def best(self, interaction: discord.Interaction):
+    async def best(self, interaction: discord.Interaction) -> None:
         """Shows top 10 trivia players.
 
         Based on games won.
@@ -190,5 +192,5 @@ class Trivia(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
 
-async def setup(bot: OverBot):
+async def setup(bot: OverBot) -> None:
     await bot.add_cog(Trivia(bot))

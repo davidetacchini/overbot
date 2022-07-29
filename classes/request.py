@@ -1,3 +1,5 @@
+from typing import Any
+
 import aiohttp
 
 import config
@@ -16,7 +18,7 @@ class Request:
 
     __slots__ = ("platform", "username", "username_l")
 
-    def __init__(self, platform: str, username: str):
+    def __init__(self, platform: str, username: str) -> None:
         self.platform = platform
         self.username = username.replace("#", "%23")
         self.username_l: str = username.lower()
@@ -25,7 +27,7 @@ class Request:
     def account_url(self) -> str:
         return config.overwatch["account"] + "/" + self.username + "/"
 
-    async def resolve_name(self, players: list[dict]) -> None | str:
+    async def resolve_name(self, players: list[dict[str, Any]]) -> None | str:
         if len(players) == 1:
             try:
                 return players[0]["urlName"]
@@ -56,7 +58,7 @@ class Request:
             # return the username and let `resolve_response` handle it
             return self.username
 
-    async def get_name(self) -> None | list[dict]:
+    async def get_name(self) -> None | str:
         async with aiohttp.ClientSession() as s:
             async with s.get(self.account_url) as r:
                 try:
@@ -70,7 +72,7 @@ class Request:
         name = await self.get_name()
         return f"{config.base_url}/{self.platform}/{name}/complete"
 
-    async def resolve_response(self, response) -> None | dict:
+    async def resolve_response(self, response: aiohttp.ClientResponse) -> dict[str, Any]:
         match response.status:
             case 200:
                 data = await response.json()
@@ -86,7 +88,7 @@ class Request:
             case _:
                 raise ServiceUnavailable()
 
-    async def get(self) -> None | dict:
+    async def get(self) -> dict[str, Any]:
         url = await self.url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
