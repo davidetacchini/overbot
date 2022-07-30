@@ -27,7 +27,7 @@ class Nickname:
         self, interaction: discord.Interaction, *, bot: OverBot, profile: None | Profile = None
     ) -> None:
         self.interaction = interaction
-        self.bot: OverBot = bot
+        self.bot = bot
         self.profile = profile
         self.member: discord.Member = interaction.user  # type: ignore
         self.guild: None | discord.Guild = interaction.guild
@@ -48,9 +48,8 @@ class Nickname:
         # tmp[:-1] removes the last slash
         tmp = "[" + tmp[:-1] + "]"
 
-        # dinamically assign the nickname's length based on
-        # player's SR. -1 indicates the space between the
-        # member's name and the SR
+        # dinamically assign the nickname's length based on player's SR.
+        # -1 indicates the space between the user's name and the SR.
         x = MAX_NICKNAME_LENGTH - len(tmp) - 1
         name = self.member.name[:x]
         return name + " " + tmp
