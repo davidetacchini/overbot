@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import discord
 
@@ -9,8 +9,7 @@ from discord import ui
 from utils import emojis
 from utils.funcs import get_platform_emoji
 
-if TYPE_CHECKING:
-    from .profile import Profile
+from .profile import Profile
 
 PLATFORMS = [
     discord.SelectOption(label="Battle.net", value="pc", emoji=emojis.battlenet),
