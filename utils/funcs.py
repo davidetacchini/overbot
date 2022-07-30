@@ -28,8 +28,6 @@ async def chunker(pages: list[Any] | tuple[Any], *, per_page: int) -> A_Generato
 
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    # Just slice the list to return the first 25 heroes since the
-    # limit of displayable choices is 25 whereas the heroes are 32.
     bot: Any = interaction.client
     heroes = bot.heroes
     # The api uses different names for these heroes.
@@ -38,6 +36,8 @@ async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choi
         "wrecking-ball": "wreckingBall",
         "dva": "dVa",
     }
+    # Just slice the list to return the first 25 heroes since the
+    # limit of displayable choices is 25 whereas the heroes are 32.
     return [
         Choice(name=hero, value=values.get(hero, hero))
         for hero in heroes
