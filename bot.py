@@ -110,11 +110,14 @@ class OverBot(commands.AutoShardedBot):
             kwargs: Any = {"content": payload}
         elif isinstance(payload, discord.Embed):
             kwargs = {"embed": payload}
-        view = PromptView(author_id=interaction.user.id)
+
+        view = PromptView(interaction=interaction)
+
         if interaction.response.is_done():
             view.message = await interaction.followup.send(**kwargs, view=view)
         else:
             await interaction.response.send_message(**kwargs, view=view)
+
         await view.wait()
         return view.value
 
