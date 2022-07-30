@@ -27,7 +27,7 @@ class Request:
     def account_url(self) -> str:
         return config.overwatch["account"] + "/" + self.username + "/"
 
-    async def resolve_name(self, players: list[dict[str, Any]]) -> None | str:
+    async def _resolve_name(self, players: list[dict[str, Any]]) -> None | str:
         if len(players) == 1:
             try:
                 return players[0]["urlName"]
@@ -58,7 +58,7 @@ class Request:
             # return the username and let `resolve_response` handle it
             return self.username
 
-    async def get_name(self) -> None | str:
+    async def _get_name(self) -> None | str:
         async with aiohttp.ClientSession() as s:
             async with s.get(self.account_url) as r:
                 try:
@@ -66,13 +66,13 @@ class Request:
                 except Exception:
                     raise UnexpectedError()
                 else:
-                    return await self.resolve_name(name)
+                    return await self._resolve_name(name)
 
-    async def url(self) -> str:
-        name = await self.get_name()
+    async def _get_url(self) -> str:
+        name = await self._get_name()
         return f"{config.base_url}/{self.platform}/{name}/complete"
 
-    async def resolve_response(self, response: aiohttp.ClientResponse) -> dict[str, Any]:
+    async def _resolve_response(self, response: aiohttp.ClientResponse) -> dict[str, Any]:
         match response.status:
             case 200:
                 data = await response.json()
@@ -89,10 +89,10 @@ class Request:
                 raise ServiceUnavailable()
 
     async def get(self) -> dict[str, Any]:
-        url = await self.url()
+        url = await self._get_url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
                 try:
-                    return await self.resolve_response(r)
+                    return await self._resolve_response(r)
                 except aiohttp.client_exceptions.ClientPayloadError:
                     raise UnexpectedError()
