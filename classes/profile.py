@@ -53,12 +53,6 @@ class Profile:
         self.bot: Any = interaction.client
         self.pages: list[discord.Embed] = []
 
-    async def compute_data(self) -> None:
-        try:
-            self.data = await Request(self.platform, self.username).get()
-        except ClientConnectorError:
-            raise UnexpectedError() from None
-
     def __str__(self) -> str:
         return self.data["name"]
 
@@ -71,7 +65,7 @@ class Profile:
         return self.data["levelIcon"]
 
     @staticmethod
-    def to_pascal(key: str) -> str:
+    def _to_pascal(key: str) -> str:
         """From camel case to pascal case (testTest -> Test Test)."""
         return (
             re.sub("([a-z])([A-Z])", r"\g<1> \g<2>", key)
@@ -80,17 +74,8 @@ class Profile:
             .title()
         )
 
-    def format_key(self, key: str) -> str:
-        match key:
-            case "best":
-                return key.capitalize() + " (Most in game)"
-            case "average":
-                return key.capitalize() + " (per 10 minutes)"
-            case _:
-                return self.to_pascal(key)
-
     @staticmethod
-    def get_rating_icon(rating: int) -> discord.PartialEmoji:
+    def _get_rating_icon(rating: int) -> discord.PartialEmoji:
         if 0 < rating < 1500:
             return emojis.bronze
         elif 1500 <= rating < 2000:
@@ -104,6 +89,21 @@ class Profile:
         elif 3500 <= rating < 4000:
             return emojis.master
         return emojis.grand_master
+
+    def _format_key(self, key: str) -> str:
+        match key:
+            case "best":
+                return key.capitalize() + " (Most in game)"
+            case "average":
+                return key.capitalize() + " (per 10 minutes)"
+            case _:
+                return self._to_pascal(key)
+
+    async def compute_data(self) -> None:
+        try:
+            self.data = await Request(self.platform, self.username).get()
+        except ClientConnectorError:
+            raise UnexpectedError() from None
 
     def is_private(self) -> bool:
         return self.data["private"]
@@ -147,7 +147,7 @@ class Profile:
             ratings[key.lower()] = value["level"]
         return ratings
 
-    def resolve_stats(self, hero: str) -> None | tuple[list[str], Stat, Stat]:
+    def _resolve_stats(self, hero: str) -> None | tuple[list[str], Stat, Stat]:
         # quickplay stats
         q = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
         # competitive stats
@@ -168,7 +168,7 @@ class Profile:
 
         return keys, q, c
 
-    def format_stats(
+    def _format_stats(
         self,
         embed: discord.Embed,
         key: str,
@@ -177,10 +177,10 @@ class Profile:
     ) -> None:
         if quickplay and quickplay[key] is not None:
             q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-            embed.add_field(name="Quick Play", value=self.to_pascal(q_t))
+            embed.add_field(name="Quick Play", value=self._to_pascal(q_t))
         if competitive and competitive[key] is not None:
             c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
-            embed.add_field(name="Competitive", value=self.to_pascal(c_t))
+            embed.add_field(name="Competitive", value=self._to_pascal(c_t))
 
     async def embed_ratings(
         self, *, save: bool = False, profile_id: None | int = None
@@ -197,7 +197,7 @@ class Profile:
         for key, value in ratings.items():
             role_icon = ROLES.get(key)
             role_name = key.upper()
-            rating_icon = self.get_rating_icon(value)
+            rating_icon = self._get_rating_icon(value)
             embed.add_field(
                 name=f"{role_icon} {role_name}",
                 value=f"{rating_icon} {value}{emojis.sr}",
@@ -213,18 +213,18 @@ class Profile:
         return embed
 
     def embed_stats(self, hero: str) -> list[discord.Embed]:
-        keys, quickplay, competitive = self.resolve_stats(hero)
+        keys, quickplay, competitive = self._resolve_stats(hero)
 
         for i, key in enumerate(keys, start=1):
             embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
-            embed.title = self.format_key(key)
+            embed.title = self._format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
             if hero == "allHeroes":
                 embed.set_thumbnail(url=self.level_icon)
             else:
                 embed.set_thumbnail(url=self.bot.config.hero_url.format(hero.lower()))
             embed.set_footer(text=f"Page {i} of {len(keys)}")
-            self.format_stats(embed, key, quickplay, competitive)
+            self._format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
         return self.pages
 
@@ -239,7 +239,7 @@ class Profile:
             ratings_ = []
             for key, value in ratings.items():
                 role_icon = ROLES.get(key.lower())
-                rating_icon = self.get_rating_icon(value)
+                rating_icon = self._get_rating_icon(value)
                 ratings_.append(f"{role_icon} {rating_icon}{value}{emojis.sr}")
             embed.description = " ".join(ratings_)
 
@@ -249,7 +249,7 @@ class Profile:
         summary["gamesWon"] = self.data.get("gamesWon")
 
         for key, value in summary.items():
-            embed.add_field(name=self.to_pascal(key), value=value)
+            embed.add_field(name=self._to_pascal(key), value=value)
 
         def format_dict(source: Stat) -> dict[str, Any]:
             d = {}
@@ -261,10 +261,10 @@ class Profile:
 
         def format_embed(source: dict[str, Any], embed: discord.Embed, *, category: str) -> None:
             for key, value in source.items():
-                key = f"{self.to_pascal(key)} ({category.title()})"
+                key = f"{self._to_pascal(key)} ({category.title()})"
                 if isinstance(value, dict):
                     v = "\n".join(f"{k}: **{v}**" for k, v in value.items())
-                    embed.add_field(name=key, value=self.to_pascal(v))
+                    embed.add_field(name=key, value=self._to_pascal(v))
                 else:
                     embed.add_field(name=key, value=value)
 
