@@ -110,9 +110,10 @@ class Overwatch(commands.Cog):
     @is_premium()
     async def newsboard(self, interaction: discord.Interaction) -> None:
         """Creates an Overwatch news channel"""
+        await interaction.response.defer(thinking=True)
         newsboard = await self.get_newsboard(interaction.guild.id)
         if newsboard.channel is not None:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"This server already has a newsboard at {newsboard.channel.mention}."
             )
 
@@ -143,15 +144,11 @@ class Overwatch(commands.Cog):
                 name=name, overwrites=overwrites, topic=topic, reason=reason  # type: ignore
             )
         except discord.HTTPException:
-            return await interaction.response.send_message(
-                "Something bad happened. Please try again."
-            )
+            return await interaction.followup.send("Something bad happened. Please try again.")
 
         query = "INSERT INTO newsboard (id, server_id, member_id) VALUES ($1, $2, $3);"
         await self.bot.pool.execute(query, channel.id, interaction.guild_id, interaction.user.id)
-        await interaction.response.send_message(
-            f"Channel successfully created at {channel.mention}."
-        )
+        await interaction.followup.send(f"Channel successfully created at {channel.mention}.")
 
 
 async def setup(bot: OverBot) -> None:
