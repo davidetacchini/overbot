@@ -114,7 +114,7 @@ class OverBot(commands.AutoShardedBot):
         if interaction.response.is_done():
             view.message = await interaction.followup.send(**kwargs, view=view)
         else:
-            view.message = await interaction.response.send_message(**kwargs, view=view)
+            await interaction.response.send_message(**kwargs, view=view)
         await view.wait()
         return view.value
 
