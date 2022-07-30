@@ -51,7 +51,7 @@ class Trivia(commands.Cog):
             select.add_option(label=entry)
             embed.description = f"{embed.description}{index}. {entry}\n"
 
-        view.message = await interaction.response.send_message(embed=embed, view=view)
+        await interaction.response.send_message(embed=embed, view=view)
         await view.wait()
 
         if (choice := select.values[0]) is not None:
@@ -59,8 +59,7 @@ class Trivia(commands.Cog):
         raise NoChoice() from None
 
     async def get_result(self, interaction: discord.Interaction, question: dict[str, Any]) -> bool:
-        entries = list(question["correct_answer"])
-        entries.append(question["wrong_answers"])
+        entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
