@@ -11,8 +11,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import SelectView, SelectAnswer
-from classes.exceptions import NoChoice
+from classes.ui import BaseView, SelectAnswer
+from classes.exceptions import NoChoice, NoTriviaStats
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -42,7 +42,7 @@ class Trivia(commands.Cog):
         interaction: discord.Interaction,
         timeout: float,
     ) -> str:
-        view = SelectView(author_id=interaction.user.id, timeout=timeout)
+        view = BaseView(interaction=interaction, timeout=timeout)
         select = SelectAnswer(placeholder="Select the correct answer...")
         view.add_item(select)
 
@@ -54,9 +54,12 @@ class Trivia(commands.Cog):
         await interaction.response.send_message(embed=embed, view=view)
         await view.wait()
 
-        if (choice := select.values[0]) is not None:
+        try:
+            choice = select.values[0]
+        except IndexError:
+            raise NoChoice() from None
+        else:
             return choice
-        raise NoChoice() from None
 
     async def get_result(self, interaction: discord.Interaction, question: dict[str, Any]) -> bool:
         entries = [question["correct_answer"]] + question["wrong_answers"]
@@ -105,7 +108,7 @@ class Trivia(commands.Cog):
         query = "SELECT * FROM trivia WHERE id = $1;"
         member_stats = await self.bot.pool.fetchrow(query, member.id)
         if not member_stats:
-            raise commands.BadArgument("This member has no stats to show.")
+            raise NoTriviaStats()
         return member_stats
 
     def get_player_ratio(self, won: int, lost: int) -> float | int:

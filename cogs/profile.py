@@ -12,7 +12,7 @@ from discord import app_commands
 from matplotlib import pyplot
 from discord.ext import commands
 
-from classes.ui import ModalProfileLink, SelectProfileView, ModalProfileUpdate, SelectProfilesView
+from classes.ui import ModalProfileLink, SelectProfileView, ModalProfileUpdate, UnlinkProfilesView
 from utils.funcs import chunker, hero_autocomplete, get_platform_emoji
 from utils.checks import is_premium, has_profile, can_add_profile
 from classes.profile import Profile
@@ -61,11 +61,11 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
         if len(profiles) == 1:
             return profiles[0]
 
-        view = SelectProfileView(profiles, author_id=interaction.user.id)
+        view = SelectProfileView(profiles, interaction=interaction)
         # Using defer() on every single command that calls 'select_profile'.
-        # Thus, the interaction is always responded before.
+        # Thus, the interaction is always responded and we can use
+        # followup.send to respond.
         view.message = await interaction.followup.send(message, view=view)  # type: ignore # it returns a value
-
         await view.wait()
 
         choice = view.select.values[0] if len(view.select.values) else None
@@ -141,7 +141,7 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
                 await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", profile.id)
                 await interaction.followup.send("Profile successfully unlinked.")
         else:
-            view = SelectProfilesView(profiles, author_id=interaction.user.id)
+            view = UnlinkProfilesView(profiles, author_id=interaction.user.id)
             message = "Select at least a profile to unlink..."
             await interaction.response.send_message(message, view=view)
 
@@ -221,6 +221,16 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
         profile selected matches the one set for the nickname.
         """
         await interaction.response.defer(thinking=True)
+
+        guild = interaction.guild
+        user = interaction.user
+        if guild.me.top_role < user.top_role or user.id == guild.owner_id:  # type: ignore
+            return await interaction.followup.send(
+                "This server's owner needs to move the `OverBot` role higher, so I will "
+                "be able to update your nickname. If you are this server's owner, there's "
+                "no way for me to change your nickname, sorry!"
+            )
+
         nick = Nickname(interaction, bot=self.bot)
         if await nick.exists():
             if await self.bot.prompt(interaction, "This will remove your SRs in your nickname."):
@@ -232,15 +242,6 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
 
         if not await self.bot.prompt(interaction, "This will display your SRs in your nickname."):
             return
-
-        author = interaction.user
-        me = interaction.guild.me
-        if isinstance(author, discord.Member) and me.top_role < author.top_role:
-            return await interaction.followup.send(
-                "This server's owner needs to move the `OverBot` role higher, so I will "
-                "be able to update your nickname. If you are this server's owner, there's "
-                "no way for me to change your nickname, sorry!"
-            )
 
         message = "Select a profile to use for the nickname SRs."
         profile = await self.select_profile(interaction, message)

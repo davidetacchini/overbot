@@ -74,22 +74,34 @@ class ModalProfileUpdate(ui.Modal, title="Profile Update"):
         await interaction.response.send_message("Profile successfully updated.", ephemeral=True)
 
 
-class PromptView(discord.ui.View):
-    def __init__(self, author_id: int) -> None:
-        super().__init__()
-        self.author_id = author_id
+class BaseView(discord.ui.View):
+    def __init__(
+        self, *, interaction: discord.Interaction, timeout: float = 120.0, **kwargs: Any
+    ) -> None:
+        super().__init__(timeout=timeout, **kwargs)
+        self.interaction = interaction
+        self.author_id = interaction.user.id
         self.message: None | discord.Message = None
-        self.value: None | bool = None
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.author_id:
             return True
-        await interaction.response.send_message("This prompt is not for you.", ephemeral=True)
+        await interaction.response.send_message(
+            "This command wes not initiated by you.", ephemeral=True
+        )
         return False
 
     async def on_timeout(self) -> None:
         if self.message:
             await self.message.delete()
+        else:
+            await self.interaction.delete_original_message()
+
+
+class PromptView(BaseView):
+    def __init__(self, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
+        self.value: None | bool = None
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
     async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
@@ -106,25 +118,6 @@ class PromptView(discord.ui.View):
         self.stop()
 
 
-class SelectView(discord.ui.View):
-    def __init__(self, *, author_id: int, timeout: float = 120.0) -> None:
-        super().__init__(timeout=timeout)
-        self.author_id = author_id
-        self.message: None | discord.Message = None
-
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if interaction.user and interaction.user.id == self.author_id:
-            return True
-        await interaction.response.send_message(
-            "This command was not initiated by you.", ephemeral=True
-        )
-        return False
-
-    async def on_timeout(self) -> None:
-        if self.message:
-            await self.message.delete()
-
-
 class DropdownProfiles(discord.ui.Select):
     def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -137,9 +130,9 @@ class DropdownProfiles(discord.ui.Select):
             self.add_option(label=profile.username, value=str(profile.id), emoji=emoji)
 
 
-class SelectProfileView(SelectView):
-    def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+class SelectProfileView(BaseView):
+    def __init__(self, profiles: list[Profile], **kwargs: Any) -> None:
+        super().__init__(**kwargs)
         placeholder = "Select a profile..."
         self.select = DropdownProfiles(profiles, placeholder=placeholder)
         setattr(self.select, "callback", self.select_callback)
@@ -157,9 +150,9 @@ class SelectProfileView(SelectView):
         self.stop()
 
 
-class SelectProfilesView(SelectView):
-    def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+class UnlinkProfilesView(BaseView):
+    def __init__(self, profiles: list[Profile], **kwargs: Any) -> None:
+        super().__init__(**kwargs)
         self.choices: list[int] = []
         placeholder = "Select at least a profile..."
         # Using min_values=0 to ensure that the view gets recomputed
