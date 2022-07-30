@@ -88,11 +88,6 @@ class OverBot(commands.AutoShardedBot):
 
         return f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
 
-    async def on_message(self, message: discord.Message) -> None:
-        if not self.is_ready():
-            return
-        await self.process_commands(message)
-
     async def paginate(
         self,
         entries: discord.Embed | str | Sequence[discord.Embed | str],
