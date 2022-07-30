@@ -26,6 +26,11 @@ class InvalidColor(OverBotException):
         )
 
 
+class NoTriviaStats(OverBotException):
+    def __init__(self) -> None:
+        super().__init__("This member has no stats to show.")
+
+
 class CannotCreateGraph(OverBotException):
     def __init__(self) -> None:
         super().__init__("I don't have enough data to create the graph.")
