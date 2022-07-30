@@ -125,7 +125,7 @@ class Profile:
         roles = await self.bot.pool.fetch(query, profile_id, requested_at)
 
         if roles:
-            # Assuming a user uses `-profile rating` multiple times within
+            # Assuming a user uses `/profile ratings` multiple times within
             # the same day, we don't want duplicate ratings. If only 1 rating
             # differs, then we insert the new ratings into the database.
             all_equals = False
