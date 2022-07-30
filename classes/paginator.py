@@ -93,7 +93,7 @@ class Paginator(discord.ui.View):
         if self.interaction.response.is_done():
             self.message = await self.interaction.followup.send(**kwargs, view=self)
         else:
-            self.message = await self.interaction.response.send_message(**kwargs, view=self)
+            await self.interaction.response.send_message(**kwargs, view=self)
 
     @discord.ui.button(label="<<", style=discord.ButtonStyle.blurple)
     async def first(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:

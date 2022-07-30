@@ -57,16 +57,15 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
         member = member or interaction.user
         profiles = await self.get_profiles(interaction, member.id)
 
-        # if there only is a profile then just return it
+        # if there only is a profile: just return it
         if len(profiles) == 1:
             return profiles[0]
 
         view = SelectProfileView(profiles, author_id=interaction.user.id)
+        # Using defer() on every single command that calls 'select_profile'.
+        # Thus, the interaction is always responded before.
+        view.message = await interaction.followup.send(message, view=view)  # type: ignore # it returns a value
 
-        if interaction.response.is_done():
-            view.message = await interaction.followup.send(message, view=view)
-        else:
-            view.message = await interaction.response.send_message(message, view=view)
         await view.wait()
 
         choice = view.select.values[0] if len(view.select.values) else None
@@ -140,11 +139,11 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
 
             if await self.bot.prompt(interaction, embed):
                 await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", profile.id)
-                await interaction.response.send_message("Profile successfully unlinked.")
+                await interaction.followup.send("Profile successfully unlinked.")
         else:
             view = SelectProfilesView(profiles, author_id=interaction.user.id)
             message = "Select at least a profile to unlink..."
-            view.message = await interaction.response.send_message(message, view=view)
+            await interaction.response.send_message(message, view=view)
 
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
