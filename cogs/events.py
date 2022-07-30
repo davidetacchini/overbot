@@ -4,7 +4,6 @@ import logging
 
 from typing import TYPE_CHECKING
 from datetime import datetime
-from contextlib import suppress
 
 import discord
 
@@ -40,8 +39,10 @@ class Events(commands.Cog):
         embed.title = guild.name
         if guild.icon:
             embed.set_thumbnail(url=guild.icon.url)
-        with suppress(AttributeError):
+        try:
             embed.add_field(name="Members", value=guild.member_count)
+        except AttributeError:
+            pass
         embed.add_field(name="Shard ID", value=guild.shard_id + 1)
         embed.set_footer(text=f"ID: {guild.id}")
         await self.bot.webhook.send(embed=embed)

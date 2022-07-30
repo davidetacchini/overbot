@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from contextlib import suppress
 
 import discord
 
@@ -59,8 +58,10 @@ class Nickname:
             return
 
         nick = await self._generate()
-        with suppress(Exception):
+        try:
             await self.member.edit(nick=nick)
+        except Exception:
+            pass
 
     async def set_or_remove(self, *, profile_id: None | int = None, remove: bool = False) -> None:
         if not remove:
