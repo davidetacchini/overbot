@@ -94,6 +94,7 @@ class Owner(commands.Cog):
     @is_owner()
     async def clear(self, interaction: discord.Interaction, amount: int = 1) -> None:
         """Remove the given amount of messages"""
+        await interaction.response.defer()
         amount += 1
         if interaction.channel is not None and isinstance(interaction.channel, discord.TextChannel):
             await interaction.channel.purge(limit=amount)
