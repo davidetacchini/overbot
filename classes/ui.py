@@ -179,6 +179,7 @@ class UnlinkProfilesView(BaseView):
             else:
                 message = "Profiles successfully unlinked."
 
+            await interaction.delete_original_message()
             await interaction.followup.send(message, ephemeral=True)
             self.stop()
         else:
