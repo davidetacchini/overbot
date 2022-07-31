@@ -20,8 +20,9 @@ async def error_handler(
     bot: Any = interaction.client
 
     async def send(payload: str | discord.Embed, ephemeral: bool = True) -> None:
+        kwargs: dict[str, Any]
         if isinstance(payload, str):
-            kwargs: Any = {"content": payload}
+            kwargs = {"content": payload}
         elif isinstance(payload, discord.Embed):
             kwargs = {"embed": payload}
 
@@ -93,7 +94,7 @@ async def error_handler(
             embed.set_author(name=str(interaction.user), icon_url=interaction.user.display_avatar)
             embed.add_field(name="Command", value=interaction.command.qualified_name)
             if interaction.guild:
-                guild = f"{str(interaction.guild)} ({interaction.guild.id})"
+                guild = f"{str(interaction.guild)} ({interaction.guild_id})"
                 embed.add_field(name="Guild", value=guild, inline=False)
             try:
                 exc = "".join(

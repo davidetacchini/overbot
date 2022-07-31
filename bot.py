@@ -101,8 +101,9 @@ class OverBot(commands.AutoShardedBot):
     async def prompt(
         self, interaction: discord.Interaction, payload: str | discord.Embed
     ) -> None | bool:
+        kwargs: dict[str, Any]
         if isinstance(payload, str):
-            kwargs: Any = {"content": payload}
+            kwargs = {"content": payload}
         elif isinstance(payload, discord.Embed):
             kwargs = {"embed": payload}
 
@@ -139,7 +140,7 @@ class OverBot(commands.AutoShardedBot):
         return any(x in self.premiums for x in to_check)
 
     def get_profiles_limit(self, interaction: discord.Interaction, member_id: int) -> int:
-        guild_id = interaction.guild.id if interaction.guild is not None else 0
+        guild_id = interaction.guild_id or 0
         if not self.is_it_premium(member_id, guild_id):
             return config.BASE_PROFILES_LIMIT
         return config.PREMIUM_PROFILES_LIMIT
