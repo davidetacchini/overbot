@@ -64,7 +64,7 @@ class Meta(commands.Cog):
     # inspired by https://github.com/Rapptz/RoboDanny
     @app_commands.command()
     @app_commands.guild_only()
-    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def about(self, interaction: discord.Interaction) -> None:
         """Shows bot related information and useful links"""
         commits = self.get_latest_commits()
@@ -141,7 +141,7 @@ class Meta(commands.Cog):
         return await bot.pool.fetch(query, config.ignored_guilds)
 
     @app_commands.command()
-    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def topweekly(self, interaction: discord.Interaction) -> None:
         """Shows bot's weekly most active servers
 

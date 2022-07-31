@@ -49,7 +49,7 @@ class Overwatch(commands.Cog):
 
     @app_commands.command()
     @app_commands.describe(amount="The amount of news to return. Defaults to 4")
-    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def news(
         self, interaction: discord.Interaction, amount: app_commands.Range[int, 1, 4] = 4
     ) -> None:
