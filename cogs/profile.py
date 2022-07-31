@@ -141,7 +141,7 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
                 await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", profile.id)
                 await interaction.followup.send("Profile successfully unlinked.")
         else:
-            view = UnlinkProfilesView(profiles, author_id=interaction.user.id)
+            view = UnlinkProfilesView(profiles, interaction=interaction)
             message = "Select at least a profile to unlink..."
             await interaction.response.send_message(message, view=view)
 
