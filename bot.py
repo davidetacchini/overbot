@@ -8,7 +8,6 @@ import asyncpg
 import discord
 
 from aiohttp import ClientSession
-from discord import app_commands
 from discord.ext import commands
 
 import config
@@ -45,11 +44,6 @@ class OverBot(commands.AutoShardedBot):
         self.embed_colors: dict[int, int] = {}
         self.heroes: dict[str, dict[str, str]] = {}
         self.maps: list[dict[str, str | list[str]]] = []
-
-        self.normal_cooldown: app_commands.Cooldown = app_commands.Cooldown(1, config.BASE_COOLDOWN)
-        self.premium_cooldown: app_commands.Cooldown = app_commands.Cooldown(
-            1, config.PREMIUM_COOLDOWN
-        )
 
         self.TEST_GUILD: discord.Object = discord.Object(config.test_guild_id)
 
@@ -134,18 +128,17 @@ class OverBot(commands.AutoShardedBot):
                     with open(f"{root}/{file}") as fp:
                         self.sloc += len(fp.readlines())
 
-    def is_it_premium(self, member_id: int, guild_id: int) -> bool:
+    def is_it_premium(self, *to_check) -> bool:
         """Check for a member/guild to be premium."""
-        to_check = (member_id, guild_id)
         return any(x in self.premiums for x in to_check)
 
-    def get_profiles_limit(self, interaction: discord.Interaction, member_id: int) -> int:
+    def get_profiles_limit(self, interaction: discord.Interaction, user_id: int) -> int:
         guild_id = interaction.guild_id or 0
-        if not self.is_it_premium(member_id, guild_id):
-            return config.BASE_PROFILES_LIMIT
+        if not self.is_it_premium(user_id, guild_id):
+            return config.DEFAULT_PROFILES_LIMIT
         return config.PREMIUM_PROFILES_LIMIT
 
-    async def cache_premiums(self) -> None:
+    async def _cache_premiums(self) -> None:
         query = """SELECT id
                    FROM member
                    WHERE member.premium = true
@@ -157,13 +150,13 @@ class OverBot(commands.AutoShardedBot):
         ids = await self.pool.fetch(query)
         self.premiums = {i["id"] for i in ids}
 
-    async def cache_heroes(self) -> None:
+    async def _cache_heroes(self) -> None:
         self.heroes = await get_overwatch_heroes()
 
-    async def cache_maps(self) -> None:
+    async def _cache_maps(self) -> None:
         self.maps = await get_overwatch_maps()
 
-    async def cache_embed_colors(self) -> None:
+    async def _cache_embed_colors(self) -> None:
         embed_colors = {}
         query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
         colors = await self.pool.fetch(query)
@@ -180,10 +173,10 @@ class OverBot(commands.AutoShardedBot):
         self.compute_sloc()
 
         # caching
-        await self.cache_premiums()
-        await self.cache_embed_colors()
-        await self.cache_heroes()
-        await self.cache_maps()
+        await self._cache_premiums()
+        await self._cache_embed_colors()
+        await self._cache_heroes()
+        await self._cache_maps()
 
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
