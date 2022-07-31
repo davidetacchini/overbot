@@ -95,7 +95,7 @@ class Events(commands.Cog):
                            VALUES ($1)
                            ON CONFLICT (id) DO NOTHING;
                         """
-                await self.bot.pool.execute(query, interaction.guild.id)
+                await self.bot.pool.execute(query, interaction.guild_id)
 
     @commands.Cog.listener()
     async def on_guild_channel_delete(self, channel: discord.abc.GuildChannel) -> None:

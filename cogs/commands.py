@@ -48,8 +48,8 @@ class Commands(commands.Cog):
             return
 
         command = interaction.command.qualified_name
-        guild_id = interaction.guild.id if interaction.guild is not None else 0
-        channel_id = interaction.channel.id if interaction.channel is not None else 0
+        guild_id = interaction.guild_id or 0
+        channel_id = interaction.channel_id or 0
 
         async with self._batch_lock:
             self._data_batch.append(
