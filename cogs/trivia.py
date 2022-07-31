@@ -160,7 +160,7 @@ class Trivia(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @trivia.command()
-    @app_commands.checks.cooldown(1, 60.0, key=lambda i: (i.guild_id, i.user.id))
+    @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def best(self, interaction: discord.Interaction) -> None:
         """Shows top 10 trivia players.
 

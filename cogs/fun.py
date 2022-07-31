@@ -96,7 +96,7 @@ class Fun(commands.Cog):
 
     @app_commands.command()
     @app_commands.describe(category="The category to get a random meme from")
-    @app_commands.checks.cooldown(1, 5.0, key=lambda i: (i.guild_id, i.user.id))
+    @app_commands.checks.cooldown(1, 5.0, key=lambda i: i.user.id)
     async def meme(self, interaction: discord.Interaction, category: MemeCategories = None) -> None:
         """Returns a random Overwatch meme"""
         categories = tuple(get_args(MemeCategories))
