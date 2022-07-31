@@ -111,7 +111,7 @@ class Overwatch(commands.Cog):
     async def newsboard(self, interaction: discord.Interaction) -> None:
         """Creates an Overwatch news channel"""
         await interaction.response.defer(thinking=True)
-        newsboard = await self.get_newsboard(interaction.guild.id)
+        newsboard = await self.get_newsboard(interaction.guild_id)
         if newsboard.channel is not None:
             return await interaction.followup.send(
                 f"This server already has a newsboard at {newsboard.channel.mention}."

@@ -73,7 +73,7 @@ def is_premium() -> Any:
     def predicate(interaction: discord.Interaction) -> bool:
         bot: Any = interaction.client
         member_id = interaction.user.id
-        guild_id = interaction.guild.id if interaction.guild is not None else 0
+        guild_id = interaction.guild_id or 0
         to_check = (member_id, guild_id)
 
         if all(x not in bot.premiums for x in to_check):
