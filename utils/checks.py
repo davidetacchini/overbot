@@ -72,11 +72,10 @@ def is_premium() -> Any:
 
     def predicate(interaction: discord.Interaction) -> bool:
         bot: Any = interaction.client
-        member_id = interaction.user.id
+        user_id = interaction.user.id
         guild_id = interaction.guild_id or 0
-        to_check = (member_id, guild_id)
 
-        if all(x not in bot.premiums for x in to_check):
+        if not bot.is_it_premium(user_id, guild_id):
             raise MemberNotPremium()
         return True
 
