@@ -17,11 +17,6 @@ class PaginationError(OverBotException):
     pass
 
 
-class CannotEmbedLinks(PaginationError):
-    def __init__(self) -> None:
-        super().__init__("Bot cannot embed links in this channel.")
-
-
 class InvalidColor(OverBotException):
     def __init__(self) -> None:
         super().__init__(
