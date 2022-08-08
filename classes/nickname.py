@@ -68,7 +68,9 @@ class Nickname:
         try:
             await self.member.edit(nick=nick)
         except discord.HTTPException:
-            await self.interaction.followup.send("Something bad happened while updating your nickname.", ephemeral=True)
+            await self.interaction.followup.send(
+                "Something bad happened while updating your nickname.", ephemeral=True
+            )
 
         if not remove:
             query = "INSERT INTO nickname (id, server_id, profile_id) VALUES ($1, $2, $3);"
