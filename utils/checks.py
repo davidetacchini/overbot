@@ -9,28 +9,10 @@ from discord import app_commands
 if TYPE_CHECKING:
     from asyncpg import Record
 
-
-class ProfileNotLinked(app_commands.CheckFailure):
-
-    pass
+from classes.exceptions import NotOwner, UserNotPremium, ProfileNotLinked, ProfileLimitReached
 
 
-class ProfileLimitReached(app_commands.CheckFailure):
-    def __init__(self, limit: int) -> None:
-        self.limit = limit
-
-
-class MemberNotPremium(app_commands.CheckFailure):
-
-    pass
-
-
-class NotOwner(app_commands.CheckFailure):
-
-    pass
-
-
-async def get_profiles(interaction: discord.Interaction) -> list[Record]:
+async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:
     bot: Any = interaction.client
     query = """SELECT platform, username
                FROM profile
@@ -38,16 +20,23 @@ async def get_profiles(interaction: discord.Interaction) -> list[Record]:
                        ON member.id = profile.member_id
                WHERE member.id = $1;
             """
-    return await bot.pool.fetch(query, interaction.user.id)
+    return await bot.pool.fetch(query, member_id)
 
 
 def has_profile() -> Any:
     """Check for a user to have linked atleast a profile."""
 
+    def get_target_id(interaction) -> int:
+        members = interaction.data.get("resolved", {}).get("members", {})
+        if not members:
+            return interaction.user.id
+        return int(list(members.keys())[0])
+
     async def predicate(interaction: discord.Interaction) -> bool:
-        if await get_profiles(interaction):
+        target_id = get_target_id(interaction)
+        if await get_profiles(interaction, target_id):
             return True
-        raise ProfileNotLinked()
+        raise ProfileNotLinked(is_author=target_id == interaction.user.id)
 
     return app_commands.check(predicate)
 
@@ -57,12 +46,12 @@ def can_add_profile() -> Any:
 
     async def predicate(interaction: discord.Interaction) -> bool:
         bot: Any = interaction.client
-        profiles = await get_profiles(interaction)
+        profiles = await get_profiles(interaction, interaction.user.id)
         limit = bot.get_profiles_limit(interaction, interaction.user.id)
 
-        if len(profiles) >= limit:
-            raise ProfileLimitReached(limit)
-        return True
+        if len(profiles) <= limit:
+            return True
+        raise ProfileLimitReached(limit)
 
     return app_commands.check(predicate)
 
@@ -75,9 +64,9 @@ def is_premium() -> Any:
         user_id = interaction.user.id
         guild_id = interaction.guild_id or 0
 
-        if not bot.is_it_premium(user_id, guild_id):
-            raise MemberNotPremium()
-        return True
+        if bot.is_it_premium(user_id, guild_id):
+            return True
+        raise UserNotPremium()
 
     return app_commands.check(predicate)
 
