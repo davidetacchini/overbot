@@ -8,8 +8,14 @@ import discord
 from asyncpg import DataError
 from discord import app_commands
 
-from utils import checks
-from classes.exceptions import NoChoice, OverBotException
+from classes.exceptions import (
+    NoChoice,
+    NotOwner,
+    UserNotPremium,
+    OverBotException,
+    ProfileNotLinked,
+    ProfileLimitReached,
+)
 
 log = logging.getLogger("overbot")
 
@@ -38,10 +44,13 @@ async def error_handler(
         await send(str(error))
 
     elif isinstance(error, app_commands.CheckFailure):
-        if type(error) == checks.ProfileNotLinked:
-            await send('You haven\'t linked a profile yet. Use "/profile link" to start.')
+        if type(error) == ProfileNotLinked:
+            if error.is_author:
+                await send("You haven't linked a profile yet. Use /profile link to start.")
+            else:
+                await send("This user did not link a profile yet.")
 
-        elif type(error) == checks.ProfileLimitReached:
+        elif type(error) == ProfileLimitReached:
             if error.limit == 5:
                 premium = bot.config.premium
                 embed = discord.Embed(color=discord.Color.red())
@@ -53,7 +62,7 @@ async def error_handler(
             else:
                 await send("Maximum limit of profiles reached.")
 
-        elif type(error) == checks.MemberNotPremium:
+        elif type(error) == UserNotPremium:
             premium = bot.config.premium
             embed = discord.Embed(color=discord.Color.red())
             embed.description = (
@@ -62,7 +71,7 @@ async def error_handler(
             )
             await send(embed)
 
-        elif type(error) == checks.NotOwner:
+        elif type(error) == NotOwner:
             await send("You are not allowed to run this command.")
 
         elif type(error) == app_commands.NoPrivateMessage:
