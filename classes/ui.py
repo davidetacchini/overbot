@@ -95,7 +95,7 @@ class BaseView(discord.ui.View):
         if self.message:
             await self.message.delete()
         else:
-            await self.interaction.delete_original_message()
+            await self.interaction.delete_original_response()
 
 
 class PromptView(BaseView):
@@ -107,14 +107,14 @@ class PromptView(BaseView):
     async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.value = True
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.stop()
 
     @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         self.value = False
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.stop()
 
 
@@ -140,13 +140,13 @@ class SelectProfileView(BaseView):
 
     async def select_callback(self, interaction: discord.Interaction) -> None:
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.stop()
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red, row=1)
     async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.stop()
 
 
@@ -179,7 +179,7 @@ class UnlinkProfilesView(BaseView):
             else:
                 message = "Profiles successfully unlinked."
 
-            await interaction.delete_original_message()
+            await interaction.delete_original_response()
             await interaction.followup.send(message, ephemeral=True)
             self.stop()
         else:
@@ -190,7 +190,7 @@ class UnlinkProfilesView(BaseView):
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red, row=1)
     async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.stop()
 
 
@@ -200,5 +200,5 @@ class SelectAnswer(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction) -> None:
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.view.stop()

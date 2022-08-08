@@ -264,7 +264,7 @@ class Owner(commands.Cog):
             stderr=asyncio.subprocess.PIPE,
         )
         ret = (await process.stdout.read()).decode("utf-8").strip()
-        await interaction.edit_original_message(content=f"""```prolog\n{ret}```""")
+        await interaction.edit_original_response(content=f"""```prolog\n{ret}```""")
 
     @app_commands.command()
     @is_owner()
@@ -330,9 +330,9 @@ class Owner(commands.Cog):
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
-            await interaction.edit_original_message(content="Backup file successfully generated.")
+            await interaction.edit_original_response(content="Backup file successfully generated.")
         except Exception as e:
-            await interaction.edit_original_message(content=f"""```prolog\n{e}```""")
+            await interaction.edit_original_response(content=f"""```prolog\n{e}```""")
 
         if file == "Yes":
             await asyncio.sleep(2)  # waiting for the file to be created or updated

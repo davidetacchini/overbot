@@ -43,7 +43,7 @@ class Paginator(discord.ui.View):
             if self.message:
                 await self.message.edit(view=None)
             else:
-                await self.interaction.edit_original_message(view=None)
+                await self.interaction.edit_original_response(view=None)
         except Exception:
             pass
 
@@ -114,7 +114,7 @@ class Paginator(discord.ui.View):
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
         await interaction.response.defer()
-        await interaction.delete_original_message()
+        await interaction.delete_original_response()
         self.stop()
 
     @discord.ui.button(label=">", style=discord.ButtonStyle.blurple)
