@@ -1,3 +1,6 @@
+from discord import app_commands
+
+
 class OverBotException(Exception):
     """Base exception type for OverBot commands."""
 
@@ -98,3 +101,23 @@ class NoHeroStats(ProfileException):
         super().__init__(
             f"This profile has no quick play nor competitive stast for **{hero}** to display."
         )
+
+
+class ProfileNotLinked(app_commands.CheckFailure):
+    def __init__(self, is_author: bool) -> None:
+        self.is_author = is_author
+
+
+class ProfileLimitReached(app_commands.CheckFailure):
+    def __init__(self, limit: int) -> None:
+        self.limit = limit
+
+
+class UserNotPremium(app_commands.CheckFailure):
+
+    pass
+
+
+class NotOwner(app_commands.CheckFailure):
+
+    pass
