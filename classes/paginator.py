@@ -2,8 +2,6 @@ from typing import Any, Sequence
 
 import discord
 
-from .exceptions import CannotEmbedLinks
-
 PageT = str | dict | discord.Embed
 
 
@@ -81,15 +79,7 @@ class Paginator(discord.ui.View):
             else:
                 await interaction.response.edit_message(**kwargs, view=self)
 
-    def _ensure_bot_permissions(self) -> None:
-        permissions = self.interaction.channel.permissions_for(self.interaction.guild.me)
-        if not permissions.send_messages:
-            return
-        if not permissions.embed_links:
-            raise CannotEmbedLinks
-
     async def start(self) -> None:
-        self._ensure_bot_permissions()
         kwargs = self._get_kwargs_from_page(self.entries[0])
         self._update_labels(0)
         if self.interaction.response.is_done():
