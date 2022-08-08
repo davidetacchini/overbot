@@ -27,10 +27,10 @@ def has_profile() -> Any:
     """Check for a user to have linked atleast a profile."""
 
     def get_target_id(interaction) -> int:
-        members = interaction.data.get("resolved", {}).get("members", {})
-        if not members:
+        try:
+            return interaction.namespace.member.id
+        except AttributeError:
             return interaction.user.id
-        return int(list(members.keys())[0])
 
     async def predicate(interaction: discord.Interaction) -> bool:
         target_id = get_target_id(interaction)
