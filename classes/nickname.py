@@ -68,15 +68,13 @@ class Nickname:
         try:
             await self.member.edit(nick=nick)
         except discord.HTTPException:
-            await self.interaction.followup.send(
-                "Something bad happened while updating your nickname."
-            )
+            await self.interaction.followup.send("Something bad happened while updating your nickname.", ephemeral=True)
 
         if not remove:
             query = "INSERT INTO nickname (id, server_id, profile_id) VALUES ($1, $2, $3);"
             await self.bot.pool.execute(query, self.member.id, self.guild.id, profile_id)
-            await self.interaction.followup.send("Nickname successfully set.")
+            await self.interaction.followup.send("Nickname successfully set.", ephemeral=True)
         else:
             query = "DELETE FROM nickname WHERE id = $1;"
             await self.bot.pool.execute(query, self.member.id)
-            await self.interaction.followup.send("Nickname successfully removed.")
+            await self.interaction.followup.send("Nickname successfully removed.", ephemeral=True)
