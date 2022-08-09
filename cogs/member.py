@@ -76,10 +76,10 @@ class Member(commands.Cog):
                     "Color successfully reset.", ephemeral=True
                 )
 
-        embed = discord.Embed(color=color)  # type: ignore # it gets transformed to Color
+        embed = discord.Embed(color=color)
         query = "UPDATE member SET embed_color = $1 WHERE id = $2;"
         await self.bot.pool.execute(query, color, interaction.user.id)
-        self.bot.embed_colors[interaction.user.id] = color  # type: ignore
+        self.bot.embed_colors[interaction.user.id] = color
         embed.description = "Color successfully set."
         await interaction.response.send_message(embed=embed)
 

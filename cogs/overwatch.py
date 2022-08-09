@@ -141,7 +141,7 @@ class Overwatch(commands.Cog):
 
         try:
             channel = await interaction.guild.create_text_channel(
-                name=name, overwrites=overwrites, topic=topic, reason=reason  # type: ignore
+                name=name, overwrites=overwrites, topic=topic, reason=reason
             )
         except discord.HTTPException:
             return await interaction.followup.send("Something bad happened. Please try again.")

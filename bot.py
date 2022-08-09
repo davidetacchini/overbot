@@ -62,7 +62,7 @@ class OverBot(commands.AutoShardedBot):
     @property
     def webhook(self) -> discord.Webhook:
         wh_id, wh_token = config.webhook.values()
-        return discord.Webhook.partial(id=wh_id, token=wh_token, session=self.session)  # type: ignore
+        return discord.Webhook.partial(id=wh_id, token=wh_token, session=self.session)
 
     def color(self, member_id: None | int = None) -> int:
         if member_id is None:

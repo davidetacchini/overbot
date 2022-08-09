@@ -50,7 +50,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self) -> None:
         if not hasattr(self.bot, "uptime"):
-            self.bot.uptime = datetime.utcnow()
+            setattr(self.bot, "uptime", datetime.utcnow())
 
         log.info(f"Connected as {self.bot.user.display_name} in {len(self.bot.guilds)} guilds.")
 

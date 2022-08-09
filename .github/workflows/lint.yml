@@ -28,5 +28,5 @@ jobs:
       - name: Lint
         run: ./scripts/format.sh
 
-      - name: Run mypy
-        run: mypy .
+      - name: Run Pyright
+        run: pyright .

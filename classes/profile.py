@@ -17,6 +17,8 @@ from .exceptions import NoStats, NoHeroStats, UnexpectedError
 if TYPE_CHECKING:
     from asyncpg import Record
 
+    from bot import OverBot
+
     Stat = dict[str, None | dict[str, Any]]
 
 ROLES = {
@@ -50,7 +52,7 @@ class Profile:
             self.username = username
 
         self.interaction = interaction
-        self.bot: Any = interaction.client
+        self.bot: OverBot = interaction.client
         self.pages: list[discord.Embed] = []
 
     def __str__(self) -> str:
@@ -133,7 +135,7 @@ class Profile:
                 if t == tank and d == damage and s == support:
                     all_equals = True
 
-        if not roles or not all_equals:
+        if not roles or not all_equals:  # type: ignore # all equals will be bound
             query = (
                 "INSERT INTO rating (tank, damage, support, profile_id) VALUES ($1, $2, $3, $4);"
             )

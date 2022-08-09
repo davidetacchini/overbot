@@ -46,7 +46,7 @@ class Fun(commands.Cog):
         else:
             categorized_maps = [m for m in maps if category in m["types"]]
             map_ = secrets.choice(categorized_maps)
-        return map_["name"]  # type: ignore # actually don't know why it throws an error
+        return map_["name"]
 
     async def get_random_meme(self, category: str) -> dict[str, Any]:
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"

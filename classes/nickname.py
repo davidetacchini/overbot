@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import discord
 
 from utils import emojis
 
 if TYPE_CHECKING:
+    from bot import OverBot
+
     from .profile import Profile
 
 MAX_NICKNAME_LENGTH = 32
@@ -22,9 +24,9 @@ class Nickname:
 
     def __init__(self, interaction: discord.Interaction, *, profile: None | Profile = None) -> None:
         self.interaction = interaction
-        self.bot: Any = interaction.client
+        self.bot: OverBot = interaction.client
         self.profile = profile
-        self.member: discord.Member = interaction.user  # type: ignore
+        self.member: discord.Member = interaction.user
         self.guild: None | discord.Guild = interaction.guild
 
     async def exists(self) -> bool:
