@@ -24,7 +24,7 @@ def get_platform_emoji(platform: str) -> PartialEmoji:
 
 async def chunker(pages: list[Any] | tuple[Any], *, per_page: int) -> A_Generator:
     for x in range(0, len(pages), per_page):
-        yield pages[x : x + per_page]
+        yield pages[x : x + per_page]  # noqa: E203
 
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
