@@ -11,6 +11,7 @@ import psutil
 import discord
 
 from discord.ext import tasks, commands
+from discord.app_commands import Group as AppCommandsGroup
 
 from utils.scrape import get_overwatch_news
 
@@ -29,8 +30,6 @@ log = logging.getLogger("overbot")
 class Tasks(commands.Cog):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
-
-    async def setup_hook(self) -> None:
         self.update_discord_portals.start()
         self.update_private_api.start()
         self.check_subscriptions.start()
@@ -99,22 +98,23 @@ class Tasks(commands.Cog):
             "shards": shards,
         }
 
-    async def get_bot_commands(self) -> BotCommands:
+    def get_bot_commands(self) -> BotCommands:
         all_commands = []
-        for command in self.bot.walk_commands():
-            if command.hidden:
+        for cog_name, cog in self.bot.cogs.items():
+            if cog_name.lower() == "owner":
                 continue
-            all_commands.append(
-                {
-                    "cog": command.cog_name,
-                    "name": command.qualified_name,
-                    "aliases": command.aliases or None,
-                    "signature": command.signature or None,
-                    "is_premium": command.extras.get("premium") or False,
-                    "short_desc": command.short_doc or "No help found...",
-                    "long_desc": command.help or "No help found...",
-                }
-            )
+            for command in cog.walk_app_commands():
+                if isinstance(command, AppCommandsGroup):
+                    continue  # groups are not commands
+                all_commands.append(
+                    {
+                        "cog": cog_name,
+                        "name": command.qualified_name,
+                        "is_premium": command.extras.get("premium", False),
+                        "description": command.description or "No description found...",
+                        "guild_only": command.guild_only,
+                    }
+                )
         return all_commands
 
     async def get_top_servers(self) -> TopServers:
@@ -142,13 +142,18 @@ class Tasks(commands.Cog):
     @tasks.loop(seconds=30.0)
     async def update_private_api(self):
         """POST bot stats to private API."""
+        if self.bot.debug:
+            return
+
+        await self.bot.wait_until_ready()
+
         headers = {
             "Content-Type": "application/json",
             "Authorization": self.bot.config.obapi["token"],
         }
 
         stats = await self.get_bot_stats()
-        commands = await self.get_bot_commands()
+        commands = self.get_bot_commands()
         servers = await self.get_top_servers()
 
         BASE_URL = self.bot.config.obapi["url"]
@@ -156,16 +161,14 @@ class Tasks(commands.Cog):
         await self.bot.session.post(f"{BASE_URL}/commands", json=commands, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/servers", json=servers, headers=headers)
 
-    @update_private_api.before_loop
-    async def before_update_private_api(self):
+    @tasks.loop(minutes=30.0)
+    async def update_discord_portals(self):
+        """Updates bot stats on Discord portals."""
         if self.bot.debug:
             return
 
         await self.bot.wait_until_ready()
 
-    @tasks.loop(minutes=30.0)
-    async def update_discord_portals(self):
-        """Updates bot stats on Discord portals."""
         # POST stats on top.gg
         payload = {
             "server_count": len(self.bot.guilds),
@@ -193,13 +196,6 @@ class Tasks(commands.Cog):
             self.bot.config.discord_bots["url"], json=payload, headers=headers
         )
 
-    @update_discord_portals.before_loop
-    async def before_update_discord_portals(self):
-        if self.bot.debug:
-            return
-
-        await self.bot.wait_until_ready()
-
     async def set_premium_for(self, target_id: int, *, server: bool = True) -> None:
         server_query = """INSERT INTO server (id)
                           VALUES ($1)
@@ -218,6 +214,11 @@ class Tasks(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def check_subscriptions(self):
+        if self.bot.debug:
+            return
+
+        await self.bot.wait_until_ready()
+
         url_new = self.bot.config.dbot["new"]  # endpoint to check for new donations
         product_server_id = self.bot.config.dbot["product_ids"]["server"]
 
@@ -252,15 +253,13 @@ class Tasks(commands.Cog):
                 log.info(message)
                 await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
 
-    @check_subscriptions.before_loop
-    async def before_check_subscriptions(self):
+    @tasks.loop(minutes=5.0)
+    async def send_overwatch_news(self):
         if self.bot.debug:
             return
 
         await self.bot.wait_until_ready()
 
-    @tasks.loop(minutes=5.0)
-    async def send_overwatch_news(self):
         try:
             news = (await get_overwatch_news(1))[0]
         except AttributeError:
@@ -297,13 +296,6 @@ class Tasks(commands.Cog):
         file.write(latest_news_id)
         file.truncate()
         file.close()
-
-    @send_overwatch_news.before_loop
-    async def before_send_overwatch_news(self):
-        if self.bot.debug:
-            return
-
-        await self.bot.wait_until_ready()
 
     def cog_unload(self) -> None:
         self.update_discord_portals.cancel()
