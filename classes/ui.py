@@ -29,12 +29,11 @@ class ModalProfileLink(ui.Modal, title="Profile Link"):
     )
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
-        bot: Any = interaction.client
         platform = self.platform.values[0]
         username = self.username.value
 
         query = "INSERT INTO profile (platform, username, member_id) VALUES ($1, $2, $3);"
-        await bot.pool.execute(query, platform, username, interaction.user.id)
+        await interaction.client.pool.execute(query, platform, username, interaction.user.id)
         await interaction.response.send_message("Profile successfully linked.", ephemeral=True)
 
 
@@ -60,7 +59,6 @@ class ModalProfileUpdate(ui.Modal, title="Profile Update"):
         self.add_item(self.username)
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
-        bot: Any = interaction.client
         new_platform = self.platform.values[0]
         new_username = self.username.value
 
@@ -70,7 +68,7 @@ class ModalProfileUpdate(ui.Modal, title="Profile Update"):
             profile_id = int(self.profile.values[0])
 
         query = "UPDATE profile SET platform = $1, username = $2 WHERE id = $3;"
-        await bot.pool.execute(query, new_platform, new_username, profile_id)
+        await interaction.client.pool.execute(query, new_platform, new_username, profile_id)
         await interaction.response.send_message("Profile successfully updated.", ephemeral=True)
 
 
@@ -171,8 +169,9 @@ class UnlinkProfilesView(BaseView):
     async def unlink(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.choices:
             await interaction.response.defer()
-            bot: Any = interaction.client
-            await bot.pool.execute("DELETE FROM profile WHERE id = any($1::int[]);", self.choices)
+            await interaction.client.pool.execute(
+                "DELETE FROM profile WHERE id = any($1::int[]);", self.choices
+            )
 
             if len(self.choices) == 1:
                 message = "Profile successfully unlinked."

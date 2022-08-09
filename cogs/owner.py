@@ -10,7 +10,7 @@ import importlib
 import traceback
 import subprocess
 
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Literal
 from contextlib import redirect_stdout
 
 import discord
@@ -53,7 +53,7 @@ class ModalExecuteCode(ui.Modal, title="Execute a piece of code"):
         func = env["func"]
         try:
             with redirect_stdout(stdout):
-                ret = await func()  # type: ignore
+                ret = await func()
         except Exception:
             value = stdout.getvalue()
             await interaction.response.send_message(f"```py\n{value}{traceback.format_exc()}\n```")
@@ -70,8 +70,7 @@ class ModalExecuteSQL(ui.Modal, title="Execute SQL queries"):
     query: ui.TextInput = ui.TextInput(label="Query", required=True, style=discord.TextStyle.long)
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
-        bot: Any = interaction.client
-        async with bot.pool.acquire() as conn:
+        async with interaction.client.pool.acquire() as conn:
             try:
                 res = await conn.fetch(self.query.value)
             except Exception as e:
@@ -209,7 +208,7 @@ class Owner(commands.Cog):
         except NotImplementedError:
             process = subprocess.Popen(
                 command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-            )  # type: ignore
+            )
             result = await self.bot.loop.run_in_executor(None, process.communicate)
 
         return [output.decode() for output in result]

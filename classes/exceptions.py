@@ -76,7 +76,7 @@ class TooManyAccounts(RequestError):
         message = (
             f"**{players}** accounts found named `{username}` playing"
             f" on `{platform}`. Please be more specific by entering"
-            f" your full {what}."
+            f" your full {what}."  # type: ignore # 'what' will always be bound to something
         )
         super().__init__(message)
 

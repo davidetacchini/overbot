@@ -28,8 +28,7 @@ async def chunker(pages: list[Any] | tuple[Any], *, per_page: int) -> A_Generato
 
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    bot: Any = interaction.client
-    heroes = bot.heroes
+    heroes = interaction.client.heroes
     # The api uses different names for these heroes.
     values = {
         "soldier-76": "soldier76",
@@ -46,8 +45,7 @@ async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choi
 
 
 async def module_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    bot: Any = interaction.client
-    modules = bot.extensions
+    modules = interaction.client.extensions
     return [
         Choice(name=module, value=module) for module in modules if current.lower() in module.lower()
     ]

@@ -65,7 +65,7 @@ class ExpiringCache(dict):
         for k in to_remove:
             del self[k]
 
-    def __contains__(self, key: str):  # type: ignore
+    def __contains__(self, key: str):
         self.__verify_cache_integrity()
         return super().__contains__(key)
 
@@ -165,6 +165,6 @@ def cache(
         setattr(wrapper, "invalidate", _invalidate)
         setattr(wrapper, "get_stats", _stats)
         setattr(wrapper, "invalidate_containing", _invalidate_containing)
-        return wrapper  # type: ignore
+        return wrapper
 
     return decorator

@@ -13,14 +13,13 @@ from classes.exceptions import NotOwner, UserNotPremium, ProfileNotLinked, Profi
 
 
 async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:
-    bot: Any = interaction.client
     query = """SELECT platform, username
                FROM profile
                INNER JOIN member
                        ON member.id = profile.member_id
                WHERE member.id = $1;
             """
-    return await bot.pool.fetch(query, member_id)
+    return await interaction.client.pool.fetch(query, member_id)
 
 
 def has_profile() -> Any:
@@ -45,9 +44,8 @@ def can_add_profile() -> Any:
     """Check for a user to have no profiles linked."""
 
     async def predicate(interaction: discord.Interaction) -> bool:
-        bot: Any = interaction.client
         profiles = await get_profiles(interaction, interaction.user.id)
-        limit = bot.get_profiles_limit(interaction, interaction.user.id)
+        limit = interaction.client.get_profiles_limit(interaction, interaction.user.id)
 
         if len(profiles) <= limit:
             return True
@@ -60,11 +58,10 @@ def is_premium() -> Any:
     """Check for a user/server to be premium."""
 
     def predicate(interaction: discord.Interaction) -> bool:
-        bot: Any = interaction.client
         user_id = interaction.user.id
         guild_id = interaction.guild_id or 0
 
-        if bot.is_it_premium(user_id, guild_id):
+        if interaction.client.is_it_premium(user_id, guild_id):
             return True
         raise UserNotPremium()
 
@@ -73,8 +70,7 @@ def is_premium() -> Any:
 
 def is_owner() -> Any:
     def predicate(interaction: discord.Interaction) -> bool:
-        bot: Any = interaction.client
-        if interaction.user.id == bot.owner.id:
+        if interaction.user.id == interaction.client.owner.id:
             return True
         raise NotOwner()
 

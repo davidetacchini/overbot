@@ -23,7 +23,7 @@ log = logging.getLogger("overbot")
 async def error_handler(
     interaction: discord.Interaction, error: app_commands.AppCommandError
 ) -> None:
-    bot: Any = interaction.client
+    bot = interaction.client
 
     async def send(payload: str | discord.Embed, ephemeral: bool = True) -> None:
         kwargs: dict[str, Any]
@@ -123,5 +123,5 @@ async def error_handler(
             else:
                 log.exception(original.__traceback__)
             await send(
-                "This command ran into an error. The incident has been reported and will be fixed as soon as possible!"
+                "This command ran into an error. The incident has been reported and will be fixed as soon as possible."
             )
