@@ -9,7 +9,7 @@ from discord import app_commands
 if TYPE_CHECKING:
     from asyncpg import Record
 
-from classes.exceptions import NotOwner, UserNotPremium, ProfileNotLinked, ProfileLimitReached
+from classes.exceptions import NotOwner, NotPremium, ProfileNotLinked, ProfileLimitReached
 
 
 async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:
@@ -63,7 +63,7 @@ def is_premium() -> Any:
 
         if interaction.client.is_it_premium(user_id, guild_id):
             return True
-        raise UserNotPremium()
+        raise NotPremium()
 
     return app_commands.check(predicate)
 
