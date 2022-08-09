@@ -11,7 +11,7 @@ from discord import app_commands
 from classes.exceptions import (
     NoChoice,
     NotOwner,
-    UserNotPremium,
+    NotPremium,
     OverBotException,
     ProfileNotLinked,
     ProfileLimitReached,
@@ -62,7 +62,7 @@ async def error_handler(
             else:
                 await send("Maximum limit of profiles reached.")
 
-        elif type(error) == UserNotPremium:
+        elif type(error) == NotPremium:
             premium = bot.config.premium
             embed = discord.Embed(color=discord.Color.red())
             embed.description = (

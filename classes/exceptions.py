@@ -108,7 +108,7 @@ class ProfileLimitReached(app_commands.CheckFailure):
         self.limit = limit
 
 
-class UserNotPremium(app_commands.CheckFailure):
+class NotPremium(app_commands.CheckFailure):
 
     pass
 
