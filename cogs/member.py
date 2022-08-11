@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import discord
 
-from discord import Color, app_commands
+from discord import Color, ui, app_commands
 from discord.ext import commands
 
 from utils.checks import is_premium
@@ -33,24 +33,20 @@ class Member(commands.Cog):
         self.bot = bot
 
     @app_commands.command()
-    @app_commands.guild_only()
     async def premium(self, interaction: discord.Interaction) -> None:
         """Shows your premium status"""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Premium Status"
 
-        member = "Active" if interaction.user.id in self.bot.premiums else "N/A"
-        guild = "Active" if interaction.guild_id in self.bot.premiums else "N/A"
+        member = "Premium" if interaction.user.id in self.bot.premiums else "N/A"
+        guild = "Premium" if interaction.guild_id in self.bot.premiums else "N/A"
 
-        description = f"Your Status: `{member}`\nServer Status: `{guild}`"
+        embed.description = f"Your Status: `{member}`\nServer Status: `{guild}`"
 
-        to_check = (member, guild)
-        if all(x == "N/A" for x in to_check):
-            link = "[Upgrade to Premium]({premium})".format(premium=self.bot.config.premium)
-            description = description + "\n" + link
+        view = ui.View()
+        view.add_item(ui.Button(label="Premium", url=self.bot.config.premium))
 
-        embed.description = description
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, view=view)
 
     @app_commands.command(extras=dict(premium=True))
     @app_commands.describe(color="The color to use for the embeds. Leave blank to reset")
