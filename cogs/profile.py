@@ -14,7 +14,7 @@ from discord.ext import commands
 
 from classes.ui import ModalProfileLink, SelectProfileView, ModalProfileUpdate, UnlinkProfilesView
 from utils.funcs import chunker, hero_autocomplete, get_platform_emoji
-from utils.checks import is_premium, has_profile, can_add_profile
+from utils.checks import is_premium, has_profile, can_add_profile, subcommand_guild_only
 from classes.profile import Profile
 from classes.nickname import Nickname
 from classes.exceptions import NoChoice, CannotCreateGraph
@@ -25,7 +25,65 @@ if TYPE_CHECKING:
 Member = discord.User | discord.Member
 
 
-class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining about name
+@app_commands.context_menu(name="List Profiles")
+@has_profile()
+async def list_profiles(interaction: discord.Interaction, member: discord.Member) -> None:
+    """List your own or a member's profiles"""
+    profile_cog = interaction.client.get_cog("Profile")
+    profiles = await profile_cog.get_profiles(interaction, member.id)
+    entries = await profile_cog.list_profiles(interaction, member, profiles)
+    await interaction.client.paginate(entries, interaction=interaction)
+
+
+@app_commands.context_menu(name="Show Ratings")
+@has_profile()
+async def show_ratings(interaction: discord.Interaction, member: discord.Member) -> None:
+    """Provides SRs information for a profile."""
+    await interaction.response.defer(thinking=True)
+    message = "Select a profile to view the skill ratings for."
+    profile = await interaction.client.get_cog("Profile").select_profile(
+        interaction, message, member
+    )
+    await profile.compute_data()
+    if profile.is_private():
+        embed = profile.embed_private()
+    else:
+        embed = await profile.embed_ratings(save=True, profile_id=profile.id)
+    await interaction.followup.send(embed=embed)
+
+
+@app_commands.context_menu(name="Show Stats")
+@has_profile()
+async def show_stats(interaction: discord.Interaction, member: discord.Member) -> None:
+    """Provides general stats for a profile"""
+    await interaction.response.defer(thinking=True)
+    message = "Select a profile to view the stats for."
+    profile = await interaction.client.get_cog("Profile").select_profile(
+        interaction, message, member
+    )
+    await interaction.client.get_cog("Stats").show_stats_for(
+        interaction, "allHeroes", profile=profile
+    )
+
+
+@app_commands.context_menu(name="Show Summary")
+@has_profile()
+async def show_summary(interaction: discord.Interaction, member: discord.Member) -> None:
+    """Provides summarized stats for a profile"""
+    await interaction.response.defer(thinking=True)
+    message = "Select a profile to view the summary for."
+    profile = await interaction.client.get_cog("Profile").select_profile(
+        interaction, message, member
+    )
+    await profile.compute_data()
+    if profile.is_private():
+        embed = profile.embed_private()
+    else:
+        embed = profile.embed_summary()
+    await interaction.followup.send(embed=embed)
+
+
+class ProfileCog(commands.Cog, name="Profile"):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
@@ -43,14 +101,6 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
         records = await self.bot.pool.fetch(query, member_id, limit)
         return [Profile(interaction=interaction, record=r) for r in records]
 
-    async def get_profile(self, interaction: discord.Interaction, profile_id: str) -> Profile:
-        query = """SELECT id, platform, username
-                   FROM profile
-                   WHERE id = $1;
-                """
-        record = await self.bot.pool.fetchrow(query, int(profile_id))
-        return Profile(interaction=interaction, record=record)
-
     async def select_profile(
         self, interaction: discord.Interaction, message: str, member: None | Member = None
     ) -> Profile:
@@ -65,7 +115,7 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
         # Using defer() on every single command that calls 'select_profile'.
         # Thus, the interaction is always responded and we can use
         # followup.send to respond.
-        view.message = await interaction.followup.send(message, view=view)  # type: ignore # it returns a value
+        view.message = await interaction.followup.send(message, view=view)
         await view.wait()
 
         choice = view.select.values[0] if len(view.select.values) else None
@@ -164,12 +214,12 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
             query = "SELECT * FROM nickname WHERE profile_id = $1;"
             flag = await self.bot.pool.fetchrow(query, profile.id)
             if flag and member.id == interaction.user.id:
-                await Nickname(interaction, bot=self.bot, profile=profile).update()
+                await Nickname(interaction, profile=profile).update()
         await interaction.followup.send(embed=embed)
 
-    @has_profile()
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
+    @has_profile()
     async def stats(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides general stats for a profile"""
         await interaction.response.defer(thinking=True)
@@ -193,9 +243,9 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
         profile = await self.select_profile(interaction, message, member)
         await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profile=profile)
 
-    @has_profile()
     @profile.command()
     @app_commands.describe(member="The mention or the ID of a Discord member")
+    @has_profile()
     async def summary(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides summarized stats for a profile"""
         await interaction.response.defer(thinking=True)
@@ -211,8 +261,9 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
 
     @profile.command()
     @app_commands.checks.bot_has_permissions(manage_nicknames=True)
-    @app_commands.guild_only()
     @has_profile()
+    @app_commands.guild_only()
+    @subcommand_guild_only()
     async def nickname(self, interaction: discord.Interaction) -> None:
         """Shows or remove your SRs in your nickname
 
@@ -224,14 +275,14 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
 
         guild = interaction.guild
         user = interaction.user
-        if guild.me.top_role < user.top_role or user.id == guild.owner_id:  # type: ignore
+        if guild.me.top_role < user.top_role or user.id == guild.owner_id:
             return await interaction.followup.send(
                 "This server's owner needs to move the `OverBot` role higher, so I will "
                 "be able to update your nickname. If you are this server's owner, there's "
                 "no way for me to change your nickname, sorry!"
             )
 
-        nick = Nickname(interaction, bot=self.bot)
+        nick = Nickname(interaction)
         if await nick.exists():
             if await self.bot.prompt(interaction, "This will remove your SRs in your nickname."):
                 try:
@@ -321,4 +372,8 @@ class ProfileCog(commands.Cog, name="Profile"):  # type: ignore # complaining ab
 
 
 async def setup(bot: OverBot) -> None:
+    cm_commands = (list_profiles, show_ratings, show_stats, show_summary)
+    for command in cm_commands:
+        setattr(command, "__cog_name__", "Profile")
+        bot.tree.add_command(command)
     await bot.add_cog(ProfileCog(bot))
