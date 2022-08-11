@@ -372,8 +372,8 @@ class ProfileCog(commands.Cog, name="Profile"):
 
 
 async def setup(bot: OverBot) -> None:
-    cm_commands = (list_profiles, show_ratings, show_stats, show_summary)
-    for command in cm_commands:
+    context_menus = (list_profiles, show_ratings, show_stats, show_summary)
+    for command in context_menus:
         setattr(command, "__cog_name__", "Profile")
         bot.tree.add_command(command)
     await bot.add_cog(ProfileCog(bot))
