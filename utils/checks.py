@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import discord
 
@@ -22,7 +22,7 @@ async def get_profiles(interaction: discord.Interaction, member_id: int) -> list
     return await interaction.client.pool.fetch(query, member_id)
 
 
-def has_profile() -> Any:
+def has_profile():
     """Check for a user to have linked atleast a profile."""
 
     def get_target_id(interaction) -> int:
@@ -40,7 +40,7 @@ def has_profile() -> Any:
     return app_commands.check(predicate)
 
 
-def can_add_profile() -> Any:
+def can_add_profile():
     """Check for a user to have no profiles linked."""
 
     async def predicate(interaction: discord.Interaction) -> bool:
@@ -54,7 +54,7 @@ def can_add_profile() -> Any:
     return app_commands.check(predicate)
 
 
-def is_premium() -> Any:
+def is_premium():
     """Check for a user/server to be premium."""
 
     def predicate(interaction: discord.Interaction) -> bool:
@@ -68,10 +68,21 @@ def is_premium() -> Any:
     return app_commands.check(predicate)
 
 
-def is_owner() -> Any:
+def is_owner():
     def predicate(interaction: discord.Interaction) -> bool:
         if interaction.user.id == interaction.client.owner.id:
             return True
         raise NotOwner()
+
+    return app_commands.check(predicate)
+
+
+def subcommand_guild_only():
+    # Due to a Discord limitation the @app_commands.guild_only
+    # decorator does not work for subcommands.
+    def predicate(interaction: discord.Interaction) -> bool:
+        if interaction.guild is not None:
+            return True
+        raise app_commands.NoPrivateMessage()
 
     return app_commands.check(predicate)
