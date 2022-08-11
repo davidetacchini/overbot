@@ -100,6 +100,29 @@ class Tasks(commands.Cog):
 
     def get_bot_commands(self) -> BotCommands:
         all_commands = []
+
+        def get_command_type(command):
+            # App Commands does not have 'type' attribute
+            try:
+                command.type
+            except AttributeError:
+                return "App Command"
+            else:
+                return "Context Menu"
+
+        context_menus = self.bot.tree.get_commands(type=discord.AppCommandType.user)
+        for command in context_menus:
+            all_commands.append(
+                {
+                    "cog": command.__cog_name__,
+                    "name": command.qualified_name,
+                    "type": get_command_type(command),
+                    "is_premium": command.extras.get("premium", False),
+                    "description": None,
+                    "guild_only": True,  # user context menus can only be used in guilds
+                }
+            )
+
         for cog_name, cog in self.bot.cogs.items():
             if cog_name.lower() == "owner":
                 continue
@@ -109,12 +132,14 @@ class Tasks(commands.Cog):
                 all_commands.append(
                     {
                         "cog": cog_name,
-                        "name": command.qualified_name,
+                        "name": "/" + command.qualified_name,
+                        "type": get_command_type(command),
                         "is_premium": command.extras.get("premium", False),
                         "description": command.description or "No description found...",
                         "guild_only": command.guild_only,
                     }
                 )
+
         return all_commands
 
     async def get_top_servers(self) -> TopServers:
