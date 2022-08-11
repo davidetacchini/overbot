@@ -119,7 +119,7 @@ class Tasks(commands.Cog):
                     "type": get_command_type(command),
                     "is_premium": command.extras.get("premium", False),
                     "description": None,
-                    "guild_only": True,  # user context menus can only be used in guilds
+                    "guild_only": False,
                 }
             )
 
