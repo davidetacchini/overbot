@@ -75,7 +75,7 @@ async def error_handler(
             await send("You are not allowed to run this command.")
 
         elif type(error) == app_commands.NoPrivateMessage:
-            await interaction.user.send("This command cannot be used in direct messages.")
+            await send("This command cannot be used in direct messages.")
 
         elif type(error) == app_commands.MissingPermissions:
             perms = ", ".join(map(lambda p: f"`{p}`", error.missing_permissions))
