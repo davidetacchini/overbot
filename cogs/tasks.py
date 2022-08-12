@@ -118,7 +118,7 @@ class Tasks(commands.Cog):
                     "name": command.qualified_name,
                     "type": get_command_type(command),
                     "is_premium": command.extras.get("premium", False),
-                    "description": None,
+                    "description": command.callback.__doc__,
                     "guild_only": False,
                 }
             )
