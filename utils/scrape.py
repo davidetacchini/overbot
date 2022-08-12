@@ -14,7 +14,11 @@ async def fetch(url: str) -> bytes:
 async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
     content = await fetch(config.overwatch["news"])
     page = BeautifulSoup(content, features="html.parser")
+
     news = page.find("section", class_="NewsHeader-featured")
+    if news is None:
+        raise Exception()
+
     news = list(news)[:amount]
 
     all_news = []
