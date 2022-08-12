@@ -20,8 +20,8 @@ PLATFORMS = [
 
 
 class ModalProfileLink(ui.Modal, title="Profile Link"):
-    platform: ui.Select = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
-    username: ui.TextInput = ui.TextInput(
+    platform = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
+    username = ui.TextInput(
         label="Username",
         style=discord.TextStyle.short,
         placeholder="Enter your username",
@@ -42,14 +42,12 @@ class ModalProfileUpdate(ui.Modal, title="Profile Update"):
         super().__init__()
         self.profiles = profiles
         if len(profiles) > 1:
-            self.profile: DropdownProfiles | Profile = DropdownProfiles(
-                profiles, placeholder="Select a profile..."
-            )
+            self.profile = DropdownProfiles(profiles, placeholder="Select a profile...")
             self.add_item(self.profile)
         else:
             self.profile = profiles[0]
-        self.platform: ui.Select = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
-        self.username: ui.TextInput = ui.TextInput(
+        self.platform = ui.Select(placeholder="Select a platform...", options=PLATFORMS)
+        self.username = ui.TextInput(
             label="Username",
             style=discord.TextStyle.short,
             placeholder="Enter your username",
@@ -131,8 +129,7 @@ class DropdownProfiles(discord.ui.Select):
 class SelectProfileView(BaseView):
     def __init__(self, profiles: list[Profile], **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        placeholder = "Select a profile..."
-        self.select = DropdownProfiles(profiles, placeholder=placeholder)
+        self.select = DropdownProfiles(profiles, placeholder="Select a profile...")
         setattr(self.select, "callback", self.select_callback)
         self.add_item(self.select)
 
