@@ -287,7 +287,7 @@ class Tasks(commands.Cog):
 
         try:
             news = (await get_overwatch_news(1))[0]
-        except AttributeError:
+        except Exception:
             return
 
         # get the news id from the URL
