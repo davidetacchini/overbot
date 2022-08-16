@@ -222,13 +222,13 @@ class Tasks(commands.Cog):
         )
 
     async def set_premium_for(self, target_id: int, *, server: bool = True) -> None:
-        server_query = """INSERT INTO server (id)
-                          VALUES ($1)
+        server_query = """INSERT INTO server (id, premium)
+                          VALUES ($1, true)
                           ON CONFLICT (id) DO
                           UPDATE SET premium = true;
                        """
-        member_query = """INSERT INTO member (id)
-                          VALUES ($1)
+        member_query = """INSERT INTO member (id, premium)
+                          VALUES ($1, true)
                           ON CONFLICT (id) DO
                           UPDATE SET premium = true;
                        """
