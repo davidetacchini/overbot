@@ -30,6 +30,22 @@ class Meta(commands.Cog):
         self.bot = bot
 
     @app_commands.command()
+    async def help(self, interaction: discord.Interaction) -> None:
+        """Shows help for OverBot"""
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed.title = "OverBot Help"
+        description = (
+            "Click the button below to look at all the available "
+            "Slash Commands and Context Menu ones."
+        )
+        embed.description = description
+
+        view = ui.View()
+        view.add_item(ui.Button(label="All available commands", url=config.website + "/commands"))
+
+        await interaction.response.send_message(embed=embed, view=view)
+
+    @app_commands.command()
     async def support(self, interaction: discord.Interaction) -> None:
         """Returns the official bot support server invite link"""
         await interaction.response.send_message(config.support)
