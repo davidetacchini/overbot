@@ -17,8 +17,6 @@ from discord.ext import commands
 
 import config
 
-from utils.time import format_relative
-
 if TYPE_CHECKING:
     from asyncpg import Record
 
@@ -67,7 +65,7 @@ class Meta(commands.Cog):
         commit_tz = datetime.timezone(datetime.timedelta(minutes=commit.commit_time_offset))
         commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(commit_tz)
 
-        offset = format_relative(commit_time.astimezone(datetime.timezone.utc))
+        offset = discord.utils.format_dt(commit_time.astimezone(datetime.timezone.utc), "R")
         return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {message} ({offset})"
 
     def get_latest_commits(self, count: int = 3) -> str:
