@@ -203,11 +203,7 @@ class OverBot(commands.AutoShardedBot):
 
 def main() -> None:
     # setup bot logger
-    log = logging.getLogger("overbot")
-    log_handler = logging.StreamHandler()
-    log_handler.setFormatter(discord.client._ColourFormatter())
-    log.setLevel(logging.INFO)
-    log.addHandler(log_handler)
+    discord.utils.setup_logging()
 
     intents = discord.Intents.none()
     intents.guilds = True
@@ -225,7 +221,7 @@ def main() -> None:
         guild_ready_timeout=5,
     )
 
-    bot.run(config.token, reconnect=True)
+    bot.run(config.token, log_handler=None, reconnect=True)
 
 
 if __name__ == "__main__":
