@@ -1,5 +1,4 @@
 # Taken from https://github.com/Rapptz/RoboDanny
-# File: https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/time.py
 
 import datetime
 
@@ -108,16 +107,3 @@ def human_timedelta(
             return human_join(output, final="and") + output_suffix
         else:
             return " ".join(output) + output_suffix
-
-
-def format_dt(dt: datetime.datetime, style: None | str = None) -> str:
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=datetime.timezone.utc)
-
-    if style is None:
-        return f"<t:{int(dt.timestamp())}>"
-    return f"<t:{int(dt.timestamp())}:{style}>"
-
-
-def format_relative(dt: datetime.datetime) -> str:
-    return format_dt(dt, "R")
