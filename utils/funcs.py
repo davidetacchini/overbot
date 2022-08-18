@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, AsyncGenerator
+from typing import TYPE_CHECKING
 
 from discord.app_commands import Choice
 
@@ -8,8 +8,6 @@ from . import emojis
 
 if TYPE_CHECKING:
     from discord import Interaction, PartialEmoji
-
-    A_Generator = AsyncGenerator[list[Any] | tuple[Any, ...], None]
 
 
 def get_platform_emoji(platform: str) -> PartialEmoji:
@@ -20,11 +18,6 @@ def get_platform_emoji(platform: str) -> PartialEmoji:
         "nintendo-switch": emojis.switch,
     }
     return lookup[platform]
-
-
-async def chunker(pages: list[Any] | tuple[Any], *, per_page: int) -> A_Generator:
-    for x in range(0, len(pages), per_page):
-        yield pages[x : x + per_page]  # noqa: E203
 
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:

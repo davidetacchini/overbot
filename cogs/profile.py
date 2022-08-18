@@ -13,7 +13,7 @@ from matplotlib import pyplot
 from discord.ext import commands
 
 from classes.ui import ModalProfileLink, SelectProfileView, ModalProfileUpdate, UnlinkProfilesView
-from utils.funcs import chunker, hero_autocomplete, get_platform_emoji
+from utils.funcs import hero_autocomplete, get_platform_emoji
 from utils.checks import is_premium, has_profile, can_add_profile, subcommand_guild_only
 from classes.profile import Profile
 from classes.nickname import Nickname
@@ -137,7 +137,8 @@ class ProfileCog(commands.Cog, name="Profile"):
             embed.set_footer(text=f"Requested by {interaction.user}")
             return embed
 
-        chunks = [c async for c in chunker(profiles, per_page=10)]
+        # using __iter__() because as_chunks accepts an iterator as its first parameter
+        chunks = [c for c in discord.utils.as_chunks(profiles.__iter__(), 10)]
         limit = self.bot.get_profiles_limit(interaction, member.id)
 
         pages = []
