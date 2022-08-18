@@ -137,8 +137,8 @@ class ProfileCog(commands.Cog, name="Profile"):
             embed.set_footer(text=f"Requested by {interaction.user}")
             return embed
 
-        # using __iter__() because as_chunks accepts an iterator as its first parameter
-        chunks = [c for c in discord.utils.as_chunks(profiles.__iter__(), 10)]
+        # using iter(profiles) because as_chunks accepts an iterator as its first parameter
+        chunks = [c for c in discord.utils.as_chunks(iter(profiles), 10)]
         limit = self.bot.get_profiles_limit(interaction, member.id)
 
         pages = []
