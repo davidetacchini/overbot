@@ -27,7 +27,7 @@ class Request:
     def account_url(self) -> str:
         return config.overwatch["account"] + "/" + self.username + "/"
 
-    async def _resolve_name(self, players: list[dict[str, Any]]) -> None | str:
+    async def _resolve_name(self, players: list[dict[str, Any]]) -> str:
         if len(players) == 1:
             try:
                 return players[0]["urlName"]
