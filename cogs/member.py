@@ -49,7 +49,9 @@ class Member(commands.Cog):
         await interaction.response.send_message(embed=embed, view=view)
 
     @app_commands.command(extras=dict(premium=True))
-    @app_commands.describe(color="The color to use for the embeds. Leave blank to reset")
+    @app_commands.describe(
+        color="An HEX or RGB color. E.g. #218ffe or 33,143,254. Leave blank to reset"
+    )
     @is_premium()
     async def color(
         self,
