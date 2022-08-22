@@ -15,9 +15,9 @@ import config
 from utils import emojis
 from classes.ui import PromptView
 from utils.time import human_timedelta
-from utils.errors import error_handler
 from utils.scrape import get_overwatch_maps, get_overwatch_heroes
 from classes.paginator import Paginator
+from utils.error_handler import error_handler
 
 if sys.platform == "linux":
     import uvloop
