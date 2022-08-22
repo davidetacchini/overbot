@@ -11,9 +11,15 @@ import matplotlib
 from discord import app_commands
 from matplotlib import pyplot
 from discord.ext import commands
+from discord.app_commands import Choice
 
-from classes.ui import ModalProfileLink, SelectProfileView, ModalProfileUpdate, UnlinkProfilesView
-from utils.funcs import hero_autocomplete, get_platform_emoji
+from classes.ui import ProfileUnlinkView, SelectProfileView
+from utils.funcs import (
+    platform_choices,
+    hero_autocomplete,
+    get_platform_emoji,
+    profile_autocomplete,
+)
 from utils.checks import is_premium, has_profile, can_add_profile, subcommand_guild_only
 from classes.profile import Profile
 from classes.nickname import Nickname
@@ -40,7 +46,7 @@ async def list_profiles(interaction: discord.Interaction, member: discord.Member
 async def show_ratings(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides SRs information for a profile."""
     await interaction.response.defer(thinking=True)
-    message = "Select a profile to view the skill ratings for."
+    message = "Select a profile to view the skill ratings for:"
     profile = await interaction.client.get_cog("Profile").select_profile(
         interaction, message, member
     )
@@ -57,7 +63,7 @@ async def show_ratings(interaction: discord.Interaction, member: discord.Member)
 async def show_stats(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides general stats for a profile"""
     await interaction.response.defer(thinking=True)
-    message = "Select a profile to view the stats for."
+    message = "Select a profile to view the stats for:"
     profile = await interaction.client.get_cog("Profile").select_profile(
         interaction, message, member
     )
@@ -71,7 +77,7 @@ async def show_stats(interaction: discord.Interaction, member: discord.Member) -
 async def show_summary(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides summarized stats for a profile"""
     await interaction.response.defer(thinking=True)
-    message = "Select a profile to view the summary for."
+    message = "Select a profile to view the summary for:"
     profile = await interaction.client.get_cog("Profile").select_profile(
         interaction, message, member
     )
@@ -164,17 +170,44 @@ class ProfileCog(commands.Cog, name="Profile"):
         await self.bot.paginate(entries, interaction=interaction)
 
     @profile.command()
+    @app_commands.choices(platform=platform_choices)
+    @app_commands.describe(platform="The platform of the profile")
+    @app_commands.describe(username="The username of the profile")
     @can_add_profile()
-    async def link(self, interaction: discord.Interaction) -> None:
+    async def link(
+        self, interaction: discord.Interaction, platform: Choice[str], username: str
+    ) -> None:
         """Link an Overwatch profile"""
-        await interaction.response.send_modal(ModalProfileLink())
+        query = "INSERT INTO profile (platform, username, member_id) VALUES ($1, $2, $3);"
+        try:
+            await self.bot.pool.execute(query, platform.value, username, interaction.user.id)
+        except Exception:
+            await interaction.response.send_message(
+                "Something bad happened while linking the profile."
+            )
+        else:
+            await interaction.response.send_message("Profile successfully linked.", ephemeral=True)
 
     @profile.command()
+    @app_commands.choices(platform=platform_choices)
+    @app_commands.autocomplete(profile=profile_autocomplete)
+    @app_commands.describe(profile="The profile to update")
+    @app_commands.describe(platform="The new profile platform")
+    @app_commands.describe(username="The new profile username")
     @has_profile()
-    async def update(self, interaction: discord.Interaction) -> None:
+    async def update(
+        self, interaction: discord.Interaction, profile: int, platform: Choice[str], username: str
+    ) -> None:
         """Update an Overwatch profile"""
-        profiles = await self.get_profiles(interaction, interaction.user.id)
-        await interaction.response.send_modal(ModalProfileUpdate(profiles))
+        query = "UPDATE profile SET platform = $1, username = $2 WHERE id = $3;"
+        try:
+            await self.bot.pool.execute(query, platform.value, username, profile)
+        except Exception:
+            await interaction.response.send_message(
+                "Something bad happened while updating the profile."
+            )
+        else:
+            await interaction.response.send_message("Profile successfully updated.", ephemeral=True)
 
     @profile.command()
     @has_profile()
@@ -190,10 +223,10 @@ class ProfileCog(commands.Cog, name="Profile"):
 
             if await self.bot.prompt(interaction, embed):
                 await self.bot.pool.execute("DELETE FROM profile WHERE id = $1;", profile.id)
-                await interaction.followup.send("Profile successfully unlinked.")
+                await interaction.followup.send("Profile successfully unlinked.", ephemeral=True)
         else:
-            view = UnlinkProfilesView(profiles, interaction=interaction)
-            message = "Select at least a profile to unlink..."
+            view = ProfileUnlinkView(profiles, interaction=interaction)
+            message = "Select at least a profile to unlink:"
             await interaction.response.send_message(message, view=view)
 
     @profile.command()
@@ -203,7 +236,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         """Provides SRs information for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
-        message = "Select a profile to view the skill ratings for."
+        message = "Select a profile to view the skill ratings for:"
         profile = await self.select_profile(interaction, message, member)
         await profile.compute_data()
         if profile.is_private():
@@ -225,7 +258,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         """Provides general stats for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
-        message = "Select a profile to view the stats for."
+        message = "Select a profile to view the stats for:"
         profile = await self.select_profile(interaction, message, member)
         await self.bot.get_cog("Stats").show_stats_for(interaction, "allHeroes", profile=profile)
 
@@ -240,7 +273,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         """Provides general hero stats for a profile."""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
-        message = f"Select a profile to view **{hero}** stats for."
+        message = f"Select a profile to view **{hero}** stats for:"
         profile = await self.select_profile(interaction, message, member)
         await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profile=profile)
 
@@ -251,7 +284,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         """Provides summarized stats for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
-        message = "Select a profile to view the summary for."
+        message = "Select a profile to view the summary for:"
         profile = await self.select_profile(interaction, message, member)
         await profile.compute_data()
         if profile.is_private():
@@ -295,7 +328,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         if not await self.bot.prompt(interaction, "This will display your SRs in your nickname."):
             return
 
-        message = "Select a profile to use for the nickname SRs."
+        message = "Select a profile to use for the nickname SRs:"
         profile = await self.select_profile(interaction, message)
         await profile.compute_data()
 
@@ -366,7 +399,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     async def graph(self, interaction: discord.Interaction) -> None:
         """Shows SRs performance graph."""
         await interaction.response.defer(thinking=True)
-        message = "Select a profile to view the SRs graph for."
+        message = "Select a profile to view the SRs graph for:"
         profile = await self.select_profile(interaction, message)
         file, embed = await self.sr_graph(interaction, profile)
         await interaction.followup.send(file=file, embed=embed)
