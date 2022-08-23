@@ -29,4 +29,6 @@ jobs:
         run: ./scripts/format.sh
 
       - name: Run Pyright
-        run: pyright .
+        uses: jakebailey/pyright-action@v1
+        with:
+          reportMissingImports: false
