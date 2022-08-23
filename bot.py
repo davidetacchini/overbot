@@ -10,7 +10,7 @@ import discord
 from aiohttp import ClientSession
 from discord.ext import commands
 
-import config
+import config  # type: reportMissingImports=false
 
 from utils import emojis
 from classes.ui import PromptView

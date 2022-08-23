@@ -2,7 +2,7 @@ import aiohttp
 
 from bs4 import BeautifulSoup
 
-import config
+import config  # type: ignoreMissingImports=false
 
 
 async def fetch(url: str) -> bytes:

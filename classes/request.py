@@ -2,7 +2,7 @@ from typing import Any
 
 import aiohttp
 
-import config
+import config  # type: reportMissingImports=false
 
 from .exceptions import (
     NotFound,
