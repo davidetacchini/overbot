@@ -29,7 +29,4 @@ jobs:
         run: ./scripts/format.sh
 
       - name: Run Pyright
-        uses: jakebailey/pyright-action@v1
-        with:
-          extra-args: 
-            "reportMissingImports=false"
+        run: pyright .
