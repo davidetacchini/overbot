@@ -169,6 +169,7 @@ class OverBot(commands.AutoShardedBot):
         self.pool = await asyncpg.create_pool(**config.database, max_size=20, command_timeout=60.0)
 
         self.app_info = await self.application_info()
+        setattr(self, "application_id", self.app_info.id)
 
         self.compute_sloc()
 
@@ -215,7 +216,6 @@ def main() -> None:
         activity=discord.Game(name="Starting..."),
         status=discord.Status.dnd,
         allowed_mentions=discord.AllowedMentions.none(),
-        application_id=550359245963526194,
         intents=intents,
         chunk_guilds_at_startup=False,
         guild_ready_timeout=5,
