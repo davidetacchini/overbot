@@ -3,6 +3,7 @@ DEBUG = True
 
 """The Bot token."""
 token = "your_bot_token"
+application_id = "your_application_id"
 
 """Database credentials."""
 database = {
