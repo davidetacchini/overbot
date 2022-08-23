@@ -31,5 +31,5 @@ jobs:
       - name: Run Pyright
         uses: jakebailey/pyright-action@v1
         with:
-          extra-args:
-            reportMissingImports: false
+          extra-args: 
+            "reportMissingImports=false"
