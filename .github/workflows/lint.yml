@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip setuptools
-          pip install -r requirements-dev.txt
+          pip install -r requirements.txt requirements-dev.txt
 
       - name: Lint
         run: ./scripts/format.sh
