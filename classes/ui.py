@@ -27,10 +27,13 @@ class BaseView(discord.ui.View):
         return False
 
     async def on_timeout(self) -> None:
-        if self.message:
-            await self.message.delete()
-        else:
-            await self.interaction.delete_original_response()
+        try:
+            if self.message:
+                await self.message.delete()
+            else:
+                await self.interaction.delete_original_response()
+        except Exception:
+            pass
 
 
 class PromptView(BaseView):
