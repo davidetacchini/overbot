@@ -15,8 +15,6 @@ import discord
 from discord import ui, app_commands
 from discord.ext import commands
 
-import config
-
 if TYPE_CHECKING:
     from asyncpg import Record
 
@@ -39,14 +37,16 @@ class Meta(commands.Cog):
         embed.description = description
 
         view = ui.View()
-        view.add_item(ui.Button(label="All available commands", url=config.website + "/commands"))
+        view.add_item(
+            ui.Button(label="All available commands", url=self.bot.config.website + "/commands")
+        )
 
         await interaction.response.send_message(embed=embed, view=view)
 
     @app_commands.command()
     async def support(self, interaction: discord.Interaction) -> None:
         """Returns the official bot support server invite link"""
-        await interaction.response.send_message(config.support)
+        await interaction.response.send_message(self.bot.config.support)
 
     @app_commands.command()
     async def ping(self, interaction: discord.Interaction) -> None:
@@ -84,17 +84,17 @@ class Meta(commands.Cog):
         commits = self.get_latest_commits()
 
         view = ui.View()
-        view.add_item(ui.Button(label="Website", url=config.website))
-        view.add_item(ui.Button(label="GitHub", url=config.github["repo"]))
-        view.add_item(ui.Button(label="Invite", url=config.invite))
-        view.add_item(ui.Button(label="Vote", url=config.vote))
+        view.add_item(ui.Button(label="Website", url=self.bot.config.website))
+        view.add_item(ui.Button(label="GitHub", url=self.bot.config.github["repo"]))
+        view.add_item(ui.Button(label="Invite", url=self.bot.config.invite))
+        view.add_item(ui.Button(label="Vote", url=self.bot.config.vote))
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"Latest Changes:\n{commits}"
 
         embed.set_author(
             name=str(self.bot.owner),
-            url=config.github["profile"],
+            url=self.bot.config.github["profile"],
             icon_url=self.bot.owner.display_avatar.url,
         )
 
@@ -139,7 +139,7 @@ class Meta(commands.Cog):
         embed.add_field(name="Lines of code", value=self.bot.sloc)
         embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
         embed.set_footer(
-            text=f"{self.bot.user.name} {config.version}", icon_url=self.bot.user.avatar
+            text=f"{self.bot.user.name} {self.bot.config.version}", icon_url=self.bot.user.avatar
         )
         await interaction.response.send_message(embed=embed, view=view)
 
@@ -152,7 +152,7 @@ class Meta(commands.Cog):
                    ORDER BY commands DESC
                    LIMIT 5;
                 """
-        return await bot.pool.fetch(query, config.ignored_guilds)
+        return await bot.pool.fetch(query, self.bot.config.ignored_guilds)
 
     @app_commands.command()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
@@ -165,7 +165,7 @@ class Meta(commands.Cog):
         guilds = await self.get_weekly_top_guilds(self.bot)
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Most Active Servers"
-        embed.url = config.website + "/#servers"
+        embed.url = self.bot.config.website + "/#servers"
         embed.set_footer(text="Tracking command usage since - 03/31/2021")
 
         board = []
