@@ -139,7 +139,7 @@ class Meta(commands.Cog):
         embed.add_field(name="Lines of code", value=self.bot.sloc)
         embed.add_field(name="Uptime", value=self.bot.get_uptime(brief=True))
         embed.set_footer(
-            text=f"{self.bot.user.name} {self.bot.config.version}", icon_url=self.bot.user.avatar
+            text=f"{self.bot.user.name} {self.bot.version}", icon_url=self.bot.user.avatar
         )
         await interaction.response.send_message(embed=embed, view=view)
 
