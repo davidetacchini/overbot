@@ -150,10 +150,18 @@ class Profile:
         return ratings
 
     def _resolve_stats(self, hero: str) -> None | tuple[list[str], Stat, Stat]:
+        # OwAPI uses different names for these heroes.
+        lookup = {
+            "soldier-76": "soldier76",
+            "wrecking-ball": "wreckingBall",
+            "dva": "dVa",
+        }
+        alias = lookup.get(hero, hero)
+
         # quickplay stats
-        q = self.data.get("quickPlayStats").get("careerStats").get(hero) or {}
+        q = self.data.get("quickPlayStats").get("careerStats").get(alias) or {}
         # competitive stats
-        c = self.data.get("competitiveStats").get("careerStats").get(hero) or {}
+        c = self.data.get("competitiveStats").get("careerStats").get(alias) or {}
 
         if not q and not c:
             if hero == "allHeroes":
@@ -224,7 +232,7 @@ class Profile:
             if hero == "allHeroes":
                 embed.set_thumbnail(url=self.level_icon)
             else:
-                embed.set_thumbnail(url=self.bot.config.hero_url.format(hero.lower()))
+                embed.set_thumbnail(url=self.bot.config.hero_portrait_url.format(hero.lower()))
             embed.set_footer(text=f"Page {i} of {len(keys)}")
             self._format_stats(embed, key, quickplay, competitive)
             self.pages.append(embed)
