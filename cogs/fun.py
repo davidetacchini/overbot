@@ -77,7 +77,7 @@ class Fun(commands.Cog):
     @app_commands.autocomplete(hero=hero_autocomplete)
     @app_commands.describe(hero="The hero you want detail for")
     async def detail(self, interaction: discord.Interaction, hero: str):
-        "Returns details about a hero"
+        """Returns details about a hero"""
         await interaction.response.defer(thinking=True)
         sel = self.bot.heroes[hero]
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
