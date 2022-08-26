@@ -82,7 +82,9 @@ class Fun(commands.Cog):
         sel = self.bot.heroes[hero]
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.set_author(
-            name=hero.capitalize(), icon_url=self.bot.config.hero_portrait_url.format(hero)
+            name=hero.capitalize(),
+            url=self.bot.config.overwatch["hero"] + f"/{hero}",
+            icon_url=self.bot.config.hero_portrait_url.format(hero),
         )
         embed.description = sel["description"]
 
