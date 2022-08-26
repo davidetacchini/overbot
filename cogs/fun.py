@@ -73,9 +73,6 @@ class Fun(commands.Cog):
         embed.set_footer(text=meme["data"]["subreddit_name_prefixed"])
         return embed
 
-    def _get_detail_for(self, hero: str) -> list[discord.Embed]:
-        pass
-
     @app_commands.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
     @app_commands.describe(hero="The hero you want detail for")
