@@ -32,7 +32,7 @@ Member = discord.User | discord.Member
 
 
 # Workaround for checks not working properly in Context Menus. To clarify: has_profile does not work,
-# @app_commands.checks does. However, Interaction.namespace returns an Empty Namespace for Context Menus,
+# @app_commands.checks does. However, Interaction.namespace returns an empty Namespace for Context Menus,
 # and has_profile uses Interaction.namespace to check whether it's the author whose profiles needs to be
 # fetched. However, Interaction.data (didn't tried that for Context Menus, but should work) can be used
 # instead of Interaction.namespace but I prefer this workaround for now.
