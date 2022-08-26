@@ -40,19 +40,13 @@ def format_platform(platform: str) -> str:
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
     heroes = interaction.client.heroes
-    # The api uses different names for these heroes.
-    values = {
-        "soldier-76": "soldier76",
-        "wrecking-ball": "wreckingBall",
-        "dva": "dVa",
-    }
-    # Just slice the list to return the first 25 heroes since the
-    # limit of displayable choices is 25 whereas the heroes are 32.
     return [
-        Choice(name=hero, value=values.get(hero, hero))
-        for hero in heroes
-        if current.lower() in hero.lower()
-    ][:25]
+        Choice(name=value["name"], value=key)
+        for key, value in heroes.items()
+        if current.lower() in value["name"].lower() or current.lower() in key.lower()
+    ][
+        :25
+    ]  # choices must be <= 25, heroes are more, so slicing.
 
 
 async def module_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
