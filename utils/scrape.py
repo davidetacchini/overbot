@@ -63,7 +63,34 @@ async def get_overwatch_heroes() -> dict[str, dict[str, str]]:
         value = {}
         value["name"] = h.find("span", class_="portrait-title").get_text()
         value["portrait"] = h.find("img", class_="portrait")["src"]
-        value["role"] = h["data-groups"][2:-2].lower()
         key = str(h.find("a", class_="hero-portrait-detailed")["data-hero-id"]).lower()
+        await _add_hero_details(key, value)
         all_heroes[key] = value
+
     return all_heroes
+
+
+async def _add_hero_details(key: str, value: dict[str, str]) -> None:
+    content = await fetch(config.overwatch["hero"] + f"/{key}")
+    page = BeautifulSoup(content, features="html.parser")
+
+    # overview tab
+    value["role"] = page.find("h4", class_="hero-detail-role-name").get_text()
+    value["description"] = page.find("p", class_="hero-detail-description").get_text()
+    # stars can be max 3, so we subtract empty stars to all stars to find the difficulty
+    value["difficulty"] = 3 - len(page.find_all("span", class_="star m-empty"))
+
+    to_check = (("weapons", "hero-ability-weapon"), ("abilities", "hero-ability"))
+    for category, children in to_check:
+        value[category] = []
+        cat = page.find("div", class_=category)
+        cat_children = cat.findChildren("div", class_=children)
+        if not len(cat_children):
+            name = cat.find("h4", class_="hero-ability-name").get_text()
+            description = cat.find("p", class_="hero-ability-description").get_text()
+            value[category].append((name, description))
+        else:
+            for what in page.find("div", class_=category).findChildren("div", class_=children):
+                name = what.find("h4", class_="hero-ability-name").get_text()
+                description = what.find("p", class_="hero-ability-description").get_text()
+                value[category].append((name, description))
