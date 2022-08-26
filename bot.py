@@ -27,6 +27,8 @@ if sys.platform == "linux":
 
 log = logging.getLogger("overbot")
 
+__version__ = "5.1.0"
+
 
 class OverBot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
@@ -53,7 +55,7 @@ class OverBot(commands.AutoShardedBot):
 
     @property
     def version(self) -> str:
-        return config.version
+        return __version__
 
     @property
     def debug(self) -> bool:
