@@ -23,7 +23,7 @@ from utils.funcs import (
 from utils.checks import is_premium, has_profile, can_add_profile, subcommand_guild_only
 from classes.profile import Profile
 from classes.nickname import Nickname
-from classes.exceptions import NoChoice, CannotCreateGraph
+from classes.exceptions import NoChoice, ProfileNotLinked, CannotCreateGraph
 
 if TYPE_CHECKING:
     from bot import OverBot
@@ -31,8 +31,24 @@ if TYPE_CHECKING:
 Member = discord.User | discord.Member
 
 
+# Workaround for checks not working properly in Context Menus. To clarify: has_profile does not work,
+# @app_commands.checks does. However, Interaction.namespace returns an Empty Namespace for Context Menus,
+# and has_profile uses Interaction.namespace to check whether it's the author whose profiles needs to be
+# fetched. However, Interaction.data (didn't tried that for Context Menus, but should work) can be used
+# instead of Interaction.namespace but I prefer this workaround for now.
+async def cm_has_profiles(interaction: discord.Interaction, member_id: int) -> bool:
+    """Custom check for Context Menus."""
+    query = """SELECT platform, username
+               FROM profile
+               INNER JOIN member
+                       ON member.id = profile.member_id
+               WHERE member.id = $1;
+            """
+    if not await interaction.client.pool.fetch(query, member_id):
+        raise ProfileNotLinked(is_author=member_id == interaction.user.id)
+
+
 @app_commands.context_menu(name="List Profiles")
-@has_profile()
 async def list_profiles(interaction: discord.Interaction, member: discord.Member) -> None:
     """List your own or a member's profiles"""
     profile_cog = interaction.client.get_cog("Profile")
@@ -42,10 +58,10 @@ async def list_profiles(interaction: discord.Interaction, member: discord.Member
 
 
 @app_commands.context_menu(name="Show Ratings")
-@has_profile()
 async def show_ratings(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides SRs information for a profile."""
     await interaction.response.defer(thinking=True)
+    await cm_has_profiles(interaction, member.id)
     message = "Select a profile to view the skill ratings for:"
     profile = await interaction.client.get_cog("Profile").select_profile(
         interaction, message, member
@@ -59,10 +75,10 @@ async def show_ratings(interaction: discord.Interaction, member: discord.Member)
 
 
 @app_commands.context_menu(name="Show Stats")
-@has_profile()
 async def show_stats(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides general stats for a profile"""
     await interaction.response.defer(thinking=True)
+    await cm_has_profiles(interaction, member.id)
     message = "Select a profile to view the stats for:"
     profile = await interaction.client.get_cog("Profile").select_profile(
         interaction, message, member
@@ -73,7 +89,6 @@ async def show_stats(interaction: discord.Interaction, member: discord.Member) -
 
 
 @app_commands.context_menu(name="Show Summary")
-@has_profile()
 async def show_summary(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides summarized stats for a profile"""
     await interaction.response.defer(thinking=True)
