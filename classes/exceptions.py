@@ -99,7 +99,7 @@ class NoHeroStats(ProfileException):
 
 
 class ProfileNotLinked(app_commands.CheckFailure):
-    def __init__(self, is_author: bool) -> None:
+    def __init__(self, *, is_author: bool) -> None:
         self.is_author = is_author
 
 
