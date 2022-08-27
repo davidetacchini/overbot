@@ -75,7 +75,7 @@ async def _add_hero_details(key: str, value: dict[str, str]) -> None:
     page = BeautifulSoup(content, features="html.parser")
 
     # overview tab
-    value["role"] = page.find("h4", class_="hero-detail-role-name").get_text()
+    value["role"] = page.find("h4", class_="hero-detail-role-name").get_text().lower()
     value["description"] = page.find("p", class_="hero-detail-description").get_text()
     # stars can be max 3, so we subtract empty stars to all stars to find the difficulty
     value["difficulty"] = 3 - len(page.find_all("span", class_="star m-empty"))
