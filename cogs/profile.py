@@ -92,6 +92,7 @@ async def show_stats(interaction: discord.Interaction, member: discord.Member) -
 async def show_summary(interaction: discord.Interaction, member: discord.Member) -> None:
     """Provides summarized stats for a profile"""
     await interaction.response.defer(thinking=True)
+    await cm_has_profiles(interaction, member.id)
     message = "Select a profile to view the summary for:"
     profile = await interaction.client.get_cog("Profile").select_profile(
         interaction, message, member
