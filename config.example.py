@@ -84,7 +84,7 @@ test_guild_id = None
 # ENDIGNORE
 
 """Hero portrait URL."""
-hero_url = "https://d1u1mce87gyfbn.cloudfront.net/hero/{}/hero-select-portrait.png"
+hero_portrait_url = "https://d1u1mce87gyfbn.cloudfront.net/hero/{}/hero-select-portrait.png"
 
 """Overwatch API url (unofficial)."""
 base_url = "https://ow-api.com/v3/stats"
