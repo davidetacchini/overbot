@@ -88,7 +88,9 @@ class Fun(commands.Cog):
         )
         embed.description = sel["description"]
 
-        embed.add_field(name="Role", value=f"{ROLES.get(sel['role'].lower())} {sel['role']}")
+        embed.add_field(
+            name="Role", value=f"{ROLES.get(sel['role'].lower())} {sel['role'].capitalize()}"
+        )
         difficulty = [":star:" for _ in range(sel["difficulty"])]
         embed.add_field(name="Difficulty", value=" ".join(difficulty))
 
