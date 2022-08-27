@@ -337,6 +337,42 @@ class Owner(commands.Cog):
             await asyncio.sleep(2)  # waiting for the file to be created or updated
             await interaction.followup.send(file=discord.File("../backup.sql"), ephemeral=True)
 
+    @app_commands.command()
+    @is_owner()
+    async def syncguilds(self, interaction: discord.Interaction):
+        """Sync guilds with database.
+
+        If a guild quit when the bot was offline, then remove it from database.
+        If a guild joined when the bot was offline, then add it to database.
+        """
+        await interaction.response.send_message("Checking for guilds to remove...", ephemeral=True)
+        db_guilds = await self.bot.pool.fetch("SELECT id FROM server;")
+        db_guild_ids = [g["id"] for g in db_guilds]
+        actual_guild_ids = [g.id for g in self.bot.guilds]
+        ret = []
+
+        # DELETE
+        total = 0
+        for guild_id in db_guild_ids:
+            if guild_id not in actual_guild_ids:
+                total += 1
+                await self.bot.pool.execute("DELETE FROM server WHERE id = $1;", guild_id)
+        ret.append(f"{total} guild(s) removed.")
+
+        await interaction.edit_original_response(content="Checking for guilds to insert...")
+
+        # INSERT
+        total = 0
+        for guild_id in actual_guild_ids:
+            if guild_id not in db_guild_ids:
+                total += 1
+                query = """INSERT INTO server (id) VALUES ($1)
+                           ON CONFLICT (id) DO NOTHING;
+                        """
+                await self.bot.pool.execute(query, guild_id)
+        ret.append(f"{total} guild(s) inserted.")
+        await interaction.followup.send("\n".join(ret), ephemeral=True)
+
 
 async def setup(bot: OverBot) -> None:
     await bot.add_cog(Owner(bot), guild=bot.TEST_GUILD)
