@@ -79,7 +79,11 @@ class Fun(commands.Cog):
     async def detail(self, interaction: discord.Interaction, hero: str):
         """Returns details about a hero"""
         await interaction.response.defer(thinking=True)
-        sel = self.bot.heroes[hero]
+
+        sel = self.bot.heroes.get(hero)
+        if sel is None:
+            return await interaction.followup.send("Hero **{hero}** does not exists.")
+
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.set_author(
             name=hero.capitalize(),
