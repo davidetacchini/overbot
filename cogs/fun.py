@@ -104,10 +104,7 @@ class Fun(commands.Cog):
             abilities += f"`{name}`: {description}\n"
         embed.add_field(name="Abilities", value=abilities)
 
-        try:
-            await interaction.followup.send(embed=embed)
-        except Exception as e:
-            await interaction.followup.send(e)
+        await interaction.followup.send(embed=embed)
 
     @app_commands.command()
     @app_commands.describe(category="The category to get a random hero from")
