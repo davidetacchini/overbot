@@ -146,6 +146,7 @@ class Trivia(commands.Cog):
             await interaction.followup.send(embed=embed)
 
     @trivia.command()
+    @app_commands.describe(member="The member to show trivia stats for")
     async def stats(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Shows trivia stats"""
         member = member or interaction.user
