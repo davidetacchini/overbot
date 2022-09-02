@@ -46,7 +46,6 @@ class Trivia(commands.Cog):
         select = SelectAnswer(placeholder="Select the correct answer...")
         view.add_item(select)
 
-        embed.description = ""
         for index, entry in enumerate(entries, start=1):
             select.add_option(label=entry)
             embed.description = f"{embed.description}{index}. {entry}\n"
@@ -66,7 +65,7 @@ class Trivia(commands.Cog):
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.title = question["question"]
+        embed.description = f'**{question["question"]}**' + "\n\n" # separate from choices
         if question["image_url"]:
             embed.set_image(url=question["image_url"])
         embed.set_footer(text=f"You have 1 try and {timeout} seconds to respond.")
