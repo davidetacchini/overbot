@@ -43,7 +43,7 @@ class Stats(commands.Cog):
     async def ratings(
         self, interaction: discord.Interaction, platform: Choice[str], *, username: str
     ) -> None:
-        """Provides player ratings."""
+        """Provides player ratings"""
         await interaction.response.defer(thinking=True)
         profile = Profile(platform.value, username, interaction=interaction)
         await profile.compute_data()
@@ -60,7 +60,7 @@ class Stats(commands.Cog):
     async def stats(
         self, interaction: discord.Interaction, platform: Choice[str], *, username: str
     ) -> None:
-        """Provides player general stats."""
+        """Provides player general stats"""
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, "allHeroes", platform.value, username)
 
@@ -78,7 +78,7 @@ class Stats(commands.Cog):
         *,
         username: str,
     ) -> None:
-        """Provides player general stats for a given hero."""
+        """Provides player general stats for a given hero"""
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, hero, platform.value, username)
 
@@ -89,7 +89,7 @@ class Stats(commands.Cog):
     async def summary(
         self, interaction: discord.Interaction, platform: Choice[str], *, username: str
     ) -> None:
-        """Provides player summarized stats."""
+        """Provides player summarized stats"""
         await interaction.response.defer(thinking=True)
         profile = Profile(platform.value, username, interaction=interaction)
         await profile.compute_data()

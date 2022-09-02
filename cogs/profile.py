@@ -59,7 +59,7 @@ async def list_profiles(interaction: discord.Interaction, member: discord.Member
 
 @app_commands.context_menu(name="Show Ratings")
 async def show_ratings(interaction: discord.Interaction, member: discord.Member) -> None:
-    """Provides SRs information for a profile."""
+    """Provides SRs information for a profile"""
     await interaction.response.defer(thinking=True)
     await cm_has_profiles(interaction, member.id)
     message = "Select a profile to view the skill ratings for:"
@@ -286,7 +286,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     async def hero(
         self, interaction: discord.Interaction, hero: str, member: None | Member = None
     ) -> None:
-        """Provides general hero stats for a profile."""
+        """Provides general hero stats for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         message = f"Select a profile to view **{hero}** stats for:"
@@ -413,7 +413,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     @has_profile()
     @is_premium()
     async def graph(self, interaction: discord.Interaction) -> None:
-        """Shows SRs performance graph."""
+        """Shows SRs performance graph"""
         await interaction.response.defer(thinking=True)
         message = "Select a profile to view the SRs graph for:"
         profile = await self.select_profile(interaction, message)
