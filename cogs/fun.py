@@ -82,7 +82,7 @@ class Fun(commands.Cog):
 
         sel = self.bot.heroes.get(hero)
         if sel is None:
-            return await interaction.followup.send("Hero **{hero}** does not exists.")
+            return await interaction.followup.send("Hero **{hero}** does not exist.")
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.set_author(
