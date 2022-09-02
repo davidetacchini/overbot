@@ -10,7 +10,7 @@ import importlib
 import traceback
 import subprocess
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 from contextlib import redirect_stdout
 
 import discord
@@ -315,12 +315,9 @@ class Owner(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command()
-    @app_commands.describe(file="Whether to get the file on Discord.")
     @is_owner()
-    async def backup(
-        self, interaction: discord.Interaction, *, file: Literal["Yes", "No"] = "No"
-    ) -> None:
-        """Generate a backup file of the database"""
+    async def backup(self, interaction: discord.Interaction) -> None:
+        """Make database backup."""
         await interaction.response.send_message("Generating backup file...", ephemeral=True)
 
         try:
@@ -332,10 +329,6 @@ class Owner(commands.Cog):
             await interaction.edit_original_response(content="Backup file successfully generated.")
         except Exception as e:
             await interaction.edit_original_response(content=f"""```prolog\n{e}```""")
-
-        if file == "Yes":
-            await asyncio.sleep(2)  # waiting for the file to be created or updated
-            await interaction.followup.send(file=discord.File("../backup.sql"), ephemeral=True)
 
     @app_commands.command()
     @is_owner()
