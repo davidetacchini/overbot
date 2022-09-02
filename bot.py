@@ -196,6 +196,7 @@ class OverBot(commands.AutoShardedBot):
             await self.tree.sync(guild=self.TEST_GUILD)
         else:
             await self.tree.sync()
+            await self.tree.sync(guild=self.TEST_GUILD)
 
     async def close(self) -> None:
         await super().close()
