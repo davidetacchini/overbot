@@ -177,7 +177,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         return pages
 
     @profile.command()
-    @app_commands.describe(member="The mention or the ID of a Discord member")
+    @app_commands.describe(member="The member to list the profiles for")
     async def list(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """List your own or a member's profiles"""
         member = member or interaction.user
@@ -246,7 +246,7 @@ class ProfileCog(commands.Cog, name="Profile"):
             await interaction.response.send_message(message, view=view)
 
     @profile.command()
-    @app_commands.describe(member="The mention or the ID of a Discord member")
+    @app_commands.describe(member="The member to show ratings for")
     @has_profile()
     async def ratings(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides SRs information for a profile"""
@@ -268,7 +268,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         await interaction.followup.send(embed=embed)
 
     @profile.command()
-    @app_commands.describe(member="The mention or the ID of a Discord member")
+    @app_commands.describe(member="The member to show stats for")
     @has_profile()
     async def stats(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides general stats for a profile"""
@@ -281,7 +281,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     @profile.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
     @app_commands.describe(hero="The name of the hero to see stats for")
-    @app_commands.describe(member="The mention or the ID of a Discord member")
+    @app_commands.describe(member="The member to show hero stats for")
     @has_profile()
     async def hero(
         self, interaction: discord.Interaction, hero: str, member: None | Member = None
@@ -294,7 +294,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profile=profile)
 
     @profile.command()
-    @app_commands.describe(member="The mention or the ID of a Discord member")
+    @app_commands.describe(member="The member to show the summary for")
     @has_profile()
     async def summary(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Provides summarized stats for a profile"""
