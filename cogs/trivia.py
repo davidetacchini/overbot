@@ -65,7 +65,7 @@ class Trivia(commands.Cog):
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.description = f'**{question["question"]}**' + "\n\n" # separate from choices
+        embed.description = f'**{question["question"]}**' + "\n\n"  # separate from choices
         if question["image_url"]:
             embed.set_image(url=question["image_url"])
         embed.set_footer(text=f"You have 1 try and {timeout} seconds to respond.")
