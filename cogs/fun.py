@@ -65,7 +65,11 @@ class Fun(commands.Cog):
 
     def _embed_meme(self, interaction: discord.Interaction, meme: dict[str, Any]) -> discord.Embed:
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.title = meme["data"]["title"]
+        meme_title = meme["data"]["title"]
+        if len(meme_title) <= 256:
+            embed.title = meme_title
+        else:
+            embed.description = meme_title
         upvotes, comments = meme["data"]["ups"], meme["data"]["num_comments"]
         embed.description = f"{upvotes} upvotes - {comments} comments"
         embed.url = f'https://reddit.com{meme["data"]["permalink"]}'
