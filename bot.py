@@ -97,7 +97,6 @@ class OverBot(commands.AutoShardedBot):
     async def prompt(
         self, interaction: discord.Interaction, payload: str | discord.Embed
     ) -> None | bool:
-        kwargs: dict[str, Any]
         if isinstance(payload, str):
             kwargs = {"content": payload}
         elif isinstance(payload, discord.Embed):

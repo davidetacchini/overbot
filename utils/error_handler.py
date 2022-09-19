@@ -1,8 +1,6 @@
 import logging
 import traceback
 
-from typing import Any
-
 import discord
 
 from asyncpg import DataError
@@ -26,7 +24,6 @@ async def error_handler(
     bot = interaction.client
 
     async def send(payload: str | discord.Embed, ephemeral: bool = True) -> None:
-        kwargs: dict[str, Any]
         if isinstance(payload, str):
             kwargs = {"content": payload}
         elif isinstance(payload, discord.Embed):
