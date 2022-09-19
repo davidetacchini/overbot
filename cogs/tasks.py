@@ -18,10 +18,8 @@ from utils.scrape import get_overwatch_news
 if TYPE_CHECKING:
     from bot import OverBot
 
-    Shards = list[dict[str, Any]]
+    Shards = BotCommands = TopServers = list[dict[str, Any]]
     BotStats = dict[str, list[dict[str, Any]] | dict[str, Any]]
-    BotCommands = list[dict[str, Any]]
-    TopServers = list[dict[str, Any]]
 
 
 log = logging.getLogger("overbot")
@@ -34,6 +32,7 @@ class Tasks(commands.Cog):
         self.update_private_api.start()
         self.check_subscriptions.start()
         self.send_overwatch_news.start()
+        self.update_bot_presence.start()
 
     def get_shards(self) -> Shards:
         shards = []
@@ -322,11 +321,18 @@ class Tasks(commands.Cog):
         file.truncate()
         file.close()
 
+    @tasks.loop(hours=1.0)
+    async def update_bot_presence(self):
+        await self.bot.wait_until_ready()
+        game = discord.Game("/help")
+        await self.bot.change_presence(activity=game)
+
     def cog_unload(self) -> None:
         self.update_discord_portals.cancel()
         self.update_private_api.cancel()
         self.check_subscriptions.cancel()
         self.send_overwatch_news.cancel()
+        self.update_bot_presence.cancel()
 
 
 async def setup(bot: OverBot) -> None:
