@@ -29,11 +29,6 @@ class Events(commands.Cog):
         embed.timestamp = datetime.utcnow()
         await self.bot.webhook.send(embed=embed)
 
-    async def change_presence(self) -> None:
-        await self.bot.wait_until_ready()
-        game = discord.Game("/help")
-        await self.bot.change_presence(activity=game)
-
     async def send_guild_log(self, guild: discord.Guild, embed: discord.Embed) -> None:
         """Sends information about a joined guild."""
         embed.title = guild.name
@@ -53,8 +48,6 @@ class Events(commands.Cog):
             setattr(self.bot, "uptime", datetime.utcnow())
 
         log.info(f"Connected as {self.bot.user.display_name} in {len(self.bot.guilds)} guilds.")
-
-        await self.change_presence()
         await self.send_log("Bot is online.", discord.Color.blue())
 
     @commands.Cog.listener()
