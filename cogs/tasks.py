@@ -296,6 +296,7 @@ class Tasks(commands.Cog):
         # one stored in the file; if not then there's a news
         file = open("assets/latest_news_id.txt", "r+")
         file_news_id = file.readline()
+
         if int(latest_news_id) == int(file_news_id):
             file.close()
             return
@@ -323,11 +324,9 @@ class Tasks(commands.Cog):
 
     @tasks.loop(hours=1.0)
     async def update_bot_presence(self):
-        cog = self.bot.get_cog("Events")
-        if not cog:
-            return
-
-        await cog.change_presence()
+        await self.bot.wait_until_ready()
+        game = discord.Game("/help")
+        await self.bot.change_presence(activity=game)
 
     def cog_unload(self) -> None:
         self.update_discord_portals.cancel()
