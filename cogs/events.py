@@ -76,6 +76,9 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction) -> None:
+        if not self.bot.is_ready():
+            return
+
         if interaction.type == InteractionType.application_command:
             query = """INSERT INTO member (id)
                        VALUES ($1)
