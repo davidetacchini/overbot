@@ -15,7 +15,7 @@ async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
     content = await fetch(config.overwatch["news"])
     page = BeautifulSoup(content, features="html.parser")
 
-    news = page.find("section", class_="NewsHeader-featured")
+    news = page.find_all("blz-card", attrs={"slot": "gallery-items"})
     if news is None:
         raise Exception()
 
@@ -24,12 +24,9 @@ async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
     all_news = []
     for n in news:
         cur_news = {}
-        cur_news["title"] = n.find("h1", {"class": "Card-title"}).get_text()
-        cur_news["link"] = "https://playoverwatch.com" + n["href"]
-        cur_news["thumbnail"] = n.find("div", class_="Card-thumbnail")["style"].split("url(")[1][
-            :-1
-        ]
-        cur_news["date"] = n.find("p", class_="Card-date").get_text()
+        cur_news["title"] = n.find("h4", attrs={"slot": "heading"}).get_text()
+        cur_news["link"] = n["href"]
+        cur_news["thumbnail"] = n.find("blz-image", attrs={"slot": "image"})["src"]
         all_news.append(cur_news)
     return all_news
 
