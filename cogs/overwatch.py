@@ -70,11 +70,6 @@ class Overwatch(commands.Cog):
             embed.url = n["link"]
             embed.set_author(name="Blizzard Entertainment")
             embed.set_image(url=f'https:{n["thumbnail"]}')
-            embed.set_footer(
-                text="News {current}/{total} - {date}".format(
-                    current=i, total=len(news), date=n["date"]
-                )
-            )
             pages.append(embed)
 
         await self.bot.paginate(pages, interaction=interaction)

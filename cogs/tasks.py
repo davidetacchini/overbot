@@ -306,7 +306,6 @@ class Tasks(commands.Cog):
         embed.url = news["link"]
         embed.set_author(name="Blizzard Entertainment")
         embed.set_image(url=f'https:{news["thumbnail"]}')
-        embed.set_footer(text=news["date"])
 
         records = await self.bot.pool.fetch("SELECT id FROM newsboard;")
         for record in records:
