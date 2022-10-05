@@ -95,13 +95,13 @@ github = {
 
 """Overwatch endpoints."""
 overwatch = {
-    "status": "https://downdetector.com/status/overwatch/",
-    "patch": "https://playoverwatch.com/en-us/news/patch-notes/{}",
-    "news": "https://playoverwatch.com/en-us/news/",
-    "player": "https://playoverwatch.com/en-us/career/{}/{}/",
-    "account": "https://playoverwatch.com/en-us/search/account-by-name",
-    "hero": "https://playoverwatch.com/en-us/heroes",
-    "map": "https://playoverwatch.com/en-us/maps",
+    "status": "https://downdetector.com/status/overwatch-2/",
+    "patch": "https://overwatch.blizzard.com/en-us/news/patch-notes/{}",
+    "news": "https://overwatch.blizzard.com/en-us/news/",
+    "player": "https://overwatch.blizzard.com/en-us/career/{}/{}/",
+    "account": "https://overwatch.blizzard.com/en-us/search/account-by-name",
+    "hero": "https://overwatch.blizzard.com/en-us/heroes",
+    "map": "https://overwatch.blizzard.com/en-us/maps",
 }
 
 """Official website."""
