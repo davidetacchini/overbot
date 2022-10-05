@@ -53,15 +53,16 @@ async def get_overwatch_heroes() -> dict[str, dict[str, str]]:
     content = await fetch(config.overwatch["hero"])
     page = BeautifulSoup(content, features="html.parser")
 
-    heroes = [h for h in page.find_all("div", class_="hero-portrait-detailed-container")]
+    heroes = [h for h in page.find_all("blz-hero-card", class_="heroCard")]
 
     all_heroes = {}
     for h in heroes:
         value = {}
-        value["name"] = h.find("span", class_="portrait-title").get_text()
-        value["portrait"] = h.find("img", class_="portrait")["src"]
-        key = str(h.find("a", class_="hero-portrait-detailed")["data-hero-id"]).lower()
-        await _add_hero_details(key, value)
+        card_name = h.find("div", class_="heroCardName")
+        value["name"] = card_name.find("span").get_text()
+        value["portrait"] = h.find("blz-image", class_="heroCardPortrait")["src"]
+        key = str(h["data-hero-id"]).lower()
+        # await _add_hero_details(key, value)
         all_heroes[key] = value
 
     return all_heroes
