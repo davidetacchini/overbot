@@ -15,7 +15,7 @@ import config  # pyright: reportMissingImports=false
 from utils import emojis
 from classes.ui import PromptView
 from utils.time import human_timedelta
-from utils.scrape import get_overwatch_maps, get_overwatch_heroes
+from utils.scrape import get_overwatch_heroes
 from classes.paginator import Paginator
 from utils.error_handler import error_handler
 
@@ -45,7 +45,6 @@ class OverBot(commands.AutoShardedBot):
         self.premiums: set[int] = set()
         self.embed_colors: dict[int, int] = {}
         self.heroes: dict[str, dict[str, str]] = {}
-        self.maps: list[dict[str, str | list[str]]] = []
 
         self.TEST_GUILD: discord.Object = discord.Object(config.test_guild_id)
 
@@ -154,9 +153,6 @@ class OverBot(commands.AutoShardedBot):
     async def _cache_heroes(self) -> None:
         self.heroes = await get_overwatch_heroes()
 
-    async def _cache_maps(self) -> None:
-        self.maps = await get_overwatch_maps()
-
     async def _cache_embed_colors(self) -> None:
         embed_colors = {}
         query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
@@ -177,7 +173,6 @@ class OverBot(commands.AutoShardedBot):
         await self._cache_premiums()
         await self._cache_embed_colors()
         await self._cache_heroes()
-        await self._cache_maps()
 
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):

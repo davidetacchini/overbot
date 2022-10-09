@@ -9,9 +9,6 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.funcs import hero_autocomplete
-from classes.profile import ROLES
-
 if TYPE_CHECKING:
     from bot import OverBot
 
@@ -42,15 +39,6 @@ class Fun(commands.Cog):
             hero = secrets.choice(categorized_heroes)
         return hero["name"]
 
-    def _get_random_map(self, category: None | str) -> str:
-        maps = self.bot.maps
-        if not category:
-            map_ = secrets.choice(maps)
-        else:
-            categorized_maps = [m for m in maps if category in m["types"]]
-            map_ = secrets.choice(categorized_maps)
-        return map_["name"]
-
     async def _get_random_meme(self, category: str) -> dict[str, Any]:
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
         async with self.bot.session.get(url) as r:
@@ -78,43 +66,6 @@ class Fun(commands.Cog):
         return embed
 
     @app_commands.command()
-    @app_commands.autocomplete(hero=hero_autocomplete)
-    @app_commands.describe(hero="The hero you want detail for")
-    async def detail(self, interaction: discord.Interaction, hero: str):
-        """Returns details about a hero"""
-        await interaction.response.defer(thinking=True)
-
-        sel = self.bot.heroes.get(hero)
-        if sel is None:
-            return await interaction.followup.send(f"Hero **{hero}** does not exist.")
-
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.set_author(
-            name=hero.capitalize(),
-            url=self.bot.config.overwatch["hero"] + f"/{hero}",
-            icon_url=self.bot.config.hero_portrait_url.format(hero),
-        )
-        embed.description = sel["description"]
-
-        embed.add_field(
-            name="Role", value=f"{ROLES.get(sel['role'].lower())} {sel['role'].capitalize()}"
-        )
-        difficulty = [":star:" for _ in range(sel["difficulty"])]
-        embed.add_field(name="Difficulty", value=" ".join(difficulty))
-
-        weapons = ""
-        for name, description in sel["weapons"]:
-            weapons += f"`{name}`: {description}\n"
-        embed.add_field(name="Weapons", value=weapons, inline=False)
-
-        abilities = ""
-        for name, description in sel["abilities"]:
-            abilities += f"`{name}`: {description}\n"
-        embed.add_field(name="Abilities", value=abilities)
-
-        await interaction.followup.send(embed=embed)
-
-    @app_commands.command()
     @app_commands.describe(category="The category to get a random hero from")
     async def herotoplay(
         self, interaction: discord.Interaction, category: HeroCategories = None
@@ -137,15 +88,6 @@ class Fun(commands.Cog):
         """Returns a random role"""
         roles = ("Tank", "Damage", "Support", "Flex")
         await interaction.response.send_message(secrets.choice(roles))
-
-    @app_commands.command()
-    @app_commands.describe(category="The category to get a random map from")
-    async def maptoplay(
-        self, interaction: discord.Interaction, category: MapCategories = None
-    ) -> None:
-        """Returns a random map"""
-        map_ = self._get_random_map(category)
-        await interaction.response.send_message(map_)
 
     @app_commands.command()
     @app_commands.describe(category="The category to get a random meme from")
