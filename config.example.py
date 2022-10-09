@@ -101,7 +101,6 @@ overwatch = {
     "player": "https://overwatch.blizzard.com/en-us/career/{}/{}/",
     "account": "https://overwatch.blizzard.com/en-us/search/account-by-name",
     "hero": "https://overwatch.blizzard.com/en-us/heroes",
-    "map": "https://overwatch.blizzard.com/en-us/maps",
 }
 
 """Official website."""
