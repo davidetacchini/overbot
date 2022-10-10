@@ -10,6 +10,7 @@ from .exceptions import (
     TooManyAccounts,
     UnexpectedError,
     ServiceUnavailable,
+    BlizzardMaintenance,
     InternalServerError,
 )
 
@@ -89,6 +90,7 @@ class Request:
                 raise ServiceUnavailable()
 
     async def get(self) -> dict[str, Any]:
+        raise BlizzardMaintenance()
         url = await self._get_url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:

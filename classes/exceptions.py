@@ -7,6 +7,13 @@ class OverBotException(Exception):
     pass
 
 
+class BlizzardMaintenance(OverBotException):
+    def __init__(self):
+        super().__init__(
+            "Stats related commands are not working due to Blizzard maintenance. Thanks for the understanding."
+        )
+
+
 class NoChoice(OverBotException):
 
     pass
