@@ -313,7 +313,10 @@ class Tasks(commands.Cog):
             channel = self.bot.get_channel(channel_id)
             if not channel:
                 continue
-            await channel.send(embed=embed)
+            try:
+                await channel.send(embed=embed)
+            except Exception:
+                pass
 
         # update old news_id with latest one
         file.seek(0)
