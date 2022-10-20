@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from io import BytesIO
 from typing import TYPE_CHECKING
 
@@ -29,6 +31,8 @@ if TYPE_CHECKING:
     from bot import OverBot
 
 Member = discord.User | discord.Member
+
+log = logging.getLogger("overbot")
 
 
 # Workaround for checks not working properly in Context Menus. To clarify: has_profile does not work,
@@ -197,7 +201,8 @@ class ProfileCog(commands.Cog, name="Profile"):
         query = "INSERT INTO profile (platform, username, member_id) VALUES ($1, $2, $3);"
         try:
             await self.bot.pool.execute(query, platform.value, username, interaction.user.id)
-        except Exception:
+        except Exception as e:
+            log.exception(e)
             await interaction.response.send_message(
                 "Something bad happened while linking the profile."
             )
