@@ -7,7 +7,6 @@ from datetime import datetime
 
 import discord
 
-from discord import InteractionType
 from discord.ext import commands
 
 if TYPE_CHECKING:
@@ -79,7 +78,7 @@ class Events(commands.Cog):
         if not self.bot.is_ready():
             return
 
-        if interaction.type == InteractionType.application_command:
+        if interaction.type is discord.InteractionType.application_command:
             query = """INSERT INTO member (id)
                        VALUES ($1)
                        ON CONFLICT (id) DO NOTHING;
