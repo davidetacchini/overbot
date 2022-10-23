@@ -277,7 +277,7 @@ class Tasks(commands.Cog):
                 log.info(message)
                 await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
 
-    @tasks.loop(minutes=5.0)
+    @tasks.loop(seconds=5.0)
     async def send_overwatch_news(self):
         if self.bot.debug:
             return
@@ -316,7 +316,7 @@ class Tasks(commands.Cog):
             try:
                 await channel.send(embed=embed)
             except Exception:
-                pass
+                continue
 
         # update old news_id with latest one
         file.seek(0)
