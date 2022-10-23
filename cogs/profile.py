@@ -198,11 +198,13 @@ class ProfileCog(commands.Cog, name="Profile"):
         self, interaction: discord.Interaction, platform: Choice[str], username: str
     ) -> None:
         """Link an Overwatch profile"""
+        # Make sure the member is in the member table. If a new member runs this command as the first
+        # command, it won't be in the member table and this could lead to a ForeignKeyViolationError.
+        await self.bot.insert_member(interaction.user.id)
         query = "INSERT INTO profile (platform, username, member_id) VALUES ($1, $2, $3);"
         try:
             await self.bot.pool.execute(query, platform.value, username, interaction.user.id)
-        except Exception as e:
-            log.exception(e)
+        except Exception:
             await interaction.response.send_message(
                 "Something bad happened while linking the profile."
             )
