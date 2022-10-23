@@ -111,6 +111,13 @@ class OverBot(commands.AutoShardedBot):
         await view.wait()
         return view.value
 
+    async def insert_member(self, member_id: int) -> None:
+        query = """INSERT INTO member (id)
+                   VALUES ($1)
+                   ON CONFLICT (id) DO NOTHING;
+                """
+        await self.pool.execute(query, member_id)
+
     def tick(self, opt: None | bool) -> discord.PartialEmoji:
         lookup = {
             True: emojis.online,
