@@ -79,11 +79,7 @@ class Events(commands.Cog):
             return
 
         if interaction.type is discord.InteractionType.application_command:
-            query = """INSERT INTO member (id)
-                       VALUES ($1)
-                       ON CONFLICT (id) DO NOTHING;
-                    """
-            await self.bot.pool.execute(query, interaction.user.id)
+            await self.bot.insert_member(interaction.user.id)
 
             if interaction.guild is not None:
                 query = """INSERT INTO server (id)
