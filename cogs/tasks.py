@@ -305,7 +305,8 @@ class Tasks(commands.Cog):
         embed.title = news["title"]
         embed.url = news["link"]
         embed.set_author(name="Blizzard Entertainment")
-        embed.set_image(url=f'https:{news["thumbnail"]}')
+        embed.set_image(url=news["thumbnail"])
+        embed.set_footer(text=news["date"])
 
         records = await self.bot.pool.fetch("SELECT id FROM newsboard;")
         for record in records:
@@ -315,7 +316,7 @@ class Tasks(commands.Cog):
                 continue
             try:
                 await channel.send(embed=embed)
-            except Exception:
+            except discord.Forbidden:
                 continue
 
         # update old news_id with latest one
