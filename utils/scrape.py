@@ -12,10 +12,13 @@ async def fetch(url: str) -> bytes:
 
 
 async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
-    content = await fetch(config.overwatch["news"])
+    with open("assets/latest_news_id.txt", "r") as fp:
+        news_id = fp.readline()
+
+    content = await fetch(config.overwatch["news"] + str(news_id))
     page = BeautifulSoup(content, features="html.parser")
 
-    news = page.find_all("blz-card", attrs={"slot": "gallery-items"})
+    news = page.find_all("a", {"class": "media@lg-min"})
     if news is None:
         raise Exception()
 
@@ -24,9 +27,10 @@ async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
     all_news = []
     for n in news:
         cur_news = {}
-        cur_news["title"] = n.find("h4", attrs={"slot": "heading"}).get_text()
-        cur_news["link"] = n["href"]
-        cur_news["thumbnail"] = n.find("blz-image", attrs={"slot": "image"})["src"]
+        cur_news["title"] = n.find("h3", class_="blog-sidebar-article-title").get_text()
+        cur_news["link"] = "https://blizzard.overwatch.com" + n["href"]
+        cur_news["thumbnail"] = "https:" + n.find("img", class_="media-card-fill")["src"]
+        cur_news["date"] = n.find("p", class_="blog-sidebar-date").get_text()
         all_news.append(cur_news)
     return all_news
 
