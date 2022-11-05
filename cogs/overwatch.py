@@ -57,7 +57,7 @@ class Overwatch(commands.Cog):
         pages = []
 
         try:
-            news = await get_overwatch_news(abs(amount))
+            news = await get_overwatch_news(amount)
         except Exception:
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
@@ -69,8 +69,12 @@ class Overwatch(commands.Cog):
             embed.title = n["title"]
             embed.url = n["link"]
             embed.set_author(name="Blizzard Entertainment")
-            embed.set_image(url=f'https:{n["thumbnail"]}')
-            embed.set_footer(text="News {current}/{total}".format(current=i, total=len(news)))
+            embed.set_image(url=n["thumbnail"])
+            embed.set_footer(
+                text="News {current}/{total} - {date}".format(
+                    current=i, total=len(news), date=n["date"]
+                )
+            )
             pages.append(embed)
 
         await self.bot.paginate(pages, interaction=interaction)
