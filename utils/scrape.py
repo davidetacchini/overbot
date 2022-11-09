@@ -28,7 +28,7 @@ async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
     for n in news:
         cur_news = {}
         cur_news["title"] = n.find("h3", class_="blog-sidebar-article-title").get_text()
-        cur_news["link"] = "https://blizzard.overwatch.com" + n["href"]
+        cur_news["link"] = "https://overwatch.blizzard.com" + n["href"]
         cur_news["thumbnail"] = "https:" + n.find("img", class_="media-card-fill")["src"]
         cur_news["date"] = n.find("p", class_="blog-sidebar-date").get_text()
         all_news.append(cur_news)
