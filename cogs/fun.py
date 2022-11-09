@@ -98,7 +98,10 @@ class Fun(commands.Cog):
         category = category or secrets.choice(categories)
         meme = await self._get_random_meme(str(category))
         embed = self._embed_meme(interaction, meme)
-        await interaction.response.send_message(embed=embed)
+        try:
+            await interaction.response.send_message(embed=embed)
+        except discord.NotFound:
+            return
 
 
 async def setup(bot: OverBot) -> None:
