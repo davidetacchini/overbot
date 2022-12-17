@@ -62,10 +62,6 @@ class Profile:
     def avatar(self) -> str:
         return self.data["icon"]
 
-    @property
-    def level_icon(self) -> str:
-        return self.data["levelIcon"]
-
     @staticmethod
     def _to_pascal(key: str) -> str:
         """From camel case to pascal case (testTest -> Test Test)."""
@@ -229,9 +225,7 @@ class Profile:
             embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
             embed.title = self._format_key(key)
             embed.set_author(name=str(self), icon_url=self.avatar)
-            if hero == "allHeroes":
-                embed.set_thumbnail(url=self.level_icon)
-            else:
+            if hero != "allHeroes":
                 embed.set_thumbnail(url=self.bot.config.hero_portrait_url.format(hero.lower()))
             embed.set_footer(text=f"Page {i} of {len(keys)}")
             self._format_stats(embed, key, quickplay, competitive)
@@ -241,7 +235,6 @@ class Profile:
     def embed_summary(self) -> discord.Embed:
         embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
-        embed.set_thumbnail(url=self.level_icon)
 
         ratings = self.resolve_ratings()
 
@@ -254,7 +247,6 @@ class Profile:
             embed.description = " ".join(ratings_)
 
         summary = {}
-        summary["level"] = int(str(self.data.get("prestige")) + str(self.data.get("level")))
         summary["endorsement"] = self.data.get("endorsement")
         summary["gamesWon"] = self.data.get("gamesWon")
 

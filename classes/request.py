@@ -10,7 +10,6 @@ from .exceptions import (
     TooManyAccounts,
     UnexpectedError,
     ServiceUnavailable,
-    BlizzardMaintenance,
     InternalServerError,
 )
 
@@ -21,40 +20,24 @@ class Request:
 
     def __init__(self, platform: str, username: str) -> None:
         self.platform = platform
-        self.username = username.replace("#", "%23")
+        self.username = username
         self.username_l: str = username.lower()
 
     @property
     def account_url(self) -> str:
-        return config.overwatch["account"] + "/" + self.username + "/"
+        return config.overwatch["account"] + "/" + self.username.replace("#", "%23") + "/"
 
     async def _resolve_name(self, players: list[dict[str, Any]]) -> str:
         if len(players) == 1:
             try:
-                return players[0]["urlName"]
+                return players[0]["battleTag"].replace("#", "-")
             except Exception:
                 raise InternalServerError()
         elif len(players) > 1:
-            total_players = []
             for player in players:
-                if self.platform != "nintendo-switch":
-                    name = player["name"].lower()
-                else:
-                    name = player["urlName"]
-                if self.username_l == name and self.platform == player["platform"]:
-                    return player["urlName"]
-                if self.platform == player["platform"]:
-                    total_players.append(name)
-            if (
-                len(total_players) == 0
-                or "#" in self.username
-                and self.username_l not in total_players
-            ):
-                raise NotFound()
-            elif len(total_players) == 1 and self.platform == "nintendo-switch":
-                return total_players[0]
-            else:
-                raise TooManyAccounts(self.platform, self.username, len(total_players))
+                if self.username_l == player["battleTag"].lower():
+                    return player["battleTag"]
+            raise TooManyAccounts(self.platform, self.username, len(players))
         else:
             # return the username and let `resolve_response` handle it
             return self.username
@@ -90,7 +73,6 @@ class Request:
                 raise ServiceUnavailable()
 
     async def get(self) -> dict[str, Any]:
-        raise BlizzardMaintenance()
         url = await self._get_url()
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
