@@ -81,6 +81,7 @@ class Meta(commands.Cog):
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def about(self, interaction: discord.Interaction) -> None:
         """Shows bot related information and useful links"""
+        await interaction.response.defer(thinking=True)
         commits = self.get_latest_commits()
 
         view = ui.View()
@@ -141,7 +142,7 @@ class Meta(commands.Cog):
         embed.set_footer(
             text=f"{self.bot.user.name} {self.bot.version}", icon_url=self.bot.user.avatar
         )
-        await interaction.response.send_message(embed=embed, view=view)
+        await interaction.followup.send(embed=embed, view=view)
 
     async def get_weekly_top_guilds(self, bot: OverBot) -> list[Record]:
         query = """SELECT guild_id, COUNT(*) as commands
