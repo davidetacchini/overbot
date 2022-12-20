@@ -23,6 +23,9 @@ class Request:
         self.username = username
         self.username_l: str = username.lower()
 
+        if self.platform != "pc":
+            self.platform = "console"
+
     @property
     def account_url(self) -> str:
         return config.overwatch["account"] + "/" + self.username.replace("#", "%23") + "/"
