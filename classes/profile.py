@@ -72,22 +72,6 @@ class Profile:
             .title()
         )
 
-    @staticmethod
-    def _get_rating_icon(rating: int) -> discord.PartialEmoji:
-        if 0 < rating < 1500:
-            return emojis.bronze
-        elif 1500 <= rating < 2000:
-            return emojis.silver
-        elif 2000 <= rating < 2500:
-            return emojis.gold
-        elif 2500 <= rating < 3000:
-            return emojis.platinum
-        elif 3000 <= rating < 3500:
-            return emojis.diamond
-        elif 3500 <= rating < 4000:
-            return emojis.master
-        return emojis.grand_master
-
     def _format_key(self, key: str) -> str:
         match key:
             case "best":
@@ -242,8 +226,7 @@ class Profile:
             ratings_ = []
             for key, value in ratings.items():
                 role_icon = ROLES.get(key.lower())
-                rating_icon = self._get_rating_icon(value)
-                ratings_.append(f"{role_icon} {rating_icon}{value}{emojis.sr}")
+                ratings_.append(f"{role_icon} {value}")
             embed.description = " ".join(ratings_)
 
         summary = {}
