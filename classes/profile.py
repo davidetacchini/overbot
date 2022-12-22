@@ -187,11 +187,7 @@ class Profile:
         for key, value in ratings.items():
             role_icon = ROLES.get(key)
             role_name = key.upper()
-            rating_icon = self._get_rating_icon(value)
-            embed.add_field(
-                name=f"{role_icon} {role_name}",
-                value=f"{rating_icon} {value}{emojis.sr}",
-            )
+            embed.add_field(name=f"{role_icon} {role_name}", value=value)
         embed.set_footer(
             text="Average: {average}".format(average=self.data.get("rating")),
             icon_url=self.data.get("ratingIcon"),
