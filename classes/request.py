@@ -33,7 +33,7 @@ class Request:
     async def _resolve_name(self, players: list[dict[str, Any]]) -> str:
         if len(players) == 1:
             try:
-                return players[0]["battleTag"].replace("#", "-")
+                return players[0]["battleTag"]
             except Exception:
                 raise InternalServerError()
         elif len(players) > 1:
@@ -57,6 +57,7 @@ class Request:
 
     async def _get_url(self) -> str:
         name = await self._get_name()
+        name = name.replace("#", "-")
         return f"{config.base_url}/{self.platform}/{name}/complete"
 
     async def _resolve_response(self, response: aiohttp.ClientResponse) -> dict[str, Any]:
