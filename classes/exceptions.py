@@ -71,12 +71,11 @@ class TooManyAccounts(RequestError):
         match platform:
             case "pc":
                 what = "BattleTag"
-            case "nintendo-switch":
-                what = "Nintendo Network ID"
+            case "console":
+                what = "username"
         message = (
-            f"**{players}** accounts found named `{username}` playing"
-            f" on `{platform}`. Please be more specific by entering"
-            f" your **full {what}**."  # type: ignore # 'what' will always be bound to something
+            f"**{players}** accounts found named `{username}`. Please "
+            f"be more specific by entering your exact **{what}**."
         )
         super().__init__(message)
 
