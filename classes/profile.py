@@ -60,7 +60,10 @@ class Profile:
 
     @property
     def avatar(self) -> str:
-        return self.data["icon"]
+        if icon := self.data["icon"]:
+            return icon
+        else:
+            "https://imgur.com/a/BrDrZKL"
 
     @staticmethod
     def _to_pascal(key: str) -> str:
