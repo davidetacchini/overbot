@@ -15,7 +15,6 @@ from .exceptions import (
 
 
 class Request:
-
     __slots__ = ("platform", "username", "username_l")
 
     def __init__(self, platform: str, username: str) -> None:
