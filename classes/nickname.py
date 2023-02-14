@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 MAX_NICKNAME_LENGTH = 32
 ROLES = {
     "tank": emojis.u_tank,
-    "damage": emojis.u_damage,
+    "offense": emojis.u_offense,
     "support": emojis.u_support,
 }
 
