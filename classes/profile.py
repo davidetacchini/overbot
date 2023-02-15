@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 
 from typing import TYPE_CHECKING, Any
-from datetime import date
 
 import discord
 
@@ -23,13 +22,12 @@ if TYPE_CHECKING:
 
 ROLES = {
     "tank": emojis.tank,
-    "damage": emojis.damage,
+    "offense": emojis.offense,
     "support": emojis.support,
 }
 
 
 class Profile:
-
     __slots__ = ("data", "id", "platform", "username", "interaction", "record", "bot", "pages")
 
     def __init__(
@@ -93,43 +91,12 @@ class Profile:
     def is_private(self) -> bool:
         return self.data["private"]
 
-    async def save_ratings(self, profile_id: int, **kwargs: Any) -> None:
-        tank = kwargs.get("tank", 0)
-        damage = kwargs.get("damage", 0)
-        support = kwargs.get("support", 0)
-
-        query = """SELECT tank, damage, support
-                   FROM rating
-                   INNER JOIN profile
-                           ON profile.id = rating.profile_id
-                   WHERE profile.id = $1
-                   AND rating.date = $2;
-                """
-
-        requested_at = date.today()
-        roles = await self.bot.pool.fetch(query, profile_id, requested_at)
-
-        if roles:
-            # Assuming a user uses `/profile ratings` multiple times within
-            # the same day, we don't want duplicate ratings. If only 1 rating
-            # differs, then we insert the new ratings into the database.
-            all_equals = False
-            for t, d, s in roles:
-                if t == tank and d == damage and s == support:
-                    all_equals = True
-
-        if not roles or not all_equals:  # type: ignore # all equals will be bound
-            query = (
-                "INSERT INTO rating (tank, damage, support, profile_id) VALUES ($1, $2, $3, $4);"
-            )
-            await self.bot.pool.execute(query, tank, damage, support, profile_id)
-
     def resolve_ratings(self) -> None | dict[str, int]:
         if not self.data["ratings"]:
             return None
         ratings = {}
         for key, value in self.data["ratings"].items():
-            ratings[key.lower()] = value["level"]
+            ratings[key.lower()] = f"**{value['group']} {str(value['tier'])}**"
         return ratings
 
     def _resolve_stats(self, hero: str) -> None | tuple[list[str], Stat, Stat]:
@@ -191,13 +158,6 @@ class Profile:
             role_icon = ROLES.get(key)
             role_name = key.upper()
             embed.add_field(name=f"{role_icon} {role_name}", value=value)
-        embed.set_footer(
-            text="Average: {average}".format(average=self.data.get("rating")),
-            icon_url=self.data.get("ratingIcon"),
-        )
-
-        if save and profile_id is not None:
-            await self.save_ratings(profile_id, **ratings)
 
         return embed
 
