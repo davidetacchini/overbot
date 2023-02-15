@@ -2,16 +2,11 @@ from __future__ import annotations
 
 import logging
 
-from io import BytesIO
 from typing import TYPE_CHECKING
 
-import pandas as pd
 import discord
-import seaborn as sns
-import matplotlib
 
 from discord import app_commands
-from matplotlib import pyplot
 from discord.ext import commands
 from discord.app_commands import Choice
 
@@ -22,10 +17,10 @@ from utils.funcs import (
     get_platform_emoji,
     profile_autocomplete,
 )
-from utils.checks import is_premium, has_profile, can_add_profile, subcommand_guild_only
+from utils.checks import has_profile, can_add_profile, subcommand_guild_only
 from classes.profile import Profile
 from classes.nickname import Nickname
-from classes.exceptions import NoChoice, ProfileNotLinked, CannotCreateGraph
+from classes.exceptions import NoChoice, ProfileNotLinked
 
 if TYPE_CHECKING:
     from bot import OverBot
@@ -364,68 +359,6 @@ class ProfileCog(commands.Cog, name="Profile"):
             await nick.set_or_remove(profile_id=profile.id)
         except Exception as e:
             await interaction.followup.send(str(e))
-
-    async def sr_graph(
-        self, interaction: discord.Interaction, profile: Profile
-    ) -> tuple[discord.File, discord.Embed]:
-        query = """SELECT tank, damage, support, date
-                   FROM rating
-                   INNER JOIN profile
-                           ON profile.id = rating.profile_id
-                   WHERE profile.id = $1
-                """
-
-        ratings = await self.bot.pool.fetch(query, profile.id)
-
-        sns.set()
-        sns.set_style("darkgrid")
-
-        data = pd.DataFrame.from_records(
-            ratings,
-            columns=["tank", "damage", "support", "date"],
-            index="date",
-        )
-
-        for row in ["support", "damage", "tank"]:
-            if data[row].isnull().all():
-                data.drop(row, axis=1, inplace=True)
-
-        if len(data.columns) == 0:
-            raise CannotCreateGraph()
-
-        fig, ax = pyplot.subplots()
-        ax.xaxis_date()
-
-        sns.lineplot(data=data, ax=ax, linewidth=2.5)
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
-        fig.autofmt_xdate()
-
-        fig.suptitle(f"{profile.username} - {profile.platform}", fontsize="20")
-        pyplot.legend(title="Roles", loc="upper right")
-        pyplot.xlabel("Date")
-        pyplot.ylabel("SR")
-
-        image = BytesIO()
-        pyplot.savefig(format="png", fname=image, transparent=False)
-        image.seek(0)
-
-        file = discord.File(image, filename="graph.png")
-
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.set_author(name=str(interaction.user), icon_url=interaction.user.display_avatar.url)
-        embed.set_image(url="attachment://graph.png")
-        return file, embed
-
-    @profile.command(extras=dict(premium=True))
-    @has_profile()
-    @is_premium()
-    async def graph(self, interaction: discord.Interaction) -> None:
-        """Shows SRs performance graph"""
-        await interaction.response.defer(thinking=True)
-        message = "Select a profile to view the SRs graph for:"
-        profile = await self.select_profile(interaction, message)
-        file, embed = await self.sr_graph(interaction, profile)
-        await interaction.followup.send(file=file, embed=embed)
 
 
 async def setup(bot: OverBot) -> None:

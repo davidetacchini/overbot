@@ -8,12 +8,10 @@ class OverBotException(Exception):
 
 
 class NoChoice(OverBotException):
-
     pass
 
 
 class PaginationError(OverBotException):
-
     pass
 
 
@@ -29,13 +27,7 @@ class NoTriviaStats(OverBotException):
         super().__init__("This member has no stats to show.")
 
 
-class CannotCreateGraph(OverBotException):
-    def __init__(self) -> None:
-        super().__init__("I don't have enough data to create the graph.")
-
-
 class RequestError(OverBotException):
-
     pass
 
 
@@ -81,7 +73,6 @@ class TooManyAccounts(RequestError):
 
 
 class ProfileException(OverBotException):
-
     pass
 
 
@@ -108,10 +99,8 @@ class ProfileLimitReached(app_commands.CheckFailure):
 
 
 class NotPremium(app_commands.CheckFailure):
-
     pass
 
 
 class NotOwner(app_commands.CheckFailure):
-
     pass
