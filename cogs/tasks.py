@@ -157,7 +157,7 @@ class Tasks(commands.Cog):
                     "members": g.member_count,
                     "commands_run": guild["commands"],
                     "shard_id": g.shard_id + 1,
-                    "joined_at": str(g.me.joined_at),
+                    "joined_at": str(g.me.joined_at) if g.me is not None else "N/A",
                     "is_premium": g.id in self.bot.premiums,
                 }
             )
