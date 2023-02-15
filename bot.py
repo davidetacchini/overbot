@@ -27,7 +27,7 @@ if sys.platform == "linux":
 
 log = logging.getLogger("overbot")
 
-__version__ = "5.2.5"
+__version__ = "5.3.0"
 
 
 class OverBot(commands.AutoShardedBot):
