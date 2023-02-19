@@ -12,7 +12,7 @@ from discord.ext import commands
 if TYPE_CHECKING:
     from bot import OverBot
 
-HeroCategories = Literal["offense", "support", "tank"]
+HeroCategories = Literal["damage", "support", "tank"]
 MemeCategories = Literal["hot", "new", "top", "rising"]
 MapCategories = Literal[
     "control",
