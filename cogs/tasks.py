@@ -18,7 +18,7 @@ from utils.scrape import get_overwatch_news
 if TYPE_CHECKING:
     from bot import OverBot
 
-    Shards = BotCommands = TopServers = list[dict[str, Any]]
+    Shards = BotCommands = TopServers = Supporters = list[dict[str, Any]]
     BotStats = dict[str, list[dict[str, Any]] | dict[str, Any]]
 
 
@@ -163,12 +163,40 @@ class Tasks(commands.Cog):
             )
         return servers
 
+    async def get_supporters(self) -> Supporters:
+        supporters = []
+        for id_ in self.bot.premiums:
+            guild = self.bot.get_guild(id_)
+            if guild is not None:
+                icon = str(guild.icon.replace(size=128, format="webp")) if guild.icon else ""
+                supporters.append(
+                    {
+                        "id": id_,
+                        "name": str(guild),
+                        "icon": icon,
+                        "is_server": True,
+                    }
+                )
+            else:
+                try:
+                    user = self.bot.get_user(id_) or (await self.bot.fetch_user(id_))
+                except Exception:
+                    pass
+                else:
+                    icon = str(user.display_avatar.replace(size=128, format="webp"))
+                    supporters.append(
+                        {
+                            "id": id_,
+                            "name": str(user),
+                            "icon": icon,
+                            "is_server": False,
+                        }
+                    )
+        return supporters
+
     @tasks.loop(seconds=30.0)
     async def update_private_api(self):
         """POST bot stats to private API."""
-        if self.bot.debug:
-            return
-
         await self.bot.wait_until_ready()
 
         headers = {
@@ -179,11 +207,17 @@ class Tasks(commands.Cog):
         stats = await self.get_bot_stats()
         commands = self.get_bot_commands()
         servers = await self.get_top_servers()
+        supporters = await self.get_supporters()
 
-        BASE_URL = self.bot.config.obapi["url"]
+        if self.bot.debug:
+            BASE_URL = "http://127.0.0.1:5001/api"
+        else:
+            BASE_URL = self.bot.config.obapi["url"]
+
         await self.bot.session.post(f"{BASE_URL}/statistics", json=stats, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/commands", json=commands, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/servers", json=servers, headers=headers)
+        await self.bot.session.post(f"{BASE_URL}/supporters", json=supporters, headers=headers)
 
     @tasks.loop(minutes=30.0)
     async def update_discord_portals(self):
