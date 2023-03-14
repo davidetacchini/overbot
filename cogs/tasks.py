@@ -40,7 +40,7 @@ class Tasks(commands.Cog):
             guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
             try:
                 total_members = sum(g.member_count for g in guilds)
-            except AttributeError:
+            except (AttributeError, TypeError):
                 total_members = 0
             shards.append(
                 {
@@ -57,7 +57,7 @@ class Tasks(commands.Cog):
 
         try:
             total_members = sum(g.member_count for g in self.bot.guilds)
-        except AttributeError:
+        except (AttributeError, TypeError):
             total_members = 0
 
         large_servers = sum(1 for g in self.bot.guilds if g.large)
