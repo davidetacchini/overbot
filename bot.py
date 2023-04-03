@@ -80,7 +80,6 @@ class OverBot(commands.AutoShardedBot):
     async def get_pg_version(self) -> str:
         async with self.pool.acquire() as con:
             pg_version = con.get_server_version()
-
         return f"{pg_version.major}.{pg_version.micro} {pg_version.releaselevel}"
 
     async def paginate(
