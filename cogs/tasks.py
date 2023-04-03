@@ -166,6 +166,8 @@ class Tasks(commands.Cog):
     async def get_supporters(self) -> Supporters:
         supporters = []
         for id_ in self.bot.premiums:
+            if id_ == self.bot.config.owner_id:  # skip my profile
+                continue
             guild = self.bot.get_guild(id_)
             if guild is not None:
                 icon = str(guild.icon.replace(size=128, format="webp")) if guild.icon else ""
