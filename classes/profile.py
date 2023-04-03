@@ -182,19 +182,21 @@ class Profile:
     def embed_summary(self) -> discord.Embed:
         embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
         embed.set_author(name=str(self), icon_url=self.avatar)
+        embed.set_footer(text=f"Endorsement: {self.data.get('endorsement')}")
 
         ratings = self.resolve_ratings()
 
         if ratings:
-            ratings_ = []
+            l_ratings = []
             for key, value in ratings.items():
                 role_icon = ROLES.get(key.lower())
-                ratings_.append(f"{role_icon} {value}")
-            embed.description = " ".join(ratings_)
+                l_ratings.append(f"{role_icon} {value}")
+            embed.description = " ".join(l_ratings)
 
         summary = {}
-        summary["endorsement"] = self.data.get("endorsement")
+        summary["gamesPlayed"] = self.data.get("gamesPlayed")
         summary["gamesWon"] = self.data.get("gamesWon")
+        summary["gamesLost"] = self.data.get("gamesLost")
 
         for key, value in summary.items():
             embed.add_field(name=self._to_pascal(key), value=value)
