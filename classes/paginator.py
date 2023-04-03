@@ -1,6 +1,7 @@
 from typing import Any, Sequence
 
 import discord
+
 from utils import emojis
 
 PageT = str | dict | discord.Embed
