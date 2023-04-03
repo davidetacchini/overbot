@@ -15,7 +15,7 @@ from contextlib import redirect_stdout
 
 import discord
 
-from discord import ui, app_commands
+from discord import app_commands
 from discord.ext import commands
 
 from utils.funcs import module_autocomplete
@@ -23,64 +23,6 @@ from utils.checks import is_owner
 
 if TYPE_CHECKING:
     from bot import OverBot
-
-
-class ModalExecuteCode(ui.Modal, title="Execute a piece of code"):
-    body: ui.TextInput = ui.TextInput(label="Code", required=True, style=discord.TextStyle.long)
-
-    async def on_submit(self, interaction: discord.Interaction) -> None:
-        env = {
-            "bot": interaction.client,
-            "interaction": interaction,
-            "channel": interaction.channel,
-            "author": interaction.user,
-            "guild": interaction.guild,
-            "message": interaction.message,
-        }
-
-        env.update(globals())
-
-        stdout = io.StringIO()
-
-        body = self.body.value or ""
-        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
-
-        try:
-            exec(to_compile, env)
-        except Exception as e:
-            return await interaction.response.send_message(f"```py\n{type(e).__name__}: {e}\n```")
-
-        func = env["func"]
-        try:
-            with redirect_stdout(stdout):
-                ret = await func()
-        except Exception:
-            value = stdout.getvalue()
-            await interaction.response.send_message(f"```py\n{value}{traceback.format_exc()}\n```")
-        else:
-            value = stdout.getvalue()
-            if not ret:
-                if value:
-                    await interaction.response.send_message(f"```py\n{value}\n```")
-            else:
-                await interaction.response.send_message(f"```py\n{value}{ret}\n```")
-
-
-class ModalExecuteSQL(ui.Modal, title="Execute SQL queries"):
-    query: ui.TextInput = ui.TextInput(label="Query", required=True, style=discord.TextStyle.long)
-
-    async def on_submit(self, interaction: discord.Interaction) -> None:
-        async with interaction.client.pool.acquire() as conn:
-            try:
-                res = await conn.fetch(self.query.value)
-            except Exception as e:
-                return await interaction.response.send_message(f"```prolog\n{e}```")
-            if res:
-                await interaction.response.send_message(
-                    f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```"""
-                )
-            else:
-                await interaction.response.send_message("There are no results.")
 
 
 class Owner(commands.Cog):
@@ -248,9 +190,43 @@ class Owner(commands.Cog):
 
     @app_commands.command()
     @is_owner()
-    async def exc(self, interaction: discord.Interaction) -> None:
-        """Evaluates a code"""
-        await interaction.response.send_modal(ModalExecuteCode())
+    async def exc(self, interaction: discord.interaction, code: str) -> None:
+        """Evaluates a piece of code"""
+        env = {
+            "bot": interaction.client,
+            "interaction": interaction,
+            "channel": interaction.channel,
+            "author": interaction.user,
+            "guild": interaction.guild,
+            "message": interaction.message,
+        }
+
+        env.update(globals())
+
+        stdout = io.StringIO()
+
+        body = code or ""
+        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
+
+        try:
+            exec(to_compile, env)
+        except Exception as e:
+            return await interaction.response.send_message(f"```py\n{type(e).__name__}: {e}\n```")
+
+        func = env["func"]
+        try:
+            with redirect_stdout(stdout):
+                ret = await func()
+        except Exception:
+            value = stdout.getvalue()
+            await interaction.response.send_message(f"```py\n{value}{traceback.format_exc()}\n```")
+        else:
+            value = stdout.getvalue()
+            if not ret:
+                if value:
+                    await interaction.response.send_message(f"```py\n{value}\n```")
+            else:
+                await interaction.response.send_message(f"```py\n{value}{ret}\n```")
 
     @app_commands.command()
     @is_owner()
@@ -267,9 +243,19 @@ class Owner(commands.Cog):
 
     @app_commands.command()
     @is_owner()
-    async def sql(self, interaction: discord.Interaction) -> None:
+    async def sql(self, interaction: discord.Interaction, query: str) -> None:
         """Run a query"""
-        await interaction.response.send_modal(ModalExecuteSQL())
+        async with interaction.client.pool.acquire() as conn:
+            try:
+                res = await conn.fetch(query)
+            except Exception as e:
+                return await interaction.response.send_message(f"```prolog\n{e}```")
+            if res:
+                await interaction.response.send_message(
+                    f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```"""
+                )
+            else:
+                await interaction.response.send_message("There are no results.")
 
     @app_commands.command()
     @is_owner()
