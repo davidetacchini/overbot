@@ -17,6 +17,15 @@ ROLES = {
     "offense": emojis.u_offense,
     "support": emojis.u_support,
 }
+SHORT_RATINGS = {
+    "bronze": "BR",
+    "silver": "SI",
+    "gold": "GO",
+    "platinum": "PL",
+    "diamond": "DI",
+    "master": "MA",
+    "grandmaster": "GM",
+}
 
 
 class Nickname:
@@ -34,13 +43,18 @@ class Nickname:
         return bool(await self.bot.pool.fetchval(query, self.member.id))
 
     async def _generate(self) -> str:
-        ratings = self.profile.resolve_ratings()
+        ratings = self.profile.resolve_ratings(formatted=False)
         if not ratings:
             return f"{self.member.name[:21]} [Unranked]"
 
         tmp = ""
         for key, value in ratings.items():
-            tmp += f"{ROLES.get(key)}{value}/"
+            icon, group, tier = (
+                ROLES.get(key),
+                SHORT_RATINGS.get(value["group"].lower()),
+                value["tier"],
+            )
+            tmp += f"{icon}{group}-{tier}/"
 
         # tmp[:-1] removes the last slash
         tmp = "[" + tmp[:-1] + "]"

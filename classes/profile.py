@@ -91,9 +91,13 @@ class Profile:
     def is_private(self) -> bool:
         return self.data["private"]
 
-    def resolve_ratings(self) -> None | dict[str, int]:
+    def resolve_ratings(self, *, formatted: bool = True) -> None | dict[str, int]:
         if not self.data["ratings"]:
             return None
+
+        if not formatted:
+            return self.data["ratings"]
+
         ratings = {}
         for key, value in self.data["ratings"].items():
             ratings[key.lower()] = f"**{value['group']} {str(value['tier'])}**"
