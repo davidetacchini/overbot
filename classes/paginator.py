@@ -1,6 +1,7 @@
 from typing import Any, Sequence
 
 import discord
+from utils import emojis
 
 PageT = str | dict | discord.Embed
 
@@ -87,19 +88,19 @@ class Paginator(discord.ui.View):
         else:
             await self.interaction.response.send_message(**kwargs, view=self)
 
-    @discord.ui.button(label="<<", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(emoji=emojis.left_d_caret, style=discord.ButtonStyle.blurple)
     async def first(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current > 0:
             self.current = 0
             await self._update(interaction)
 
-    @discord.ui.button(label="<", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(emoji=emojis.left_caret, style=discord.ButtonStyle.blurple)
     async def previous(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current - 1 >= 0:
             self.current -= 1
             await self._update(interaction)
 
-    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
+    @discord.ui.button(emoji=emojis.close, style=discord.ButtonStyle.red)
     async def quit_session(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
@@ -107,13 +108,13 @@ class Paginator(discord.ui.View):
         await interaction.delete_original_response()
         self.stop()
 
-    @discord.ui.button(label=">", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(emoji=emojis.right_caret, style=discord.ButtonStyle.blurple)
     async def next(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current + 1 <= self.total:
             self.current += 1
             await self._update(interaction)
 
-    @discord.ui.button(label=">>", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(emoji=emojis.right_d_caret, style=discord.ButtonStyle.blurple)
     async def last(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current < self.total:
             self.current = self.total
