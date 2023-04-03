@@ -49,11 +49,9 @@ class Nickname:
 
         tmp = ""
         for key, value in ratings.items():
-            icon, group, tier = (
-                ROLES.get(key),
-                SHORT_RATINGS.get(value["group"].lower()),
-                value["tier"],
-            )
+            icon = ROLES.get(key)
+            group = SHORT_RATINGS.get(value["group"].lower())
+            tier = value["tier"]
             tmp += f"{icon}{group}-{tier}/"
 
         # tmp[:-1] removes the last slash
