@@ -210,9 +210,9 @@ class Tasks(commands.Cog):
         supporters = await self.get_supporters()
 
         if self.bot.debug:
-            BASE_URL = "http://127.0.0.1:5001/api"
+            BASE_URL = self.bot.config.obapi["dev"]
         else:
-            BASE_URL = self.bot.config.obapi["url"]
+            BASE_URL = self.bot.config.obapi["prod"]
 
         await self.bot.session.post(f"{BASE_URL}/statistics", json=stats, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/commands", json=commands, headers=headers)
@@ -278,7 +278,7 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         url_new = self.bot.config.dbot["new"]  # endpoint to check for new donations
-        product_server_id = self.bot.config.dbot["product_ids"]["server"]
+        product_member_id = self.bot.config.dbot["product_ids"]["member"]
 
         headers = {"Authorization": self.bot.config.dbot["api_key"]}
 
@@ -293,23 +293,33 @@ class Tasks(commands.Cog):
         if not donations:
             return
 
+        mark_processed = True
         for donation in donations:
-            if donation["product_id"] == product_server_id:
-                guild_id = int(donation["seller_customs"]["Server ID (to be set as premium)"])
-                await self.set_premium_for(guild_id)
-                self.bot.premiums.add(guild_id)
-            else:
+            if donation["product_id"] == product_member_id:
                 member_id = int(donation["buyer_id"])
                 await self.set_premium_for(member_id, server=False)
                 self.bot.premiums.add(member_id)
+            else:
+                try:
+                    guild_id = int(donation["seller_customs"]["Server ID (to be set as premium)"])
+                except ValueError:  # if the user does not input the server ID
+                    mark_processed = False
+                else:
+                    await self.set_premium_for(guild_id)
+                    self.bot.premiums.add(guild_id)
 
-            # endpoint to mark donation as processed
-            url_mark = self.bot.config.dbot["mark"].format(donation["txn_id"])
-            payload = {"markProcessed": True}
-            async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
-                message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
-                log.info(message)
-                await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
+            if mark_processed:
+                # endpoint to mark donation as processed
+                url_mark = self.bot.config.dbot["mark"].format(donation["txn_id"])
+                payload = {"markProcessed": True}
+                async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
+                    message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
+                    log.info(message)
+                    await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
+            else:
+                message = f'Donation {donation["txn_id"]} was not processed.'
+                log.error(message)
+                await self.bot.get_cog("Events").send_log(message, discord.Color.red())
 
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
