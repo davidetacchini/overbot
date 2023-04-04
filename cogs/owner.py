@@ -30,6 +30,7 @@ class Owner(commands.Cog):
         self.bot = bot
 
     reload = app_commands.Group(name="reload", description="Reloads modules or the config file.")
+    sql = app_commands.Group(name="sql", description="Executes SQL queries.")
 
     @app_commands.command()
     @is_owner()
@@ -92,6 +93,7 @@ class Owner(commands.Cog):
 
     # Source: https://github.com/Rapptz/RoboDanny
     @reload.command()
+    @is_owner()
     async def modules(self, interaction: discord.Interaction) -> None:
         """Reloads all modules, while pulling from git"""
         await interaction.response.defer(thinking=True)
@@ -241,10 +243,22 @@ class Owner(commands.Cog):
         ret = (await process.stdout.read()).decode("utf-8").strip()
         await interaction.edit_original_response(content=f"""```prolog\n{ret}```""")
 
-    @app_commands.command()
+    @sql.command()
     @is_owner()
-    async def sql(self, interaction: discord.Interaction, query: str) -> None:
-        """Run a query"""
+    async def execute(self, interaction: discord.Interaction, query: str) -> None:
+        """INSERT, UPDATE or DELETE from database"""
+        async with interaction.client.pool.acquire() as conn:
+            try:
+                await conn.execute(query)
+            except Exception as e:
+                return await interaction.response.send_message(f"```prolog\n{e}```")
+            else:
+                await interaction.response.send_message("Successful query.")
+
+    @sql.command()
+    @is_owner()
+    async def fetch(self, interaction: discord.Interaction, query: str) -> None:
+        """Fetch data from database"""
         async with interaction.client.pool.acquire() as conn:
             try:
                 res = await conn.fetch(query)
