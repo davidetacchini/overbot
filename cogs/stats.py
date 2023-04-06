@@ -8,7 +8,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.app_commands import Choice
 
-from utils.funcs import platform_choices, hero_autocomplete
+from utils.helpers import platform_choices, hero_autocomplete
 from classes.profile import Profile
 
 if TYPE_CHECKING:

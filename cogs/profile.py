@@ -11,13 +11,13 @@ from discord.ext import commands
 from discord.app_commands import Choice
 
 from classes.ui import ProfileUnlinkView, SelectProfileView
-from utils.funcs import (
+from utils.checks import has_profile, can_add_profile, subcommand_guild_only
+from utils.helpers import (
     platform_choices,
     hero_autocomplete,
     get_platform_emoji,
     profile_autocomplete,
 )
-from utils.checks import has_profile, can_add_profile, subcommand_guild_only
 from classes.profile import Profile
 from classes.nickname import Nickname
 from classes.exceptions import NoChoice, ProfileNotLinked

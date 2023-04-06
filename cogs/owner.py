@@ -18,8 +18,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.funcs import module_autocomplete
 from utils.checks import is_owner
+from utils.helpers import module_autocomplete
 
 if TYPE_CHECKING:
     from bot import OverBot

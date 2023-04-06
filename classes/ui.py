@@ -4,7 +4,7 @@ from typing import Any
 
 import discord
 
-from utils.funcs import get_platform_emoji
+from utils.helpers import get_platform_emoji
 
 from .profile import Profile
 
