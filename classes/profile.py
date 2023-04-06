@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
     Stat = dict[str, None | dict[str, Any]]
 
-ROLES = {
+ROLE_TO_EMOJI = {
     "tank": emojis.tank,
     "offense": emojis.offense,
     "support": emojis.support,
@@ -159,7 +159,7 @@ class Profile:
             return embed
 
         for key, value in ratings.items():
-            role_icon = ROLES.get(key)
+            role_icon = ROLE_TO_EMOJI.get(key)
             role_name = key.upper()
             embed.add_field(name=f"{role_icon} {role_name}", value=value)
 
@@ -189,7 +189,7 @@ class Profile:
         if ratings:
             l_ratings = []
             for key, value in ratings.items():
-                role_icon = ROLES.get(key.lower())
+                role_icon = ROLE_TO_EMOJI.get(key.lower())
                 l_ratings.append(f"{role_icon} {value}")
             embed.description = " ".join(l_ratings)
 
