@@ -12,20 +12,6 @@ if TYPE_CHECKING:
     from .profile import Profile
 
 MAX_NICKNAME_LENGTH = 32
-ROLES = {
-    "tank": emojis.u_tank,
-    "offense": emojis.u_offense,
-    "support": emojis.u_support,
-}
-SHORT_RATINGS = {
-    "bronze": "BR",
-    "silver": "SI",
-    "gold": "GO",
-    "platinum": "PL",
-    "diamond": "DI",
-    "master": "MA",
-    "grandmaster": "GM",
-}
 
 
 class Nickname:
@@ -47,10 +33,25 @@ class Nickname:
         if not ratings:
             return f"{self.member.name[:21]} [Unranked]"
 
+        role_to_emoji = {
+            "tank": emojis.u_tank,
+            "offense": emojis.u_offense,
+            "support": emojis.u_support,
+        }
+        ratings_abbrv = {
+            "bronze": "BR",
+            "silver": "SI",
+            "gold": "GO",
+            "platinum": "PL",
+            "diamond": "DI",
+            "master": "MA",
+            "grandmaster": "GM",
+        }
+
         tmp = ""
         for key, value in ratings.items():
-            icon = ROLES.get(key)
-            group = SHORT_RATINGS.get(value["group"].lower())
+            icon = role_to_emoji.get(key)
+            group = ratings_abbrv.get(value["group"].lower())
             tier = value["tier"]
             tmp += f"{icon}{group}-{tier}/"
 
