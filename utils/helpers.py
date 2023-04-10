@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from discord.app_commands import Choice
+from discord.app_commands import Group, Choice
 
 from . import emojis
 
@@ -64,3 +64,12 @@ async def profile_autocomplete(interaction: Interaction, current: str) -> list[C
         for profile in profiles
         if current.lower() in profile.username.lower()
     ]
+
+
+async def command_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
+    commands = [c for c in interaction.client.tree.walk_commands()]
+    return [
+        Choice(name=command.qualified_name, value=command.qualified_name)
+        for command in commands
+        if current.lower() in command.qualified_name.lower() and not isinstance(command, Group)
+    ][:25]

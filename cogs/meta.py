@@ -15,6 +15,8 @@ import discord
 from discord import ui, app_commands
 from discord.ext import commands
 
+from utils.helpers import command_autocomplete
+
 if TYPE_CHECKING:
     from asyncpg import Record
 
@@ -26,22 +28,49 @@ class Meta(commands.Cog):
         self.bot = bot
 
     @app_commands.command()
-    async def help(self, interaction: discord.Interaction) -> None:
-        """Shows help for OverBot"""
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.title = "OverBot Help"
-        description = (
-            "Click the button below to look at all the available "
-            "Slash Commands and Context Menu ones."
-        )
-        embed.description = description
+    @app_commands.autocomplete(command=command_autocomplete)
+    async def help(self, interaction: discord.Interaction, command: None | str = None) -> None:
+        """Shows help for a given command"""
+        await interaction.response.defer()
+
+        if not command:
+            help_id = 1094929544055640084 if self.bot.debug else 1011734903471214622
+            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed.title = "OverBot Help"
+            description = (
+                f"Click the button below to look at all the available commands or use </help:{help_id}> "
+                "followed by a command name (e.g. **/help stats**) to get information about a command."
+            )
+            embed.description = description
+        else:
+            actual = self.bot.tree.get_command(command.split(" ")[0])
+            if not actual:
+                return await interaction.followup.send(f"Command **{command}** not found.")
+
+            if isinstance(actual, app_commands.Group):
+                actual = actual.get_command(command.split(" ")[1])
+
+            signature = " ".join(map(lambda p: f"`{p.name}`", actual.parameters))
+
+            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed.title = f"/{actual.qualified_name} {signature}"
+            embed.description = actual.description
+
+            parameters = []
+            for p in actual.parameters:
+                tmp = f"`{p.name}`: {p.description}{' [**R**]' if p.required else ' [**O**]'}"
+                parameters.append(tmp)
+
+            if parameters:
+                embed.set_footer(text="[R] = Required / [O] = Optional")
+                embed.add_field(name="Parameters", value="\n".join(parameters))
 
         view = ui.View()
         view.add_item(
-            ui.Button(label="All available commands", url=self.bot.config.website + "/commands")
+            ui.Button(label="See all commands", url=self.bot.config.website + "/commands")
         )
 
-        await interaction.response.send_message(embed=embed, view=view)
+        await interaction.followup.send(embed=embed, view=view)
 
     @app_commands.command()
     async def support(self, interaction: discord.Interaction) -> None:
