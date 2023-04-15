@@ -278,7 +278,7 @@ class Owner(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             profiles = await conn.fetchval("SELECT COUNT(*) FROM profile;")
             guilds = await conn.fetchval("SELECT COUNT(*) FROM server;")
-            members = await conn.fetchrow("SELECT count(*) from member;")
+            members = await conn.fetchval("SELECT COUNT(*) from member;")
             ratings = await conn.fetchval("SELECT COUNT(*) FROM rating;")
             nicknames = await conn.fetchval("SELECT COUNT(*) FROM nickname;")
             played, won, lost = await conn.fetchrow(
