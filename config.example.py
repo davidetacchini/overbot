@@ -82,9 +82,6 @@ test_guild_id = None
 
 # ENDIGNORE
 
-"""Hero portrait URL."""
-hero_portrait_url = "https://d1u1mce87gyfbn.cloudfront.net/hero/{}/hero-select-portrait.png"
-
 """Overwatch API url (unofficial)."""
 base_url = "https://overfast-api.tekrop.fr"
 
