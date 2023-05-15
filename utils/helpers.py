@@ -10,6 +10,11 @@ if TYPE_CHECKING:
     from discord import Interaction, PartialEmoji
 
 
+basic_platform_choices = [
+    Choice(name="PC", value="pc"),
+    Choice(name="Console", value="console"),
+]
+
 platform_choices = [
     Choice(name="Battle.net", value="pc"),
     Choice(name="PlayStation", value="psn"),
@@ -41,9 +46,9 @@ def format_platform(platform: str) -> str:
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
     heroes = interaction.client.heroes
     return [
-        Choice(name=value["name"], value=key)
-        for key, value in heroes.items()
-        if current.lower() in value["name"].lower() or current.lower() in key.lower()
+        Choice(name=hero["name"], value=hero["key"])
+        for hero in heroes
+        if current.lower() in hero["name"].lower() or current.lower() in hero["key"].lower()
     ][
         :25
     ]  # choices must be <= 25, heroes are more, so slicing.
