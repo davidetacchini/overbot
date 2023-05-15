@@ -15,14 +15,15 @@ if TYPE_CHECKING:
 HeroCategories = Literal["damage", "support", "tank"]
 MemeCategories = Literal["hot", "new", "top", "rising"]
 MapCategories = Literal[
-    "control",
     "assault",
-    "escort",
-    "capture the flag",
-    "hybrid",
-    "elimination",
+    "capture-the-flag",
+    "control",
     "deathmatch",
-    "team deathmatch",
+    "elimination",
+    "escort",
+    "hybrid",
+    "push",
+    "team-deathmatch",
 ]
 
 
@@ -31,13 +32,20 @@ class Fun(commands.Cog):
         self.bot = bot
 
     def _get_random_hero(self, category: None | str) -> str:
-        heroes = list(self.bot.heroes.values())
         if not category:
-            hero = secrets.choice(heroes)
+            hero = secrets.choice(self.bot.heroes)
         else:
-            categorized_heroes = [h for h in heroes if h["role"] == category]
+            categorized_heroes = [h for h in self.bot.heroes if h["role"] == category]
             hero = secrets.choice(categorized_heroes)
         return hero["name"]
+
+    def _get_random_map(self, category: None | str) -> str:
+        if not category:
+            map_ = secrets.choice(self.bot.maps)
+        else:
+            categorized_maps = [m for m in self.bot.maps if category in m["gamemodes"]]
+            map_ = secrets.choice(categorized_maps)
+        return map_["name"]
 
     async def _get_random_meme(self, category: str) -> dict[str, Any]:
         url = f"https://www.reddit.com/r/Overwatch_Memes/{category}.json"
@@ -82,6 +90,15 @@ class Fun(commands.Cog):
         """Returns a hero to get a golden gun for"""
         hero = self._get_random_hero(category)
         await interaction.response.send_message(hero)
+
+    @app_commands.command()
+    @app_commands.describe(category="The category to get a random map from")
+    async def maptoplay(
+        self, interaction: discord.Interaction, category: MapCategories = None
+    ) -> None:
+        """Returns a random map"""
+        map_ = self._get_random_map(category)
+        await interaction.response.send_message(map_)
 
     @app_commands.command()
     async def roletoplay(self, interaction: discord.Interaction) -> None:
