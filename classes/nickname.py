@@ -35,7 +35,7 @@ class Nickname:
 
         role_to_emoji = {
             "tank": emojis.u_tank,
-            "offense": emojis.u_offense,
+            "damage": emojis.u_damage,
             "support": emojis.u_support,
         }
         ratings_abbrv = {
