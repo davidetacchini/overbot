@@ -10,12 +10,11 @@ import discord
 from aiohttp import ClientSession
 from discord.ext import commands
 
-import config  # pyright: reportMissingImports=false
+import config
 
 from utils import emojis
 from classes.ui import PromptView
 from utils.time import human_timedelta
-from utils.scrape import get_overwatch_heroes
 from classes.paginator import Paginator
 from utils.error_handler import error_handler
 
@@ -44,8 +43,10 @@ class OverBot(commands.AutoShardedBot):
         # caching
         self.premiums: set[int] = set()
         self.embed_colors: dict[int, int] = {}
-        self.heroes: dict[str, dict[str, str]] = {}
+        self.heroes: list[dict[Any, Any]] = []
+        self.maps: list[dict[Any, Any]] = []
 
+        self.BASE_URL: str = config.base_url
         self.TEST_GUILD: discord.Object = discord.Object(config.test_guild_id)
 
     @property
@@ -156,9 +157,6 @@ class OverBot(commands.AutoShardedBot):
         ids = await self.pool.fetch(query)
         self.premiums = {i["id"] for i in ids}
 
-    async def _cache_heroes(self) -> None:
-        self.heroes = await get_overwatch_heroes()
-
     async def _cache_embed_colors(self) -> None:
         embed_colors = {}
         query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
@@ -166,6 +164,26 @@ class OverBot(commands.AutoShardedBot):
         for member_id, color in colors:
             embed_colors[member_id] = color
         self.embed_colors = embed_colors
+
+    async def _cache_heroes(self) -> None:
+        try:
+            data = await self.session.get(f"{self.BASE_URL}/heroes")
+        except Exception:
+            log.exception("Cannot get heroes. Aborting...")
+            await self.close()
+        else:
+            self.heroes = await data.json()
+            log.info("Heroes successfully cached.")
+
+    async def _cache_maps(self) -> None:
+        try:
+            data = await self.session.get(f"{self.BASE_URL}/maps")
+        except Exception:
+            log.exception("Cannot get maps. Aborting...")
+            await self.close()
+        else:
+            self.maps = await data.json()
+            log.info("Maps successfully cached.")
 
     async def setup_hook(self) -> None:
         self.session = ClientSession()
@@ -179,6 +197,7 @@ class OverBot(commands.AutoShardedBot):
         await self._cache_premiums()
         await self._cache_embed_colors()
         await self._cache_heroes()
+        await self._cache_maps()
 
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
