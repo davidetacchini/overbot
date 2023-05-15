@@ -43,7 +43,7 @@ class OverBot(commands.AutoShardedBot):
         # caching
         self.premiums: set[int] = set()
         self.embed_colors: dict[int, int] = {}
-        self.heroes: list[dict[Any, Any]] = []
+        self.heroes: dict[str, dict[Any, Any]] = {}
         self.maps: list[dict[Any, Any]] = []
 
         self.BASE_URL: str = config.base_url
@@ -172,7 +172,11 @@ class OverBot(commands.AutoShardedBot):
             log.exception("Cannot get heroes. Aborting...")
             await self.close()
         else:
-            self.heroes = await data.json()
+            heroes = {}
+            data = await data.json()
+            for hero in data:
+                heroes[hero.pop("key")] = hero
+            self.heroes = heroes
             log.info("Heroes successfully cached.")
 
     async def _cache_maps(self) -> None:
