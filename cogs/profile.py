@@ -83,7 +83,7 @@ async def show_stats(interaction: discord.Interaction, member: discord.Member) -
         interaction, message, member
     )
     await interaction.client.get_cog("Stats").show_stats_for(
-        interaction, "allHeroes", profile=profile
+        interaction, "all-heroes", profile=profile
     )
 
 
@@ -108,7 +108,7 @@ class ProfileCog(commands.Cog, name="Profile"):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
-    profile = app_commands.Group(name="profile", description="Your Overwatch profiles.")
+    profile = app_commands.Group(name="profile", description="Manage your Overwatch profiles")
 
     async def get_profiles(self, interaction: discord.Interaction, member_id: int) -> list[Profile]:
         limit = self.bot.get_profiles_limit(interaction, member_id)
@@ -278,7 +278,7 @@ class ProfileCog(commands.Cog, name="Profile"):
         member = member or interaction.user
         message = "Select a profile to view the stats for:"
         profile = await self.select_profile(interaction, message, member)
-        await self.bot.get_cog("Stats").show_stats_for(interaction, "allHeroes", profile=profile)
+        await self.bot.get_cog("Stats").show_stats_for(interaction, "all-heroes", profile=profile)
 
     @profile.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
