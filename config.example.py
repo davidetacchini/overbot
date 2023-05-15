@@ -4,6 +4,7 @@ DEBUG = True
 """The Bot token."""
 token = "your_bot_token"
 application_id = "your_application_id"
+ignored_guilds = ()  # guilds to ignore when getting data from the database.
 
 """Database credentials."""
 database = {
@@ -85,7 +86,7 @@ test_guild_id = None
 hero_portrait_url = "https://d1u1mce87gyfbn.cloudfront.net/hero/{}/hero-select-portrait.png"
 
 """Overwatch API url (unofficial)."""
-base_url = "https://ow-api.com/v3/stats"
+base_url = "https://overfast-api.tekrop.fr"
 
 """GitHub links."""
 github = {
@@ -98,9 +99,7 @@ overwatch = {
     "status": "https://downdetector.com/status/overwatch-2/",
     "patch": "https://overwatch.blizzard.com/en-us/news/patch-notes/{}",
     "news": "https://overwatch.blizzard.com/en-us/news/",
-    "player": "https://overwatch.blizzard.com/en-us/career/{}/{}/",
     "account": "https://overwatch.blizzard.com/en-us/search/account-by-name",
-    "hero": "https://overwatch.blizzard.com/en-us/heroes",
 }
 
 """Official website."""
@@ -117,10 +116,3 @@ vote = "https://top.gg/bot/547546531666984961/vote"
 
 """Premium URL."""
 premium = "https://overbot.netlify.app/premium"
-
-"""Guilds to ignore when getting data from the database."""
-ignored_guilds = (
-    550685823784321035,
-    638339745117896745,
-    110373943822540800,
-)
