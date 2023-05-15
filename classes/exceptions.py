@@ -33,12 +33,12 @@ class RequestError(OverBotException):
 
 class NotFound(RequestError):
     def __init__(self) -> None:
-        super().__init__("Profile not found.")
+        super().__init__("Player not found.")
 
 
-class BadRequest(RequestError):
+class ValidationError(RequestError):
     def __init__(self) -> None:
-        super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
+        super().__init__("Validation error occured. Please try again.")
 
 
 class InternalServerError(RequestError):
@@ -48,12 +48,14 @@ class InternalServerError(RequestError):
         )
 
 
-class ServiceUnavailable(RequestError):
+class BlizzardServerError(RequestError):
     def __init__(self) -> None:
-        super().__init__("The API is under maintenance. Please be patient and try again later.")
+        super().__init__(
+            "Blizzard is having internal server problems. Please be patient and try again later."
+        )
 
 
-class UnexpectedError(RequestError):
+class UnknownError(RequestError):
     def __init__(self) -> None:
         super().__init__("Something bad happened. Please be patient and try again.")
 
