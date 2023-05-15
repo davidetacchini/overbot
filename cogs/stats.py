@@ -8,7 +8,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.app_commands import Choice
 
-from utils.helpers import platform_choices, hero_autocomplete
+from utils.helpers import hero_autocomplete, basic_platform_choices
 from classes.profile import Profile
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ class Stats(commands.Cog):
         await self.bot.paginate(embed, interaction=interaction)
 
     @app_commands.command()
-    @app_commands.choices(platform=platform_choices)
+    @app_commands.choices(platform=basic_platform_choices)
     @app_commands.describe(platform="The username of the player")
     @app_commands.describe(username="The platform of the player")
     async def ratings(
@@ -54,7 +54,7 @@ class Stats(commands.Cog):
         await interaction.followup.send(embed=embed)
 
     @app_commands.command()
-    @app_commands.choices(platform=platform_choices)
+    @app_commands.choices(platform=basic_platform_choices)
     @app_commands.describe(platform="The username of the player")
     @app_commands.describe(username="The platform of the player")
     async def stats(
@@ -62,11 +62,11 @@ class Stats(commands.Cog):
     ) -> None:
         """Provides player general stats"""
         await interaction.response.defer(thinking=True)
-        await self.show_stats_for(interaction, "allHeroes", platform.value, username)
+        await self.show_stats_for(interaction, "all-heroes", platform.value, username)
 
     @app_commands.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
-    @app_commands.choices(platform=platform_choices)
+    @app_commands.choices(platform=basic_platform_choices)
     @app_commands.describe(hero="The hero name to see the stats for")
     @app_commands.describe(platform="The username of the player")
     @app_commands.describe(username="The platform of the player")
@@ -83,7 +83,7 @@ class Stats(commands.Cog):
         await self.show_stats_for(interaction, hero, platform.value, username)
 
     @app_commands.command()
-    @app_commands.choices(platform=platform_choices)
+    @app_commands.choices(platform=basic_platform_choices)
     @app_commands.describe(platform="The username of the player")
     @app_commands.describe(username="The platform of the player")
     async def summary(
