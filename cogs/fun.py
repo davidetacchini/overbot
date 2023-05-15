@@ -32,10 +32,11 @@ class Fun(commands.Cog):
         self.bot = bot
 
     def _get_random_hero(self, category: None | str) -> str:
+        heroes = list(self.bot.heroes.values())
         if not category:
-            hero = secrets.choice(self.bot.heroes)
+            hero = secrets.choice(heroes)
         else:
-            categorized_heroes = [h for h in self.bot.heroes if h["role"] == category]
+            categorized_heroes = [h for h in heroes if h["role"] == category]
             hero = secrets.choice(categorized_heroes)
         return hero["name"]
 
