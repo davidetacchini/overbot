@@ -22,9 +22,6 @@
   <a href="https://discord.com/invite/8g3jnxv" traget="_blank">
   <img src="https://discord.com/api/guilds/550685823784321035/embed.png" alt="Discord Server" />
   </a>
-  <a href="https://top.gg/bot/547546531666984961" traget="_blank">
-    <img src="https://top.gg/api/widget/servers/547546531666984961.svg?noavatar=true" alt="Server Count" />
-  </a>
 </p>
 
 Self Hosting
