@@ -23,7 +23,7 @@ async def get_profiles(interaction: discord.Interaction, member_id: int) -> list
 
 
 def has_profile():
-    """Check for a user to have linked atleast a profile."""
+    """Check for a user to have linked at least a profile."""
 
     def get_target_id(interaction) -> int:
         try:
