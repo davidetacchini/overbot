@@ -221,41 +221,6 @@ class Tasks(commands.Cog):
         await self.bot.session.post(f"{BASE_URL}/servers", json=servers, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/supporters", json=supporters, headers=headers)
 
-    @tasks.loop(minutes=30.0)
-    async def update_discord_portals(self):
-        """Updates bot stats on Discord portals."""
-        if self.bot.debug:
-            return
-
-        await self.bot.wait_until_ready()
-
-        # POST stats on top.gg
-        payload = {
-            "server_count": len(self.bot.guilds),
-            "shard_count": self.bot.shard_count,
-        }
-
-        top_gg_headers = {"Authorization": self.bot.config.top_gg["token"]}
-
-        await self.bot.session.post(
-            self.bot.config.top_gg["url"], data=payload, headers=top_gg_headers
-        )
-
-        # POST stats on discord.bots.gg
-        payload = {
-            "guildCount": len(self.bot.guilds),
-            "shardCount": self.bot.shard_count,
-        }
-
-        headers = {
-            "Authorization": self.bot.config.discord_bots["token"],
-            "Content-Type": "application/json",
-        }
-
-        await self.bot.session.post(
-            self.bot.config.discord_bots["url"], json=payload, headers=headers
-        )
-
     async def set_premium_for(self, target_id: int, *, server: bool = True) -> None:
         server_query = """INSERT INTO server (id, premium)
                           VALUES ($1, true)
