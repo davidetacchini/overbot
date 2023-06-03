@@ -28,7 +28,6 @@ log = logging.getLogger("overbot")
 class Tasks(commands.Cog):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
-        self.update_discord_portals.start()
         self.update_private_api.start()
         self.check_subscriptions.start()
         self.send_overwatch_news.start()
@@ -343,7 +342,6 @@ class Tasks(commands.Cog):
         await self.bot.change_presence(activity=game)
 
     def cog_unload(self) -> None:
-        self.update_discord_portals.cancel()
         self.update_private_api.cancel()
         self.check_subscriptions.cancel()
         self.send_overwatch_news.cancel()
