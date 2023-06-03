@@ -16,8 +16,8 @@
   <a href="https://pypi.org/project/discord.py/" traget="_blank">
 	<img src="https://img.shields.io/pypi/v/discord.py" alt="PyPI" />
   </a>
-  <a href="https://ow-api.com/docs/" traget="_blank">
-    <img src="https://img.shields.io/badge/API-ow--api-orange" alt="API" />
+  <a href="https://overfast-api.tekrop.fr/" traget="_blank">
+    <img src="https://img.shields.io/badge/API-OverFast-orange" alt="API" />
   </a>
   <a href="https://discord.com/invite/8g3jnxv" traget="_blank">
   <img src="https://discord.com/api/guilds/550685823784321035/embed.png" alt="Discord Server" />
