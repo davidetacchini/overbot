@@ -43,18 +43,6 @@ obapi = {
     "token": "",
 }
 
-"""Top.gg authorization."""
-top_gg = {
-    "url": "",
-    "token": "",
-}
-
-"""discord.bots.gg authorization."""
-discord_bots = {
-    "url": "",
-    "token": "",
-}
-
 # ENDIGNORE
 
 """Premium consts."""
