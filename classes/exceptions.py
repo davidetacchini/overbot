@@ -79,15 +79,14 @@ class ProfileException(OverBotException):
 
 
 class NoStats(ProfileException):
-    def __init__(self) -> None:
-        super().__init__("This profile has no quick play nor competitive stats to display.")
-
-
-class NoHeroStats(ProfileException):
     def __init__(self, hero: str) -> None:
-        super().__init__(
-            f"This profile has no quick play nor competitive stast for **{hero}** to display."
-        )
+        if hero == "all-heroes":
+            message = "This profile has no quick play nor competitive stats to display."
+        else:
+            message = (
+                f"This profile has no quick play nor competitive stast for **{hero}** to display."
+            )
+        super().__init__(message)
 
 
 class ProfileNotLinked(app_commands.CheckFailure):
