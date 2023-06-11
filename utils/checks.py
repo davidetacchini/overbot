@@ -13,7 +13,7 @@ from classes.exceptions import NotOwner, NotPremium, ProfileNotLinked, ProfileLi
 
 
 async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:
-    query = """SELECT platform, username
+    query = """SELECT battletag
                FROM profile
                INNER JOIN member
                        ON member.id = profile.member_id

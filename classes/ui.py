@@ -4,8 +4,6 @@ from typing import Any
 
 import discord
 
-from utils.helpers import get_platform_emoji
-
 from .profile import Profile
 
 
@@ -56,7 +54,7 @@ class PromptView(BaseView):
         self.stop()
 
 
-class DropdownProfiles(discord.ui.Select):
+class SelectProfiles(discord.ui.Select):
     def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.profiles = profiles
@@ -64,14 +62,13 @@ class DropdownProfiles(discord.ui.Select):
 
     def __fill_options(self) -> None:
         for profile in self.profiles:
-            emoji = get_platform_emoji(profile.platform)
-            self.add_option(label=profile.username, value=str(profile.id), emoji=emoji)
+            self.add_option(label=profile.battletag, value=str(profile.id))
 
 
 class SelectProfileView(BaseView):
     def __init__(self, profiles: list[Profile], **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.select = DropdownProfiles(profiles, placeholder="Select a profile...")
+        self.select = SelectProfiles(profiles, placeholder="Select a profile...")
         setattr(self.select, "callback", self.select_callback)
         self.add_item(self.select)
 
@@ -94,7 +91,7 @@ class ProfileUnlinkView(BaseView):
         placeholder = "Select at least a profile..."
         # Using min_values=0 to ensure that the view gets recomputed
         # even when the user unselects the previously selected profile(s).
-        self.select = DropdownProfiles(
+        self.select = SelectProfiles(
             profiles, min_values=0, max_values=len(profiles), placeholder=placeholder
         )
         setattr(self.select, "callback", self.select_callback)
