@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.4
--- Dumped by pg_dump version 14.4
+-- Dumped from database version 15.3 (Homebrew)
+-- Dumped by pg_dump version 15.3 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -103,8 +103,7 @@ ALTER TABLE public.nickname OWNER TO davide;
 
 CREATE TABLE public.profile (
     id integer NOT NULL,
-    platform character varying(15) NOT NULL,
-    username character varying(100) NOT NULL,
+    battletag character varying(100) NOT NULL,
     member_id bigint NOT NULL
 );
 
