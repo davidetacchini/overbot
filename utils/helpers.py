@@ -4,43 +4,14 @@ from typing import TYPE_CHECKING
 
 from discord.app_commands import Group, Choice
 
-from . import emojis
-
 if TYPE_CHECKING:
-    from discord import Interaction, PartialEmoji
+    from discord import Interaction
 
 
-basic_platform_choices = [
+platform_choices = [
     Choice(name="PC", value="pc"),
     Choice(name="Console", value="console"),
 ]
-
-platform_choices = [
-    Choice(name="Battle.net", value="pc"),
-    Choice(name="PlayStation", value="psn"),
-    Choice(name="XBOX", value="xbl"),
-    Choice(name="Nintendo Switch", value="nintendo-switch"),
-]
-
-
-def get_platform_emoji(platform: str) -> PartialEmoji:
-    lookup = {
-        "pc": emojis.battlenet,
-        "psn": emojis.psn,
-        "xbl": emojis.xbl,
-        "nintendo-switch": emojis.switch,
-    }
-    return lookup[platform]
-
-
-def format_platform(platform: str) -> str:
-    lookup = {
-        "pc": "Battle.net",
-        "psn": "PlayStation",
-        "xbl": "XBOX",
-        "nintendo-switch": "Nintendo Switch",
-    }
-    return lookup[platform]
 
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
@@ -65,9 +36,9 @@ async def profile_autocomplete(interaction: Interaction, current: str) -> list[C
     profile_cog = interaction.client.get_cog("Profile")
     profiles = await profile_cog.get_profiles(interaction, interaction.user.id)
     return [
-        Choice(name=f"{format_platform(profile.platform)} - {profile.username}", value=profile.id)
+        Choice(name=profile.battletag, value=profile.id)
         for profile in profiles
-        if current.lower() in profile.username.lower()
+        if current.lower() in profile.battletag.lower()
     ]
 
 
