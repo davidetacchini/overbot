@@ -61,15 +61,10 @@ class UnknownError(RequestError):
 
 
 class TooManyAccounts(RequestError):
-    def __init__(self, platform: str, username: str, players: int) -> None:
-        match platform:
-            case "pc":
-                what = "BattleTag"
-            case "console":
-                what = "username"
+    def __init__(self, battletag: str, players: int) -> None:
         message = (
-            f"**{players}** accounts found named `{username}`. Please "
-            f"be more specific by entering your exact **{what}**."  # type: ignore # 'what' will always be bound to something
+            f"**{players}** accounts found named `{battletag}`. Please "
+            f"be more specific by entering your exact **BattleTag**."
         )
         super().__init__(message)
 
