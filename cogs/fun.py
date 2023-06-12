@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import secrets
 
-from typing import TYPE_CHECKING, Any, Literal, get_args
+from typing import TYPE_CHECKING, Literal
 
 import discord
 
@@ -65,7 +65,9 @@ class Fun(commands.Cog):
     @app_commands.command()
     async def meme(self, interaction: discord.Interaction) -> None:
         """Returns a random Overwatch meme"""
-        await interaction.response.send_message("Due to Reddit's new APIs policy, this command is no longer available. Thanks for the understanding.")
+        await interaction.response.send_message(
+            "Due to Reddit's new APIs policy, this command is no longer available. Thanks for the understanding."
+        )
 
 
 async def setup(bot: OverBot) -> None:
