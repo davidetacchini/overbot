@@ -10,3 +10,4 @@ python-dateutil
 pandas
 seaborn
 lru_dict
+lxml
