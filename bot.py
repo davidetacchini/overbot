@@ -16,7 +16,7 @@ from utils import emojis
 from classes.ui import PromptView
 from utils.time import human_timedelta
 from classes.paginator import Paginator
-from utils.error_handler import error_handler
+from classes.command_tree import OverBotCommandTree
 
 if sys.platform == "linux":
     import uvloop
@@ -36,7 +36,9 @@ class OverBot(commands.AutoShardedBot):
     app_info: discord.AppInfo
 
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__(command_prefix=config.default_prefix, **kwargs)
+        super().__init__(
+            command_prefix=config.default_prefix, tree_cls=OverBotCommandTree, **kwargs
+        )
         self.config = config
         self.sloc: int = 0
 
@@ -211,8 +213,6 @@ class OverBot(commands.AutoShardedBot):
                     log.exception(f"Extension {extension} failed its loading.")
                 else:
                     log.info(f"Extension {extension} successfully loaded.")
-
-        self.tree.on_error = error_handler
 
         if self.debug:
             self.tree.copy_global_to(guild=self.TEST_GUILD)
