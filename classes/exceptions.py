@@ -69,11 +69,7 @@ class TooManyAccounts(RequestError):
         super().__init__(message)
 
 
-class ProfileException(OverBotException):
-    pass
-
-
-class NoStats(ProfileException):
+class NoStats(OverBotException):
     def __init__(self, hero: str) -> None:
         if hero == "all-heroes":
             message = "This profile has no quick play nor competitive stats to display."
