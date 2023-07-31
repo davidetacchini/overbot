@@ -45,7 +45,8 @@ class Meta(commands.Cog):
         else:
             actual = self.bot.tree.get_command(command.split(" ")[0])
             if not actual:
-                return await interaction.followup.send(f"Command **{command}** not found.")
+                await interaction.followup.send(f"Command **{command}** not found.")
+                return
 
             if isinstance(actual, app_commands.Group):
                 actual = actual.get_command(command.split(" ")[1])
