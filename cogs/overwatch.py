@@ -62,7 +62,8 @@ class Overwatch(commands.Cog):
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
             embed.description = f"[Latest Overwatch News]({url})"
-            return await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed)
+            return
 
         for i, n in enumerate(news, start=1):
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
@@ -113,9 +114,10 @@ class Overwatch(commands.Cog):
         await interaction.response.defer(thinking=True)
         newsboard = await self.get_newsboard(interaction.guild_id)
         if newsboard.channel is not None:
-            return await interaction.followup.send(
+            await interaction.followup.send(
                 f"This server already has a newsboard at {newsboard.channel.mention}."
             )
+            return
 
         if guild := await self._has_newsboard(interaction.user.id):
             payload = f"You have already set up a newsboard in **{str(guild)}**. Do you want to override it?"
@@ -144,7 +146,8 @@ class Overwatch(commands.Cog):
                 name=name, overwrites=overwrites, topic=topic, reason=reason
             )
         except discord.HTTPException:
-            return await interaction.followup.send("Something bad happened. Please try again.")
+            await interaction.followup.send("Something bad happened. Please try again.")
+            return
 
         query = "INSERT INTO newsboard (id, server_id, member_id) VALUES ($1, $2, $3);"
         await self.bot.pool.execute(query, channel.id, interaction.guild_id, interaction.user.id)

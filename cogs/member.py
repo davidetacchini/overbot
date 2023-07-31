@@ -66,13 +66,13 @@ class Member(commands.Cog):
             try:
                 del self.bot.embed_colors[interaction.user.id]
             except KeyError:
-                return await interaction.response.send_message(
+                await interaction.response.send_message(
                     "Color already set to default.", ephemeral=True
                 )
+                return
             else:
-                return await interaction.response.send_message(
-                    "Color successfully reset.", ephemeral=True
-                )
+                await interaction.response.send_message("Color successfully reset.", ephemeral=True)
+                return
 
         embed = discord.Embed(color=color)
         query = "UPDATE member SET embed_color = $1 WHERE id = $2;"

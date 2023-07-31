@@ -104,7 +104,8 @@ class Owner(commands.Cog):
         # along with the text "already up-to-date" are in stdout
 
         if stdout.startswith("Already up to date."):
-            return await interaction.followup.send(stdout)
+            await interaction.followup.send(stdout)
+            return
 
         modules = self.find_modules_from_git(stdout)
         updated_modules = "\n".join(
@@ -213,7 +214,8 @@ class Owner(commands.Cog):
         try:
             exec(to_compile, env)
         except Exception as e:
-            return await interaction.response.send_message(f"```py\n{type(e).__name__}: {e}\n```")
+            await interaction.response.send_message(f"```py\n{type(e).__name__}: {e}\n```")
+            return
 
         func = env["func"]
         try:
@@ -251,7 +253,8 @@ class Owner(commands.Cog):
             try:
                 await conn.execute(query)
             except Exception as e:
-                return await interaction.response.send_message(f"```prolog\n{e}```")
+                await interaction.response.send_message(f"```prolog\n{e}```")
+                return
             else:
                 await interaction.response.send_message("Successful query.")
 
@@ -263,7 +266,8 @@ class Owner(commands.Cog):
             try:
                 res = await conn.fetch(query)
             except Exception as e:
-                return await interaction.response.send_message(f"```prolog\n{e}```")
+                await interaction.response.send_message(f"```prolog\n{e}```")
+                return
             if res:
                 await interaction.response.send_message(
                     f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```"""
