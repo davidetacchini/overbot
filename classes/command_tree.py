@@ -24,6 +24,14 @@ class OverBotCommandTree(app_commands.CommandTree):
     ) -> None:
         bot = interaction.client
         command = interaction.command
+        original_error = getattr(error, "original", error)
+
+        if command is not None:
+            if command._has_any_error_handlers():
+                return
+
+        if isinstance(original_error, discord.NotFound):
+            return
 
         async def send(payload: str | discord.Embed, ephemeral: bool = True) -> None:
             if isinstance(payload, str):
@@ -36,7 +44,7 @@ class OverBotCommandTree(app_commands.CommandTree):
             else:
                 await interaction.response.send_message(**kwargs, ephemeral=ephemeral)
 
-        if isinstance(error, (app_commands.CommandNotFound, discord.NotFound)):
+        if isinstance(error, app_commands.CommandNotFound):
             return
 
         elif isinstance(error, app_commands.TransformerError):
