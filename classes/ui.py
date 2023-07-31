@@ -5,6 +5,7 @@ from typing import Any
 import discord
 
 from .profile import Profile
+from .paginator import Paginator
 
 
 class BaseView(discord.ui.View):
@@ -20,7 +21,7 @@ class BaseView(discord.ui.View):
         if interaction.user and interaction.user.id == self.author_id:
             return True
         await interaction.response.send_message(
-            "This command wes not initiated by you.", ephemeral=True
+            "This command was not initiated by you.", ephemeral=True
         )
         return False
 
@@ -54,6 +55,19 @@ class PromptView(BaseView):
         self.stop()
 
 
+class SelectPlatform(discord.ui.Select):
+    def __init__(self, entries: dict[str, discord.Embed | list[discord.Embed]] = {}) -> None:
+        super().__init__(row=0, placeholder="Select a platform...")
+        self.entries = entries
+        self.add_option(label="PC", value="pc")
+        self.add_option(label="Console", value="console")
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        assert self.view is not None
+        value = self.values[0]
+        await self.view.rebind(self.entries[value], interaction)
+
+
 class SelectProfiles(discord.ui.Select):
     def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -63,6 +77,29 @@ class SelectProfiles(discord.ui.Select):
     def __fill_options(self) -> None:
         for profile in self.profiles:
             self.add_option(label=profile.battletag, value=str(profile.id))
+
+
+class SelectPlatformMenu(Paginator):
+    def __init__(
+        self, entries: discord.Embed | list[discord.Embed], interaction: discord.Interaction
+    ):
+        super().__init__(entries, interaction=interaction)
+
+    def add_platforms(self, platforms: dict[str, discord.Embed | list[discord.Embed]]) -> None:
+        self.clear_items()
+        self.add_item(SelectPlatform(entries=platforms))
+        self.fill_items()
+
+    async def rebind(
+        self, entries: discord.Embed | list[discord.Embed], interaction: discord.Interaction
+    ) -> None:
+        if isinstance(entries, discord.Embed):
+            entries = [entries]
+        self.entries = entries
+        self.current = 0
+        kwargs = self._get_kwargs_from_page(self.entries[0])
+        self._update_labels(0)
+        await interaction.response.edit_message(**kwargs, view=self)
 
 
 class SelectProfileView(BaseView):

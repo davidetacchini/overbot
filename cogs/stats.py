@@ -6,9 +6,9 @@ import discord
 
 from discord import app_commands
 from discord.ext import commands
-from discord.app_commands import Choice
 
-from utils.helpers import hero_autocomplete, basic_platform_choices
+from classes.ui import SelectPlatformMenu
+from utils.helpers import hero_autocomplete
 from classes.profile import Profile
 
 if TYPE_CHECKING:
@@ -23,80 +23,66 @@ class Stats(commands.Cog):
         self,
         interaction: discord.Interaction,
         hero: str,
-        platform: None | str = None,
-        username: None | str = None,
+        battletag: None | str = None,
         *,
         profile: None | Profile = None,
     ) -> None:
-        profile = profile or Profile(platform, username, interaction=interaction)
-        await profile.compute_data()
-        if profile.is_private():
-            embed: discord.Embed | list[discord.Embed] = profile.embed_private()
-        else:
-            embed = profile.embed_stats(hero)
-        await self.bot.paginate(embed, interaction=interaction)
+        profile = profile or Profile(battletag, interaction=interaction)
+        await profile.fetch_data()
 
-    @app_commands.command()
-    @app_commands.choices(platform=basic_platform_choices)
-    @app_commands.describe(platform="The username of the player")
-    @app_commands.describe(username="The platform of the player")
-    async def ratings(
-        self, interaction: discord.Interaction, platform: Choice[str], *, username: str
-    ) -> None:
-        """Provides player ratings"""
-        await interaction.response.defer(thinking=True)
-        profile = Profile(platform.value, username, interaction=interaction)
-        await profile.compute_data()
         if profile.is_private():
             embed = profile.embed_private()
-        else:
-            embed = await profile.embed_ratings()
-        await interaction.followup.send(embed=embed)
+            await interaction.response.send_message(embed=embed)
+            return
+
+        data = await profile.embed_stats(hero)
+        value = "console" if not data["pc"] else "pc"
+        view = SelectPlatformMenu(data[value], interaction=interaction)
+        view.add_platforms(data)
+        await view.start()
 
     @app_commands.command()
-    @app_commands.choices(platform=basic_platform_choices)
-    @app_commands.describe(platform="The username of the player")
-    @app_commands.describe(username="The platform of the player")
-    async def stats(
-        self, interaction: discord.Interaction, platform: Choice[str], *, username: str
-    ) -> None:
-        """Provides player general stats"""
+    @app_commands.describe(battletag="The battletag of the player")
+    async def ratings(self, interaction: discord.Interaction, *, battletag: str) -> None:
+        """Provides ratings for player."""
         await interaction.response.defer(thinking=True)
-        await self.show_stats_for(interaction, "all-heroes", platform.value, username)
+        profile = Profile(battletag, interaction=interaction)
+        await profile.fetch_data()
+
+        if profile.is_private():
+            embed = profile.embed_private()
+            await interaction.response.send_message(embed=embed)
+            return
+
+        data = await profile.embed_ratings()
+        value = "console" if not data["pc"] else "pc"
+        view = SelectPlatformMenu(data[value], interaction=interaction)
+        view.add_platforms(data)
+        await view.start()
 
     @app_commands.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
-    @app_commands.choices(platform=basic_platform_choices)
-    @app_commands.describe(hero="The hero name to see the stats for")
-    @app_commands.describe(platform="The username of the player")
-    @app_commands.describe(username="The platform of the player")
-    async def hero(
-        self,
-        interaction: discord.Interaction,
-        hero: str,
-        platform: Choice[str],
-        *,
-        username: str,
+    @app_commands.describe(battletag="The battletag of the player")
+    @app_commands.describe(
+        hero="The hero name to see the stats for. If not given then it shows general stats"
+    )
+    async def stats(
+        self, interaction: discord.Interaction, *, battletag: str, hero: str = "all-heroes"
     ) -> None:
-        """Provides player general stats for a given hero"""
-        await interaction.response.defer(thinking=True)
-        await self.show_stats_for(interaction, hero, platform.value, username)
+        """Provides general stats or hero specific stats for a player."""
+        await self.show_stats_for(interaction, hero, battletag)
 
     @app_commands.command()
-    @app_commands.choices(platform=basic_platform_choices)
-    @app_commands.describe(platform="The username of the player")
-    @app_commands.describe(username="The platform of the player")
-    async def summary(
-        self, interaction: discord.Interaction, platform: Choice[str], *, username: str
-    ) -> None:
-        """Provides player summarized stats"""
+    @app_commands.describe(battletag="The battletag of the player")
+    async def summary(self, interaction: discord.Interaction, *, battletag: str) -> None:
+        """Provides summarized stats for a player."""
         await interaction.response.defer(thinking=True)
-        profile = Profile(platform.value, username, interaction=interaction)
-        await profile.compute_data()
+        profile = Profile(battletag, interaction=interaction)
+        await profile.fetch_data()
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = profile.embed_summary()
+            embed = await profile.embed_summary()
         await interaction.followup.send(embed=embed)
 
 
