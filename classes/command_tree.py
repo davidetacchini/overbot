@@ -43,13 +43,13 @@ class OverBotCommandTree(app_commands.CommandTree):
             await send(str(error))
 
         elif isinstance(error, app_commands.CheckFailure):
-            if type(error) == ProfileNotLinked:
+            if isinstance(error, ProfileNotLinked):
                 if error.is_author:
                     await send("You haven't linked a profile yet. Use /profile link to start.")
                 else:
                     await send("This user did not link a profile yet.")
 
-            elif type(error) == ProfileLimitReached:
+            elif isinstance(error, ProfileLimitReached):
                 if error.limit == 5:
                     premium = bot.config.premium
                     embed = discord.Embed(color=discord.Color.red())
@@ -61,7 +61,7 @@ class OverBotCommandTree(app_commands.CommandTree):
                 else:
                     await send("Maximum limit of profiles reached.")
 
-            elif type(error) == NotPremium:
+            elif isinstance(error, NotPremium):
                 premium = bot.config.premium
                 embed = discord.Embed(color=discord.Color.red())
                 embed.description = (
@@ -70,21 +70,21 @@ class OverBotCommandTree(app_commands.CommandTree):
                 )
                 await send(embed)
 
-            elif type(error) == NotOwner:
+            elif isinstance(error, NotOwner):
                 await send("You are not allowed to run this command.")
 
-            elif type(error) == app_commands.NoPrivateMessage:
+            elif isinstance(error, app_commands.NoPrivateMessage):
                 await send("This command cannot be used in direct messages.")
 
-            elif type(error) == app_commands.MissingPermissions:
+            elif isinstance(error, app_commands.MissingPermissions):
                 perms = ", ".join(map(lambda p: f"`{p}`", error.missing_permissions))
                 await send(f"You don't have enough permissions to run this command: {perms}")
 
-            elif type(error) == app_commands.BotMissingPermissions:
+            elif isinstance(error, app_commands.BotMissingPermissions):
                 perms = ", ".join(map(lambda p: f"`{p}`", error.missing_permissions))
                 await send(f"I don't have enough permissions to run this command: {perms}")
 
-            elif type(error) == app_commands.CommandOnCooldown:
+            elif isinstance(error, app_commands.CommandOnCooldown):
                 command = interaction.command.qualified_name
                 seconds = round(error.retry_after, 2)
                 await send(f"You can't use `{command}` command for `{seconds}s`.")
