@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import re
+import datetime
 
 from typing import TYPE_CHECKING, Any
 
@@ -11,124 +11,170 @@ from aiohttp.client_exceptions import ClientConnectorError
 from utils import emojis
 
 from .request import Request
-from .exceptions import NoStats, NoHeroStats, UnexpectedError
+from .exceptions import UnknownError
 
 if TYPE_CHECKING:
     from asyncpg import Record
 
     from bot import OverBot
 
-    Stat = dict[str, None | dict[str, Any]]
+    Stat = dict[str, None | dict[Any, Any]]
 
 ROLE_TO_EMOJI = {
     "tank": emojis.tank,
-    "offense": emojis.offense,
+    "damage": emojis.damage,
     "support": emojis.support,
 }
 
 
 class Profile:
-    __slots__ = ("data", "id", "platform", "username", "interaction", "record", "bot", "pages")
+    __slots__ = (
+        "id",
+        "battletag",
+        "interaction",
+        "record",
+        "bot",
+        "pages",
+        "_platforms",
+        "_data",
+    )
 
     def __init__(
         self,
-        platform: None | str = None,
-        username: None | str = None,
+        battletag: None | str = None,
         *,
         interaction: discord.Interaction,
         record: None | Record = None,
     ) -> None:
-        self.data: dict[str, Any] = {}
         self.id: None | int = None
 
         if record:
             self.id = record["id"]
-            self.platform = record["platform"]
-            self.username = record["username"]
+            self.battletag = record["battletag"]
         else:
-            self.platform = platform
-            self.username = username
+            self.battletag = battletag
 
         self.interaction = interaction
         self.bot: OverBot = interaction.client
         self.pages: list[discord.Embed] = []
 
-    def __str__(self) -> str:
-        return self.data["name"]
+        self._platforms: tuple[str] = ("pc", "console")
+        self._data: dict[str, Any] = {}
+
+    @property
+    def _summary(self) -> dict[str, Any]:
+        return self._data.get("summary")
+
+    @property
+    def _stats(self) -> dict[str, Any]:
+        return self._data.get("stats")
+
+    @property
+    def username(self) -> str:
+        return self._summary.get("username")
+
+    @property
+    def request(self) -> Request:
+        return Request(self.battletag)
 
     @property
     def avatar(self) -> str:
-        if icon := self.data["icon"]:
-            return icon
-        else:
-            "https://imgur.com/a/BrDrZKL"
+        return self._summary.get("avatar", "https://imgur.com/a/BrDrZKL")
+
+    @property
+    def namecard(self) -> None | str:
+        return self._summary.get("namecard")
+
+    @property
+    def title(self) -> None | str:
+        return self._summary.get("title", "N/A")
+
+    @property
+    def endorsement(self) -> None | int:
+        return self._summary.get("endorsement").get("level") or "N/A"
 
     @staticmethod
-    def _to_pascal(key: str) -> str:
-        """From camel case to pascal case (testTest -> Test Test)."""
-        return (
-            re.sub("([a-z])([A-Z])", r"\g<1> \g<2>", key)
-            .replace(" Avg Per10Min", "")
-            .replace(" Most In Game", "")
-            .title()
-        )
-
-    def _format_key(self, key: str) -> str:
+    def _format_key(key: str, *, only_capital: bool = False) -> str:
         match key:
             case "best":
+                if only_capital:
+                    return key.capitalize()
                 return key.capitalize() + " (Most in game)"
             case "average":
+                if only_capital:
+                    return key.capitalize()
                 return key.capitalize() + " (per 10 minutes)"
             case _:
-                return self._to_pascal(key)
+                return (
+                    key.replace("_", " ")
+                    .title()
+                    .replace(" Avg Per 10 Min", "")
+                    .replace(" Most In Game", "")
+                )
 
-    async def compute_data(self) -> None:
+    async def fetch_data(self) -> None:
         try:
-            self.data = await Request(self.platform, self.username).get()
+            self._data = await self.request.fetch_data()
         except ClientConnectorError:
-            raise UnexpectedError() from None
+            raise UnknownError() from None
+
+    async def _get_career_stats_for(self, hero: str) -> None:
+        try:
+            data = await self.request.get_stats_for(hero)
+        except ClientConnectorError:
+            raise UnknownError() from None
+        else:
+            return data.get(hero) or {}
+
+    def _from_list_to_dict(self, source: list[dict[str, Any]]) -> dict[str, Any]:
+        career_stats = {}
+        for item in source:
+            stats = {}
+            for stat in item["stats"]:
+                stats[stat["key"]] = stat["value"]
+            career_stats[item.pop("category")] = stats
+        return career_stats
 
     def is_private(self) -> bool:
-        return self.data["private"]
+        return self._summary.get("privacy") == "private"
 
-    def resolve_ratings(self, *, formatted: bool = True) -> None | dict[str, int]:
-        if not self.data["ratings"]:
+    def resolve_ratings(self, *, platform: str, formatted: bool = True) -> None | dict[str, int]:
+        ratings = self._summary.get("competitive").get(platform)
+        if not ratings:
             return None
 
-        if not formatted:
-            return self.data["ratings"]
+        # if not formatted:
+        #     return ratings
 
-        ratings = {}
-        for key, value in self.data["ratings"].items():
-            ratings[key.lower()] = f"**{value['group']} {str(value['tier'])}**"
-        return ratings
+        ret = {}
+        for key, value in ratings.items():
+            if not value or isinstance(value, int):  # skip null values and 'season' value
+                continue
+            ret[key.lower()] = f"**{value['division'].capitalize()} {str(value['tier'])}**"
+        return ret
 
-    def _resolve_stats(self, hero: str) -> None | tuple[list[str], Stat, Stat]:
-        # OwAPI uses different names for these heroes.
-        lookup = {
-            "soldier-76": "soldier76",
-            "wrecking-ball": "wreckingBall",
-            "dva": "dVa",
-        }
-        alias = lookup.get(hero, hero)
+    async def _resolve_stats(
+        self, platform: str, hero: str, /
+    ) -> None | tuple[list[str], Stat, Stat]:
+        try:
+            q = self._stats.get(platform).get("quickplay").get("career_stats").get(hero)
+        except AttributeError:
+            q = {}
+        else:
+            q = self._from_list_to_dict(q)
 
-        # quickplay stats
-        q = self.data.get("quickPlayStats").get("careerStats").get(alias) or {}
-        # competitive stats
-        c = self.data.get("competitiveStats").get("careerStats").get(alias) or {}
+        try:
+            c = self._stats.get(platform).get("competitive").get("career_stats").get(hero)
+        except AttributeError:
+            c = {}
+        else:
+            c = self._from_list_to_dict(c)
 
         if not q and not c:
-            if hero == "allHeroes":
-                raise NoStats()
-            else:
-                raise NoHeroStats(hero)
+            return None
 
         keys = list({*q, *c})
         keys.sort()
-
-        for i, key in enumerate(keys):
-            if not q.get(key) and not c.get(key):
-                del keys[i]
 
         return keys, q, c
 
@@ -139,105 +185,106 @@ class Profile:
         quickplay: Stat,
         competitive: Stat,
     ) -> None:
-        if quickplay and quickplay[key] is not None:
-            q_t = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
-            embed.add_field(name="Quick Play", value=self._to_pascal(q_t))
-        if competitive and competitive[key] is not None:
-            c_t = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
-            embed.add_field(name="Competitive", value=self._to_pascal(c_t))
+        if quickplay and quickplay.get(key) is not None:
+            q_temp = "\n".join(f"{k}: **{v}**" for k, v in quickplay[key].items())
+            embed.add_field(name="Quick Play", value=self._format_key(q_temp))
+        if competitive and competitive.get(key) is not None:
+            c_temp = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
+            embed.add_field(name="Competitive", value=self._format_key(c_temp))
 
-    async def embed_ratings(
-        self, *, save: bool = False, profile_id: None | int = None
-    ) -> discord.Embed:
-        embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
-        embed.set_author(name=str(self), icon_url=self.avatar)
-
-        ratings = self.resolve_ratings()
-
-        if not ratings:
-            embed.description = "This profile is unranked."
-            return embed
-
-        for key, value in ratings.items():
-            role_icon = ROLE_TO_EMOJI.get(key)
-            role_name = key.upper()
-            embed.add_field(name=f"{role_icon} {role_name}", value=value)
-
-        return embed
-
-    def embed_stats(self, hero: str) -> list[discord.Embed]:
-        keys, quickplay, competitive = self._resolve_stats(hero)
-
-        for i, key in enumerate(keys, start=1):
+    async def embed_ratings(self) -> dict[str, discord.Embed]:
+        ret = {}
+        for platform in self._platforms:
             embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
-            embed.title = self._format_key(key)
-            embed.set_author(name=str(self), icon_url=self.avatar)
-            if hero != "allHeroes":
-                embed.set_thumbnail(url=self.bot.config.hero_portrait_url.format(hero.lower()))
-            embed.set_footer(text=f"Page {i} of {len(keys)}")
-            self._format_stats(embed, key, quickplay, competitive)
-            self.pages.append(embed)
-        return self.pages
+            embed.set_author(name=self.username, icon_url=self.avatar)
 
-    def embed_summary(self) -> discord.Embed:
+            ratings = self.resolve_ratings(platform=platform)
+
+            if not ratings:
+                embed.description = "This profile is unranked."
+            else:
+                for key, value in ratings.items():
+                    role_icon = ROLE_TO_EMOJI.get(key)
+                    role_name = key.upper()
+                    embed.add_field(name=f"{role_icon} {role_name}", value=value)
+
+            ret[platform] = embed
+        return ret
+
+    async def embed_stats(self, hero: str) -> dict[str, discord.Embed | list[discord.Embed]]:
+        ret = {}
+        for platform in self._platforms:
+            career_stats = await self._resolve_stats(platform, hero)
+            if career_stats is None:
+                embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
+                embed.set_author(name=self.username, icon_url=self.avatar)
+                embed.description = "There is no data for this account in this mode yet."
+                ret[platform] = embed
+                continue
+            self.pages = []
+            keys, quickplay, competitive = career_stats
+            for i, key in enumerate(keys, start=1):
+                embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
+                embed.set_author(name=self.username, icon_url=self.avatar)
+                embed.title = self._format_key(key)
+                if hero != "all-heroes":
+                    embed.set_thumbnail(url=self.bot.heroes[hero]["portrait"])
+                embed.set_footer(text=f"Page {i} of {len(keys)}")
+                self._format_stats(embed, key, quickplay, competitive)
+                self.pages.append(embed)
+            ret[platform] = self.pages
+        return ret
+
+    async def embed_summary(self) -> discord.Embed:
         embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
-        embed.set_author(name=str(self), icon_url=self.avatar)
-        embed.set_footer(text=f"Endorsement: {self.data.get('endorsement')}")
+        embed.set_author(name=self.username, icon_url=self.avatar)
+        embed.set_image(url=self.namecard)
+        embed.set_footer(text=f"Endorsement: {self.endorsement}")
 
         ratings = self.resolve_ratings()
 
         if ratings:
-            l_ratings = []
+            temp = []
             for key, value in ratings.items():
                 role_icon = ROLE_TO_EMOJI.get(key.lower())
-                l_ratings.append(f"{role_icon} {value}")
-            embed.description = " ".join(l_ratings)
+                temp.append(f"{role_icon} {value}")
+            embed.description = " ".join(temp)
 
-        summary = {}
-        summary["gamesPlayed"] = self.data.get("gamesPlayed")
-        summary["gamesWon"] = self.data.get("gamesWon")
-        summary["gamesLost"] = self.data.get("gamesLost")
-
-        for key, value in summary.items():
-            embed.add_field(name=self._to_pascal(key), value=value)
-
-        def format_dict(source: Stat) -> dict[str, Any]:
-            d = {}
-            d["game"] = source.get("game")
-            to_keep = ("deaths", "eliminations", "damageDone")
-            d["combat"] = {k: v for k, v in source.get("combat").items() if k in to_keep}
-            d["awards"] = source.get("matchAwards")
-            return d
-
-        def format_embed(source: dict[str, Any], embed: discord.Embed, *, category: str) -> None:
+        def format_dict(source: dict[str, Any]):
             for key, value in source.items():
-                key = f"{self._to_pascal(key)} ({category.title()})"
+                if key == "time_played":
+                    value = str(datetime.timedelta(seconds=value))
                 if isinstance(value, dict):
-                    v = "\n".join(f"{k}: **{v}**" for k, v in value.items())
-                    embed.add_field(name=key, value=self._to_pascal(v))
-                else:
-                    embed.add_field(name=key, value=value)
+                    value = "\n".join(f"{self._format_key(k)}: **{v}**" for k, v in value.items())
+                embed.add_field(name=self._format_key(key, only_capital=True), value=value)
 
-        q = self.data.get("quickPlayStats").get("careerStats").get("allHeroes")  # quick play
-        c = self.data.get("competitiveStats").get("careerStats").get("allHeroes")  # competitive
+        def get_most_played_hero(source: Any):
+            name, time_played = None, 0
+            for key, value in source.items():
+                if (cur_time := value.get("time_played")) > time_played:
+                    name, time_played = key, cur_time
+            conv_time = str(datetime.timedelta(seconds=time_played))
+            embed.add_field(name="Most Played Hero", value=f"{name.capitalize()}: {conv_time}")
 
-        if q:
-            quickplay = format_dict(q)
-            format_embed(quickplay, embed, category="quick play")
+        data = await self.request.get_stats_summary()
+        general = data.get("general") or {}
+        heroes = data.get("heroes") or {}
 
-        if c:
-            competitive = format_dict(c)
-            format_embed(competitive, embed, category="competitive")
+        if general:
+            format_dict(general)
+        if heroes:
+            get_most_played_hero(heroes)
 
         return embed
 
     def embed_private(self) -> discord.Embed:
         embed = discord.Embed(color=discord.Color.red())
-        embed.title = "This profile is set to private"
+        embed.set_author(name=self.username, icon_url=self.avatar)
+        embed.title = "This profile is currently private"
         embed.description = (
             "Profiles are set to private by default."
-            " You can modify this setting in Overwatch under `Options > Social`."
-            " Please note that this change may take effect within approximately 30 minutes."
+            " You can update the profile visibility in Overwatch 2 settings."
+            " Depending on Blizzard servers this change could take effect"
+            " in minutes or it could take days."
         )
-        embed.set_author(name=str(self), icon_url=self.avatar)
         return embed
