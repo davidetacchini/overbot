@@ -118,7 +118,6 @@ class Meta(commands.Cog):
         view.add_item(ui.Button(label="Website", url=self.bot.config.website))
         view.add_item(ui.Button(label="GitHub", url=self.bot.config.github["repo"]))
         view.add_item(ui.Button(label="Invite", url=self.bot.config.invite))
-        view.add_item(ui.Button(label="Vote", url=self.bot.config.vote))
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"Latest Changes:\n{commits}"
