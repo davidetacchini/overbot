@@ -38,7 +38,7 @@ class Owner(commands.Cog):
         """Remove the given amount of messages"""
         await interaction.response.defer()
         amount += 1
-        if interaction.channel is not None and isinstance(interaction.channel, discord.TextChannel):
+        if interaction.channel and isinstance(interaction.channel, discord.TextChannel):
             await interaction.channel.purge(limit=amount)
 
     @app_commands.command()
@@ -101,7 +101,7 @@ class Owner(commands.Cog):
 
         # progress and stuff is redirected to stderr in git pull
         # however, things like "fast forward" and files
-        # along with the text "already up-to-date" are in stdout
+        # along with the text "Already up to date" are in stdout
 
         if stdout.startswith("Already up to date."):
             await interaction.followup.send(stdout)
@@ -112,7 +112,7 @@ class Owner(commands.Cog):
             f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
         message = f"This will update the following modules?\n{updated_modules}"
-        if await self.bot.prompt(interaction, message):
+        if not await self.bot.prompt(interaction, message):
             return
 
         statuses = []
