@@ -32,7 +32,7 @@ class Stats(commands.Cog):
 
         if profile.is_private():
             embed = profile.embed_private()
-            await interaction.response.send_message(embed=embed)
+            await interaction.followup.send(embed=embed)
             return
 
         data = await profile.embed_stats(hero)
@@ -51,7 +51,7 @@ class Stats(commands.Cog):
 
         if profile.is_private():
             embed = profile.embed_private()
-            await interaction.response.send_message(embed=embed)
+            await interaction.followup.send(embed=embed)
             return
 
         data = await profile.embed_ratings()
@@ -70,6 +70,7 @@ class Stats(commands.Cog):
         self, interaction: discord.Interaction, *, battletag: str, hero: str = "all-heroes"
     ) -> None:
         """Provides general stats or hero specific stats for a player."""
+        await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, hero, battletag)
 
     @app_commands.command()
