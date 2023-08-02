@@ -75,14 +75,3 @@ def is_owner():
         raise NotOwner()
 
     return app_commands.check(predicate)
-
-
-def subcommand_guild_only():
-    # Due to a Discord limitation the @app_commands.guild_only
-    # decorator does not work for subcommands.
-    def predicate(interaction: discord.Interaction) -> bool:
-        if interaction.guild is not None:
-            return True
-        raise app_commands.NoPrivateMessage()
-
-    return app_commands.check(predicate)
