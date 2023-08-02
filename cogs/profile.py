@@ -10,10 +10,9 @@ from discord import app_commands
 from discord.ext import commands
 
 from classes.ui import ProfileUnlinkView, SelectProfileView
-from utils.checks import has_profile, can_add_profile, subcommand_guild_only
+from utils.checks import has_profile, can_add_profile
 from utils.helpers import hero_autocomplete, profile_autocomplete
 from classes.profile import Profile
-from classes.nickname import Nickname
 from classes.exceptions import NoChoice, ProfileNotLinked
 
 if TYPE_CHECKING:
@@ -159,11 +158,11 @@ class ProfileCog(commands.GroupCog, name="profile"):
         for chunk in chunks:
             embed = embed.copy()
             embed.set_footer(
-                text=f"{len(profiles)}/{limit} profiles • Requested by {interaction.user}"
+                text=f"{len(profiles)}/{limit} profiles • Requested by {interaction.user.display_name}"
             )
             description = []
-            for profile in chunk:
-                description.append(profile.battletag)
+            for index, profile in enumerate(chunk, start=1):
+                description.append(f"{index}. {profile.battletag}")
             embed.description = "\n".join(description)
             pages.append(embed)
         return pages
@@ -244,12 +243,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         if profile.is_private():
             embed = profile.embed_private()
         else:
-            embed = await profile.embed_ratings(save=True, profile_id=profile.id)
-            # only update the nickname if the profile matches the one selected for that purpose
-            query = "SELECT EXISTS (SELECT TRUE FROM nickname WHERE profile_id = $1);"
-            flag = await self.bot.pool.fetchval(query, profile.id)
-            if flag and member.id == interaction.user.id:
-                await Nickname(interaction, profile=profile).update()
+            embed = await profile.embed_ratings()
         await interaction.followup.send(embed=embed)
 
     @app_commands.command()
@@ -290,56 +284,6 @@ class ProfileCog(commands.GroupCog, name="profile"):
         else:
             embed = await profile.embed_summary()
         await interaction.followup.send(embed=embed)
-
-    @app_commands.command()
-    @app_commands.checks.bot_has_permissions(manage_nicknames=True)
-    @has_profile()
-    @subcommand_guild_only()
-    async def nickname(self, interaction: discord.Interaction) -> None:
-        """Shows or remove your SRs in your nickname
-
-        The nickname can only be set in one server. It updates
-        automatically whenever `profile rating` is used and the
-        profile selected matches the one set for the nickname.
-        """
-        await interaction.response.defer(thinking=True)
-
-        guild = interaction.guild
-        user = interaction.user
-        if guild.me.top_role < user.top_role or user.id == guild.owner_id:
-            await interaction.followup.send(
-                "This server's owner needs to move the `OverBot` role higher, so I will "
-                "be able to update your nickname. If you are this server's owner, there's "
-                "no way for me to change your nickname, sorry!"
-            )
-            return
-
-        nick = Nickname(interaction)
-        if await nick.exists():
-            if await self.bot.prompt(interaction, "This will remove your SRs in your nickname."):
-                try:
-                    await nick.set_or_remove(remove=True)
-                except Exception as e:
-                    await interaction.followup.send(str(e))
-            return
-
-        if not await self.bot.prompt(interaction, "This will display your SRs in your nickname."):
-            return
-
-        message = "Select a profile to use for the nickname SRs:"
-        profile = await self.select_profile(interaction, message)
-        await profile.fetch_data()
-
-        if profile.is_private():
-            await interaction.followup.send(embed=profile.embed_private())
-            return
-
-        nick.profile = profile
-
-        try:
-            await nick.set_or_remove(profile_id=profile.id)
-        except Exception as e:
-            await interaction.followup.send(str(e))
 
 
 async def setup(bot: OverBot) -> None:
