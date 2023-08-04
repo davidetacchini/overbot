@@ -1,10 +1,5 @@
 from discord import PartialEmoji
 
-# emojis for custom nickname
-u_tank = "\N{SHIELD}"
-u_damage = "\N{CROSSED SWORDS}"
-u_support = "\N{HEAVY GREEK CROSS}"
-
 tank = PartialEmoji(name="tank", id=645784573141319722)
 damage = PartialEmoji(name="damage", id=645784543093325824)
 support = PartialEmoji(name="support", id=645784563322191902)
