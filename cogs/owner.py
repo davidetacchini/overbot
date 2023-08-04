@@ -284,7 +284,6 @@ class Owner(commands.Cog):
             guilds = await conn.fetchval("SELECT COUNT(*) FROM server;")
             members = await conn.fetchval("SELECT COUNT(*) from member;")
             ratings = await conn.fetchval("SELECT COUNT(*) FROM rating;")
-            nicknames = await conn.fetchval("SELECT COUNT(*) FROM nickname;")
             played, won, lost = await conn.fetchrow(
                 "SELECT SUM(started), SUM(won), SUM(lost) FROM trivia;"
             )
@@ -293,7 +292,6 @@ class Owner(commands.Cog):
         bot_entries = (
             ("Total profiles linked", profiles),
             ("Total profile ratings", ratings),
-            ("Total nicknames set", nicknames),
             ("Total guilds", guilds),
             ("Total members", members),
             ("Total commands runned", total_commands),
