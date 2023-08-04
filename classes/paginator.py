@@ -61,7 +61,7 @@ class Paginator(discord.ui.View):
         self.first.disabled = 0 <= page <= 1
         self.previous.disabled = page == 0
         self.next.disabled = page == self.max_pages
-        self.last.disabled = self.total - 1 <= page <= self.max_pages
+        self.last.disabled = self.max_pages - 1 <= page <= self.max_pages
 
     def _get_kwargs_from_page(self, page: PageT) -> dict[str, Any]:
         if isinstance(page, dict):
