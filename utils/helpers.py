@@ -8,12 +8,6 @@ if TYPE_CHECKING:
     from discord import Interaction
 
 
-platform_choices = [
-    Choice(name="PC", value="pc"),
-    Choice(name="Console", value="console"),
-]
-
-
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
     heroes = interaction.client.heroes
     return [
