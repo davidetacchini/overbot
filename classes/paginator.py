@@ -48,14 +48,15 @@ class Paginator(discord.ui.View):
             pass
 
     def fill_items(self) -> None:
-        if self.max_pages > 2:
+        if self.max_pages >= 2:
             self.add_item(self.first)
         if self.max_pages > 0:
             self.add_item(self.previous)
-            self.add_item(self.quit_session)
             self.add_item(self.next)
-        if self.max_pages > 2:
+        if self.max_pages >= 2:
             self.add_item(self.last)
+        if self.max_pages > 0:
+            self.add_item(self.quit_session)
 
     def _update_labels(self, page: int) -> None:
         self.first.disabled = 0 <= page <= 1
@@ -101,14 +102,6 @@ class Paginator(discord.ui.View):
             self.current -= 1
             await self._update(interaction)
 
-    @discord.ui.button(emoji=emojis.close, style=discord.ButtonStyle.red)
-    async def quit_session(
-        self, interaction: discord.Interaction, button: discord.ui.Button
-    ) -> None:
-        await interaction.response.defer()
-        await interaction.delete_original_response()
-        self.stop()
-
     @discord.ui.button(emoji=emojis.right_caret, style=discord.ButtonStyle.blurple)
     async def next(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.current + 1 <= self.max_pages:
@@ -120,3 +113,11 @@ class Paginator(discord.ui.View):
         if self.current < self.max_pages:
             self.current = self.max_pages
             await self._update(interaction)
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
+    async def quit_session(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
