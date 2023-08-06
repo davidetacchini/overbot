@@ -48,16 +48,13 @@ class Overwatch(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command()
-    @app_commands.describe(amount="The amount of news to return. Defaults to 4")
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
-    async def news(
-        self, interaction: discord.Interaction, amount: app_commands.Range[int, 1, 4] = 4
-    ) -> None:
+    async def news(self, interaction: discord.Interaction) -> None:
         """Shows the latest Overwatch news"""
         pages = []
 
         try:
-            news = await get_overwatch_news(amount)
+            news = await get_overwatch_news()
         except Exception:
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
