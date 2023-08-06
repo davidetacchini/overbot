@@ -11,7 +11,7 @@ async def fetch(url: str) -> bytes:
             return await r.read()
 
 
-async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
+async def get_overwatch_news() -> list[dict[str, str]]:
     with open("assets/latest_news_id.txt", "r") as fp:
         news_id = fp.readline()
 
@@ -31,6 +31,6 @@ async def get_overwatch_news(amount: int) -> list[dict[str, str]]:
             "thumbnail": "https:" + n.find("blz-image", slot="image")["src"],
             "date": n["date"].split(":")[0][:-3],  # from YYYY-MM-DDT18:00:00.000Z to YYYY-MM-DD
         }
-        for n in news_container.find_all("blz-card")[:amount]
+        for n in news_container.find_all("blz-card")
     ]
     return news
