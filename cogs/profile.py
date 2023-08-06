@@ -9,7 +9,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import ProfileUnlinkView, SelectProfileView
+from classes.ui import ProfileUnlinkView, SelectProfileView, SelectPlatformMenu
 from utils.checks import has_profile, can_add_profile
 from utils.helpers import hero_autocomplete, profile_autocomplete
 from classes.profile import Profile
@@ -240,11 +240,17 @@ class ProfileCog(commands.GroupCog, name="profile"):
         message = "Select a profile to view the skill ratings for:"
         profile = await self.select_profile(interaction, message, member)
         await profile.fetch_data()
+
         if profile.is_private():
             embed = profile.embed_private()
-        else:
-            embed = await profile.embed_ratings()
-        await interaction.followup.send(embed=embed)
+            await interaction.followup.send(embed=embed)
+            return
+
+        data = await profile.embed_ratings()
+        value = "console" if not data["pc"] else "pc"
+        view = SelectPlatformMenu(data[value], interaction=interaction)
+        view.add_platforms(data)
+        await view.start()
 
     @app_commands.command()
     @app_commands.autocomplete(hero=hero_autocomplete)
