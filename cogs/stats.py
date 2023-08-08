@@ -73,19 +73,6 @@ class Stats(commands.Cog):
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, hero, battletag)
 
-    @app_commands.command()
-    @app_commands.describe(battletag="The battletag of the player")
-    async def summary(self, interaction: discord.Interaction, *, battletag: str) -> None:
-        """Provides summarized stats for a player."""
-        await interaction.response.defer(thinking=True)
-        profile = Profile(battletag, interaction=interaction)
-        await profile.fetch_data()
-        if profile.is_private():
-            embed = profile.embed_private()
-        else:
-            embed = await profile.embed_summary()
-        await interaction.followup.send(embed=embed)
-
 
 async def setup(bot: OverBot) -> None:
     await bot.add_cog(Stats(bot))
