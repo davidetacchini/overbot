@@ -13,7 +13,7 @@ from classes.ui import ProfileUnlinkView, SelectProfileView, SelectPlatformMenu
 from utils.checks import has_profile, can_add_profile
 from utils.helpers import hero_autocomplete, profile_autocomplete
 from classes.profile import Profile
-from classes.exceptions import NoChoice, ProfileNotLinked
+from classes.exceptions import NoChoice
 
 if TYPE_CHECKING:
     from bot import OverBot
@@ -23,23 +23,6 @@ Member = discord.User | discord.Member
 log = logging.getLogger("overbot")
 
 
-# Workaround for checks not working properly in Context Menus. To clarify: has_profile does not work,
-# @app_commands.checks does. However, Interaction.namespace returns an empty Namespace for Context Menus,
-# and has_profile uses Interaction.namespace to check whether it's the author whose profiles needs to be
-# fetched. Interaction.data (didn't tried that for Context Menus, but should work) can be used
-# instead of Interaction.namespace but I prefer this workaround for now.
-async def cm_has_profiles(interaction: discord.Interaction, member_id: int) -> bool:
-    """Custom check for Context Menus."""
-    query = """SELECT battletag
-               FROM profile
-               INNER JOIN member
-                       ON member.id = profile.member_id
-               WHERE member.id = $1;
-            """
-    if not await interaction.client.pool.fetch(query, member_id):
-        raise ProfileNotLinked(is_author=member_id == interaction.user.id)
-
-
 @app_commands.context_menu(name="List Profiles")
 async def list_profiles(interaction: discord.Interaction, member: discord.Member) -> None:
     """List your own or a member's profiles"""
@@ -47,54 +30,6 @@ async def list_profiles(interaction: discord.Interaction, member: discord.Member
     profiles = await profile_cog.get_profiles(interaction, member.id)
     entries = await profile_cog.list_profiles(interaction, member, profiles)
     await interaction.client.paginate(entries, interaction=interaction)
-
-
-@app_commands.context_menu(name="Show Ratings")
-async def show_ratings(interaction: discord.Interaction, member: discord.Member) -> None:
-    """Provides SRs information for a profile"""
-    await interaction.response.defer(thinking=True)
-    await cm_has_profiles(interaction, member.id)
-    message = "Select a profile to view the skill ratings for:"
-    profile = await interaction.client.get_cog("Profile").select_profile(
-        interaction, message, member
-    )
-    await profile.fetch_data()
-    if profile.is_private():
-        embed = profile.embed_private()
-    else:
-        embed = await profile.embed_ratings(save=True, profile_id=profile.id)
-    await interaction.followup.send(embed=embed)
-
-
-@app_commands.context_menu(name="Show Stats")
-async def show_stats(interaction: discord.Interaction, member: discord.Member) -> None:
-    """Provides general stats for a profile"""
-    await interaction.response.defer(thinking=True)
-    await cm_has_profiles(interaction, member.id)
-    message = "Select a profile to view the stats for:"
-    profile = await interaction.client.get_cog("Profile").select_profile(
-        interaction, message, member
-    )
-    await interaction.client.get_cog("Stats").show_stats_for(
-        interaction, "all-heroes", profile=profile
-    )
-
-
-@app_commands.context_menu(name="Show Summary")
-async def show_summary(interaction: discord.Interaction, member: discord.Member) -> None:
-    """Provides summarized stats for a profile"""
-    await interaction.response.defer(thinking=True)
-    await cm_has_profiles(interaction, member.id)
-    message = "Select a profile to view the summary for:"
-    profile = await interaction.client.get_cog("Profile").select_profile(
-        interaction, message, member
-    )
-    await profile.fetch_data()
-    if profile.is_private():
-        embed = profile.embed_private()
-    else:
-        embed = await profile.embed_summary()
-    await interaction.followup.send(embed=embed)
 
 
 class ProfileCog(commands.GroupCog, name="profile"):
@@ -109,6 +44,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
                    INNER JOIN member
                            ON member.id = profile.member_id
                    WHERE member.id = $1
+                   ORDER BY battletag
                    LIMIT $2;
                 """
         records = await self.bot.pool.fetch(query, member_id, limit)
@@ -275,26 +211,8 @@ class ProfileCog(commands.GroupCog, name="profile"):
         profile = await self.select_profile(interaction, message, member)
         await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profilo=profile)
 
-    @app_commands.command()
-    @app_commands.describe(member="The member to show the summary for")
-    @has_profile()
-    async def summary(self, interaction: discord.Interaction, member: None | Member = None) -> None:
-        """Provides summarized stats for a profile"""
-        await interaction.response.defer(thinking=True)
-        member = member or interaction.user
-        message = "Select a profile to view the summary for:"
-        profile = await self.select_profile(interaction, message, member)
-        await profile.fetch_data()
-        if profile.is_private():
-            embed = profile.embed_private()
-        else:
-            embed = await profile.embed_summary()
-        await interaction.followup.send(embed=embed)
-
 
 async def setup(bot: OverBot) -> None:
-    context_menus = (list_profiles, show_ratings, show_stats, show_summary)
-    for command in context_menus:
-        setattr(command, "__cog_name__", "Profile")
-        bot.tree.add_command(command)
+    setattr(list_profiles, "__cog_name__", "Profile")
+    bot.tree.add_command(list_profiles)
     await bot.add_cog(ProfileCog(bot))
