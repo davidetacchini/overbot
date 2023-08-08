@@ -27,7 +27,7 @@ async def module_autocomplete(interaction: Interaction, current: str) -> list[Ch
 
 
 async def profile_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    profile_cog = interaction.client.get_cog("Profile")
+    profile_cog = interaction.client.get_cog("profile")
     profiles = await profile_cog.get_profiles(interaction, interaction.user.id)
     return [
         Choice(name=profile.battletag, value=profile.id)
