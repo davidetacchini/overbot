@@ -91,7 +91,7 @@ class Trivia(commands.Cog):
         self, member: Member, *, won: bool = True, correct_answer: None | str = None
     ) -> discord.Embed:
         embed = discord.Embed()
-        embed.set_author(name=str(member), icon_url=member.display_avatar.url)
+        embed.set_author(name=member.display_name, icon_url=member.display_avatar.url)
         if won:
             embed.colour = discord.Color.green()
             embed.title = "Correct!"
