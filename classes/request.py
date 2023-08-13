@@ -35,7 +35,7 @@ class Request:
             # return the battletag and let `resolve_response` handle it
             return self.battletag
 
-    async def _get_name(self) -> None | str:
+    async def _get_name(self) -> str:
         url = config.overwatch["account"] + "/" + self.battletag.replace("#", "%23") + "/"
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
@@ -62,7 +62,7 @@ class Request:
             case _:
                 raise UnknownError()
 
-    async def _request(self, path):
+    async def _request(self, path) -> dict[str, Any]:
         url = config.base_url + path
         async with aiohttp.ClientSession() as s:
             async with s.get(url) as r:
@@ -74,3 +74,7 @@ class Request:
     async def fetch_data(self) -> dict[str, Any]:
         name = await self._get_name()
         return await self._request(f"/players/{name}")
+
+    async def fetch_stats_summary(self) -> dict[str, Any]:
+        name = await self._get_name()
+        return await self._request(f"/players/{name}/stats/summary")
