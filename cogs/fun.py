@@ -40,10 +40,11 @@ class Fun(commands.Cog):
         return hero["name"]
 
     def _get_random_map(self, category: None | str) -> str:
+        maps = list(self.bot.maps.values())
         if not category:
-            map_ = secrets.choice(self.bot.maps)
+            map_ = secrets.choice(maps)
         else:
-            categorized_maps = [m for m in self.bot.maps if category in m["gamemodes"]]
+            categorized_maps = [m for m in maps if category in m["gamemodes"]]
             map_ = secrets.choice(categorized_maps)
         return map_["name"]
 
