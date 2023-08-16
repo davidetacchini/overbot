@@ -19,6 +19,26 @@ async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choi
     ]  # choices must be <= 25, heroes are more, so slicing.
 
 
+async def map_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
+    maps = interaction.client.maps
+    return [
+        Choice(name=value["name"], value=key)
+        for key, value in maps.items()
+        if current.lower() in value["name"].lower() or current.lower() in key.lower()
+    ][
+        :25
+    ]  # choices must be <= 25, maps are more, so slicing.
+
+
+async def gamemode_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
+    gamemodes = interaction.client.gamemodes
+    return [
+        Choice(name=value["name"], value=key)
+        for key, value in gamemodes.items()
+        if current.lower() in value["name"].lower() or current.lower() in key.lower()
+    ]
+
+
 async def module_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
     modules = interaction.client.extensions
     return [
