@@ -308,13 +308,13 @@ class Owner(commands.Cog):
         trivia = []
 
         for key, value in bot_entries:
-            bot.append(f"{key}: **{value}**\n")
+            bot.append(f"{key}: **{value}**")
 
         for key, value in trivia_entries:
-            trivia.append(f"{key}: **{value}**\n")
+            trivia.append(f"{key}: **{value}**")
 
-        embed.add_field(name="Bot", value="".join(bot))
-        embed.add_field(name="Trivia", value="".join(trivia))
+        embed.add_field(name="Bot", value="\n".join(bot))
+        embed.add_field(name="Trivia", value="\n".join(trivia))
 
         await interaction.response.send_message(embed=embed)
 
