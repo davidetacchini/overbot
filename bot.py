@@ -46,7 +46,8 @@ class OverBot(commands.AutoShardedBot):
         self.premiums: set[int] = set()
         self.embed_colors: dict[int, int] = {}
         self.heroes: dict[str, dict[Any, Any]] = {}
-        self.maps: list[dict[Any, Any]] = []
+        self.maps: dict[str, dict[Any, Any]] = {}
+        self.gamemodes: dict[str, dict[Any, Any]] = {}
 
         self.BASE_URL: str = config.base_url
         self.TEST_GUILD: discord.Object = discord.Object(config.test_guild_id)
@@ -174,8 +175,8 @@ class OverBot(commands.AutoShardedBot):
             log.exception("Cannot get heroes. Aborting...")
             await self.close()
         else:
-            heroes = {}
             data = await data.json()
+            heroes = {}
             for hero in data:
                 heroes[hero.pop("key")] = hero
             self.heroes = heroes
@@ -188,8 +189,26 @@ class OverBot(commands.AutoShardedBot):
             log.exception("Cannot get maps. Aborting...")
             await self.close()
         else:
-            self.maps = await data.json()
+            data = await data.json()
+            maps = {}
+            for map_ in data:
+                maps[map_.get("name")] = map_
+            self.maps = maps
             log.info("Maps successfully cached.")
+
+    async def _cache_gamemodes(self) -> None:
+        try:
+            data = await self.session.get(f"{self.BASE_URL}/gamemodes")
+        except Exception:
+            log.exception("Cannot get gamemodes. Aborting...")
+            await self.close()
+        else:
+            data = await data.json()
+            gamemodes = {}
+            for gamemode in data:
+                gamemodes[gamemode.pop("key")] = gamemode
+            self.gamemodes = gamemodes
+            log.info("Gamemodes successfully cached.")
 
     async def setup_hook(self) -> None:
         self.session = ClientSession()
@@ -204,6 +223,7 @@ class OverBot(commands.AutoShardedBot):
         await self._cache_embed_colors()
         await self._cache_heroes()
         await self._cache_maps()
+        await self._cache_gamemodes()
 
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
