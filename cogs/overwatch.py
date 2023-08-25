@@ -4,12 +4,15 @@ from typing import TYPE_CHECKING
 
 import discord
 
+from aiohttp import ClientSession
 from discord import app_commands
 from discord.ext import commands
 
+from classes.ui import HeroInfoView
 from utils.cache import cache
 from utils.checks import is_premium
 from utils.scrape import get_overwatch_news
+from utils.helpers import map_autocomplete, hero_autocomplete, gamemode_autocomplete
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -38,6 +41,10 @@ class Newsboard:
 class Overwatch(commands.Cog):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
+
+    info = app_commands.Group(
+        name="info", description="Provides information about heroes, maps or gamemodes."
+    )
 
     @app_commands.command()
     async def status(self, interaction: discord.Interaction) -> None:
@@ -149,6 +156,65 @@ class Overwatch(commands.Cog):
         query = "INSERT INTO newsboard (id, server_id, member_id) VALUES ($1, $2, $3);"
         await self.bot.pool.execute(query, channel.id, interaction.guild_id, interaction.user.id)
         await interaction.followup.send(f"Channel successfully created at {channel.mention}.")
+
+    async def embed_map_info(self, map_: str) -> discord.Embed:
+        embed = discord.Embed()
+        map_ = self.bot.maps.get(map_)
+        embed.title = map_.get("name")
+        embed.set_image(url=map_.get("screenshot"))
+        gamemodes = "\n".join(map(lambda m: m.capitalize(), map_.get("gamemodes")))
+        embed.add_field(name="Gamemodes", value=gamemodes)
+        embed.add_field(name="Location", value=map_.get("location"))
+        embed.add_field(name="Country Code", value=map_.get("country_code", "N/A"))
+        return embed
+
+    async def embed_gamemode_info(self, gamemode: str) -> discord.Embed:
+        embed = discord.Embed()
+        gamemode = self.bot.gamemodes.get(gamemode)
+        embed.title = gamemode.get("name")
+        embed.description = gamemode.get("description")
+        embed.set_thumbnail(url=gamemode.get("icon"))
+        embed.set_image(url=gamemode.get("screenshot"))
+        return embed
+
+    @info.command()
+    @app_commands.autocomplete(name=hero_autocomplete)
+    @app_commands.describe(name="The name of the hero to see information for")
+    async def hero(self, interaction: discord.Interaction, name: str) -> None:
+        """Returns information about a given hero"""
+        url = f"{self.bot.BASE_URL}/heroes/{name}"
+        async with ClientSession() as s:
+            async with s.get(url) as r:
+                data = await r.json()
+
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed.set_author(name=data.get("name"), icon_url=data.get("portrait"))
+        embed.description = data.get("description")
+        hitpoints = "\n".join(
+            f"{k.capitalize()}: **{v}**" for k, v in data.get("hitpoints").items()
+        )
+        embed.add_field(name="Hitpoints", value=hitpoints)
+        embed.add_field(name="Role", value=data.get("role").capitalize())
+        embed.add_field(name="Location", value=data.get("location"))
+
+        view = HeroInfoView(interaction=interaction, data=data)
+        await interaction.response.send_message(embed=embed, view=view)
+
+    @info.command()
+    @app_commands.autocomplete(name=map_autocomplete)
+    @app_commands.describe(name="The name of the map to see information for")
+    async def map(self, interaction: discord.Interaction, name: str) -> None:
+        """Returns information about a given map"""
+        embed = await self.embed_map_info(name)
+        await interaction.response.send_message(embed=embed)
+
+    @info.command()
+    @app_commands.autocomplete(name=gamemode_autocomplete)
+    @app_commands.describe(name="The name of the gamemode to see information for")
+    async def gamemode(self, interaction: discord.Interaction, name: str) -> None:
+        """Returns information about a given gamemode"""
+        embed = await self.embed_gamemode_info(name)
+        await interaction.response.send_message(embed=embed)
 
 
 async def setup(bot: OverBot) -> None:
