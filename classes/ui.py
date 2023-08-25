@@ -82,7 +82,7 @@ class SelectProfiles(discord.ui.Select):
 class SelectPlatformMenu(Paginator):
     def __init__(
         self, entries: discord.Embed | list[discord.Embed], interaction: discord.Interaction
-    ):
+    ) -> None:
         super().__init__(entries, interaction=interaction)
 
     def add_platforms(self, platforms: dict[str, discord.Embed | list[discord.Embed]]) -> None:
@@ -174,3 +174,64 @@ class SelectAnswer(discord.ui.Select):
         await interaction.response.defer()
         await interaction.delete_original_response()
         self.view.stop()
+
+
+class HeroInfoView(BaseView):
+    def __init__(self, *, interaction: discord.Interaction, data: dict[str, Any]) -> None:
+        super().__init__(interaction=interaction)
+        self.data = data
+
+    @discord.ui.button(label="Abilities", style=discord.ButtonStyle.blurple)
+    async def abilities(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        abilities = self.data.get("abilities")
+        if not abilities:
+            return
+
+        pages = []
+        for index, ability in enumerate(abilities, start=1):
+            embed = discord.Embed()
+            embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+            embed.title = ability.get("name")
+            embed.url = ability.get("video").get("link").get("mp4")
+            embed.description = ability.get("description")
+            embed.set_thumbnail(url=ability.get("icon"))
+            embed.set_image(url=ability.get("video").get("thumbnail"))
+            embed.set_footer(text=f"Page {index} of {len(abilities)}")
+            pages.append(embed)
+
+        await interaction.client.paginate(pages, interaction=interaction)
+
+    @discord.ui.button(label="Story", style=discord.ButtonStyle.blurple)
+    async def story(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        story = self.data.get("story")
+        if not story:
+            return
+
+        chapters = story.get("chapters")
+        max_pages = len(chapters) + 1
+        pages = []
+
+        embed = discord.Embed()
+        embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+        embed.url = story.get("media").get("link")
+        embed.title = "Origin Story"
+        embed.description = story.get("summary")
+        embed.set_footer(text=f"Page 1 of {max_pages}")
+        pages.append(embed)
+
+        for index, chapter in enumerate(story.get("chapters"), start=2):
+            embed = discord.Embed()
+            embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+            embed.title = chapter.get("title")
+            embed.description = chapter.get("content")
+            embed.set_image(url=chapter.get("picture"))
+            embed.set_footer(text=f"Page {index} of {max_pages}")
+            pages.append(embed)
+
+        await interaction.client.paginate(pages, interaction=interaction)
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
+    async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
