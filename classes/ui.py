@@ -88,7 +88,7 @@ class SelectPlatformMenu(Paginator):
     def add_platforms(self, platforms: dict[str, discord.Embed | list[discord.Embed]]) -> None:
         self.clear_items()
         self.add_item(SelectPlatform(entries=platforms))
-        self.fill_items()
+        self.fill_items(force_quit=True)
 
     async def rebind(
         self, entries: discord.Embed | list[discord.Embed], interaction: discord.Interaction

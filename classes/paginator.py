@@ -47,7 +47,7 @@ class Paginator(discord.ui.View):
         except Exception:
             pass
 
-    def fill_items(self) -> None:
+    def fill_items(self, *, force_quit: bool = False) -> None:
         if self.max_pages >= 2:
             self.add_item(self.first)
         if self.max_pages > 0:
@@ -55,7 +55,7 @@ class Paginator(discord.ui.View):
             self.add_item(self.next)
         if self.max_pages >= 2:
             self.add_item(self.last)
-        if self.max_pages > 0:
+        if self.max_pages > 0 or force_quit:
             self.add_item(self.quit_session)
 
     def _update_labels(self, page: int) -> None:
