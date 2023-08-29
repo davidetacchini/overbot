@@ -27,7 +27,7 @@ async def get_overwatch_news() -> list[dict[str, str]]:
     news = [
         {
             "title": n.find("h4", slot="heading").get_text(),
-            "link": n["href"],
+            "link": "https://overwatch.blizzard.com/en-us" + n["href"],
             "thumbnail": "https:" + n.find("blz-image", slot="image")["src"],
             "date": n["date"].split(":")[0][:-3],  # from YYYY-MM-DDT18:00:00.000Z to YYYY-MM-DD
         }
