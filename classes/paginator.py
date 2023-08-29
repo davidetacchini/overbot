@@ -33,9 +33,7 @@ class Paginator(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.interaction.user.id:
             return True
-        await interaction.response.send_message(
-            "This command was not initiated by you.", ephemeral=True
-        )
+        await interaction.response.send_message("This is not for you.", ephemeral=True)
         return False
 
     async def on_timeout(self) -> None:
