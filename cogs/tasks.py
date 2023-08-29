@@ -295,7 +295,7 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = (await get_overwatch_news(1))[0]
+            news = (await get_overwatch_news())[0]
         except Exception:
             return
 
