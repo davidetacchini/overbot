@@ -14,9 +14,7 @@ async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choi
         Choice(name=value["name"], value=key)
         for key, value in heroes.items()
         if current.lower() in value["name"].lower() or current.lower() in key.lower()
-    ][
-        :25
-    ]  # choices must be <= 25, heroes are more, so slicing.
+    ][:25]
 
 
 async def map_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
@@ -25,9 +23,7 @@ async def map_autocomplete(interaction: Interaction, current: str) -> list[Choic
         Choice(name=value["name"], value=key)
         for key, value in maps.items()
         if current.lower() in value["name"].lower() or current.lower() in key.lower()
-    ][
-        :25
-    ]  # choices must be <= 25, maps are more, so slicing.
+    ][:25]
 
 
 async def gamemode_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
