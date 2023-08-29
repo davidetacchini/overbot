@@ -11,7 +11,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import BaseView, SelectAnswer
+from classes.ui import BaseView
 from classes.exceptions import NoChoice, NoTriviaStats
 
 if TYPE_CHECKING:
@@ -20,6 +20,16 @@ if TYPE_CHECKING:
     from bot import OverBot
 
 Member = discord.User | discord.Member
+
+
+class SelectAnswer(discord.ui.Select):
+    def __init__(self) -> None:
+        super().__init__(placeholder="Select the correct answer...")
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.view.stop()
 
 
 class Trivia(commands.Cog):
@@ -43,7 +53,7 @@ class Trivia(commands.Cog):
         timeout: float,
     ) -> str:
         view = BaseView(interaction=interaction, timeout=timeout)
-        select = SelectAnswer(placeholder="Select the correct answer...")
+        select = SelectAnswer()
         view.add_item(select)
 
         for index, entry in enumerate(entries, start=1):
