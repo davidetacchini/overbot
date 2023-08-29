@@ -13,6 +13,7 @@ from utils.cache import cache
 from utils.checks import is_premium
 from utils.scrape import get_overwatch_news
 from utils.helpers import map_autocomplete, hero_autocomplete, gamemode_autocomplete
+from classes.exceptions import UnknownError
 
 if TYPE_CHECKING:
     from asyncpg import Record
@@ -245,6 +246,8 @@ class Overwatch(commands.Cog):
         url = f"{self.bot.BASE_URL}/heroes/{name}"
         async with ClientSession() as s:
             async with s.get(url) as r:
+                if r.status != 200:
+                    raise UnknownError()
                 data = await r.json()
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
