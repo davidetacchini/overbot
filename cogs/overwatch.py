@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import discord
 
@@ -8,7 +8,7 @@ from aiohttp import ClientSession
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import HeroInfoView
+from classes.ui import BaseView
 from utils.cache import cache
 from utils.checks import is_premium
 from utils.scrape import get_overwatch_news
@@ -18,6 +18,67 @@ if TYPE_CHECKING:
     from asyncpg import Record
 
     from bot import OverBot
+
+
+class HeroInfoView(BaseView):
+    def __init__(self, *, interaction: discord.Interaction, data: dict[str, Any]) -> None:
+        super().__init__(interaction=interaction)
+        self.data = data
+
+    @discord.ui.button(label="Abilities", style=discord.ButtonStyle.blurple)
+    async def abilities(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        abilities = self.data.get("abilities")
+        if not abilities:
+            return
+
+        pages = []
+        for index, ability in enumerate(abilities, start=1):
+            embed = discord.Embed()
+            embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+            embed.title = ability.get("name")
+            embed.url = ability.get("video").get("link").get("mp4")
+            embed.description = ability.get("description")
+            embed.set_thumbnail(url=ability.get("icon"))
+            embed.set_image(url=ability.get("video").get("thumbnail"))
+            embed.set_footer(text=f"Page {index} of {len(abilities)}")
+            pages.append(embed)
+
+        await interaction.client.paginate(pages, interaction=interaction)
+
+    @discord.ui.button(label="Story", style=discord.ButtonStyle.blurple)
+    async def story(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        story = self.data.get("story")
+        if not story:
+            return
+
+        chapters = story.get("chapters")
+        max_pages = len(chapters) + 1
+        pages = []
+
+        embed = discord.Embed()
+        embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+        embed.url = story.get("media").get("link")
+        embed.title = "Origin Story"
+        embed.description = story.get("summary")
+        embed.set_footer(text=f"Page 1 of {max_pages}")
+        pages.append(embed)
+
+        for index, chapter in enumerate(story.get("chapters"), start=2):
+            embed = discord.Embed()
+            embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+            embed.title = chapter.get("title")
+            embed.description = chapter.get("content")
+            embed.set_image(url=chapter.get("picture"))
+            embed.set_footer(text=f"Page {index} of {max_pages}")
+            pages.append(embed)
+
+        await interaction.client.paginate(pages, interaction=interaction)
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
+    async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
 
 
 class Newsboard:
@@ -134,7 +195,6 @@ class Overwatch(commands.Cog):
 
         name = "overwatch-news"
         topic = "Latest Overwatch news."
-
         overwrites = {
             interaction.guild.me: discord.PermissionOverwrite(
                 read_messages=True, send_messages=True, embed_links=True

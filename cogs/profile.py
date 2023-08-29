@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import logging
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import discord
 
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import ProfileUnlinkView, SelectProfileView, SelectPlatformMenu
+from classes.ui import BaseView, PlatformSelectMenu
 from utils.checks import has_profile, can_add_profile
 from utils.helpers import hero_autocomplete, profile_autocomplete
 from classes.profile import Profile
@@ -21,6 +21,82 @@ if TYPE_CHECKING:
 Member = discord.User | discord.Member
 
 log = logging.getLogger("overbot")
+
+
+class ProfileSelect(discord.ui.Select):
+    def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.profiles = profiles
+        self.__fill_options()
+
+    def __fill_options(self) -> None:
+        for profile in self.profiles:
+            self.add_option(label=profile.battletag, value=str(profile.id))
+
+
+class ProfileSelectView(BaseView):
+    def __init__(self, profiles: list[Profile], *, interaction: discord.Interaction) -> None:
+        super().__init__(interaction=interaction)
+        placeholder = f"Select a profile... ({len(profiles)} found)"
+        self.select = ProfileSelect(profiles, placeholder=placeholder)
+        setattr(self.select, "callback", self.select_callback)
+        self.add_item(self.select)
+
+    async def select_callback(self, interaction: discord.Interaction) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red, row=1)
+    async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
+
+
+class ProfileUnlinkView(BaseView):
+    def __init__(self, profiles: list[Profile], *, interaction: discord.Interaction) -> None:
+        super().__init__(interaction=interaction)
+        self.choices: list[int] = []
+        placeholder = "Select at least a profile..."
+        # Using min_values=0 to ensure that the view gets recomputed
+        # even when the user unselects the previously selected profile(s).
+        self.select = ProfileSelect(
+            profiles, min_values=0, max_values=len(profiles), placeholder=placeholder
+        )
+        setattr(self.select, "callback", self.select_callback)
+        self.add_item(self.select)
+
+    async def select_callback(self, interaction: discord.Interaction) -> None:
+        await interaction.response.defer()
+        self.choices = list(map(int, self.select.values))
+
+    @discord.ui.button(label="Unlink", style=discord.ButtonStyle.blurple, row=1)
+    async def unlink(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        if self.choices:
+            await interaction.response.defer()
+            await interaction.client.pool.execute(
+                "DELETE FROM profile WHERE id = any($1::int[]);", self.choices
+            )
+
+            if len(self.choices) == 1:
+                message = "Profile successfully unlinked."
+            else:
+                message = "Profiles successfully unlinked."
+
+            await interaction.delete_original_response()
+            await interaction.followup.send(message, ephemeral=True)
+            self.stop()
+        else:
+            await interaction.response.send_message(
+                "Please select at least a profile to unlink.", ephemeral=True
+            )
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red, row=1)
+    async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
 
 
 @app_commands.context_menu(name="List Profiles")
@@ -60,7 +136,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         if len(profiles) == 1:
             return profiles[0]
 
-        view = SelectProfileView(profiles, interaction=interaction)
+        view = ProfileSelectView(profiles, interaction=interaction)
         # Using defer() on every single command that calls 'select_profile'.
         # Thus, the interaction is always responded and we can use
         # followup.send to respond.
@@ -82,7 +158,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         embed.set_author(name=member.display_name, icon_url=member.display_avatar)
 
         if not profiles:
-            embed.description = "No profiles..."
+            embed.description = "No profiles."
             embed.set_footer(text=f"Requested by {interaction.user.display_name}")
             return embed
 
@@ -184,7 +260,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
 
         data = await profile.embed_ratings()
         value = "console" if not data["pc"] else "pc"
-        view = SelectPlatformMenu(data[value], interaction=interaction)
+        view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
         await view.start()
 
@@ -211,8 +287,11 @@ class ProfileCog(commands.GroupCog, name="profile"):
         profile = await self.select_profile(interaction, message, member)
         await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profilo=profile)
 
+    def cog_unload(self):
+        self.bot.tree.remove_command(list_profiles.name, type=list_profiles.type)
+
 
 async def setup(bot: OverBot) -> None:
-    setattr(list_profiles, "__cog_name__", "Profile")
+    setattr(list_profiles, "__cog_name__", "profile")
     bot.tree.add_command(list_profiles)
     await bot.add_cog(ProfileCog(bot))
