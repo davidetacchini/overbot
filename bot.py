@@ -10,7 +10,7 @@ import discord
 from aiohttp import ClientSession
 from discord.ext import commands
 
-import config # pyright: reportMissingImports=false
+import config  # pyright: ignore[reportMissingImports]
 
 from utils import emojis
 from classes.ui import PromptView

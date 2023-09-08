@@ -2,7 +2,7 @@ import aiohttp
 
 from bs4 import BeautifulSoup
 
-import config # pyright: reportMissingImports=false
+import config  # pyright: ignore[reportMissingImports]
 
 
 async def fetch(url: str) -> bytes:
