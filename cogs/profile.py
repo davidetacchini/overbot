@@ -277,7 +277,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         hero: str = "all-heroes",
         member: None | Member = None,
     ) -> None:
-        """Provides general stats or hero specific stats for a profile."""
+        """Provides general stats or hero specific stats for a profile"""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         if hero == "all-heroes":
@@ -289,6 +289,27 @@ class ProfileCog(commands.GroupCog, name="profile"):
 
     def cog_unload(self):
         self.bot.tree.remove_command(list_profiles.name, type=list_profiles.type)
+
+    @app_commands.command()
+    @app_commands.describe(member="The member to show summary for")
+    @has_profile()
+    async def summary(self, interaction: discord.Interaction, member: None | Member = None) -> None:
+        """Provides summarized stats for a profile
+
+        Data from both competitive and quickplay, and/or pc and console is merged
+        """
+        await interaction.response.defer(thinking=True)
+        member = member or interaction.user
+        message = "Select a profile to view the summary for:"
+        profile = await self.select_profile(interaction, message, member)
+        await profile.fetch_data()
+
+        if profile.is_private():
+            embed = profile.embed_private()
+        else:
+            embed = await profile.embed_summary()
+
+        await interaction.followup.send(embed=embed)
 
 
 async def setup(bot: OverBot) -> None:
