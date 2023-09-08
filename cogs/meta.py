@@ -45,7 +45,8 @@ class Meta(commands.Cog):
         else:
             actual = self.bot.tree.get_command(command.split(" ")[0])
             if not actual:
-                return await interaction.followup.send(f"Command **{command}** not found.")
+                await interaction.followup.send(f"Command **{command}** not found.")
+                return
 
             if isinstance(actual, app_commands.Group):
                 actual = actual.get_command(command.split(" ")[1])
@@ -117,7 +118,6 @@ class Meta(commands.Cog):
         view.add_item(ui.Button(label="Website", url=self.bot.config.website))
         view.add_item(ui.Button(label="GitHub", url=self.bot.config.github["repo"]))
         view.add_item(ui.Button(label="Invite", url=self.bot.config.invite))
-        view.add_item(ui.Button(label="Vote", url=self.bot.config.vote))
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"Latest Changes:\n{commits}"

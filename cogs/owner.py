@@ -38,7 +38,7 @@ class Owner(commands.Cog):
         """Remove the given amount of messages"""
         await interaction.response.defer()
         amount += 1
-        if interaction.channel is not None and isinstance(interaction.channel, discord.TextChannel):
+        if interaction.channel and isinstance(interaction.channel, discord.TextChannel):
             await interaction.channel.purge(limit=amount)
 
     @app_commands.command()
@@ -101,17 +101,18 @@ class Owner(commands.Cog):
 
         # progress and stuff is redirected to stderr in git pull
         # however, things like "fast forward" and files
-        # along with the text "already up-to-date" are in stdout
+        # along with the text "Already up to date" are in stdout
 
         if stdout.startswith("Already up to date."):
-            return await interaction.followup.send(stdout)
+            await interaction.followup.send(stdout)
+            return
 
         modules = self.find_modules_from_git(stdout)
         updated_modules = "\n".join(
             f"{index}. `{module}`" for index, (_, module) in enumerate(modules, start=1)
         )
         message = f"This will update the following modules?\n{updated_modules}"
-        if await self.bot.prompt(interaction, message):
+        if not await self.bot.prompt(interaction, message):
             return
 
         statuses = []
@@ -213,7 +214,8 @@ class Owner(commands.Cog):
         try:
             exec(to_compile, env)
         except Exception as e:
-            return await interaction.response.send_message(f"```py\n{type(e).__name__}: {e}\n```")
+            await interaction.response.send_message(f"```py\n{type(e).__name__}: {e}\n```")
+            return
 
         func = env["func"]
         try:
@@ -251,7 +253,8 @@ class Owner(commands.Cog):
             try:
                 await conn.execute(query)
             except Exception as e:
-                return await interaction.response.send_message(f"```prolog\n{e}```")
+                await interaction.response.send_message(f"```prolog\n{e}```")
+                return
             else:
                 await interaction.response.send_message("Successful query.")
 
@@ -263,7 +266,8 @@ class Owner(commands.Cog):
             try:
                 res = await conn.fetch(query)
             except Exception as e:
-                return await interaction.response.send_message(f"```prolog\n{e}```")
+                await interaction.response.send_message(f"```prolog\n{e}```")
+                return
             if res:
                 await interaction.response.send_message(
                     f"""```asciidoc\nSuccessful query\n----------------\n\n{res}```"""
@@ -278,9 +282,8 @@ class Owner(commands.Cog):
         async with self.bot.pool.acquire() as conn:
             profiles = await conn.fetchval("SELECT COUNT(*) FROM profile;")
             guilds = await conn.fetchval("SELECT COUNT(*) FROM server;")
-            members = await conn.fetchrow("SELECT count(*) from member;")
+            members = await conn.fetchval("SELECT COUNT(*) from member;")
             ratings = await conn.fetchval("SELECT COUNT(*) FROM rating;")
-            nicknames = await conn.fetchval("SELECT COUNT(*) FROM nickname;")
             played, won, lost = await conn.fetchrow(
                 "SELECT SUM(started), SUM(won), SUM(lost) FROM trivia;"
             )
@@ -289,7 +292,6 @@ class Owner(commands.Cog):
         bot_entries = (
             ("Total profiles linked", profiles),
             ("Total profile ratings", ratings),
-            ("Total nicknames set", nicknames),
             ("Total guilds", guilds),
             ("Total members", members),
             ("Total commands runned", total_commands),
@@ -306,13 +308,13 @@ class Owner(commands.Cog):
         trivia = []
 
         for key, value in bot_entries:
-            bot.append(f"{key}: **{value}**\n")
+            bot.append(f"{key}: **{value}**")
 
         for key, value in trivia_entries:
-            trivia.append(f"{key}: **{value}**\n")
+            trivia.append(f"{key}: **{value}**")
 
-        embed.add_field(name="Bot", value="".join(bot))
-        embed.add_field(name="Trivia", value="".join(trivia))
+        embed.add_field(name="Bot", value="\n".join(bot))
+        embed.add_field(name="Trivia", value="\n".join(trivia))
 
         await interaction.response.send_message(embed=embed)
 

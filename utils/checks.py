@@ -13,7 +13,7 @@ from classes.exceptions import NotOwner, NotPremium, ProfileNotLinked, ProfileLi
 
 
 async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:
-    query = """SELECT platform, username
+    query = """SELECT battletag
                FROM profile
                INNER JOIN member
                        ON member.id = profile.member_id
@@ -23,7 +23,7 @@ async def get_profiles(interaction: discord.Interaction, member_id: int) -> list
 
 
 def has_profile():
-    """Check for a user to have linked atleast a profile."""
+    """Check for a user to have linked at least a profile."""
 
     def get_target_id(interaction) -> int:
         try:
@@ -73,16 +73,5 @@ def is_owner():
         if interaction.user.id == interaction.client.owner.id:
             return True
         raise NotOwner()
-
-    return app_commands.check(predicate)
-
-
-def subcommand_guild_only():
-    # Due to a Discord limitation the @app_commands.guild_only
-    # decorator does not work for subcommands.
-    def predicate(interaction: discord.Interaction) -> bool:
-        if interaction.guild is not None:
-            return True
-        raise app_commands.NoPrivateMessage()
 
     return app_commands.check(predicate)

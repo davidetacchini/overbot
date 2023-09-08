@@ -14,14 +14,15 @@ if TYPE_CHECKING:
 
 HeroCategories = Literal["damage", "support", "tank"]
 MapCategories = Literal[
-    "control",
     "assault",
-    "escort",
-    "capture the flag",
-    "hybrid",
-    "elimination",
+    "capture-the-flag",
+    "control",
     "deathmatch",
-    "team deathmatch",
+    "elimination",
+    "escort",
+    "hybrid",
+    "push",
+    "team-deathmatch",
 ]
 
 
@@ -37,6 +38,15 @@ class Fun(commands.Cog):
             categorized_heroes = [h for h in heroes if h["role"] == category]
             hero = secrets.choice(categorized_heroes)
         return hero["name"]
+
+    def _get_random_map(self, category: None | str) -> str:
+        maps = list(self.bot.maps.values())
+        if not category:
+            map_ = secrets.choice(maps)
+        else:
+            categorized_maps = [m for m in maps if category in m["gamemodes"]]
+            map_ = secrets.choice(categorized_maps)
+        return map_["name"]
 
     @app_commands.command()
     @app_commands.describe(category="The category to get a random hero from")
@@ -57,17 +67,19 @@ class Fun(commands.Cog):
         await interaction.response.send_message(hero)
 
     @app_commands.command()
+    @app_commands.describe(category="The category to get a random map from")
+    async def maptoplay(
+        self, interaction: discord.Interaction, category: MapCategories = None
+    ) -> None:
+        """Returns a random map"""
+        map_ = self._get_random_map(category)
+        await interaction.response.send_message(map_)
+
+    @app_commands.command()
     async def roletoplay(self, interaction: discord.Interaction) -> None:
         """Returns a random role"""
         roles = ("Tank", "Damage", "Support", "Flex")
         await interaction.response.send_message(secrets.choice(roles))
-
-    @app_commands.command()
-    async def meme(self, interaction: discord.Interaction) -> None:
-        """Returns a random Overwatch meme"""
-        await interaction.response.send_message(
-            "Due to Reddit's new APIs policy, this command is no longer available. Thanks for the understanding."
-        )
 
 
 async def setup(bot: OverBot) -> None:

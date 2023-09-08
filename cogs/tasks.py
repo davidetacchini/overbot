@@ -28,7 +28,6 @@ log = logging.getLogger("overbot")
 class Tasks(commands.Cog):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
-        self.update_discord_portals.start()
         self.update_private_api.start()
         self.check_subscriptions.start()
         self.send_overwatch_news.start()
@@ -221,41 +220,6 @@ class Tasks(commands.Cog):
         await self.bot.session.post(f"{BASE_URL}/servers", json=servers, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/supporters", json=supporters, headers=headers)
 
-    @tasks.loop(minutes=30.0)
-    async def update_discord_portals(self):
-        """Updates bot stats on Discord portals."""
-        if self.bot.debug:
-            return
-
-        await self.bot.wait_until_ready()
-
-        # POST stats on top.gg
-        payload = {
-            "server_count": len(self.bot.guilds),
-            "shard_count": self.bot.shard_count,
-        }
-
-        top_gg_headers = {"Authorization": self.bot.config.top_gg["token"]}
-
-        await self.bot.session.post(
-            self.bot.config.top_gg["url"], data=payload, headers=top_gg_headers
-        )
-
-        # POST stats on discord.bots.gg
-        payload = {
-            "guildCount": len(self.bot.guilds),
-            "shardCount": self.bot.shard_count,
-        }
-
-        headers = {
-            "Authorization": self.bot.config.discord_bots["token"],
-            "Content-Type": "application/json",
-        }
-
-        await self.bot.session.post(
-            self.bot.config.discord_bots["url"], json=payload, headers=headers
-        )
-
     async def set_premium_for(self, target_id: int, *, server: bool = True) -> None:
         server_query = """INSERT INTO server (id, premium)
                           VALUES ($1, true)
@@ -331,7 +295,7 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = (await get_overwatch_news(1))[0]
+            news = (await get_overwatch_news())[0]
         except Exception:
             return
 
@@ -378,7 +342,6 @@ class Tasks(commands.Cog):
         await self.bot.change_presence(activity=game)
 
     def cog_unload(self) -> None:
-        self.update_discord_portals.cancel()
         self.update_private_api.cancel()
         self.check_subscriptions.cancel()
         self.send_overwatch_news.cancel()

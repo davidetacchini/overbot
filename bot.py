@@ -10,14 +10,13 @@ import discord
 from aiohttp import ClientSession
 from discord.ext import commands
 
-import config  # pyright: reportMissingImports=false
+import config
 
 from utils import emojis
 from classes.ui import PromptView
 from utils.time import human_timedelta
-from utils.scrape import get_overwatch_heroes
 from classes.paginator import Paginator
-from utils.error_handler import error_handler
+from classes.command_tree import OverBotCommandTree
 
 if sys.platform == "linux":
     import uvloop
@@ -27,7 +26,7 @@ if sys.platform == "linux":
 
 log = logging.getLogger("overbot")
 
-__version__ = "5.4.0"
+__version__ = "6.0.0"
 
 
 class OverBot(commands.AutoShardedBot):
@@ -37,15 +36,20 @@ class OverBot(commands.AutoShardedBot):
     app_info: discord.AppInfo
 
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__(command_prefix=config.default_prefix, **kwargs)
+        super().__init__(
+            command_prefix=config.default_prefix, tree_cls=OverBotCommandTree, **kwargs
+        )
         self.config = config
         self.sloc: int = 0
 
         # caching
         self.premiums: set[int] = set()
         self.embed_colors: dict[int, int] = {}
-        self.heroes: dict[str, dict[str, str]] = {}
+        self.heroes: dict[str, dict[Any, Any]] = {}
+        self.maps: dict[str, dict[Any, Any]] = {}
+        self.gamemodes: dict[str, dict[Any, Any]] = {}
 
+        self.BASE_URL: str = config.base_url
         self.TEST_GUILD: discord.Object = discord.Object(config.test_guild_id)
 
     @property
@@ -156,9 +160,6 @@ class OverBot(commands.AutoShardedBot):
         ids = await self.pool.fetch(query)
         self.premiums = {i["id"] for i in ids}
 
-    async def _cache_heroes(self) -> None:
-        self.heroes = await get_overwatch_heroes()
-
     async def _cache_embed_colors(self) -> None:
         embed_colors = {}
         query = "SELECT id, embed_color FROM member WHERE embed_color IS NOT NULL;"
@@ -166,6 +167,48 @@ class OverBot(commands.AutoShardedBot):
         for member_id, color in colors:
             embed_colors[member_id] = color
         self.embed_colors = embed_colors
+
+    async def _cache_heroes(self) -> None:
+        try:
+            data = await self.session.get(f"{self.BASE_URL}/heroes")
+        except Exception:
+            log.exception("Cannot get heroes. Aborting...")
+            await self.close()
+        else:
+            data = await data.json()
+            heroes = {}
+            for hero in data:
+                heroes[hero.pop("key")] = hero
+            self.heroes = heroes
+            log.info("Heroes successfully cached.")
+
+    async def _cache_maps(self) -> None:
+        try:
+            data = await self.session.get(f"{self.BASE_URL}/maps")
+        except Exception:
+            log.exception("Cannot get maps. Aborting...")
+            await self.close()
+        else:
+            data = await data.json()
+            maps = {}
+            for map_ in data:
+                maps[map_.get("name")] = map_
+            self.maps = maps
+            log.info("Maps successfully cached.")
+
+    async def _cache_gamemodes(self) -> None:
+        try:
+            data = await self.session.get(f"{self.BASE_URL}/gamemodes")
+        except Exception:
+            log.exception("Cannot get gamemodes. Aborting...")
+            await self.close()
+        else:
+            data = await data.json()
+            gamemodes = {}
+            for gamemode in data:
+                gamemodes[gamemode.pop("key")] = gamemode
+            self.gamemodes = gamemodes
+            log.info("Gamemodes successfully cached.")
 
     async def setup_hook(self) -> None:
         self.session = ClientSession()
@@ -179,6 +222,8 @@ class OverBot(commands.AutoShardedBot):
         await self._cache_premiums()
         await self._cache_embed_colors()
         await self._cache_heroes()
+        await self._cache_maps()
+        await self._cache_gamemodes()
 
         for extension in os.listdir("cogs"):
             if extension.endswith(".py"):
@@ -188,8 +233,6 @@ class OverBot(commands.AutoShardedBot):
                     log.exception(f"Extension {extension} failed its loading.")
                 else:
                     log.info(f"Extension {extension} successfully loaded.")
-
-        self.tree.on_error = error_handler
 
         if self.debug:
             self.tree.copy_global_to(guild=self.TEST_GUILD)

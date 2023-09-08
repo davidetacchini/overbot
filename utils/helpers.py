@@ -4,38 +4,8 @@ from typing import TYPE_CHECKING
 
 from discord.app_commands import Group, Choice
 
-from . import emojis
-
 if TYPE_CHECKING:
-    from discord import Interaction, PartialEmoji
-
-
-platform_choices = [
-    Choice(name="Battle.net", value="pc"),
-    Choice(name="PlayStation", value="psn"),
-    Choice(name="XBOX", value="xbl"),
-    Choice(name="Nintendo Switch", value="nintendo-switch"),
-]
-
-
-def get_platform_emoji(platform: str) -> PartialEmoji:
-    lookup = {
-        "pc": emojis.battlenet,
-        "psn": emojis.psn,
-        "xbl": emojis.xbl,
-        "nintendo-switch": emojis.switch,
-    }
-    return lookup[platform]
-
-
-def format_platform(platform: str) -> str:
-    lookup = {
-        "pc": "Battle.net",
-        "psn": "PlayStation",
-        "xbl": "XBOX",
-        "nintendo-switch": "Nintendo Switch",
-    }
-    return lookup[platform]
+    from discord import Interaction
 
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
@@ -44,9 +14,25 @@ async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choi
         Choice(name=value["name"], value=key)
         for key, value in heroes.items()
         if current.lower() in value["name"].lower() or current.lower() in key.lower()
-    ][
-        :25
-    ]  # choices must be <= 25, heroes are more, so slicing.
+    ][:25]
+
+
+async def map_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
+    maps = interaction.client.maps
+    return [
+        Choice(name=value["name"], value=key)
+        for key, value in maps.items()
+        if current.lower() in value["name"].lower() or current.lower() in key.lower()
+    ][:25]
+
+
+async def gamemode_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
+    gamemodes = interaction.client.gamemodes
+    return [
+        Choice(name=value["name"], value=key)
+        for key, value in gamemodes.items()
+        if current.lower() in value["name"].lower() or current.lower() in key.lower()
+    ]
 
 
 async def module_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
@@ -57,12 +43,12 @@ async def module_autocomplete(interaction: Interaction, current: str) -> list[Ch
 
 
 async def profile_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    profile_cog = interaction.client.get_cog("Profile")
+    profile_cog = interaction.client.get_cog("profile")
     profiles = await profile_cog.get_profiles(interaction, interaction.user.id)
     return [
-        Choice(name=f"{format_platform(profile.platform)} - {profile.username}", value=profile.id)
+        Choice(name=profile.battletag, value=profile.id)
         for profile in profiles
-        if current.lower() in profile.username.lower()
+        if current.lower() in profile.battletag.lower()
     ]
 
 

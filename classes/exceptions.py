@@ -33,12 +33,12 @@ class RequestError(OverBotException):
 
 class NotFound(RequestError):
     def __init__(self) -> None:
-        super().__init__("Profile not found.")
+        super().__init__("Player not found.")
 
 
-class BadRequest(RequestError):
+class ValidationError(RequestError):
     def __init__(self) -> None:
-        super().__init__("Wrong BattleTag format entered! Correct format: `name#0000`")
+        super().__init__("Validation error occured. Please try again.")
 
 
 class InternalServerError(RequestError):
@@ -48,44 +48,36 @@ class InternalServerError(RequestError):
         )
 
 
-class ServiceUnavailable(RequestError):
+class BlizzardServerError(RequestError):
     def __init__(self) -> None:
-        super().__init__("The API is under maintenance. Please be patient and try again later.")
+        super().__init__(
+            "Blizzard is having internal server problems. Please be patient and try again later."
+        )
 
 
-class UnexpectedError(RequestError):
+class UnknownError(RequestError):
     def __init__(self) -> None:
         super().__init__("Something bad happened. Please be patient and try again.")
 
 
 class TooManyAccounts(RequestError):
-    def __init__(self, platform: str, username: str, players: int) -> None:
-        match platform:
-            case "pc":
-                what = "BattleTag"
-            case "console":
-                what = "username"
+    def __init__(self, battletag: str, players: int) -> None:
         message = (
-            f"**{players}** accounts found named `{username}`. Please "
-            f"be more specific by entering your exact **{what}**."  # type: ignore # 'what' will always be bound to something
+            f"**{players}** accounts found named `{battletag}`. Please "
+            f"be more specific by entering your exact **BattleTag**."
         )
         super().__init__(message)
 
 
-class ProfileException(OverBotException):
-    pass
-
-
-class NoStats(ProfileException):
-    def __init__(self) -> None:
-        super().__init__("This profile has no quick play nor competitive stats to display.")
-
-
-class NoHeroStats(ProfileException):
+class NoStats(OverBotException):
     def __init__(self, hero: str) -> None:
-        super().__init__(
-            f"This profile has no quick play nor competitive stast for **{hero}** to display."
-        )
+        if hero == "all-heroes":
+            message = "This profile has no quick play nor competitive stats to display."
+        else:
+            message = (
+                f"This profile has no quick play nor competitive stast for **{hero}** to display."
+            )
+        super().__init__(message)
 
 
 class ProfileNotLinked(app_commands.CheckFailure):

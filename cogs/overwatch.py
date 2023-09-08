@@ -1,20 +1,85 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import discord
 
+from aiohttp import ClientSession
 from discord import app_commands
 from discord.ext import commands
 
+from classes.ui import BaseView
 from utils.cache import cache
 from utils.checks import is_premium
 from utils.scrape import get_overwatch_news
+from utils.helpers import map_autocomplete, hero_autocomplete, gamemode_autocomplete
+from classes.exceptions import UnknownError
 
 if TYPE_CHECKING:
     from asyncpg import Record
 
     from bot import OverBot
+
+
+class HeroInfoView(BaseView):
+    def __init__(self, *, interaction: discord.Interaction, data: dict[str, Any]) -> None:
+        super().__init__(interaction=interaction)
+        self.data = data
+
+    @discord.ui.button(label="Abilities", style=discord.ButtonStyle.blurple)
+    async def abilities(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        abilities = self.data.get("abilities")
+        if not abilities:
+            return
+
+        pages = []
+        for index, ability in enumerate(abilities, start=1):
+            embed = discord.Embed()
+            embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+            embed.title = ability.get("name")
+            embed.url = ability.get("video").get("link").get("mp4")
+            embed.description = ability.get("description")
+            embed.set_thumbnail(url=ability.get("icon"))
+            embed.set_image(url=ability.get("video").get("thumbnail"))
+            embed.set_footer(text=f"Page {index} of {len(abilities)}")
+            pages.append(embed)
+
+        await interaction.client.paginate(pages, interaction=interaction)
+
+    @discord.ui.button(label="Story", style=discord.ButtonStyle.blurple)
+    async def story(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        story = self.data.get("story")
+        if not story:
+            return
+
+        chapters = story.get("chapters")
+        max_pages = len(chapters) + 1
+        pages = []
+
+        embed = discord.Embed()
+        embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+        embed.url = story.get("media").get("link")
+        embed.title = "Origin Story"
+        embed.description = story.get("summary")
+        embed.set_footer(text=f"Page 1 of {max_pages}")
+        pages.append(embed)
+
+        for index, chapter in enumerate(story.get("chapters"), start=2):
+            embed = discord.Embed()
+            embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
+            embed.title = chapter.get("title")
+            embed.description = chapter.get("content")
+            embed.set_image(url=chapter.get("picture"))
+            embed.set_footer(text=f"Page {index} of {max_pages}")
+            pages.append(embed)
+
+        await interaction.client.paginate(pages, interaction=interaction)
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
+    async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        await interaction.response.defer()
+        await interaction.delete_original_response()
+        self.stop()
 
 
 class Newsboard:
@@ -39,6 +104,10 @@ class Overwatch(commands.Cog):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
+    info = app_commands.Group(
+        name="info", description="Provides information about heroes, maps or gamemodes."
+    )
+
     @app_commands.command()
     async def status(self, interaction: discord.Interaction) -> None:
         """Returns Overwatch server status link"""
@@ -48,21 +117,19 @@ class Overwatch(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command()
-    @app_commands.describe(amount="The amount of news to return. Defaults to 4")
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
-    async def news(
-        self, interaction: discord.Interaction, amount: app_commands.Range[int, 1, 4] = 4
-    ) -> None:
+    async def news(self, interaction: discord.Interaction) -> None:
         """Shows the latest Overwatch news"""
         pages = []
 
         try:
-            news = await get_overwatch_news(amount)
+            news = await get_overwatch_news()
         except Exception:
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
             embed.description = f"[Latest Overwatch News]({url})"
-            return await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed)
+            return
 
         for i, n in enumerate(news, start=1):
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
@@ -113,9 +180,10 @@ class Overwatch(commands.Cog):
         await interaction.response.defer(thinking=True)
         newsboard = await self.get_newsboard(interaction.guild_id)
         if newsboard.channel is not None:
-            return await interaction.followup.send(
+            await interaction.followup.send(
                 f"This server already has a newsboard at {newsboard.channel.mention}."
             )
+            return
 
         if guild := await self._has_newsboard(interaction.user.id):
             payload = f"You have already set up a newsboard in **{str(guild)}**. Do you want to override it?"
@@ -128,7 +196,6 @@ class Overwatch(commands.Cog):
 
         name = "overwatch-news"
         topic = "Latest Overwatch news."
-
         overwrites = {
             interaction.guild.me: discord.PermissionOverwrite(
                 read_messages=True, send_messages=True, embed_links=True
@@ -144,11 +211,73 @@ class Overwatch(commands.Cog):
                 name=name, overwrites=overwrites, topic=topic, reason=reason
             )
         except discord.HTTPException:
-            return await interaction.followup.send("Something bad happened. Please try again.")
+            await interaction.followup.send("Something bad happened. Please try again.")
+            return
 
         query = "INSERT INTO newsboard (id, server_id, member_id) VALUES ($1, $2, $3);"
         await self.bot.pool.execute(query, channel.id, interaction.guild_id, interaction.user.id)
         await interaction.followup.send(f"Channel successfully created at {channel.mention}.")
+
+    async def embed_map_info(self, map_: str) -> discord.Embed:
+        embed = discord.Embed()
+        map_ = self.bot.maps.get(map_)
+        embed.title = map_.get("name")
+        embed.set_image(url=map_.get("screenshot"))
+        gamemodes = "\n".join(map(lambda m: m.capitalize(), map_.get("gamemodes")))
+        embed.add_field(name="Gamemodes", value=gamemodes)
+        embed.add_field(name="Location", value=map_.get("location"))
+        embed.add_field(name="Country Code", value=map_.get("country_code", "N/A"))
+        return embed
+
+    async def embed_gamemode_info(self, gamemode: str) -> discord.Embed:
+        embed = discord.Embed()
+        gamemode = self.bot.gamemodes.get(gamemode)
+        embed.title = gamemode.get("name")
+        embed.description = gamemode.get("description")
+        embed.set_thumbnail(url=gamemode.get("icon"))
+        embed.set_image(url=gamemode.get("screenshot"))
+        return embed
+
+    @info.command()
+    @app_commands.autocomplete(name=hero_autocomplete)
+    @app_commands.describe(name="The name of the hero to see information for")
+    async def hero(self, interaction: discord.Interaction, name: str) -> None:
+        """Returns information about a given hero"""
+        url = f"{self.bot.BASE_URL}/heroes/{name}"
+        async with ClientSession() as s:
+            async with s.get(url) as r:
+                if r.status != 200:
+                    raise UnknownError()
+                data = await r.json()
+
+        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed.set_author(name=data.get("name"), icon_url=data.get("portrait"))
+        embed.description = data.get("description")
+        hitpoints = "\n".join(
+            f"{k.capitalize()}: **{v}**" for k, v in data.get("hitpoints").items()
+        )
+        embed.add_field(name="Hitpoints", value=hitpoints)
+        embed.add_field(name="Role", value=data.get("role").capitalize())
+        embed.add_field(name="Location", value=data.get("location"))
+
+        view = HeroInfoView(interaction=interaction, data=data)
+        await interaction.response.send_message(embed=embed, view=view)
+
+    @info.command()
+    @app_commands.autocomplete(name=map_autocomplete)
+    @app_commands.describe(name="The name of the map to see information for")
+    async def map(self, interaction: discord.Interaction, name: str) -> None:
+        """Returns information about a given map"""
+        embed = await self.embed_map_info(name)
+        await interaction.response.send_message(embed=embed)
+
+    @info.command()
+    @app_commands.autocomplete(name=gamemode_autocomplete)
+    @app_commands.describe(name="The name of the gamemode to see information for")
+    async def gamemode(self, interaction: discord.Interaction, name: str) -> None:
+        """Returns information about a given gamemode"""
+        embed = await self.embed_gamemode_info(name)
+        await interaction.response.send_message(embed=embed)
 
 
 async def setup(bot: OverBot) -> None:

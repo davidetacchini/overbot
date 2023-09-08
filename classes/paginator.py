@@ -27,15 +27,13 @@ class Paginator(discord.ui.View):
         self.fill_items()
 
     @property
-    def total(self) -> int:
+    def max_pages(self) -> int:
         return len(self.entries) - 1
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user and interaction.user.id == self.interaction.user.id:
             return True
-        await interaction.response.send_message(
-            "This command was not initiated by you.", ephemeral=True
-        )
+        await interaction.response.send_message("This is not for you.", ephemeral=True)
         return False
 
     async def on_timeout(self) -> None:
@@ -47,21 +45,20 @@ class Paginator(discord.ui.View):
         except Exception:
             pass
 
-    def fill_items(self) -> None:
-        if self.total > 2:
+    def fill_items(self, *, force_quit: bool = False) -> None:
+        if self.max_pages >= 2:
             self.add_item(self.first)
-        if self.total > 0:
+        if self.max_pages > 0:
             self.add_item(self.previous)
-            self.add_item(self.quit_session)
             self.add_item(self.next)
-        if self.total > 2:
+        if self.max_pages >= 2:
             self.add_item(self.last)
+        if self.max_pages > 0 or force_quit:
+            self.add_item(self.quit_session)
 
     def _update_labels(self, page: int) -> None:
-        self.first.disabled = 0 <= page <= 1
-        self.previous.disabled = page == 0
-        self.next.disabled = page == self.total
-        self.last.disabled = self.total - 1 <= page <= self.total
+        self.first.disabled = self.previous.disabled = page == 0
+        self.last.disabled = self.next.disabled = page == self.max_pages
 
     def _get_kwargs_from_page(self, page: PageT) -> dict[str, Any]:
         if isinstance(page, dict):
@@ -101,22 +98,22 @@ class Paginator(discord.ui.View):
             self.current -= 1
             await self._update(interaction)
 
-    @discord.ui.button(emoji=emojis.close, style=discord.ButtonStyle.red)
+    @discord.ui.button(emoji=emojis.right_caret, style=discord.ButtonStyle.blurple)
+    async def next(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        if self.current + 1 <= self.max_pages:
+            self.current += 1
+            await self._update(interaction)
+
+    @discord.ui.button(emoji=emojis.right_d_caret, style=discord.ButtonStyle.blurple)
+    async def last(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        if self.current < self.max_pages:
+            self.current = self.max_pages
+            await self._update(interaction)
+
+    @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
     async def quit_session(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
         await interaction.response.defer()
         await interaction.delete_original_response()
         self.stop()
-
-    @discord.ui.button(emoji=emojis.right_caret, style=discord.ButtonStyle.blurple)
-    async def next(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-        if self.current + 1 <= self.total:
-            self.current += 1
-            await self._update(interaction)
-
-    @discord.ui.button(emoji=emojis.right_d_caret, style=discord.ButtonStyle.blurple)
-    async def last(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-        if self.current < self.total:
-            self.current = self.total
-            await self._update(interaction)
