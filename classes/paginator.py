@@ -57,10 +57,8 @@ class Paginator(discord.ui.View):
             self.add_item(self.quit_session)
 
     def _update_labels(self, page: int) -> None:
-        self.first.disabled = 0 <= page <= 1
-        self.previous.disabled = page == 0
-        self.next.disabled = page == self.max_pages
-        self.last.disabled = self.max_pages - 1 <= page <= self.max_pages
+        self.first.disabled = self.previous.disabled = page == 0
+        self.last.disabled = self.next.disabled = page == self.max_pages
 
     def _get_kwargs_from_page(self, page: PageT) -> dict[str, Any]:
         if isinstance(page, dict):
