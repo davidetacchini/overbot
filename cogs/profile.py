@@ -102,7 +102,7 @@ class ProfileUnlinkView(BaseView):
 @app_commands.context_menu(name="List Profiles")
 async def list_profiles(interaction: discord.Interaction, member: discord.Member) -> None:
     """List your own or a member's profiles"""
-    profile_cog = interaction.client.get_cog("Profile")
+    profile_cog = interaction.client.get_cog("profile")
     profiles = await profile_cog.get_profiles(interaction, member.id)
     entries = await profile_cog.list_profiles(interaction, member, profiles)
     await interaction.client.paginate(entries, interaction=interaction)
