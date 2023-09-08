@@ -2,7 +2,7 @@ from typing import Any
 
 import aiohttp
 
-import config # pyright: reportMissingImports=false
+import config  # pyright: ignore[reportMissingImports]
 
 from .exceptions import (
     NotFound,
