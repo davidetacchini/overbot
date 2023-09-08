@@ -7,7 +7,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import SelectPlatformMenu
+from classes.ui import PlatformSelectMenu
 from utils.helpers import hero_autocomplete
 from classes.profile import Profile
 
@@ -37,14 +37,14 @@ class Stats(commands.Cog):
 
         data = await profile.embed_stats(hero)
         value = "console" if not data["pc"] else "pc"
-        view = SelectPlatformMenu(data[value], interaction=interaction)
+        view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
         await view.start()
 
     @app_commands.command()
     @app_commands.describe(battletag="The battletag of the player")
     async def ratings(self, interaction: discord.Interaction, *, battletag: str) -> None:
-        """Provides ratings for player."""
+        """Provides ratings for a player"""
         await interaction.response.defer(thinking=True)
         profile = Profile(battletag, interaction=interaction)
         await profile.fetch_data()
@@ -56,7 +56,7 @@ class Stats(commands.Cog):
 
         data = await profile.embed_ratings()
         value = "console" if not data["pc"] else "pc"
-        view = SelectPlatformMenu(data[value], interaction=interaction)
+        view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
         await view.start()
 
@@ -69,9 +69,25 @@ class Stats(commands.Cog):
     async def stats(
         self, interaction: discord.Interaction, *, battletag: str, hero: str = "all-heroes"
     ) -> None:
-        """Provides general stats or hero specific stats for a player."""
+        """Provides general stats or hero specific stats for a player"""
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, hero, battletag)
+
+    @app_commands.command()
+    @app_commands.describe(battletag="The battletag of the player")
+    async def summary(self, interaction: discord.Interaction, *, battletag: str) -> None:
+        """Provides summarized stats for a player
+
+        Data from both competitive and quickplay, and/or pc and console is merged
+        """
+        await interaction.response.defer(thinking=True)
+        profile = Profile(battletag, interaction=interaction)
+        await profile.fetch_data()
+        if profile.is_private():
+            embed = profile.embed_private()
+        else:
+            embed = await profile.embed_summary()
+        await interaction.followup.send(embed=embed)
 
 
 async def setup(bot: OverBot) -> None:

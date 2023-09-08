@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datetime
+
 from typing import TYPE_CHECKING, Any
 
 import discord
@@ -227,6 +229,43 @@ class Profile:
         if isinstance(stats["pc"], discord.Embed) and isinstance(stats["console"], discord.Embed):
             raise NoStats(hero)
         return stats
+
+    async def embed_summary(self) -> discord.Embed:
+        embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
+        embed.set_author(name=self.username, icon_url=self.avatar)
+        embed.set_image(url=self.namecard)
+        embed.set_footer(text=f"Endorsement: {self.endorsement}")
+
+        def format_dict(source: dict[str, Any]):
+            for key, value in source.items():
+                if key == "time_played":
+                    value = str(datetime.timedelta(seconds=value))
+                if isinstance(value, dict):
+                    value = "\n".join(f"{self._format_key(k)}: **{v}**" for k, v in value.items())
+                embed.add_field(name=self._format_key(key, only_capital=True), value=value)
+
+        def get_most_played_hero(source: Any):
+            name, time_played = None, 0
+            for key, value in source.items():
+                if (cur_time := value.get("time_played")) > time_played:
+                    name, time_played = key, cur_time
+            conv_time = str(datetime.timedelta(seconds=time_played))
+            embed.add_field(name="Most Played Hero", value=f"{name.capitalize()}: {conv_time}")
+
+        try:
+            data = await self.request.fetch_stats_summary()
+        except ClientConnectorError:
+            raise UnknownError() from None
+
+        general = data.get("general") or {}
+        heroes = data.get("heroes") or {}
+
+        if general:
+            format_dict(general)
+        if heroes:
+            get_most_played_hero(heroes)
+
+        return embed
 
     def embed_private(self) -> discord.Embed:
         embed = discord.Embed(color=discord.Color.red())
