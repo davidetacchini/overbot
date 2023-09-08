@@ -285,7 +285,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         else:
             message = f"Select a profile to view **{hero}** stats for:"
         profile = await self.select_profile(interaction, message, member)
-        await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profilo=profile)
+        await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profile=profile)
 
     def cog_unload(self):
         self.bot.tree.remove_command(list_profiles.name, type=list_profiles.type)
