@@ -141,7 +141,7 @@ class Profile:
             ratings[key.lower()] = f"**{value['division'].capitalize()} {str(value['tier'])}**"
         return ratings
 
-    async def _resolve_stats(
+    def _resolve_stats(
         self, platform: str, hero: str, /
     ) -> None | tuple[list[str], dict[str, Any], dict[str, Any]]:
         try:
@@ -180,7 +180,7 @@ class Profile:
             c_temp = "\n".join(f"{k}: **{v}**" for k, v in competitive[key].items())
             embed.add_field(name="Competitive", value=self._format_key(c_temp))
 
-    async def embed_ratings(self) -> dict[str, discord.Embed]:
+    def embed_ratings(self) -> dict[str, discord.Embed]:
         ratings = {}
         for platform in self._platforms:
             embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
@@ -200,14 +200,14 @@ class Profile:
             ratings[platform] = embed
         return ratings
 
-    async def embed_stats(self, hero: str) -> dict[str, discord.Embed | list[discord.Embed]]:
+    def embed_stats(self, hero: str) -> dict[str, discord.Embed | list[discord.Embed]]:
         stats = {}
         for platform in self._platforms:
             embed = discord.Embed(color=self.bot.color(self.interaction.user.id))
             username = f"{self.username} [{platform.upper()}]"
             embed.set_author(name=username, icon_url=self.avatar)
 
-            career_stats = await self._resolve_stats(platform, hero)
+            career_stats = self._resolve_stats(platform, hero)
             if career_stats is None:
                 embed.description = "There is no data for this account in this mode yet."
                 stats[platform] = embed

@@ -246,6 +246,9 @@ class Overwatch(commands.Cog):
         url = f"{self.bot.BASE_URL}/heroes/{name}"
         async with ClientSession() as s:
             async with s.get(url) as r:
+                if r.status == 422:
+                    await interaction.response.send_message(f"Hero **{name}** not found.")
+                    return
                 if r.status != 200:
                     raise UnknownError()
                 data = await r.json()
@@ -268,6 +271,11 @@ class Overwatch(commands.Cog):
     @app_commands.describe(name="The name of the map to see information for")
     async def map(self, interaction: discord.Interaction, name: str) -> None:
         """Returns information about a given map"""
+        map_ = self.bot.maps.get(name)
+        if map_ is None:
+            await interaction.response.send_message(f"Map **{name}** not found.")
+            return
+
         embed = await self.embed_map_info(name)
         await interaction.response.send_message(embed=embed)
 
@@ -276,6 +284,11 @@ class Overwatch(commands.Cog):
     @app_commands.describe(name="The name of the gamemode to see information for")
     async def gamemode(self, interaction: discord.Interaction, name: str) -> None:
         """Returns information about a given gamemode"""
+        gamemode = self.bot.gamemodes.get(name)
+        if gamemode is None:
+            await interaction.response.send_message(f"Gamemode **{name}** not found.")
+            return
+
         embed = await self.embed_gamemode_info(name)
         await interaction.response.send_message(embed=embed)
 
