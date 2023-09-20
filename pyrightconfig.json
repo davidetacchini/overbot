@@ -2,14 +2,15 @@
     "include": [
         "classes",
         "cogs",
-        "utils"
+        "utils",
+        "bot.py"
     ],
     "exclude": [
         "**/__pycache__",
         "env",
         ".git"
     ],
-    "pythonVersion": "3.10",
+    "pythonVersion": "3.11",
     "typeCheckingMode": "basic",
     "strictParameterNoneValue": false,
     "reportUnnecessaryTypeIgnoreComment": "warning",
