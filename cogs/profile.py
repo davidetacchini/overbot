@@ -258,7 +258,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
             await interaction.followup.send(embed=embed)
             return
 
-        data = await profile.embed_ratings()
+        data = profile.embed_ratings()
         value = "console" if not data["pc"] else "pc"
         view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
