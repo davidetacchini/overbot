@@ -3,12 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import discord
-
-from discord import Color, ui, app_commands
+from discord import Color, app_commands, ui
 from discord.ext import commands
 
-from utils.checks import is_premium
 from classes.exceptions import InvalidColor
+from utils.checks import is_premium
 
 if TYPE_CHECKING:
     from bot import OverBot

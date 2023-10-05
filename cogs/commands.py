@@ -2,12 +2,11 @@
 from __future__ import annotations
 
 import asyncio
-
 from typing import TYPE_CHECKING, Any
 
 from asyncpg import PostgresConnectionError
 from discord import InteractionType
-from discord.ext import tasks, commands
+from discord.ext import commands, tasks
 
 if TYPE_CHECKING:
     from discord import Interaction

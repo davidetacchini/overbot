@@ -1,5 +1,4 @@
 import aiohttp
-
 from bs4 import BeautifulSoup
 
 import config  # pyright: ignore[reportMissingImports]

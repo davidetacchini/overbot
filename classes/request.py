@@ -5,12 +5,12 @@ import aiohttp
 import config  # pyright: ignore[reportMissingImports]
 
 from .exceptions import (
-    NotFound,
-    UnknownError,
-    TooManyAccounts,
-    ValidationError,
     BlizzardServerError,
     InternalServerError,
+    NotFound,
+    TooManyAccounts,
+    UnknownError,
+    ValidationError,
 )
 
 

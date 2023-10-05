@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from discord.app_commands import Group, Choice
+from discord.app_commands import Choice, Group
 
 if TYPE_CHECKING:
     from discord import Interaction

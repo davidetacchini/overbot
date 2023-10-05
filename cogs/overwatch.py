@@ -3,17 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import discord
-
 from aiohttp import ClientSession
 from discord import app_commands
 from discord.ext import commands
 
+from classes.exceptions import UnknownError
 from classes.ui import BaseView
 from utils.cache import cache
 from utils.checks import is_premium
+from utils.helpers import gamemode_autocomplete, hero_autocomplete, map_autocomplete
 from utils.scrape import get_overwatch_news
-from utils.helpers import map_autocomplete, hero_autocomplete, gamemode_autocomplete
-from classes.exceptions import UnknownError
 
 if TYPE_CHECKING:
     from asyncpg import Record

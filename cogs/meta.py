@@ -1,18 +1,16 @@
 from __future__ import annotations
 
-import time
 import datetime
-import platform
 import itertools
-
+import platform
+import time
 from typing import TYPE_CHECKING
 
+import discord
 import distro
 import psutil
 import pygit2
-import discord
-
-from discord import ui, app_commands
+from discord import app_commands, ui
 from discord.ext import commands
 
 from utils.helpers import command_autocomplete

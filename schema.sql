@@ -332,4 +332,3 @@ ALTER TABLE ONLY public.newsboard
 --
 -- PostgreSQL database dump complete
 --
-

@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-import enum
-import time
 import asyncio
+import enum
 import inspect
-
-from typing import Any, TypeVar, Callable, Protocol, Awaitable, Coroutine, MutableMapping
+import time
 from functools import wraps
+from typing import Any, Awaitable, Callable, Coroutine, MutableMapping, Protocol, TypeVar
 
 from lru import LRU
 

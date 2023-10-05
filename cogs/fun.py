@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import secrets
-
 from typing import TYPE_CHECKING, Literal
 
 import discord
-
 from discord import app_commands
 from discord.ext import commands
 

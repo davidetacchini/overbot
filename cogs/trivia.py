@@ -3,16 +3,14 @@ from __future__ import annotations
 import json
 import random
 import secrets
-
 from typing import TYPE_CHECKING, Any
 
 import discord
-
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import BaseView
 from classes.exceptions import NoChoice, NoTriviaStats
+from classes.ui import BaseView
 
 if TYPE_CHECKING:
     from asyncpg import Record

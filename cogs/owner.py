@@ -1,20 +1,18 @@
 from __future__ import annotations
 
+import asyncio
+import importlib
 import io
 import os
 import re
-import sys
-import asyncio
-import textwrap
-import importlib
-import traceback
 import subprocess
-
-from typing import TYPE_CHECKING
+import sys
+import textwrap
+import traceback
 from contextlib import redirect_stdout
+from typing import TYPE_CHECKING
 
 import discord
-
 from discord import app_commands
 from discord.ext import commands
 

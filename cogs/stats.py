@@ -3,13 +3,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import discord
-
 from discord import app_commands
 from discord.ext import commands
 
+from classes.profile import Profile
 from classes.ui import PlatformSelectMenu
 from utils.helpers import hero_autocomplete
-from classes.profile import Profile
 
 if TYPE_CHECKING:
     from bot import OverBot

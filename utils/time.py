@@ -1,7 +1,6 @@
 # Taken from https://github.com/Rapptz/RoboDanny
 
 import datetime
-
 from typing import Sequence
 
 from dateutil.relativedelta import relativedelta

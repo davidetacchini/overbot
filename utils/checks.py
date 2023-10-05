@@ -3,13 +3,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import discord
-
 from discord import app_commands
 
 if TYPE_CHECKING:
     from asyncpg import Record
 
-from classes.exceptions import NotOwner, NotPremium, ProfileNotLinked, ProfileLimitReached
+from classes.exceptions import NotOwner, NotPremium, ProfileLimitReached, ProfileNotLinked
 
 
 async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:

@@ -1,22 +1,19 @@
+import logging
 import os
 import sys
-import logging
-
 from typing import Any, Sequence
 
 import asyncpg
 import discord
-
 from aiohttp import ClientSession
 from discord.ext import commands
 
 import config  # pyright: ignore[reportMissingImports]
-
-from utils import emojis
-from classes.ui import PromptView
-from utils.time import human_timedelta
-from classes.paginator import Paginator
 from classes.command_tree import OverBotCommandTree
+from classes.paginator import Paginator
+from classes.ui import PromptView
+from utils import emojis
+from utils.time import human_timedelta
 
 if sys.platform == "linux":
     import uvloop

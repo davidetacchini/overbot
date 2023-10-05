@@ -1,19 +1,17 @@
 from __future__ import annotations
 
 import logging
-
 from typing import TYPE_CHECKING, Any
 
 import discord
-
 from discord import app_commands
 from discord.ext import commands
 
-from classes.ui import BaseView, PlatformSelectMenu
-from utils.checks import has_profile, can_add_profile
-from utils.helpers import hero_autocomplete, profile_autocomplete
-from classes.profile import Profile
 from classes.exceptions import NoChoice
+from classes.profile import Profile
+from classes.ui import BaseView, PlatformSelectMenu
+from utils.checks import can_add_profile, has_profile
+from utils.helpers import hero_autocomplete, profile_autocomplete
 
 if TYPE_CHECKING:
     from bot import OverBot

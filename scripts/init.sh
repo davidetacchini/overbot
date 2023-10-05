@@ -4,7 +4,7 @@ green=$(tput setaf 2)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-if [ "$EUID" -ne 0 ]; then 
+if [ "$EUID" -ne 0 ]; then
     echo "${red}You must have root permission.${reset}"
     exit 1
 fi

@@ -1,17 +1,15 @@
 from __future__ import annotations
 
-import re
 import logging
 import platform
-
+import re
 from typing import TYPE_CHECKING, Any
 
+import discord
 import distro
 import psutil
-import discord
-
-from discord.ext import tasks, commands
 from discord.app_commands import Group as AppCommandsGroup
+from discord.ext import commands, tasks
 
 from utils.scrape import get_overwatch_news
 

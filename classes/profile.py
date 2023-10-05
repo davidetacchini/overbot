@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import datetime
-
 from typing import TYPE_CHECKING, Any
 
 import discord
-
 from aiohttp.client_exceptions import ClientConnectorError
 
 from utils import emojis
 
-from .request import Request
 from .exceptions import NoStats, UnknownError
+from .request import Request
 
 if TYPE_CHECKING:
     from asyncpg import Record

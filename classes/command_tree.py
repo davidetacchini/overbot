@@ -2,7 +2,6 @@ import logging
 import traceback
 
 import discord
-
 from asyncpg import DataError
 from discord import app_commands
 
@@ -11,8 +10,8 @@ from classes.exceptions import (
     NotOwner,
     NotPremium,
     OverBotException,
-    ProfileNotLinked,
     ProfileLimitReached,
+    ProfileNotLinked,
 )
 
 log = logging.getLogger("overbot")
