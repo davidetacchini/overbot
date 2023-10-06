@@ -15,7 +15,7 @@ from classes.ui import PromptView
 from utils import emojis
 from utils.time import human_timedelta
 
-if sys.platform == "linux":
+if sys.platform == "linux" or sys.platform == "darwin":
     import uvloop
 
     uvloop.install()
