@@ -24,7 +24,7 @@
 ## Contributing
 
 OverBot uses [black](https://pypi.org/project/black/), [isort](https://pypi.org/project/isort/) and [flake8](https://pypi.org/project/flake8/) as code style.
-It also uses pyright as type checker. Thus, before running a pull request make sure to run the following commands:
+It also uses [pyright](https://pypi.org/project/pyright/) as type checker. Thus, before running a pull request make sure to run the following commands:
 
 ```bash
 pre-commit run --all-files
