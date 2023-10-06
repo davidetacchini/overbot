@@ -2,7 +2,7 @@ from typing import Any
 
 import aiohttp
 
-import config  # pyright: ignore[reportMissingImports]
+import config
 
 from .exceptions import (
     BlizzardServerError,

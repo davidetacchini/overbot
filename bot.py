@@ -8,7 +8,7 @@ import discord
 from aiohttp import ClientSession
 from discord.ext import commands
 
-import config  # pyright: ignore[reportMissingImports]
+import config
 from classes.command_tree import OverBotCommandTree
 from classes.paginator import Paginator
 from classes.ui import PromptView
