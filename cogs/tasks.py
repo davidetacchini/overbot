@@ -293,7 +293,7 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = (await get_overwatch_news())[0]
+            news = (await get_overwatch_news(bot=self.bot))[0]
         except Exception:
             return
 
@@ -302,11 +302,9 @@ class Tasks(commands.Cog):
 
         # check whether the scraped news id is equals to the
         # one stored in the file; if not then there's a news
-        file = open("assets/latest_news_id.txt", "r+")
-        file_news_id = file.readline()
+        db_news_id = await self.bot.pool.fetchval("SELECT latest_id FROM news WHERE id = 1;")
 
-        if int(latest_news_id) == int(file_news_id):
-            file.close()
+        if int(latest_news_id) == int(db_news_id):
             return
 
         embed = discord.Embed()
@@ -328,10 +326,8 @@ class Tasks(commands.Cog):
                 continue
 
         # update old news_id with latest one
-        file.seek(0)
-        file.write(latest_news_id)
-        file.truncate()
-        file.close()
+        await self.bot.pool.execute("UPDATE news SET latest_id = $1 WHERE id = 1", latest_news_id)
+        log.info("News ID has been successfully updated.")
 
     @tasks.loop(hours=1.0)
     async def update_bot_presence(self):
