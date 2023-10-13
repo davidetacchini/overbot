@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from logging.handlers import RotatingFileHandler
 from typing import Any, Sequence
 
 import asyncpg
@@ -209,7 +210,9 @@ class OverBot(commands.AutoShardedBot):
 
     async def setup_hook(self) -> None:
         self.session = ClientSession()
-        self.pool = await asyncpg.create_pool(**config.database, max_size=20, command_timeout=60.0)
+        self.pool = await asyncpg.create_pool(
+            **config.database, min_size=20, max_size=20, command_timeout=120.0
+        )
 
         self.app_info = await self.application_info()
 
@@ -244,10 +247,24 @@ class OverBot(commands.AutoShardedBot):
         await self.pool.close()
 
 
-def main() -> None:
-    # setup bot logger
+def setup_logger() -> None:
     discord.utils.setup_logging()
 
+    max_bytes = 32 * 1024 * 1024  # 32MiB
+    handler = RotatingFileHandler(
+        filename="overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
+    )
+    date_format = "%d-%m-%Y %H:%M:%S"
+    formatter = logging.Formatter(
+        "[{asctime}] [{levelname:<8}] {name}: {message}", date_format, style="{"
+    )
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
+
+    # TODO: finish it
+
+
+def main() -> None:
     intents = discord.Intents.none()
     intents.guilds = True
     intents.members = True
