@@ -15,6 +15,7 @@ config.example.py
 schema.sql
 pyrightconfig.json
 poetry.lock
+Dockerfile
 
 README.md
 LICENSE
