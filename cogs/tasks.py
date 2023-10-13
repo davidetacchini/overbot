@@ -209,7 +209,10 @@ class Tasks(commands.Cog):
         supporters = await self.get_supporters()
 
         if self.bot.debug:
-            BASE_URL = self.bot.config.obapi["dev"]
+            try:
+                BASE_URL = self.bot.config.obapi["dev"]
+            except KeyError:
+                return
         else:
             BASE_URL = self.bot.config.obapi["prod"]
 
