@@ -1,25 +1,22 @@
-FROM ubuntu:22.04
+FROM python:3.11-slim
 
-ENV	POETRY_VIRTUALENVS_CREATE=false
+ENV POETRY_HOME="/opt/poetry" \
+	POETRY_VIRTUALENVS_CREATE=false \
+	POETRY_NO_INTERACTION=1
+
+RUN apt-get update && \
+	apt-get install -y \
+	libgit2-dev \
+	git \
+	curl && \
+	curl -sSL https://install.python-poetry.org | python3 -
+
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
 WORKDIR /app
 
-RUN	apt-get update && apt-get install -y software-properties-common; \
-	add-apt-repository -y ppa:fkrull/deadsnakes; \
-	apt-get update; \
-	apt-get install -y \
-	python3.11 \
-	python3.11-dev \
-	python3-pip \
-	libgit2-dev \
-	curl \
-	gcc \
-	git \
-	wget \
-	&& python3.11 -m pip install --upgrade pip poetry
-
 COPY . .
 
-RUN python3.11 -m poetry update && python3.11 -m poetry install --without dev
+RUN poetry update && poetry install --without dev --no-ansi
 
-CMD [ "python3.11", "bot.py" ]
+CMD [ "python3", "bot.py" ]
