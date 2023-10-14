@@ -8,6 +8,7 @@ RUN apt-get update && \
 	apt-get install -y \
 	libgit2-dev \
 	git \
+    gcc \
 	curl && \
 	curl -sSL https://install.python-poetry.org | python3 -
 
