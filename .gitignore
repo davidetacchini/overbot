@@ -3,8 +3,9 @@ __pycache__/
 .DS_Store
 .vscode
 
+env
+logs
 assets
 
 config.py
 
-env
