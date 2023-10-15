@@ -246,13 +246,18 @@ class OverBot(commands.AutoShardedBot):
         await self.session.close()
         await self.pool.close()
 
+        log = logging.getLogger("overbot")
+        for handler in log.handlers[:]:
+            handler.close()
+            log.removeHandler(handler)
 
-def setup_logger() -> None:
+
+def setup_logging() -> None:
     discord.utils.setup_logging()
 
     max_bytes = 32 * 1024 * 1024  # 32MiB
     handler = RotatingFileHandler(
-        filename="overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
+        filename="logs/overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
     )
     date_format = "%d-%m-%Y %H:%M:%S"
     formatter = logging.Formatter(
@@ -261,10 +266,10 @@ def setup_logger() -> None:
     handler.setFormatter(formatter)
     log.addHandler(handler)
 
-    # TODO: finish it
-
 
 def main() -> None:
+    setup_logging()
+
     intents = discord.Intents.none()
     intents.guilds = True
     intents.members = True
