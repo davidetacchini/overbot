@@ -359,4 +359,3 @@ GRANT ALL ON SCHEMA public TO davide;
 --
 -- PostgreSQL database dump complete
 --
-
