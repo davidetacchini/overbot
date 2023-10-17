@@ -255,6 +255,9 @@ class OverBot(commands.AutoShardedBot):
 def setup_logging() -> None:
     discord.utils.setup_logging()
 
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
+
     max_bytes = 32 * 1024 * 1024  # 32MiB
     handler = RotatingFileHandler(
         filename="logs/overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
