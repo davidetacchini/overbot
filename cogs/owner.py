@@ -95,7 +95,7 @@ class Owner(commands.Cog):
     async def modules(self, interaction: discord.Interaction) -> None:
         """Reloads all modules, while pulling from git"""
         await interaction.response.defer(thinking=True)
-        stdout, stderr = await self.run_process("git pull")
+        stdout, _ = await self.run_process("git pull")
 
         # progress and stuff is redirected to stderr in git pull
         # however, things like "fast forward" and files
