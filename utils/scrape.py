@@ -1,7 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import aiohttp
 from bs4 import BeautifulSoup
 
 import config
+
+if TYPE_CHECKING:
+    from bot import OverBot
 
 
 async def fetch(url: str) -> bytes:
@@ -10,10 +17,8 @@ async def fetch(url: str) -> bytes:
             return await r.read()
 
 
-async def get_overwatch_news() -> list[dict[str, str]]:
-    with open("assets/latest_news_id.txt", "r") as fp:
-        news_id = fp.readline()
-
+async def get_overwatch_news(*, bot: OverBot) -> list[dict[str, str]]:
+    news_id = await bot.pool.fetchval("SELECT latest_id FROM news WHERE id = 1;")
     content = await fetch(config.overwatch["news"] + str(news_id))
 
     root_kwargs = {"name": "div", "class_": "main-content", "recursive": False}
