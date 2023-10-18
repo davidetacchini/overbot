@@ -122,7 +122,7 @@ class Overwatch(commands.Cog):
         pages = []
 
         try:
-            news = await get_overwatch_news()
+            news = await get_overwatch_news(bot=self.bot)
         except Exception:
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
