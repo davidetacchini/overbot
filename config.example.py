@@ -1,3 +1,5 @@
+"""Configuration file for OverBot."""
+
 """Whether the version is realase or beta."""
 DEBUG = True
 
@@ -7,12 +9,7 @@ application_id = "your_application_id"
 ignored_guilds = ()  # guilds to ignore when getting data from the database.
 
 """Database credentials."""
-database = {
-    "user": "davide",
-    "password": "your_password",
-    "database": "overbot",
-    "host": "localhost",
-}
+database = "postgresql://user:password@host:port/database"
 
 # IGNORE (you don't actually need them to run the bot)
 # NOTE: DEBUG must be set to True though
@@ -65,10 +62,10 @@ main_color = 0xFFA657
 """OverBot's server ID."""
 support_server_id = 550685823784321035
 
-"""Test guild for app commands testing and owner commands usage."""
-test_guild_id = None
-
 # ENDIGNORE
+
+"""Guild ID for app commands testing. Also, the guild where cog Owner's related commands will be available."""
+test_guild_id = None
 
 """Overwatch API url (unofficial)."""
 base_url = "https://overfast-api.tekrop.fr"
