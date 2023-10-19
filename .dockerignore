@@ -13,7 +13,6 @@ env
 
 config.example.py
 schema.sql
-pyrightconfig.json
 Dockerfile
 
 README.md
