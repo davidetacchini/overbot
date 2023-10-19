@@ -191,10 +191,10 @@ class Owner(commands.Cog):
 
     @app_commands.command()
     @is_owner()
-    async def exc(self, interaction: discord.interaction, code: str) -> None:
+    async def exec(self, interaction: discord.Interaction, code: str) -> None:
         """Evaluates a piece of code"""
         env = {
-            "bot": interaction.client,
+            "bot": self.bot,
             "interaction": interaction,
             "channel": interaction.channel,
             "author": interaction.user,
@@ -240,14 +240,16 @@ class Owner(commands.Cog):
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        ret = (await process.stdout.read()).decode("utf-8").strip()
+        ret = "Nothing..."
+        if process.stdout:
+            ret = (await process.stdout.read()).decode("utf-8").strip()
         await interaction.edit_original_response(content=f"""```prolog\n{ret}```""")
 
     @sql.command()
     @is_owner()
     async def execute(self, interaction: discord.Interaction, query: str) -> None:
         """INSERT, UPDATE or DELETE from database"""
-        async with interaction.client.pool.acquire() as conn:
+        async with self.bot.pool.acquire() as conn:
             try:
                 await conn.execute(query)
             except Exception as e:
@@ -260,7 +262,7 @@ class Owner(commands.Cog):
     @is_owner()
     async def fetch(self, interaction: discord.Interaction, query: str) -> None:
         """Fetch data from database"""
-        async with interaction.client.pool.acquire() as conn:
+        async with self.bot.pool.acquire() as conn:
             try:
                 res = await conn.fetch(query)
             except Exception as e:

@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 class HeroInfoView(BaseView):
     def __init__(self, *, interaction: discord.Interaction, data: dict[str, Any]) -> None:
         super().__init__(interaction=interaction)
+        self.bot: OverBot = getattr(interaction, "client")
         self.data = data
 
     @discord.ui.button(label="Abilities", style=discord.ButtonStyle.blurple)
@@ -43,7 +44,7 @@ class HeroInfoView(BaseView):
             embed.set_footer(text=f"Page {index} of {len(abilities)}")
             pages.append(embed)
 
-        await interaction.client.paginate(pages, interaction=interaction)
+        await self.bot.paginate(pages, interaction=interaction)
 
     @discord.ui.button(label="Story", style=discord.ButtonStyle.blurple)
     async def story(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
@@ -72,7 +73,7 @@ class HeroInfoView(BaseView):
             embed.set_footer(text=f"Page {index} of {max_pages}")
             pages.append(embed)
 
-        await interaction.client.paginate(pages, interaction=interaction)
+        await self.bot.paginate(pages, interaction=interaction)
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
     async def quit(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
@@ -96,7 +97,7 @@ class Newsboard:
     @property
     def channel(self) -> None | discord.TextChannel:
         guild = self.bot.get_guild(self.guild_id)
-        return guild and guild.get_channel(self.channel_id)
+        return guild and guild.get_channel(self.channel_id)  # type: ignore
 
 
 class Overwatch(commands.Cog):
@@ -122,7 +123,7 @@ class Overwatch(commands.Cog):
         pages = []
 
         try:
-            news = await get_overwatch_news(bot=self.bot)
+            news = await get_overwatch_news(self.bot)
         except Exception:
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
@@ -177,6 +178,11 @@ class Overwatch(commands.Cog):
     async def newsboard(self, interaction: discord.Interaction) -> None:
         """Creates an Overwatch news channel"""
         await interaction.response.defer(thinking=True)
+
+        if not interaction.guild:
+            await interaction.followup.send("Something bad happened. Please try again.")
+            return
+
         newsboard = await self.get_newsboard(interaction.guild_id)
         if newsboard.channel is not None:
             await interaction.followup.send(
@@ -217,20 +223,18 @@ class Overwatch(commands.Cog):
         await self.bot.pool.execute(query, channel.id, interaction.guild_id, interaction.user.id)
         await interaction.followup.send(f"Channel successfully created at {channel.mention}.")
 
-    async def embed_map_info(self, map_: str) -> discord.Embed:
+    async def embed_map_info(self, map_: dict[Any, Any]) -> discord.Embed:
         embed = discord.Embed()
-        map_ = self.bot.maps.get(map_)
         embed.title = map_.get("name")
         embed.set_image(url=map_.get("screenshot"))
-        gamemodes = "\n".join(map(lambda m: m.capitalize(), map_.get("gamemodes")))
+        gamemodes = "\n".join(map(lambda m: m.capitalize(), map_.get("gamemodes")))  # type: ignore
         embed.add_field(name="Gamemodes", value=gamemodes)
         embed.add_field(name="Location", value=map_.get("location"))
         embed.add_field(name="Country Code", value=map_.get("country_code", "N/A"))
         return embed
 
-    async def embed_gamemode_info(self, gamemode: str) -> discord.Embed:
+    async def embed_gamemode_info(self, gamemode: dict[Any, Any]) -> discord.Embed:
         embed = discord.Embed()
-        gamemode = self.bot.gamemodes.get(gamemode)
         embed.title = gamemode.get("name")
         embed.description = gamemode.get("description")
         embed.set_thumbnail(url=gamemode.get("icon"))
@@ -271,11 +275,11 @@ class Overwatch(commands.Cog):
     async def map(self, interaction: discord.Interaction, name: str) -> None:
         """Returns information about a given map"""
         map_ = self.bot.maps.get(name)
-        if map_ is None:
+        if not map_:
             await interaction.response.send_message(f"Map **{name}** not found.")
             return
 
-        embed = await self.embed_map_info(name)
+        embed = await self.embed_map_info(map_)
         await interaction.response.send_message(embed=embed)
 
     @info.command()
@@ -284,11 +288,11 @@ class Overwatch(commands.Cog):
     async def gamemode(self, interaction: discord.Interaction, name: str) -> None:
         """Returns information about a given gamemode"""
         gamemode = self.bot.gamemodes.get(name)
-        if gamemode is None:
+        if not gamemode:
             await interaction.response.send_message(f"Gamemode **{name}** not found.")
             return
 
-        embed = await self.embed_gamemode_info(name)
+        embed = await self.embed_gamemode_info(gamemode)
         await interaction.response.send_message(embed=embed)
 
 

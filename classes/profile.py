@@ -52,43 +52,43 @@ class Profile:
             self.battletag = battletag
 
         self.interaction = interaction
-        self.bot: OverBot = interaction.client
+        self.bot: OverBot = getattr(interaction, "client")
         self.pages: list[discord.Embed] = []
 
-        self._platforms: tuple[str] = ("pc", "console")
+        self._platforms: tuple[str, ...] = ("pc", "console")
         self._data: dict[str, Any] = {}
 
     @property
+    def request(self) -> Request:
+        return Request(self.battletag)  # type: ignore
+
+    @property
     def _summary(self) -> dict[str, Any]:
-        return self._data.get("summary")
+        return self.safe_get(self._data, "summary")
 
     @property
     def _stats(self) -> dict[str, Any]:
-        return self._data.get("stats")
+        return self.safe_get(self._data, "stats")
 
     @property
     def username(self) -> str:
-        return self._summary.get("username")
-
-    @property
-    def request(self) -> Request:
-        return Request(self.battletag)
+        return self.safe_get(self._summary, "username")
 
     @property
     def avatar(self) -> str:
-        return self._summary.get("avatar", "https://imgur.com/a/BrDrZKL")
+        return self.safe_get(self._summary, "avatar", default="https://imgur.com/a/BrDrZKL")
 
     @property
     def namecard(self) -> None | str:
-        return self._summary.get("namecard")
+        return self.safe_get(self._summary, "namecard")
 
     @property
     def title(self) -> None | str:
-        return self._summary.get("title", "N/A")
+        return self.safe_get(self._summary, "title", default="N/A")
 
     @property
-    def endorsement(self) -> None | int:
-        return self._summary.get("endorsement").get("level") or "N/A"
+    def endorsement(self) -> None | str:
+        return self.safe_get(self._summary, "endorsement.level", default="N/A")
 
     @staticmethod
     def _format_key(key: str, *, only_capital: bool = False) -> str:
@@ -109,6 +109,19 @@ class Profile:
                     .replace(" Most In Game", "")
                 )
 
+    @staticmethod
+    def safe_get(source: dict, path: str, /, *, default={}) -> Any:
+        if "." not in path:
+            return source.get("path")
+        keys = path.split(".")
+        ret = source
+        for key in keys:
+            try:
+                ret = ret[key]
+            except KeyError:
+                return default
+        return ret
+
     async def fetch_data(self) -> None:
         try:
             self._data = await self.request.fetch_data()
@@ -128,7 +141,7 @@ class Profile:
         return self._summary.get("privacy") == "private"
 
     def _resolve_ratings(self, *, platform: str) -> None | dict[str, int]:
-        raw_ratings = self._summary.get("competitive").get(platform)
+        raw_ratings = self.safe_get(self._summary, f"competitive.{platform}")
         if not raw_ratings:
             return
 
@@ -142,19 +155,10 @@ class Profile:
     def _resolve_stats(
         self, platform: str, hero: str, /
     ) -> None | tuple[list[str], dict[str, Any], dict[str, Any]]:
-        try:
-            q = self._stats.get(platform).get("quickplay").get("career_stats").get(hero) or {}
-        except AttributeError:
-            q = {}
-        else:
-            q = self._from_list_to_dict(q)
-
-        try:
-            c = self._stats.get(platform).get("competitive").get("career_stats").get(hero) or {}
-        except AttributeError:
-            c = {}
-        else:
-            c = self._from_list_to_dict(c)
+        q = self.safe_get(self._stats, f"{platform}.quickplay.career_stats.{hero}")
+        q = self._from_list_to_dict(q)
+        c = self.safe_get(self._stats, f"{platform}.competitive.career_stats.{hero}")
+        c = self._from_list_to_dict(c)
 
         if not q and not c:
             return
@@ -243,7 +247,7 @@ class Profile:
                 embed.add_field(name=self._format_key(key, only_capital=True), value=value)
 
         def get_most_played_hero(source: Any):
-            name, time_played = None, 0
+            name, time_played = "N/A", 0
             for key, value in source.items():
                 if (cur_time := value.get("time_played")) > time_played:
                     name, time_played = key, cur_time

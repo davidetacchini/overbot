@@ -16,6 +16,8 @@ from utils.scrape import get_overwatch_news
 if TYPE_CHECKING:
     from bot import OverBot
 
+    from .events import Events
+
     Shards = BotCommands = TopServers = Supporters = list[dict[str, Any]]
     BotStats = dict[str, list[dict[str, Any]] | dict[str, Any]]
 
@@ -36,7 +38,7 @@ class Tasks(commands.Cog):
         for shard in self.bot.shards.values():
             guilds = [g for g in self.bot.guilds if g.shard_id == shard.id]
             try:
-                total_members = sum(g.member_count for g in guilds)
+                total_members = sum(g.member_count for g in guilds if g.member_count)
             except (AttributeError, TypeError):
                 total_members = 0
             shards.append(
@@ -53,7 +55,7 @@ class Tasks(commands.Cog):
         total_commands = await self.bot.total_commands()
 
         try:
-            total_members = sum(g.member_count for g in self.bot.guilds)
+            total_members = sum(g.member_count for g in self.bot.guilds if g.member_count)
         except (AttributeError, TypeError):
             total_members = 0
 
@@ -110,7 +112,7 @@ class Tasks(commands.Cog):
         for command in context_menus:
             all_commands.append(
                 {
-                    "cog": command.__cog_name__,
+                    "cog": getattr(command, "__cog_name__"),
                     "name": command.qualified_name,
                     "type": get_command_type(command),
                     "is_premium": command.extras.get("premium", False),
@@ -139,7 +141,7 @@ class Tasks(commands.Cog):
         return all_commands
 
     async def get_top_servers(self) -> TopServers:
-        guilds = await self.bot.get_cog("Meta").get_weekly_top_guilds(self.bot)
+        guilds = await self.bot.get_cog("Meta").get_weekly_top_guilds(self.bot)  # type: ignore
         servers = []
         for guild in guilds:
             g = self.bot.get_guild(guild["guild_id"])
@@ -275,6 +277,8 @@ class Tasks(commands.Cog):
                     await self.set_premium_for(guild_id)
                     self.bot.premiums.add(guild_id)
 
+            events: Events = self.bot.get_cog("Events")  # type: ignore
+
             if mark_processed:
                 # endpoint to mark donation as processed
                 url_mark = self.bot.config.dbot["mark"].format(donation["txn_id"])
@@ -282,11 +286,11 @@ class Tasks(commands.Cog):
                 async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
                     message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
                     log.info(message)
-                    await self.bot.get_cog("Events").send_log(message, discord.Color.blurple())
+                    await events.send_log(message, discord.Color.blurple())
             else:
                 message = f'Donation {donation["txn_id"]} was not processed.'
                 log.error(message)
-                await self.bot.get_cog("Events").send_log(message, discord.Color.red())
+                await events.send_log(message, discord.Color.red())
 
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
@@ -296,12 +300,12 @@ class Tasks(commands.Cog):
         await self.bot.wait_until_ready()
 
         try:
-            news = (await get_overwatch_news(bot=self.bot))[0]
+            news = (await get_overwatch_news(self.bot))[0]
         except Exception:
             return
 
         # get the news id from the URL
-        latest_news_id = re.search(r"\d+", news["link"]).group(0)
+        latest_news_id = re.search(r"\d+", news["link"]).group(0)  # type: ignore
 
         # check whether the scraped news id is equals to the
         # one stored in the file; if not then there's a news
@@ -321,7 +325,7 @@ class Tasks(commands.Cog):
         for record in records:
             channel_id = record["id"]
             channel = self.bot.get_channel(channel_id)
-            if not channel:
+            if not channel or not isinstance(channel, discord.TextChannel):
                 continue
             try:
                 await channel.send(embed=embed)

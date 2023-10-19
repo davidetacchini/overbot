@@ -16,6 +16,8 @@ from utils.helpers import hero_autocomplete, profile_autocomplete
 if TYPE_CHECKING:
     from bot import OverBot
 
+    from .stats import Stats
+
 Member = discord.User | discord.Member
 
 log = logging.getLogger("overbot")
@@ -29,7 +31,7 @@ class ProfileSelect(discord.ui.Select):
 
     def __fill_options(self) -> None:
         for profile in self.profiles:
-            self.add_option(label=profile.battletag, value=str(profile.id))
+            self.add_option(label=profile.battletag, value=str(profile.id))  # type: ignore
 
 
 class ProfileSelectView(BaseView):
@@ -55,6 +57,7 @@ class ProfileSelectView(BaseView):
 class ProfileUnlinkView(BaseView):
     def __init__(self, profiles: list[Profile], *, interaction: discord.Interaction) -> None:
         super().__init__(interaction=interaction)
+        self.bot: OverBot = getattr(interaction, "client")
         self.choices: list[int] = []
         placeholder = "Select at least a profile..."
         # Using min_values=0 to ensure that the view gets recomputed
@@ -73,7 +76,7 @@ class ProfileUnlinkView(BaseView):
     async def unlink(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
         if self.choices:
             await interaction.response.defer()
-            await interaction.client.pool.execute(
+            await self.bot.pool.execute(
                 "DELETE FROM profile WHERE id = any($1::int[]);", self.choices
             )
 
@@ -100,10 +103,11 @@ class ProfileUnlinkView(BaseView):
 @app_commands.context_menu(name="List Profiles")
 async def list_profiles(interaction: discord.Interaction, member: discord.Member) -> None:
     """List your own or a member's profiles"""
-    profile_cog = interaction.client.get_cog("profile")
+    bot: OverBot = getattr(interaction, "client")
+    profile_cog: ProfileCog = bot.get_cog("profile")  # type: ignore
     profiles = await profile_cog.get_profiles(interaction, member.id)
     entries = await profile_cog.list_profiles(interaction, member, profiles)
-    await interaction.client.paginate(entries, interaction=interaction)
+    await bot.paginate(entries, interaction=interaction)
 
 
 class ProfileCog(commands.GroupCog, name="profile"):
@@ -283,7 +287,8 @@ class ProfileCog(commands.GroupCog, name="profile"):
         else:
             message = f"Select a profile to view **{hero}** stats for:"
         profile = await self.select_profile(interaction, message, member)
-        await self.bot.get_cog("Stats").show_stats_for(interaction, hero, profile=profile)
+        stats_cog: Stats = self.bot.get_cog("Stats")  # type: ignore
+        await stats_cog.show_stats_for(interaction, hero, profile=profile)
 
     def cog_unload(self):
         self.bot.tree.remove_command(list_profiles.name, type=list_profiles.type)

@@ -7,53 +7,59 @@ from discord.app_commands import Choice, Group
 if TYPE_CHECKING:
     from discord import Interaction
 
+    from bot import OverBot
+    from cogs.profile import ProfileCog
+
 
 async def hero_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    heroes = interaction.client.heroes
+    bot: OverBot = getattr(interaction, "client")
     return [
         Choice(name=value["name"], value=key)
-        for key, value in heroes.items()
+        for key, value in bot.heroes.items()
         if current.lower() in value["name"].lower() or current.lower() in key.lower()
     ][:25]
 
 
 async def map_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    maps = interaction.client.maps
+    bot: OverBot = getattr(interaction, "client")
     return [
         Choice(name=value["name"], value=key)
-        for key, value in maps.items()
+        for key, value in bot.maps.items()
         if current.lower() in value["name"].lower() or current.lower() in key.lower()
     ][:25]
 
 
 async def gamemode_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    gamemodes = interaction.client.gamemodes
+    bot: OverBot = getattr(interaction, "client")
     return [
         Choice(name=value["name"], value=key)
-        for key, value in gamemodes.items()
+        for key, value in bot.gamemodes.items()
         if current.lower() in value["name"].lower() or current.lower() in key.lower()
     ]
 
 
 async def module_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    modules = interaction.client.extensions
+    bot: OverBot = getattr(interaction, "client")
     return [
-        Choice(name=module, value=module) for module in modules if current.lower() in module.lower()
+        Choice(name=module, value=module)
+        for module in bot.extensions
+        if current.lower() in module.lower()
     ]
 
 
 async def profile_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    profile_cog = interaction.client.get_cog("profile")
+    profile_cog: ProfileCog = interaction.client.get_cog("profile")  # type: ignore
     profiles = await profile_cog.get_profiles(interaction, interaction.user.id)
     return [
-        Choice(name=profile.battletag, value=profile.id)
+        Choice(name=profile.battletag, value=profile.id)  # type: ignore
         for profile in profiles
-        if current.lower() in profile.battletag.lower()
+        if current.lower() in profile.battletag.lower()  # type: ignore
     ]
 
 
 async def command_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
-    commands = [c for c in interaction.client.tree.walk_commands()]
+    bot: OverBot = getattr(interaction, "client")
+    commands = [c for c in bot.tree.walk_commands()]
     return [
         Choice(name=command.qualified_name, value=command.qualified_name)
         for command in commands

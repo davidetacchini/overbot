@@ -27,7 +27,7 @@ class SelectAnswer(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction) -> None:
         await interaction.response.defer()
         await interaction.delete_original_response()
-        self.view.stop()
+        self.view.stop()  # type: ignore
 
 
 class Trivia(commands.Cog):

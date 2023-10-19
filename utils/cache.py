@@ -164,6 +164,6 @@ def cache(
         setattr(wrapper, "invalidate", _invalidate)
         setattr(wrapper, "get_stats", _stats)
         setattr(wrapper, "invalidate_containing", _invalidate_containing)
-        return wrapper
+        return wrapper  # type: ignore
 
     return decorator

@@ -42,13 +42,15 @@ class Meta(commands.Cog):
             embed.description = description
         else:
             actual = self.bot.tree.get_command(command.split(" ")[0])
-            if not actual:
-                await interaction.followup.send(f"Command **{command}** not found.")
-                return
 
             if isinstance(actual, app_commands.Group):
                 actual = actual.get_command(command.split(" ")[1])
 
+            if not actual:
+                await interaction.followup.send(f"Command **{command}** not found.")
+                return
+
+            assert isinstance(actual, app_commands.Command)
             signature = " ".join(map(lambda p: f"`{p.name}`", actual.parameters))
 
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
@@ -143,7 +145,7 @@ class Meta(commands.Cog):
         for guild in self.bot.guilds:
             guilds += 1
             try:
-                total_members += guild.member_count
+                total_members += guild.member_count or 0
             except AttributeError:
                 pass
             for channel in guild.channels:
@@ -161,7 +163,7 @@ class Meta(commands.Cog):
         embed.add_field(name="Members", value=total_members)
         embed.add_field(name="Servers", value=len(self.bot.guilds))
         embed.add_field(
-            name="Shards", value=f"{interaction.guild.shard_id + 1}/{self.bot.shard_count}"
+            name="Shards", value=f"{interaction.guild.shard_id + 1}/{self.bot.shard_count}"  # type: ignore
         )
         embed.add_field(name="Commands Run", value=total_commands)
         embed.add_field(name="Lines of code", value=self.bot.sloc)

@@ -68,7 +68,7 @@ class Request:
             async with s.get(url) as r:
                 try:
                     return await self._resolve_response(r)
-                except aiohttp.client_exceptions.ClientPayloadError:
+                except aiohttp.ClientPayloadError:
                     raise UnknownError()
 
     async def fetch_data(self) -> dict[str, Any]:

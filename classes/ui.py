@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Mapping
 
 import discord
 
@@ -52,7 +52,7 @@ class PromptView(BaseView):
 
 
 class PlatformSelect(discord.ui.Select):
-    def __init__(self, entries: dict[str, discord.Embed | list[discord.Embed]] = {}) -> None:
+    def __init__(self, entries: Mapping[str, discord.Embed | list[discord.Embed]] = {}) -> None:
         super().__init__(row=0, placeholder="Select a platform...")
         self.entries = entries
         self.add_option(label="PC", value="pc")
@@ -70,7 +70,7 @@ class PlatformSelectMenu(Paginator):
     ) -> None:
         super().__init__(entries, interaction=interaction)
 
-    def add_platforms(self, platforms: dict[str, discord.Embed | list[discord.Embed]]) -> None:
+    def add_platforms(self, platforms: Mapping[str, discord.Embed | list[discord.Embed]]) -> None:
         self.clear_items()
         self.add_item(PlatformSelect(entries=platforms))
         self.fill_items(force_quit=True)

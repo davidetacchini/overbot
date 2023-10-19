@@ -10,6 +10,8 @@ from discord.ext import commands
 if TYPE_CHECKING:
     from bot import OverBot
 
+    from .overwatch import Overwatch
+
 log = logging.getLogger("overbot")
 
 
@@ -91,7 +93,8 @@ class Events(commands.Cog):
         if not isinstance(channel, discord.TextChannel):
             return
 
-        newsboard = await self.bot.get_cog("Overwatch").get_newsboard(channel.guild.id)
+        overwatch: Overwatch = self.bot.get_cog("Overwatch")  # type: ignore
+        newsboard = await overwatch.get_newsboard(channel.guild.id)
         if newsboard.channel_id != channel.id:
             return
 

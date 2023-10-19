@@ -30,6 +30,7 @@ __version__ = "6.0.3"
 class OverBot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
 
+    user: discord.ClientUser
     pool: asyncpg.Pool
     app_info: discord.AppInfo
 
@@ -73,7 +74,7 @@ class OverBot(commands.AutoShardedBot):
         return self.embed_colors.get(member_id, config.main_color)
 
     def get_uptime(self, *, brief: bool = False) -> str:
-        return human_timedelta(self.uptime, accuracy=None, brief=brief, suffix=False)
+        return human_timedelta(getattr(self, "uptime"), accuracy=None, brief=brief, suffix=False)
 
     async def total_commands(self) -> int:
         total_commands: int = await self.pool.fetchval("SELECT COUNT(*) FROM command;")
@@ -98,9 +99,9 @@ class OverBot(commands.AutoShardedBot):
         self, interaction: discord.Interaction, payload: str | discord.Embed
     ) -> None | bool:
         if isinstance(payload, str):
-            kwargs = {"content": payload}
+            kwargs = {"content": payload, "embed": None}
         elif isinstance(payload, discord.Embed):
-            kwargs = {"embed": payload}
+            kwargs = {"content": None, "embed": payload}
 
         view = PromptView(interaction=interaction)
 
@@ -211,8 +212,8 @@ class OverBot(commands.AutoShardedBot):
     async def setup_hook(self) -> None:
         self.session = ClientSession()
         self.pool = await asyncpg.create_pool(
-            **config.database, min_size=20, max_size=20, command_timeout=120.0
-        )
+            config.database, min_size=20, max_size=20, command_timeout=120.0
+        )  # type: ignore
 
         self.app_info = await self.application_info()
 
