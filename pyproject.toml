@@ -5,6 +5,14 @@ profile = "black"
 [tool.black]
 line_length = 100
 
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
+strictParameterNoneValue = false
+reportUnnecessaryTypeIgnoreComment = "warning"
+include = ["classes", "cogs", "utils", "bot.py"]
+exclude = ["**/__pycache__", "env", ".git"]
+
 [tool.poetry]
 name = "overbot"
 version = "6.0.3"
@@ -15,7 +23,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-uvloop = { version = "*", markers = "sys_platform == 'linux' or sys_platform == 'darwin'" }
+uvloop = { version = "v0.17.0", markers = "sys_platform == 'linux' or sys_platform == 'darwin'" }
 discord-py = { git = "https://github.com/Rapptz/discord.py.git" }
 psutil = "*"
 asyncpg = "*"
