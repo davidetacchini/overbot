@@ -17,7 +17,7 @@ async def fetch(url: str) -> bytes:
             return await r.read()
 
 
-async def get_overwatch_news(*, bot: OverBot) -> list[dict[str, str]]:
+async def get_overwatch_news(bot: OverBot, /) -> list[dict[str, str]]:
     news_id = await bot.pool.fetchval("SELECT latest_id FROM news WHERE id = 1;")
     content = await fetch(config.overwatch["news"] + str(news_id))
 
