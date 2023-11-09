@@ -64,31 +64,31 @@ class Profile:
 
     @property
     def _summary(self) -> dict[str, Any]:
-        return self.safe_get(self._data, "summary")
+        return self._safe_get(self._data, "summary")
 
     @property
     def _stats(self) -> dict[str, Any]:
-        return self.safe_get(self._data, "stats")
+        return self._safe_get(self._data, "stats")
 
     @property
     def username(self) -> str:
-        return self.safe_get(self._summary, "username")
+        return self._safe_get(self._summary, "username")
 
     @property
     def avatar(self) -> str:
-        return self.safe_get(self._summary, "avatar", default="https://imgur.com/a/BrDrZKL")
+        return self._safe_get(self._summary, "avatar", default="https://imgur.com/a/BrDrZKL")
 
     @property
     def namecard(self) -> None | str:
-        return self.safe_get(self._summary, "namecard")
+        return self._safe_get(self._summary, "namecard")
 
     @property
     def title(self) -> None | str:
-        return self.safe_get(self._summary, "title", default="N/A")
+        return self._safe_get(self._summary, "title", default="N/A")
 
     @property
     def endorsement(self) -> None | str:
-        return self.safe_get(self._summary, "endorsement.level", default="N/A")
+        return self._safe_get(self._summary, "endorsement.level", default="N/A")
 
     @staticmethod
     def _format_key(key: str, *, only_capital: bool = False) -> str:
@@ -110,7 +110,7 @@ class Profile:
                 )
 
     @staticmethod
-    def safe_get(source: dict, path: str, /, *, default={}) -> Any:
+    def _safe_get(source: dict, path: str, /, *, default={}) -> Any:
         if "." not in path:
             return source.get("path")
         keys = path.split(".")
@@ -122,13 +122,8 @@ class Profile:
                 return default
         return ret
 
-    async def fetch_data(self) -> None:
-        try:
-            self._data = await self.request.fetch_data()
-        except ClientConnectorError:
-            raise UnknownError() from None
-
-    def _from_list_to_dict(self, source: list[dict[str, Any]]) -> dict[str, Any]:
+    @staticmethod
+    def _from_list_to_dict(source: list[dict[str, Any]]) -> dict[str, Any]:
         career_stats = {}
         for item in source:
             stats = {}
@@ -137,11 +132,17 @@ class Profile:
             career_stats[item.pop("category")] = stats
         return career_stats
 
+    async def fetch_data(self) -> None:
+        try:
+            self._data = await self.request.fetch_data()
+        except ClientConnectorError:
+            raise UnknownError() from None
+
     def is_private(self) -> bool:
         return self._summary.get("privacy") == "private"
 
     def _resolve_ratings(self, *, platform: str) -> None | dict[str, int]:
-        raw_ratings = self.safe_get(self._summary, f"competitive.{platform}")
+        raw_ratings = self._safe_get(self._summary, f"competitive.{platform}")
         if not raw_ratings:
             return
 
@@ -155,9 +156,9 @@ class Profile:
     def _resolve_stats(
         self, platform: str, hero: str, /
     ) -> None | tuple[list[str], dict[str, Any], dict[str, Any]]:
-        q = self.safe_get(self._stats, f"{platform}.quickplay.career_stats.{hero}")
+        q = self._safe_get(self._stats, f"{platform}.quickplay.career_stats.{hero}")
         q = self._from_list_to_dict(q)
-        c = self.safe_get(self._stats, f"{platform}.competitive.career_stats.{hero}")
+        c = self._safe_get(self._stats, f"{platform}.competitive.career_stats.{hero}")
         c = self._from_list_to_dict(c)
 
         if not q and not c:
