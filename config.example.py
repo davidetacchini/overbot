@@ -6,7 +6,7 @@ DEBUG = True
 """The Bot token."""
 token = "your_bot_token"
 application_id = "your_application_id"
-ignored_guilds = ()  # guilds to ignore when getting data from the database.
+ignored_guilds = ()  # guilds (ids) to ignore when getting data from the database.
 
 """Database credentials."""
 database = "postgresql://user:password@host:port/database"
