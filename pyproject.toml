@@ -34,6 +34,7 @@ speedtest-cli = "*"
 python-dateutil = "*"
 lru-dict = "*"
 lxml = "*"
+click = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
