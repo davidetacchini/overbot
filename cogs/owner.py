@@ -326,7 +326,7 @@ class Owner(commands.Cog):
 
         try:
             await asyncio.create_subprocess_shell(
-                "pg_dump -h localhost -U davide -d overbot > ../backup.sql",
+                "pg_dump -h localhost -U davide -d overbot --data-only > ../backup.sql",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
