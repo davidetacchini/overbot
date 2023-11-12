@@ -1,12 +1,10 @@
 import logging
 import os
-import sys
-from logging.handlers import RotatingFileHandler
 from typing import Any, Sequence
 
-import asyncpg
 import discord
 from aiohttp import ClientSession
+from asyncpg import Pool
 from discord.ext import commands
 
 import config
@@ -15,12 +13,6 @@ from classes.paginator import Paginator
 from classes.ui import PromptView
 from utils import emojis
 from utils.time import human_timedelta
-
-if sys.platform == "linux" or sys.platform == "darwin":
-    import uvloop
-
-    uvloop.install()
-
 
 log = logging.getLogger("overbot")
 
@@ -31,7 +23,7 @@ class OverBot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
 
     user: discord.ClientUser
-    pool: asyncpg.Pool
+    pool: Pool
     app_info: discord.AppInfo
 
     def __init__(self, **kwargs: Any) -> None:
@@ -211,9 +203,6 @@ class OverBot(commands.AutoShardedBot):
 
     async def setup_hook(self) -> None:
         self.session = ClientSession()
-        self.pool = await asyncpg.create_pool(
-            config.database, min_size=20, max_size=20, command_timeout=120.0
-        )  # type: ignore
 
         self.app_info = await self.application_info()
 
@@ -242,6 +231,9 @@ class OverBot(commands.AutoShardedBot):
             await self.tree.sync()
             await self.tree.sync(guild=self.TEST_GUILD)
 
+    async def start(self) -> None:
+        await super().start(config.token, reconnect=True)
+
     async def close(self) -> None:
         await super().close()
         await self.session.close()
@@ -251,47 +243,3 @@ class OverBot(commands.AutoShardedBot):
         for handler in log.handlers[:]:
             handler.close()
             log.removeHandler(handler)
-
-
-def setup_logging() -> None:
-    discord.utils.setup_logging()
-
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
-
-    max_bytes = 32 * 1024 * 1024  # 32MiB
-    handler = RotatingFileHandler(
-        filename="logs/overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
-    )
-    date_format = "%d-%m-%Y %H:%M:%S"
-    formatter = logging.Formatter(
-        "[{asctime}] [{levelname:<8}] {name}: {message}", date_format, style="{"
-    )
-    handler.setFormatter(formatter)
-    log.addHandler(handler)
-
-
-def main() -> None:
-    setup_logging()
-
-    intents = discord.Intents.none()
-    intents.guilds = True
-    intents.members = True
-    intents.reactions = True
-    intents.messages = True
-
-    bot = OverBot(
-        activity=discord.Game(name="Starting..."),
-        status=discord.Status.dnd,
-        allowed_mentions=discord.AllowedMentions.none(),
-        application_id=config.application_id,
-        intents=intents,
-        chunk_guilds_at_startup=False,
-        guild_ready_timeout=5,
-    )
-
-    bot.run(config.token, log_handler=None, reconnect=True)
-
-
-if __name__ == "__main__":
-    main()
