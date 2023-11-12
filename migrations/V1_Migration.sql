@@ -17,6 +17,11 @@ CREATE TABLE IF NOT EXISTS member (
     premium boolean DEFAULT false NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS server (
+    id bigint PRIMARY KEY NOT NULL,
+    premium boolean DEFAULT false NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS newsboard (
     id bigint PRIMARY KEY NOT NULL,
     server_id bigint REFERENCES server(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
@@ -36,11 +41,6 @@ CREATE TABLE IF NOT EXISTS rating (
     support smallint,
     date date DEFAULT CURRENT_DATE,
     profile_id integer REFERENCES profile(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS server (
-    id bigint PRIMARY KEY NOT NULL,
-    premium boolean DEFAULT false NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trivia (
