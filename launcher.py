@@ -155,6 +155,46 @@ class Migrations:
                 click.echo(sql)
 
 
+def setup_logging() -> None:
+    discord.utils.setup_logging()
+
+    if not Path("logs").exists():
+        Path("logs").mkdir(parents=True, exist_ok=True)
+
+    max_bytes = 32 * 1024 * 1024  # 32MiB
+    handler = RotatingFileHandler(
+        filename="logs/overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
+    )
+    date_format = "%d-%m-%Y %H:%M:%S"
+    formatter = logging.Formatter(
+        "[{asctime}] [{levelname:<8}] {name}: {message}", date_format, style="{"
+    )
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
+
+
+async def run_bot() -> None:
+    intents = discord.Intents(
+        guilds=True,
+        members=True,
+        messages=True,
+        reactions=True,
+    )
+
+    async with OverBot(
+        activity=discord.Game(name="Starting..."),
+        status=discord.Status.dnd,
+        allowed_mentions=discord.AllowedMentions.none(),
+        application_id=config.application_id,
+        intents=intents,
+        chunk_guilds_at_startup=False,
+    ) as bot:
+        bot.pool = await asyncpg.create_pool(
+            config.database, min_size=20, max_size=20, command_timeout=120.0
+        )  # type: ignore
+        await bot.start()
+
+
 @click.group(invoke_without_command=True, options_metavar="[options]")
 @click.pass_context
 def main(ctx):
@@ -248,46 +288,6 @@ def history(reverse):
     for rev in revs:
         as_yellow = click.style(f"V{rev.version:>03}", fg="yellow")
         click.echo(f'{as_yellow} {rev.description.replace("_", " ")}')
-
-
-def setup_logging() -> None:
-    discord.utils.setup_logging()
-
-    if not Path("logs").exists():
-        Path("logs").mkdir(parents=True, exist_ok=True)
-
-    max_bytes = 32 * 1024 * 1024  # 32MiB
-    handler = RotatingFileHandler(
-        filename="logs/overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
-    )
-    date_format = "%d-%m-%Y %H:%M:%S"
-    formatter = logging.Formatter(
-        "[{asctime}] [{levelname:<8}] {name}: {message}", date_format, style="{"
-    )
-    handler.setFormatter(formatter)
-    log.addHandler(handler)
-
-
-async def run_bot() -> None:
-    intents = discord.Intents(
-        guilds=True,
-        members=True,
-        messages=True,
-        reactions=True,
-    )
-
-    async with OverBot(
-        activity=discord.Game(name="Starting..."),
-        status=discord.Status.dnd,
-        allowed_mentions=discord.AllowedMentions.none(),
-        application_id=config.application_id,
-        intents=intents,
-        chunk_guilds_at_startup=False,
-    ) as bot:
-        bot.pool = await asyncpg.create_pool(
-            config.database, min_size=20, max_size=20, command_timeout=120.0
-        )  # type: ignore
-        await bot.start()
 
 
 if __name__ == "__main__":
