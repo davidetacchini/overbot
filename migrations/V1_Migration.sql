@@ -1,3 +1,7 @@
+-- Revises: V0
+-- Creation Date: 2023-11-12 16:55:22.416885 UTC
+-- Reason: Initial migration
+
 CREATE TABLE IF NOT EXISTS command (
     id SERIAL PRIMARY KEY,
     name text NOT NULL,
