@@ -21,4 +21,4 @@ COPY . .
 
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 
-CMD [ "python3", "bot.py" ]
+CMD [ "python3", "launcher.py" ]
