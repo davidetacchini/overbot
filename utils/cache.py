@@ -131,7 +131,7 @@ def cache(
                 value = func(*args, **kwargs)
 
                 if inspect.isawaitable(value):
-                    return _wrap_and_store_coroutine(_internal_cache, key, value)
+                    return _wrap_and_store_coroutine(_internal_cache, key, value)  # type: ignore
 
                 _internal_cache[key] = value
                 return value
