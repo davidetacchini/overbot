@@ -40,7 +40,7 @@ def has_profile():
 
 
 def can_add_profile():
-    """Check for a user to have no profiles linked."""
+    """Check for a user to have available profile slots."""
 
     async def predicate(interaction: discord.Interaction) -> bool:
         profiles = await get_profiles(interaction, interaction.user.id)
