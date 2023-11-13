@@ -165,9 +165,9 @@ def setup_logging() -> None:
     handler = RotatingFileHandler(
         filename="logs/overbot.log", mode="w", maxBytes=max_bytes, backupCount=5, encoding="utf-8"
     )
-    date_format = "%d-%m-%Y %H:%M:%S"
+    dt_format = "%d-%m-%Y %H:%M:%S"
     formatter = logging.Formatter(
-        "[{asctime}] [{levelname:<8}] {name}: {message}", date_format, style="{"
+        "[{asctime}] [{levelname:<8}] {name}: {message}", dt_format, style="{"
     )
     handler.setFormatter(formatter)
     log.addHandler(handler)
