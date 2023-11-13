@@ -89,7 +89,7 @@ class Owner(commands.Cog):
         else:
             await interaction.followup.send("Configuration successfully reloaded.")
 
-    # Source: https://github.com/Rapptz/RoboDanny
+    # Credits to https://github.com/Rapptz/RoboDanny
     @reload.command()
     @is_owner()
     async def modules(self, interaction: discord.Interaction) -> None:

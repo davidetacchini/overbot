@@ -1,4 +1,4 @@
-# stolen from https://github.com/Rapptz/RoboDanny
+# Credits to https://github.com/Rapptz/RoboDanny
 
 from __future__ import annotations
 

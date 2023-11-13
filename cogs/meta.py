@@ -105,7 +105,7 @@ class Meta(commands.Cog):
         )
         return "\n".join(self.format_commit(c) for c in commits)
 
-    # inspired by https://github.com/Rapptz/RoboDanny
+    # Inspired by https://github.com/Rapptz/RoboDanny
     @app_commands.command()
     @app_commands.guild_only()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)

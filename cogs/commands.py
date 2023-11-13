@@ -1,4 +1,4 @@
-# inspired by https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/stats.py#L64
+# Inspired by https://github.com/Rapptz/RoboDanny
 from __future__ import annotations
 
 import asyncio

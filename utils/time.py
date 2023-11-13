@@ -1,4 +1,4 @@
-# Taken from https://github.com/Rapptz/RoboDanny
+# Credits to https://github.com/Rapptz/RoboDanny
 
 import datetime
 from typing import Sequence
