@@ -45,7 +45,7 @@ class OverBot(commands.AutoShardedBot):
 
     @property
     def owner(self) -> discord.User:
-        return self.app_info.owner
+        return self.app_info.team.owner
 
     @property
     def version(self) -> str:
