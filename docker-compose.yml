@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ~/apps/overbot/logs:/app/logs
     depends_on:
       postgres:
         condition: service_healthy
@@ -18,7 +20,6 @@ services:
       - .env
     volumes:
       - ~/apps/overbot/database:/var/lib/postgresql/data
-      - ~/apps/overbot/logs:/app/logs
       - ./migrations/V1_Migration.sql:/docker-entrypoint-initdb.d/V1.sql
       - ./migrations/V2_Migration.sql:/docker-entrypoint-initdb.d/V2.sql
     healthcheck:
