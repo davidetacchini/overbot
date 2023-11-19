@@ -73,15 +73,25 @@ class Tasks(commands.Cog):
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
 
+        # it seems psutil is unable to read cpu_freq when running docker on top o M1 chip.
+        try:
+            cpu_frequency = f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz"
+        except TypeError:
+            cpu_frequency = "N/A"
+
+        cpu_percent = f"{psutil.cpu_percent()}%"
+        cpu_cores = psutil.cpu_count()
+        ram_usage = f"{psutil.virtual_memory()[2]}%"
+
         return {
             "host": {
                 "Postgres": pg_version,
                 "Python": platform.python_version(),
                 "OS": os_name + " " + os_version,
-                "CPU Percent": f"{psutil.cpu_percent()}%",
-                "CPU Cores": psutil.cpu_count(),
-                "CPU Frequency": f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz",
-                "RAM Usage": f"{psutil.virtual_memory()[2]}%",
+                "CPU Percent": cpu_percent,
+                "CPU Cores": cpu_cores,
+                "CPU Frequency": cpu_frequency,
+                "RAM Usage": ram_usage,
             },
             "bot": {
                 "Servers": len(self.bot.guilds),

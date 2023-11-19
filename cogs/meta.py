@@ -128,7 +128,7 @@ class Meta(commands.Cog):
             icon_url=self.bot.owner.display_avatar.url,
         )
 
-        activity = f"{psutil.cpu_percent()}% CPU\n" f"{psutil.virtual_memory()[2]}% RAM\n"
+        activity = f"{psutil.cpu_percent()}% CPU\n{psutil.virtual_memory()[2]}% RAM\n"
 
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
