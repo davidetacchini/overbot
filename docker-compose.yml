@@ -6,6 +6,7 @@ services:
     build: .
     volumes:
       - ~/apps/overbot/logs:/app/logs
+      - ./.git:/app/.git # used by pygit2
     depends_on:
       postgres:
         condition: service_healthy
