@@ -17,8 +17,10 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 
 WORKDIR /app
 
-COPY . .
+COPY ./poetry.lock ./pyproject.toml .
 
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
+
+COPY . .
 
 CMD [ "python3", "launcher.py" ]
