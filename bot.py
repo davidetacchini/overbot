@@ -239,7 +239,6 @@ class OverBot(commands.AutoShardedBot):
         await self.session.close()
         await self.pool.close()
 
-        log = logging.getLogger("overbot")
         for handler in log.handlers[:]:
             handler.close()
             log.removeHandler(handler)
