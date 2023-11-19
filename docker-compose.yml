@@ -3,9 +3,7 @@ version: "3.8"
 services:
   python:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     volumes:
       - ~/apps/overbot/logs:/app/logs
     depends_on:
