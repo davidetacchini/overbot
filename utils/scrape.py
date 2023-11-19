@@ -39,3 +39,25 @@ async def get_overwatch_news(bot: OverBot, /) -> list[dict[str, str]]:
         for n in news_container.find_all("blz-card")
     ]
     return news
+
+
+async def get_overwatch_news_from_ids(bot: OverBot, ids: list[str]) -> list[dict[str, str]]:
+    news = []
+    for idx in ids:
+        url = config.overwatch["news"] + idx
+        content = await fetch(url)
+
+        root = BeautifulSoup(content, features="lxml")
+
+        image = root.find("div", class_="blog-header-image")
+
+        news.append(
+            {
+                "title": root.find("h1", class_="blog-title").get_text(),
+                "link": url,
+                "thumbnail": image.find("img")["src"],
+                "date": root.find("span", class_="publish-date").get_text(),
+            }
+        )
+
+    return news

@@ -18,6 +18,7 @@ from discord.ext import commands
 
 from utils.checks import is_owner
 from utils.helpers import module_autocomplete
+from utils.scrape import get_overwatch_news_from_ids
 
 if TYPE_CHECKING:
     from bot import OverBot
@@ -254,7 +255,6 @@ class Owner(commands.Cog):
                 await conn.execute(query)
             except Exception as e:
                 await interaction.response.send_message(f"```prolog\n{e}```")
-                return
             else:
                 await interaction.response.send_message("Successful query.")
 
@@ -369,6 +369,47 @@ class Owner(commands.Cog):
                 await self.bot.pool.execute(query, guild_id)
         ret.append(f"{total} guild(s) inserted.")
         await interaction.followup.send("\n".join(ret), ephemeral=True)
+
+    @app_commands.command()
+    @is_owner()
+    async def newsfix(self, interaction: discord.Interaction, raw_ids: str) -> None:
+        import logging
+
+        log = logging.getLogger("overbot")
+
+        await interaction.response.defer(thinking=True)
+
+        ids = raw_ids.split(",")
+
+        try:
+            news = await get_overwatch_news_from_ids(self.bot, ids)
+        except Exception as e:
+            log.exception(e)
+            await interaction.followup.send(f"```prolog\n{e}```")
+            return
+
+        records = await self.bot.pool.fetch("SELECT id FROM newsboard;")
+        for n in news:
+            embed = discord.Embed()
+            embed.title = n["title"]
+            embed.url = n["link"]
+            embed.set_author(name="Blizzard Entertainment")
+            embed.set_image(url=n["thumbnail"])
+            embed.set_footer(text=n["date"])
+
+            for record in records:
+                channel_id = record["id"]
+                channel = self.bot.get_channel(channel_id)
+                if not channel or not isinstance(channel, discord.TextChannel):
+                    continue
+                try:
+                    await channel.send(embed=embed)
+                except discord.Forbidden:
+                    continue
+
+        message = f"**{len(ids)}** news successfully sent to **{len(records)}** channels."
+        log.info(message)
+        await interaction.followup.send(message)
 
 
 async def setup(bot: OverBot) -> None:
