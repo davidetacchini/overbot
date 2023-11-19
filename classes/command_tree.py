@@ -103,7 +103,8 @@ class OverBotCommandTree(app_commands.CommandTree):
                 if command := interaction.command:
                     seconds = round(error.retry_after, 2)
                     await self._send(
-                        interaction, f"You can't use `{command}` command for `{seconds}s`."
+                        interaction,
+                        f"You can't use `{command.qualified_name}` command for `{seconds}s`.",
                     )
 
         elif isinstance(error, app_commands.CommandInvokeError):
