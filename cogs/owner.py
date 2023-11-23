@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import importlib
 import io
+import logging
 import os
 import re
 import subprocess
@@ -22,6 +23,9 @@ from utils.scrape import get_overwatch_news_from_ids
 
 if TYPE_CHECKING:
     from bot import OverBot
+
+
+log = logging.getLogger("overbot")
 
 
 class Owner(commands.Cog):
@@ -373,10 +377,6 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def newsfix(self, interaction: discord.Interaction, raw_ids: str) -> None:
-        import logging
-
-        log = logging.getLogger("overbot")
-
         await interaction.response.defer(thinking=True)
 
         ids = raw_ids.split(",")
