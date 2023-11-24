@@ -6,7 +6,7 @@ profile = "black"
 line_length = 100
 
 [tool.pyright]
-pythonVersion = "3.11"
+pythonVersion = "3.12"
 typeCheckingMode = "basic"
 strictParameterNoneValue = false
 reportUnnecessaryTypeIgnoreComment = "warning"
@@ -22,8 +22,8 @@ license = "MIT License"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
-uvloop = { version = "v0.17.0", markers = "sys_platform == 'linux' or sys_platform == 'darwin'" }
+python = "^3.12"
+uvloop = { version = "*", markers = "sys_platform == 'linux' or sys_platform == 'darwin'" }
 discord-py = { git = "https://github.com/Rapptz/discord.py.git" }
 psutil = "*"
 asyncpg = "*"
