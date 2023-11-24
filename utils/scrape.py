@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import config
 
 if TYPE_CHECKING:
-    from bot import OverBot
+    News = list[dict[str, str]]
 
 
 async def fetch(url: str) -> bytes:
@@ -18,9 +18,8 @@ async def fetch(url: str) -> bytes:
             return await r.read()
 
 
-async def get_overwatch_news(bot: OverBot, /) -> list[dict[str, str]]:
-    news_id = await bot.pool.fetchval("SELECT latest_id FROM news WHERE id = 1;")
-    content = await fetch(config.overwatch["news"] + str(news_id))
+async def get_overwatch_news() -> News:
+    content = await fetch(config.overwatch["news"])
 
     root_kwargs = {"name": "div", "class_": "main-content", "recursive": False}
     root = BeautifulSoup(content, features="lxml").body.find(**root_kwargs)
@@ -41,7 +40,7 @@ async def get_overwatch_news(bot: OverBot, /) -> list[dict[str, str]]:
     return news
 
 
-async def get_overwatch_news_from_ids(bot: OverBot, ids: list[str]) -> list[dict[str, str]]:
+async def get_overwatch_news_from_ids(ids: list[str]) -> News:
     news = []
     for idx in ids:
         url = config.overwatch["news"] + idx

@@ -377,12 +377,13 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def newsfix(self, interaction: discord.Interaction, raw_ids: str) -> None:
+        """Send unsent news to server newsboards."""
         await interaction.response.defer(thinking=True)
 
         ids = raw_ids.split(",")
 
         try:
-            news = await get_overwatch_news_from_ids(self.bot, ids)
+            news = await get_overwatch_news_from_ids(ids)
         except Exception as e:
             log.exception(e)
             await interaction.followup.send(f"```prolog\n{e}```")
