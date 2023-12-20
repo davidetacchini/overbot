@@ -58,7 +58,7 @@ class HeroInfoView(BaseView):
 
         embed = discord.Embed()
         embed.set_author(name=self.data.get("name"), icon_url=self.data.get("portrait"))
-        embed.url = story.get("media").get("link")
+        embed.url = story.get("media", {}).get("link")
         embed.title = "Origin Story"
         embed.description = story.get("summary")
         embed.set_footer(text=f"Page 1 of {max_pages}")
