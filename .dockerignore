@@ -3,6 +3,7 @@ __pycache__/
 .git
 .github
 
+migrations
 scripts
 env
 
@@ -14,6 +15,7 @@ env
 config.example.py
 schema.sql
 Dockerfile
+docker-compose.yml
 
 README.md
 LICENSE
