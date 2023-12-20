@@ -16,8 +16,6 @@ from utils.scrape import get_overwatch_news
 if TYPE_CHECKING:
     from bot import OverBot
 
-    from .events import Events
-
     Shards = BotCommands = TopServers = Supporters = list[dict[str, Any]]
     BotStats = dict[str, list[dict[str, Any]] | dict[str, Any]]
 
@@ -29,7 +27,6 @@ class Tasks(commands.Cog):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
         self.update_private_api.start()
-        self.check_subscriptions.start()
         self.send_overwatch_news.start()
         self.update_bot_presence.start()
 
@@ -250,59 +247,6 @@ class Tasks(commands.Cog):
             await self.bot.pool.execute(member_query, target_id)
 
     @tasks.loop(minutes=5.0)
-    async def check_subscriptions(self):
-        if self.bot.debug:
-            return
-
-        await self.bot.wait_until_ready()
-
-        url_new = self.bot.config.dbot["new"]  # endpoint to check for new donations
-        product_member_id = self.bot.config.dbot["product_ids"]["member"]
-
-        headers = {"Authorization": self.bot.config.dbot["api_key"]}
-
-        async with self.bot.session.get(url_new, headers=headers) as r:
-            subscriptions = await r.json()
-
-        try:
-            donations = subscriptions["donations"]
-        except KeyError:
-            return
-
-        if not donations:
-            return
-
-        mark_processed = True
-        for donation in donations:
-            if donation["product_id"] == product_member_id:
-                member_id = int(donation["buyer_id"])
-                await self.set_premium_for(member_id, server=False)
-                self.bot.premiums.add(member_id)
-            else:
-                try:
-                    guild_id = int(donation["seller_customs"]["Server ID (to be set as premium)"])
-                except ValueError:  # if the user does not input the server ID
-                    mark_processed = False
-                else:
-                    await self.set_premium_for(guild_id)
-                    self.bot.premiums.add(guild_id)
-
-            events: Events = self.bot.get_cog("Events")  # type: ignore
-
-            if mark_processed:
-                # endpoint to mark donation as processed
-                url_mark = self.bot.config.dbot["mark"].format(donation["txn_id"])
-                payload = {"markProcessed": True}
-                async with self.bot.session.post(url_mark, json=payload, headers=headers) as r:
-                    message = f'Donation {donation["txn_id"]} has been processed. Status {r.status}'
-                    log.info(message)
-                    await events.send_log(message, discord.Color.blurple())
-            else:
-                message = f'Donation {donation["txn_id"]} was not processed.'
-                log.error(message)
-                await events.send_log(message, discord.Color.red())
-
-    @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
         if self.bot.debug:
             return
@@ -354,7 +298,6 @@ class Tasks(commands.Cog):
 
     def cog_unload(self) -> None:
         self.update_private_api.cancel()
-        self.check_subscriptions.cancel()
         self.send_overwatch_news.cancel()
         self.update_bot_presence.cancel()
 
