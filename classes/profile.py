@@ -112,13 +112,12 @@ class Profile:
     @staticmethod
     def _safe_get(source: dict, path: str, /, *, default={}) -> Any:
         if "." not in path:
-            return source.get("path")
+            return source.get(path)
         keys = path.split(".")
         ret = source
         for key in keys:
-            try:
-                ret = ret[key]
-            except KeyError:
+            ret = ret.get(key)
+            if not ret:
                 return default
         return ret
 
