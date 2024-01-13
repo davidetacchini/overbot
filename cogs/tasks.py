@@ -287,7 +287,9 @@ class Tasks(commands.Cog):
                 continue
 
         # update old news_id with latest one
-        await self.bot.pool.execute("UPDATE news SET latest_id = $1 WHERE id = 1", latest_news_id)
+        await self.bot.pool.execute(
+            "UPDATE news SET latest_id = $1 WHERE id = 1", int(latest_news_id)
+        )
         log.info("News ID has been successfully updated.")
 
     @tasks.loop(hours=1.0)
