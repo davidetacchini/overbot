@@ -70,7 +70,7 @@ class Tasks(commands.Cog):
         os_name = distro.linux_distribution()[0]
         os_version = distro.linux_distribution()[1]
 
-        # it seems psutil is unable to read cpu_freq when running docker on top o M1 chip.
+        # it seems psutil is unable to read cpu_freq when running docker on top of M1 chip.
         try:
             cpu_frequency = f"{round(psutil.cpu_freq()[0] / 1000, 2)}GHz"
         except TypeError:
