@@ -218,7 +218,6 @@ async def ensure_uri_can_run() -> bool:
 @db.command()
 def init():
     """Initializes the database and runs all the current migrations"""
-
     asyncio.run(ensure_uri_can_run())
 
     migrations = Migrations()
