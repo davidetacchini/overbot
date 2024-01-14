@@ -21,7 +21,7 @@ import discord
 import config
 from bot import OverBot
 
-log = logging.getLogger("overbot")
+log = logging.getLogger()
 
 if sys.platform == "linux" or sys.platform == "darwin":
     import uvloop

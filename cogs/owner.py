@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from bot import OverBot
 
 
-log = logging.getLogger("overbot")
+log = logging.getLogger(__name__)
 
 
 class Owner(commands.Cog):

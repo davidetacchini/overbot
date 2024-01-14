@@ -19,7 +19,7 @@ from classes.exceptions import (
 if TYPE_CHECKING:
     from bot import OverBot
 
-log = logging.getLogger("overbot")
+log = logging.getLogger(__name__)
 
 
 class OverBotCommandTree(app_commands.CommandTree):

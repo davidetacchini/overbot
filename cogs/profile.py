@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 Member = discord.User | discord.Member
 
-log = logging.getLogger("overbot")
+log = logging.getLogger(__name__)
 
 
 class ProfileSelect(discord.ui.Select):

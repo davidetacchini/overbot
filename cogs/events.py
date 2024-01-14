@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
     from .overwatch import Overwatch
 
-log = logging.getLogger("overbot")
+log = logging.getLogger(__name__)
 
 
 class Events(commands.Cog):

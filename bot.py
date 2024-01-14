@@ -14,7 +14,7 @@ from classes.ui import PromptView
 from utils import emojis
 from utils.time import human_timedelta
 
-log = logging.getLogger("overbot")
+log = logging.getLogger(__name__)
 
 __version__ = "6.1.2"
 
