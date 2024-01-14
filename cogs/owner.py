@@ -34,6 +34,7 @@ class Owner(commands.Cog):
 
     reload = app_commands.Group(name="reload", description="Reloads modules or the config file.")
     sql = app_commands.Group(name="sql", description="Executes SQL queries.")
+    sync = app_commands.Group(name="sync", description="Sync stuff.")
 
     @app_commands.command()
     @is_owner()
@@ -338,9 +339,9 @@ class Owner(commands.Cog):
         except Exception as e:
             await interaction.edit_original_response(content=f"""```prolog\n{e}```""")
 
-    @app_commands.command()
+    @sync.command()
     @is_owner()
-    async def syncguilds(self, interaction: discord.Interaction):
+    async def guilds(self, interaction: discord.Interaction):
         """Sync guilds with database.
 
         If a guild quit when the bot was offline, then remove it from database.
@@ -374,9 +375,9 @@ class Owner(commands.Cog):
         ret.append(f"{total} guild(s) inserted.")
         await interaction.followup.send("\n".join(ret), ephemeral=True)
 
-    @app_commands.command()
+    @sync.command()
     @is_owner()
-    async def newsfix(self, interaction: discord.Interaction, raw_ids: str) -> None:
+    async def news(self, interaction: discord.Interaction, raw_ids: str) -> None:
         """Send unsent news to server newsboards."""
         await interaction.response.defer(thinking=True)
 
