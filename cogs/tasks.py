@@ -91,7 +91,7 @@ class Tasks(commands.Cog):
                 "RAM Usage": ram_usage,
             },
             "bot": {
-                "Version": self.bot.__version__,
+                "Version": self.bot.version,
                 "Servers": len(self.bot.guilds),
                 "Shards": self.bot.shard_count,
                 "Members": total_members,
