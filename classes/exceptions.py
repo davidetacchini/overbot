@@ -64,7 +64,7 @@ class TooManyAccounts(RequestError):
     def __init__(self, battletag: str, players: int) -> None:
         message = (
             f"**{players}** accounts found named `{battletag}`. Please "
-            f"be more specific by entering your exact **BattleTag**."
+            f"be more specific by entering the exact **BattleTag**."
         )
         super().__init__(message)
 
