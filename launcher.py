@@ -167,7 +167,7 @@ def setup_logging() -> None:
     )
     dt_format = "%d-%m-%Y %H:%M:%S"
     formatter = logging.Formatter(
-        "[{asctime}] [{levelname:<8}] {name}: {message}", dt_format, style="{"
+        "[{asctime}] [{levelname:<7}] {name}: {message}", dt_format, style="{"
     )
     handler.setFormatter(formatter)
     log.addHandler(handler)
