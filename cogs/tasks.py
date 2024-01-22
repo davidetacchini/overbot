@@ -91,7 +91,6 @@ class Tasks(commands.Cog):
                 "RAM Usage": ram_usage,
             },
             "bot": {
-                "Version": self.bot.version,
                 "Servers": len(self.bot.guilds),
                 "Shards": self.bot.shard_count,
                 "Members": total_members,
@@ -100,6 +99,7 @@ class Tasks(commands.Cog):
                 "Uptime": str(self.bot.get_uptime(brief=True)),
                 "Websocket latency": ping,
                 "Lines of code": self.bot.sloc,
+                "Version": self.bot.version,
             },
             "shards": shards,
         }
