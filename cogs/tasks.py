@@ -231,22 +231,6 @@ class Tasks(commands.Cog):
         await self.bot.session.post(f"{BASE_URL}/servers", json=servers, headers=headers)
         await self.bot.session.post(f"{BASE_URL}/supporters", json=supporters, headers=headers)
 
-    async def set_premium_for(self, target_id: int, *, server: bool = True) -> None:
-        server_query = """INSERT INTO server (id, premium)
-                          VALUES ($1, true)
-                          ON CONFLICT (id) DO
-                          UPDATE SET premium = true;
-                       """
-        member_query = """INSERT INTO member (id, premium)
-                          VALUES ($1, true)
-                          ON CONFLICT (id) DO
-                          UPDATE SET premium = true;
-                       """
-        if server:
-            await self.bot.pool.execute(server_query, target_id)
-        else:
-            await self.bot.pool.execute(member_query, target_id)
-
     @tasks.loop(minutes=5.0)
     async def send_overwatch_news(self):
         if self.bot.debug:
