@@ -426,7 +426,6 @@ class Owner(commands.Cog):
     ) -> None:
         await interaction.response.defer(thinking=True)
 
-        target_id = int(target_id)
         if target == Targets.USER:
             query = """INSERT INTO member (id, premium)
                        VALUES ($1, true)
@@ -440,7 +439,7 @@ class Owner(commands.Cog):
                        UPDATE SET premium = true;
                     """
         try:
-            await self.bot.pool.execute(query, target_id)
+            await self.bot.pool.execute(query, int(target_id))
         except Exception:
             log.exception(f"Cannot set premium for {target_id}")
             await interaction.followup.send("Something bad happened.")
@@ -455,13 +454,12 @@ class Owner(commands.Cog):
     ) -> None:
         await interaction.response.defer(thinking=True)
 
-        target_id = int(target_id)
         if target == Targets.USER:
             query = "UPDATE member SET premium = false WHERE id = $1;"
         elif target == Targets.SERVER:
             query = "UPDATE server SET premium = false WHERE id = $1;"
         try:
-            await self.bot.pool.execute(query, target_id)
+            await self.bot.pool.execute(query, int(target_id))
         except Exception:
             log.exception(f"Cannot remove premium for {target_id}")
             await interaction.followup.send("Something bad happened.")
