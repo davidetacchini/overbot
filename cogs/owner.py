@@ -11,6 +11,7 @@ import sys
 import textwrap
 import traceback
 from contextlib import redirect_stdout
+from enum import Enum
 from typing import TYPE_CHECKING
 
 import discord
@@ -26,6 +27,11 @@ if TYPE_CHECKING:
 
 
 log = logging.getLogger(__name__)
+
+
+class Targets(Enum):
+    USER = 1
+    SERVER = 2
 
 
 class Owner(commands.Cog):
@@ -412,6 +418,56 @@ class Owner(commands.Cog):
         message = f"**{len(ids)}** news successfully sent to **{len(records)}** channels."
         log.info(message)
         await interaction.followup.send(message)
+
+    @app_commands.command()
+    @is_owner()
+    async def addpremium(
+        self, interaction: discord.Interaction, *, target: Targets, target_id: str
+    ) -> None:
+        await interaction.response.defer(thinking=True)
+
+        target_id = int(target_id)
+        if target == Targets.USER:
+            query = """INSERT INTO member (id, premium)
+                       VALUES ($1, true)
+                       ON CONFLICT (id) DO
+                       UPDATE SET premium = true;
+                    """
+        elif target == Targets.SERVER:
+            query = """INSERT INTO server (id, premium)
+                       VALUES ($1, true)
+                       ON CONFLICT (id) DO
+                       UPDATE SET premium = true;
+                    """
+        try:
+            await self.bot.pool.execute(query, target_id)
+        except Exception:
+            log.exception(f"Cannot set premium for {target_id}")
+            await interaction.followup.send("Something bad happened.")
+        else:
+            self.bot.premiums.add(target_id)
+            await interaction.followup.send(f"Premium successfully set for **{target_id}**.")
+
+    @app_commands.command()
+    @is_owner()
+    async def delpremium(
+        self, interaction: discord.Interaction, *, target: Targets, target_id: str
+    ) -> None:
+        await interaction.response.defer(thinking=True)
+
+        target_id = int(target_id)
+        if target == Targets.USER:
+            query = "UPDATE member SET premium = false WHERE id = $1;"
+        elif target == Targets.SERVER:
+            query = "UPDATE server SET premium = false WHERE id = $1;"
+        try:
+            await self.bot.pool.execute(query, target_id)
+        except Exception:
+            log.exception(f"Cannot remove premium for {target_id}")
+            await interaction.followup.send("Something bad happened.")
+        else:
+            self.bot.premiums.remove(target_id)
+            await interaction.followup.send(f"Premium successfully removed for **{target_id}**.")
 
 
 async def setup(bot: OverBot) -> None:
