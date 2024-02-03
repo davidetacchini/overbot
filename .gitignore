@@ -6,7 +6,6 @@ __pycache__/
 
 env
 logs
-assets
 
 config.py
 migrations/revisions.json
