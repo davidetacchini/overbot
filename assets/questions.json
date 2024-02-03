@@ -1,0 +1,652 @@
+[
+  {
+    "question": "What’s the relationship between Ana and Pharah?",
+    "image_url": null,
+    "correct_answer": "Mother and daughter",
+    "wrong_answers": [
+      "They're sisters",
+      "They're not related!",
+      "They are cousins"
+    ]
+  },
+  {
+    "question": "What does Junkrat say when he imitates Tracer?",
+    "image_url": null,
+    "correct_answer": "\"Cheers mate, the cavalry's here.\"",
+    "wrong_answers": [
+      "\"Well that just happend.\"",
+      "\"Ever get the feeling of deja vu?\"",
+      "\"You need a time out.\""
+    ]
+  },
+  {
+    "question": "How many ways can Symmetra concurrently hit an opponent?",
+    "image_url": null,
+    "correct_answer": "7",
+    "wrong_answers": ["3", "6", "1"]
+  },
+  {
+    "question": "What was Bastion’s original ultimate ability?",
+    "image_url": null,
+    "correct_answer": "Remote mine",
+    "wrong_answers": [
+      "It was always Configuration: Tank",
+      "Invicibility",
+      "Teleport"
+    ]
+  },
+  {
+    "question": "Who is this?",
+    "image_url": "https://img.playbuzz.com/image/upload/ar_1.5,c_pad,f_jpg,b_auto/q_auto:good,f_auto,fl_lossy,w_640,c_limit,dpr_1/cdn/707a6b97-b09e-4689-8bf0-b9dc111dd534/65e00069-29a1-4016-8c42-d0589930805a.jpg",
+    "correct_answer": "Reaper",
+    "wrong_answers": ["Junkrat", "Genji", "Soldier 76"]
+  },
+  {
+    "question": "Who is Reinhardt’s favourite musical artist/band?",
+    "image_url": null,
+    "correct_answer": "David Hasselhoff",
+    "wrong_answers": ["Pink Floyd", "Metallica", "Justin Bieber"]
+  },
+  {
+    "question": "Who voices D.Va?",
+    "image_url": null,
+    "correct_answer": "Charlet Chung",
+    "wrong_answers": ["Chloe Hollings", "Cara Theobold", "Laura Bailey"]
+  },
+  {
+    "question": "What was Pharah’s original name during development?",
+    "image_url": null,
+    "correct_answer": "Mercy",
+    "wrong_answers": ["Jumper Boom", "Sky Rocket", "Death Splash"]
+  },
+  {
+    "question": "Where is Zarya from?",
+    "image_url": null,
+    "correct_answer": "Russia",
+    "wrong_answers": ["Ukraine", "slovakia.", "Poland"]
+  },
+  {
+    "question": "What is the name of the Diner on Route 66 where the attacking team spawns?",
+    "image_url": "https://media.secondstreetapp.com/3388778?cropmode=fill&anchor=faces&width=1440&height=600&quality=60",
+    "correct_answer": "Panorama Diner",
+    "wrong_answers": [
+      "The Route 66 Dive",
+      "High Noon In' n 'Out.",
+      "Deadlocke Diner"
+    ]
+  },
+  {
+    "question": "Which of the following are NOT part of D.va’s old MEKA Squad?",
+    "image_url": null,
+    "correct_answer": "D.Mom",
+    "wrong_answers": ["Casino", "Overlord", "King"]
+  },
+  {
+    "question": "When a friendly Sigma uses his Ultimate he says, “What is that melody?” but when an enemy Sigma uses his ultimate he uses a different phrase in Dutch. What is the English translation of that phrase?",
+    "image_url": null,
+    "correct_answer": "The universe sings to me",
+    "wrong_answers": [
+      "What goes up, must come down.",
+      "Ally-ope!",
+      "And they all fall down..."
+    ]
+  },
+  {
+    "question": "Which of the following Talon Members were not in Blackwatch?",
+    "image_url": null,
+    "correct_answer": "Sombra",
+    "wrong_answers": ["Genji", "Reaper", "None of them"]
+  },
+  {
+    "question": "In a past Gamecomes Live Panel, the Overwatch Developers described this character as being emblematic of the Optimism and energy of the Overwatch World. They were the response to Tracer’s call of “the world could always use more heroes.” Which character is this referring to?",
+    "image_url": null,
+    "correct_answer": "Lùcio",
+    "wrong_answers": ["Zenyatta", "Winston", "Mei"]
+  },
+  {
+    "question": "\"Torbjörn\" is a Scandinavian masculine given name that comes from the Old Norse \"Þórbjörn\", which literally translates to...",
+    "image_url": null,
+    "correct_answer": "Thunder Bear",
+    "wrong_answers": ["Builder God", "Loyal Worker", "Fire Hand"]
+  },
+  {
+    "question": "Which of the following is a NOT a true fact about Winston...",
+    "image_url": null,
+    "correct_answer": "Zarya is the only person who has beaten him in arm wrestling",
+    "wrong_answers": [
+      "Hollywood contacted him to be in a movie",
+      "He pays his taxes to the Swiss Government",
+      "He designed Treacer's chronal accelerator"
+    ]
+  },
+  {
+    "question": "Jeff Kaplan once confirmed what Junkrat likes to keep in his canteen, is it...",
+    "image_url": null,
+    "correct_answer": "Milk Tea with Boba, half sweetened",
+    "wrong_answers": ["Jack Daniels Whiskey", "Ginger Beer", "Just regular H20"]
+  },
+  {
+    "question": "Chris Metzen has joked that Pharah has \"a little bit of a ...\" what Marvel Hero in her?",
+    "image_url": null,
+    "correct_answer": "Captain America",
+    "wrong_answers": ["The Hulk", "Black Widow", "Spider-Man"]
+  },
+  {
+    "question": "Zarya has a tattoo on her arm, 512, what does this number represent?",
+    "image_url": null,
+    "correct_answer": "Her weight lifting record",
+    "wrong_answers": [
+      "The number of lives she failed to save from Omnics",
+      "The number of Omnics she killed defending Russia",
+      "Its meaning has yet to be revelead"
+    ]
+  },
+  {
+    "question": "Which of these is NOT a playable character in the 2016 video game Overwatch?",
+    "image_url": null,
+    "correct_answer": "Invoker",
+    "wrong_answers": ["Mercy", "Winston", "Zenyatta"]
+  },
+  {
+    "question": "In the game \"Overwatch,\" what are the names of the two Australian criminals from the Junkers faction?",
+    "image_url": null,
+    "correct_answer": "Junkrat and Roadhog",
+    "wrong_answers": [
+      "Roadrat and Junkhog",
+      "Ana and Pharah",
+      "McCree and Deadeye"
+    ]
+  },
+  {
+    "question": "In the game \"Overwatch,\" which quote does the hero \"McCree\" NOT say upon using his flashbang ability?",
+    "image_url": null,
+    "correct_answer": "\"You done?\"",
+    "wrong_answers": ["\"Whoa there.\"", "\"Hold up now.\"", "\"Don't move.\""]
+  },
+  {
+    "question": "Which Overwatch character says the line \"Heroes never die!\"?",
+    "image_url": null,
+    "correct_answer": "Mercy",
+    "wrong_answers": ["Reaper", "Sonic", "Ana"]
+  },
+  {
+    "question": "Ana was added as a new hero for the game Overwatch on July 19th, 2016.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "In \"Overwatch,\" an allied McCree will say \"Step right up\" upon using his ultimate ability Deadeye.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "According to Overwatch's lore, who was once a member of the Deadlock Gang?",
+    "image_url": null,
+    "correct_answer": "McCree",
+    "wrong_answers": ["Roadhog", "Soldier 76", "Junkrat"]
+  },
+  {
+    "question": "In Overwatch, how old is Reinhardt Wilhelm?",
+    "image_url": null,
+    "correct_answer": "61",
+    "wrong_answers": ["59", "65", "62"]
+  },
+  {
+    "question": "What device allows Tracer to manipulate her own time in the game \"Overwatch\"?",
+    "image_url": null,
+    "correct_answer": "Chronal Accelerator",
+    "wrong_answers": [
+      "B.L.I.N.K",
+      "Spacial Displacement Manipulator",
+      "TMD (Time Manipulation Device)"
+    ]
+  },
+  {
+    "question": "In \"Overwatch\", what is the name of Mercy's \"ultimate ability\"?",
+    "image_url": null,
+    "correct_answer": "Valkyrie",
+    "wrong_answers": ["Earthshatter", "Rocket Barrage", "Molten Core"]
+  },
+  {
+    "question": "What year was the game \"Overwatch\" revealed?",
+    "image_url": null,
+    "correct_answer": "2014",
+    "wrong_answers": ["2015", "2011", "2008"]
+  },
+  {
+    "question": "In \"Overwatch\", which hero is able to wallride?",
+    "image_url": null,
+    "correct_answer": "Lucio",
+    "wrong_answers": ["Reinhardt", "Sombra", "Mercy"]
+  },
+  {
+    "question": "What year did the game \"Overwatch\" enter closed beta?",
+    "image_url": null,
+    "correct_answer": "2015",
+    "wrong_answers": ["2013", "2011", "2016"]
+  },
+  {
+    "question": "In Overwatch, what is L\u00f9cio's full name?",
+    "image_url": null,
+    "correct_answer": "L\u00f9cio Correia Dos Santos",
+    "wrong_answers": [
+      "L\u00f9cio Luiz L\u00f3s Guilherme",
+      "L\u00f9cio Jo\u00f3o Lucas",
+      "L\u00f9cio Chupar Prima"
+    ]
+  },
+  {
+    "question": "What Nationality is D.Va from Overwatch?",
+    "image_url": null,
+    "correct_answer": "Korean",
+    "wrong_answers": ["Japanese", "Chinese", "Vietnamese"]
+  },
+  {
+    "question": "Who is the narrator in Overwatch?",
+    "image_url": null,
+    "correct_answer": "Athena",
+    "wrong_answers": ["Volskaya's AI", "Orisa", "Symmetra"]
+  },
+  {
+    "question": "How old is Bastion?",
+    "image_url": null,
+    "correct_answer": "30",
+    "wrong_answers": ["50", "Unknown", "3"]
+  },
+  {
+    "question": "What is the name of Tracer's Girlfriend?",
+    "image_url": null,
+    "correct_answer": "Emily",
+    "wrong_answers": ["Lena", "Cathy", "Hannah"]
+  },
+  {
+    "question": "What did players receive for the 20th anniversary of Diablo?",
+    "image_url": null,
+    "correct_answer": "6 sprays and 1 icon",
+    "wrong_answers": ["Nothing", "A free lootbox"]
+  },
+  {
+    "question": "Who was Widowmaker's Husband?",
+    "image_url": null,
+    "correct_answer": "A member of Overwatch",
+    "wrong_answers": ["A partner from Ballet", "Reaper", "A member of Talon"]
+  },
+  {
+    "question": "Who's voice actor was originally a stand-up comedian?",
+    "image_url": null,
+    "correct_answer": "Mercy",
+    "wrong_answers": ["McCree", "L\u00f9cio", "Sombra"]
+  },
+  {
+    "question": "What cooperation owns the Horizon Lunar Colony?",
+    "image_url": null,
+    "correct_answer": "Lucheng Interstellar",
+    "wrong_answers": ["Overwatch", "Horizon", "Volskaya Industries"]
+  },
+  {
+    "question": "When was Sombra released?",
+    "image_url": null,
+    "correct_answer": "November 2016",
+    "wrong_answers": ["April 2017", "February 2017", "October 2017"]
+  },
+  {
+    "question": "How many unique special edition loot boxes are there?",
+    "image_url": null,
+    "correct_answer": "5",
+    "wrong_answers": ["4", "6", "8"]
+  },
+  {
+    "question": "How many Epic skins does Hanzo have?",
+    "image_url": null,
+    "correct_answer": "3",
+    "wrong_answers": ["2", "4", "6"]
+  },
+  {
+    "question": "What is the name of Zarya's Comic?",
+    "image_url": null,
+    "correct_answer": "Searching",
+    "wrong_answers": ["Destroyer", "Old Soldiers", "Wasted Land"]
+  },
+  {
+    "question": "Who did NOT have 5 legendary skins at launch?",
+    "image_url": null,
+    "correct_answer": "D.Va",
+    "wrong_answers": ["Pharah", "Widowmaker", "Tracer"]
+  },
+  {
+    "question": "Who is Widowmaker's target in her cinematic?",
+    "image_url": null,
+    "correct_answer": "Mondatta",
+    "wrong_answers": ["Zenyatta", "Tracer", "Overwatch Intel"]
+  },
+  {
+    "question": "What is the name of the religion Zenyatta studies?",
+    "image_url": null,
+    "correct_answer": "Shambali",
+    "wrong_answers": ["The Iris", "Bhuddism", "Tekhardtha"]
+  },
+  {
+    "question": "How many unique voicelines do training bots have for taking damage?",
+    "image_url": null,
+    "correct_answer": "10",
+    "wrong_answers": ["5", "3", "25"]
+  },
+  {
+    "question": "Where is Reaper from?",
+    "image_url": null,
+    "correct_answer": "Los Angeles, California",
+    "wrong_answers": ["Toronto, Canada", "San Diego, California", "Unknown"]
+  },
+  {
+    "question": "Which character fights to stop rapid climate change?",
+    "image_url": null,
+    "correct_answer": "Mei",
+    "wrong_answers": ["Winston", "L\u00f9cio", "Mercy"]
+  },
+  {
+    "question": "Which of the following is NOT written on Reaper's guns on any of his skins?",
+    "image_url": null,
+    "correct_answer": "REVNGER",
+    "wrong_answers": ["BLK001", "MN 666-SHGX1", "CRW-ND"]
+  },
+  {
+    "question": "How did Genji and Mercy meet?",
+    "image_url": null,
+    "correct_answer": "Hurt and wounded after a big battle",
+    "wrong_answers": [
+      "They met while singing up with Overwatch",
+      "Winston introduced them",
+      "They bumped on each other in Overwatch headquarters"
+    ]
+  },
+  {
+    "question": "Who did Gabriel Reyes end up becoming?",
+    "image_url": null,
+    "correct_answer": "Reaper",
+    "wrong_answers": ["Reinhardt", "Soldier-76", "Baptiste"]
+  },
+  {
+    "question": "Was McCree a member of Overwatch and Blackwatch?",
+    "image_url": null,
+    "correct_answer": "He used to be in both",
+    "wrong_answers": [
+      "He is a member of Blackwatch",
+      "He used to be in Blackwatch, now is a member of Overwatch",
+      "He used to be in Overwatch, now is a member of Blackwatch"
+    ]
+  },
+  {
+    "question": "Who did Tracer battle on the roof tops of King’s Row?",
+    "image_url": null,
+    "correct_answer": "Widowmaker",
+    "wrong_answers": ["Genji", "McCree", "Junkrat"]
+  },
+  {
+    "question": "What is Mercy's real name?",
+    "image_url": null,
+    "correct_answer": "Angela Ziegler",
+    "wrong_answers": ["Angela Song", "Angela Johnson", "Angela Cooler"]
+  },
+  {
+    "question": "What is the name of Bastion's bird companion?",
+    "image_url": null,
+    "correct_answer": "Ganymede",
+    "wrong_answers": ["Europa", "Antares", "Pollux"]
+  },
+  {
+    "question": "What country does Brigitte come from?",
+    "image_url": null,
+    "correct_answer": "Sweden",
+    "wrong_answers": ["Denmark", "Finland", "Netherlands"]
+  },
+  {
+    "question": "What was Ana's vigilante name?",
+    "image_url": null,
+    "correct_answer": "Shrike",
+    "wrong_answers": ["Ghost", "Phoenix", "Hunter"]
+  },
+  {
+    "question": "Who founded the Overwatch?",
+    "image_url": null,
+    "correct_answer": "The United Nations",
+    "wrong_answers": [
+      "Winston",
+      "The Horizon Lunar Colony",
+      "President of the USA"
+    ]
+  },
+  {
+    "question": "Why did Hanzo try to kill his brother?",
+    "image_url": null,
+    "correct_answer": "He was pressured by the clan",
+    "wrong_answers": [
+      "He thought Genji killed their father",
+      "He was paid to do so",
+      "They fought over who could rule the clan"
+    ]
+  },
+  {
+    "question": "What was the name of Genji and Hanzo's clan?",
+    "image_url": null,
+    "correct_answer": "The Shimada Clan",
+    "wrong_answers": ["The Ninja Clan", "The Dragon Clan", "The Assassin Clan"]
+  },
+  {
+    "question": "What is Sombra’s real name?",
+    "image_url": null,
+    "correct_answer": "Olivia Colomar",
+    "wrong_answers": ["Mei-Ling Zhou", "Satya Vaswani", "Lena Oxton"]
+  },
+  {
+    "question": "Which one of these is an escort map?",
+    "image_url": null,
+    "correct_answer": "Dorado",
+    "wrong_answers": ["Oasis", "Nepal", "Hanamura"]
+  },
+  {
+    "question": "Which hero says “One shot, one kill.”?",
+    "image_url": null,
+    "correct_answer": "Widowmaker",
+    "wrong_answers": ["Mei", "Symmetra", "Tracer"]
+  },
+  {
+    "question": "Which hero has an ability called Frag Launcher?",
+    "image_url": null,
+    "correct_answer": "Junkrat",
+    "wrong_answers": ["Bastion", "Cassidy", "Reaper"]
+  },
+  {
+    "question": "How old is Baptiste?",
+    "image_url": null,
+    "correct_answer": "36",
+    "wrong_answers": ["34", "25", "27"]
+  },
+  {
+    "question": "Who is Roadhog’s voice actor?",
+    "image_url": null,
+    "correct_answer": "Josh Petersdorf",
+    "wrong_answers": ["Darin De Paul", "Benz Antoine", "Jonny Cruz"]
+  },
+  {
+    "question": "What is Mei’s profession?",
+    "image_url": null,
+    "correct_answer": "Climatologist",
+    "wrong_answers": ["Geneticist", "Engineer", "DJ"]
+  },
+  {
+    "question": "What do we need to escort in Route 66 map?",
+    "image_url": null,
+    "correct_answer": "US military bomb",
+    "wrong_answers": ["Satellite drone", "Hal-Fred Glitchbot's limousine", "EMP Bomb"]
+  },
+  {
+    "question": "What is Zenyatta’s ultimate ability?",
+    "image_url": null,
+    "correct_answer": "Trascendence",
+    "wrong_answers": ["Self-Destruct", "Sound Barrier", "Graviton Surge"]
+  },
+  {
+    "question": "What is the cooldown of Micro Missiles, D.Va’s ability?",
+    "image_url": null,
+    "correct_answer": "8 seconds",
+    "wrong_answers": ["10 seconds", "6 seconds", "5 seconds"]
+  },
+  {
+    "question": "Coach Gun is an ability used by which hero?",
+    "image_url": null,
+    "correct_answer": "Ashe",
+    "wrong_answers": ["Hanzo", "Widowmaker", "Reaper"]
+  },
+  {
+    "question": "In which country is the Black Forest map located?",
+    "image_url": null,
+    "correct_answer": "Germany",
+    "wrong_answers": ["France", "Mexico", "Egypt"]
+  },
+  {
+    "question": "Where is Lúcio from?",
+    "image_url": null,
+    "correct_answer": "Brasil",
+    "wrong_answers": ["Nigeria", "Mexico", "Haiti"]
+  },
+  {
+    "question": "What weapon is Hanzo using?",
+    "image_url": null,
+    "correct_answer": "Bow",
+    "wrong_answers": ["Shotgun", "Crossbow", "Rifle"]
+  },
+  {
+    "question": "Tracer suffers from Chronal-detachment.",
+    "image_url": null,
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
+  },
+  {
+    "question": "The payload on the Hollywood map is Halfred Glitchbot's Limo.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "What is D.Va's real name?",
+    "image_url": null,
+    "correct_answer": "Hana Song",
+    "wrong_answers": ["Hans Sung"]
+  },
+  {
+    "question": "What is the name of Mei's drone companion?",
+    "image_url": null,
+    "correct_answer": "Snowball",
+    "wrong_answers": ["Snowflake"]
+  },
+  {
+    "question": "Reinhardt is the oldest Overwatch hero.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "Hanzo and Genji are brothers.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "What is the name of Bastion's bird companion?",
+    "image_url": null,
+    "correct_answer": "Ganymede",
+    "wrong_answers": ["Genymadre", "Ganymed"]
+  },
+  {
+    "question": "Orisa's creator is an 11 year-old inventor named Efi Oladele.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "During the Halloween Terror Brawl, Solider: 76 is refered to as the \"Gunslinger.\"",
+    "image_url": null,
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
+  },
+  {
+    "question": "Winston took his name from Dr. Henry Winston.",
+    "image_url": null,
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
+  },
+  {
+    "question": "What does Widowmaker's forearm tattoo say?",
+    "image_url": null,
+    "correct_answer": "Cauchemar",
+    "wrong_answers": ["Cacahouète"]
+  },
+  {
+    "question": "Who is Gabriel Reyes?",
+    "image_url": null,
+    "correct_answer": "Reaper",
+    "wrong_answers": ["Soldier: 76", "Hanzo", "Gengji"]
+  },
+  {
+    "question": "Lucio's debut album is called \"Synaesthesia Auditiva.\"",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "Torbjörn is also the name of a type of chair at IKEA.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "Zenyatta is a former member of the Shambali Monastary.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "Junkrat is 6'7\" tall.",
+    "image_url": null,
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
+  },
+  {
+    "question": "Mei's biological age, 31, does not include her time spent in cryostasis. What is her chronological age?",
+    "image_url": null,
+    "correct_answer": "40",
+    "wrong_answers": ["50", "34", "43"]
+  },
+  {
+    "question": "Doomfist's real name is Akande Ogundimu.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "Hanzo is older than Genji.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "Moira has one orange eye and one _____ eye.",
+    "image_url": null,
+    "correct_answer": "Blue",
+    "wrong_answers": ["Purple", "Red", "Pink"]
+  },
+  {
+    "question": "Pharah's suit is called the Raptora Mark V.",
+    "image_url": null,
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
+  },
+  {
+    "question": "Zarya is a soldier in the Russian Defense Forces.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  }
+]
