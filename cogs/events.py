@@ -102,6 +102,29 @@ class Events(commands.Cog):
             query = "DELETE FROM newsboard WHERE id = $1;"
             await conn.execute(query, channel.id)
 
+    @commands.Cog.listener()
+    async def on_entitlement_create(self, entitlement: discord.Entitlement) -> None:
+        if not entitlement.guild_id:
+            return
+
+        query = """INSERT INTO server (id, premium)
+                   VALUES ($1, true)
+                   ON CONFLICT (id) DO
+                   UPDATE SET premium = true;
+                """
+        try:
+            await self.bot.pool.execute(query, entitlement.guild_id)
+        except Exception:
+            message = f"Cannot set premium for **{entitlement.guild_id}**."
+            color = discord.Color.red()
+            log.exception(message)
+        else:
+            self.bot.premiums.add(entitlement.guild_id)
+            message = f"Premium set for **{entitlement.guild_id}**."
+            color = discord.Color.green()
+            log.info(message)
+        await self.send_log(message, color)
+
 
 async def setup(bot: OverBot) -> None:
     await bot.add_cog(Events(bot))
