@@ -445,7 +445,7 @@ class Owner(commands.Cog):
             message = f"Cannot set premium for **{target_id}**."
             log.exception(message)
         else:
-            self.bot.premiums.remove(target_id)
+            self.bot.premiums.add(int(target_id))
             message = f"Premium set for **{target_id}**."
             log.info(message)
         await interaction.followup.send(message)
@@ -468,7 +468,7 @@ class Owner(commands.Cog):
             message = f"Cannot remove premium for **{target_id}**."
             log.exception(message)
         else:
-            self.bot.premiums.remove(target_id)
+            self.bot.premiums.remove(int(target_id))
             message = f"Premium removed for **{target_id}**."
             log.info(message)
         await interaction.followup.send(message)
