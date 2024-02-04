@@ -424,6 +424,7 @@ class Owner(commands.Cog):
     async def addpremium(
         self, interaction: discord.Interaction, *, target: Targets, target_id: str
     ) -> None:
+        """Set Premium for a given target."""
         await interaction.response.defer(thinking=True)
 
         if target == Targets.USER:
@@ -452,6 +453,7 @@ class Owner(commands.Cog):
     async def delpremium(
         self, interaction: discord.Interaction, *, target: Targets, target_id: str
     ) -> None:
+        """Delete Premium for a given target."""
         await interaction.response.defer(thinking=True)
 
         if target == Targets.USER:
