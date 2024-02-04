@@ -122,12 +122,17 @@ class OverBot(commands.AutoShardedBot):
 
     def compute_sloc(self) -> None:
         """Compute source lines of code."""
+
+        def read_file_lines(root, file):
+            if file.endswith(".py"):
+                with open(f"{root}/{file}", "r") as fp:
+                    nc = [_.strip() for _ in fp if not _.startswith("#")]  # remove comment lines
+                    self.sloc += len([_ for _ in nc if _])  # remove blank lines
+
         for root, dirs, files in os.walk(os.getcwd()):
             dirs[:] = set(dirs) - {"env"}
             for file in files:
-                if file.endswith(".py"):
-                    with open(f"{root}/{file}") as fp:
-                        self.sloc += len(fp.readlines())
+                read_file_lines(root, file)
 
     def is_it_premium(self, *to_check) -> bool:
         """Check for a member/guild to be premium."""
