@@ -442,11 +442,13 @@ class Owner(commands.Cog):
         try:
             await self.bot.pool.execute(query, int(target_id))
         except Exception:
-            log.exception(f"Cannot set premium for {target_id}")
-            await interaction.followup.send("Something bad happened.")
+            message = f"Cannot set premium for **{target_id}**."
+            log.exception(message)
         else:
-            self.bot.premiums.add(target_id)
-            await interaction.followup.send(f"Premium successfully set for **{target_id}**.")
+            self.bot.premiums.remove(target_id)
+            message = f"Premium set for **{target_id}**."
+            log.info(message)
+        await interaction.followup.send(message)
 
     @app_commands.command()
     @is_owner()
@@ -463,11 +465,13 @@ class Owner(commands.Cog):
         try:
             await self.bot.pool.execute(query, int(target_id))
         except Exception:
-            log.exception(f"Cannot remove premium for {target_id}")
-            await interaction.followup.send("Something bad happened.")
+            message = f"Cannot remove premium for **{target_id}**."
+            log.exception(message)
         else:
             self.bot.premiums.remove(target_id)
-            await interaction.followup.send(f"Premium successfully removed for **{target_id}**.")
+            message = f"Premium removed for **{target_id}**."
+            log.info(message)
+        await interaction.followup.send(message)
 
 
 async def setup(bot: OverBot) -> None:
