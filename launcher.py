@@ -123,7 +123,7 @@ class Migrations:
 
         stub = (
             f"-- Revises: V{self.version}\n"
-            f"-- Creation Date: {datetime.datetime.utcnow()} UTC\n"
+            f"-- Creation Date: {datetime.datetime.now(datetime.UTC)} UTC\n"
             f"-- Reason: {reason}\n\n"
         )
 
