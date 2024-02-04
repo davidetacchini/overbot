@@ -12,6 +12,7 @@ import psutil
 import pygit2
 from discord import app_commands, ui
 from discord.ext import commands
+from pygit2.enums import SortMode
 
 from utils.helpers import command_autocomplete
 
@@ -100,9 +101,7 @@ class Meta(commands.Cog):
 
     def get_latest_commits(self, count: int = 3) -> str:
         repo = pygit2.Repository(".git")
-        commits = list(
-            itertools.islice(repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count)
-        )
+        commits = list(itertools.islice(repo.walk(repo.head.target, SortMode.TOPOLOGICAL), count))
         return "\n".join(self.format_commit(c) for c in commits)
 
     # Inspired by https://github.com/Rapptz/RoboDanny
