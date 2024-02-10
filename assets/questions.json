@@ -648,71 +648,71 @@
     "image_url": null,
     "correct_answer": "True",
     "wrong_answers": ["False"]
-  }
+  },
   {
     "question": "Lifeweaver and Symmetra were roommates at the Vishkar Academy.",
     "image_url": null,
     "correct_answer": "True",
     "wrong_answers": ["False"]
-  }
+  },
   {
     "question": "In her origin story short what language, excluding English, was Kiriko shown communicating in?",
     "image_url": null,
     "correct_answer": "JSL",
-    "wrong_answers": ["ASL, Korean, Mandarin"]
-  }
+    "wrong_answers": ["ASL", "Korean", "Mandarin"]
+  },
   {
     "question": "Illari's name is a Quechuan name that means sunset.",
     "image_url": null,
     "correct_answer": "False",
     "wrong_answers": ["True"]
-  }
+  },
   {
     "question": "Which of these is not the name of one of Mauga's rare skins.",
     "image_url": null,
     "correct_answer": "Surf",
-    "wrong_answers": ["Sand, Palm, Lava"]
-  }
+    "wrong_answers": ["Sand", "Palm", "Lava"]
+  },
   {
     "question": "What was the name of Solider: 76's former romantic partner?",
     "image_url": null,
     "correct_answer": "Vincent",
-    "wrong_answers": ["Janet, Michael, Alex"]
-  }
+    "wrong_answers": ["Janet", "Michael", "Alex"]
+  },
   {
     "question": "Illari is known to have what pet?",
     "image_url": null,
     "correct_answer": "A llama",
-    "wrong_answers": ["An alpaca, A sheep, A Cat"]
-  }
+    "wrong_answers": ["An alpaca", "A sheep", "A Cat"]
+  },
   {
     "question": "Which of these is not a prop in the night market mischief and magic map?",
     "image_url": null,
     "correct_answer": "A Bush",
-    "wrong_answers": ["Ikayaki, A Pot, A Firework"]
-  }
+    "wrong_answers": ["Ikayaki", "A Pot", "A Firework"]
+  },
   {
     "question": "Which PvE mission added in OW2 had a challenge to collect 4 pachimaris?",
     "image_url": null,
     "correct_answer": "Resistance",
-    "wrong_answers": ["Liberation, Ironclad"]
-  }
+    "wrong_answers": ["Liberation", "Ironclad"]
+  },
   {
     "question": "How many arcade wins are required to get the Partygoer title?",
     "image_url": null,
     "correct_answer": "500",
-    "wrong_answers": ["250, 750, 1000"]
-  }
+    "wrong_answers": ["250", "750", "1000"]
+  },
   {
     "question": "Which of these characters cannot teleport as an ability?",
     "image_url": null,
     "correct_answer": "Pharah",
-    "wrong_answers": ["Sombra, Reaper, Kiriko"]
-  }
+    "wrong_answers": ["Sombra", "Reaper", "Kiriko"]
+  },
   {
     "question": "Which of these heros did not get a skin in the le sserafim colab?",
     "image_url": null,
     "correct_answer": "Mei",
-    "wrong_answers": ["D.va, Brigitte, Kiriko"]
-  }
+    "wrong_answers": ["D.va", "Brigitte", "Kiriko"]
+  },
 ]
