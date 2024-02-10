@@ -154,11 +154,11 @@
     "wrong_answers": [
       "Roadrat and Junkhog",
       "Ana and Pharah",
-      "McCree and Deadeye"
+      "Cassidy and Deadeye"
     ]
   },
   {
-    "question": "In the game \"Overwatch,\" which quote does the hero \"McCree\" NOT say upon using his flashbang ability?",
+    "question": "In the game \"Overwatch,\" which quote does the hero \"Cassidy\" NOT say upon using his flashbang ability?",
     "image_url": null,
     "correct_answer": "\"You done?\"",
     "wrong_answers": ["\"Whoa there.\"", "\"Hold up now.\"", "\"Don't move.\""]
@@ -176,7 +176,7 @@
     "wrong_answers": ["False"]
   },
   {
-    "question": "In \"Overwatch,\" an allied McCree will say \"Step right up\" upon using his ultimate ability Deadeye.",
+    "question": "In \"Overwatch,\" an allied Cassidy will say \"Step right up\" upon using his ultimate ability Deadeye.",
     "image_url": null,
     "correct_answer": "True",
     "wrong_answers": ["False"]
@@ -184,7 +184,7 @@
   {
     "question": "According to Overwatch's lore, who was once a member of the Deadlock Gang?",
     "image_url": null,
-    "correct_answer": "McCree",
+    "correct_answer": "Cassidy",
     "wrong_answers": ["Roadhog", "Soldier 76", "Junkrat"]
   },
   {
@@ -277,7 +277,7 @@
     "question": "Who's voice actor was originally a stand-up comedian?",
     "image_url": null,
     "correct_answer": "Mercy",
-    "wrong_answers": ["McCree", "L\u00f9cio", "Sombra"]
+    "wrong_answers": ["Cassidy", "L\u00f9cio", "Sombra"]
   },
   {
     "question": "What cooperation owns the Horizon Lunar Colony?",
@@ -292,16 +292,16 @@
     "wrong_answers": ["April 2017", "February 2017", "October 2017"]
   },
   {
-    "question": "How many unique special edition loot boxes are there?",
+    "question": "How many unique special edition loot boxes were there?",
     "image_url": null,
     "correct_answer": "5",
     "wrong_answers": ["4", "6", "8"]
   },
   {
-    "question": "How many Epic skins does Hanzo have?",
+    "question": "What season was Hanzo's mythic skin released in",
     "image_url": null,
-    "correct_answer": "3",
-    "wrong_answers": ["2", "4", "6"]
+    "correct_answer": "Season 7",
+    "wrong_answers": ["Season 8", "Season 6", "Season 5"]
   },
   {
     "question": "What is the name of Zarya's Comic?",
@@ -368,7 +368,7 @@
     "wrong_answers": ["Reinhardt", "Soldier-76", "Baptiste"]
   },
   {
-    "question": "Was McCree a member of Overwatch and Blackwatch?",
+    "question": "Was Cassidy a member of Overwatch and Blackwatch?",
     "image_url": null,
     "correct_answer": "He used to be in both",
     "wrong_answers": [
@@ -381,7 +381,7 @@
     "question": "Who did Tracer battle on the roof tops of King’s Row?",
     "image_url": null,
     "correct_answer": "Widowmaker",
-    "wrong_answers": ["Genji", "McCree", "Junkrat"]
+    "wrong_answers": ["Genji", "Cassidy", "Junkrat"]
   },
   {
     "question": "What is Mercy's real name?",
@@ -544,8 +544,8 @@
   {
     "question": "Reinhardt is the oldest Overwatch hero.",
     "image_url": null,
-    "correct_answer": "True",
-    "wrong_answers": ["False"]
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
   },
   {
     "question": "Hanzo and Genji are brothers.",
@@ -587,7 +587,7 @@
     "question": "Who is Gabriel Reyes?",
     "image_url": null,
     "correct_answer": "Reaper",
-    "wrong_answers": ["Soldier: 76", "Hanzo", "Gengji"]
+    "wrong_answers": ["Soldier: 76", "Hanzo", "Genji"]
   },
   {
     "question": "Lucio's debut album is called \"Synaesthesia Auditiva.\"",
@@ -616,8 +616,8 @@
   {
     "question": "Mei's biological age, 31, does not include her time spent in cryostasis. What is her chronological age?",
     "image_url": null,
-    "correct_answer": "40",
-    "wrong_answers": ["50", "34", "43"]
+    "correct_answer": "42",
+    "wrong_answers": ["50", "34", "46"]
   },
   {
     "question": "Doomfist's real name is Akande Ogundimu.",
@@ -648,5 +648,71 @@
     "image_url": null,
     "correct_answer": "True",
     "wrong_answers": ["False"]
-  }
+  },
+  {
+    "question": "Lifeweaver and Symmetra were roommates at the Vishkar Academy.",
+    "image_url": null,
+    "correct_answer": "True",
+    "wrong_answers": ["False"]
+  },
+  {
+    "question": "In her origin story short what language, excluding English, was Kiriko shown communicating in?",
+    "image_url": null,
+    "correct_answer": "JSL",
+    "wrong_answers": ["ASL", "Korean", "Mandarin"]
+  },
+  {
+    "question": "Illari's name is a Quechuan name that means sunset.",
+    "image_url": null,
+    "correct_answer": "False",
+    "wrong_answers": ["True"]
+  },
+  {
+    "question": "Which of these is not the name of one of Mauga's rare skins.",
+    "image_url": null,
+    "correct_answer": "Surf",
+    "wrong_answers": ["Sand", "Palm", "Lava"]
+  },
+  {
+    "question": "What was the name of Solider: 76's former romantic partner?",
+    "image_url": null,
+    "correct_answer": "Vincent",
+    "wrong_answers": ["Janet", "Michael", "Alex"]
+  },
+  {
+    "question": "Illari is known to have what pet?",
+    "image_url": null,
+    "correct_answer": "A llama",
+    "wrong_answers": ["An alpaca", "A sheep", "A Cat"]
+  },
+  {
+    "question": "Which of these is not a prop in the night market mischief and magic map?",
+    "image_url": null,
+    "correct_answer": "A Bush",
+    "wrong_answers": ["Ikayaki", "A Pot", "A Firework"]
+  },
+  {
+    "question": "Which PvE mission added in OW2 had a challenge to collect 4 pachimaris?",
+    "image_url": null,
+    "correct_answer": "Resistance",
+    "wrong_answers": ["Liberation", "Ironclad"]
+  },
+  {
+    "question": "How many arcade wins are required to get the Partygoer title?",
+    "image_url": null,
+    "correct_answer": "500",
+    "wrong_answers": ["250", "750", "1000"]
+  },
+  {
+    "question": "Which of these characters cannot teleport as an ability?",
+    "image_url": null,
+    "correct_answer": "Pharah",
+    "wrong_answers": ["Sombra", "Reaper", "Kiriko"]
+  },
+  {
+    "question": "Which of these heros did not get a skin in the le sserafim colab?",
+    "image_url": null,
+    "correct_answer": "Mei",
+    "wrong_answers": ["D.va", "Brigitte", "Kiriko"]
+  },
 ]
