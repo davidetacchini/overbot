@@ -137,10 +137,9 @@ class OverBotCommandTree(app_commands.CommandTree):
                     exc = f"{type(original)}\n{original}"
                 embed.description = f"```py\n{exc}\n```"
                 embed.timestamp = interaction.created_at
+                log.exception(original.__traceback__)
                 if not bot.debug:
                     await bot.webhook.send(embed=embed)
-                else:
-                    log.exception(original.__traceback__)
                 await self._send(
                     interaction,
                     "This command ran into an error. The incident has been reported and will be fixed as soon as possible.",
