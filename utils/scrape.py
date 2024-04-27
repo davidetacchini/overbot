@@ -32,7 +32,7 @@ async def get_overwatch_news() -> News:
         {
             "title": n.find("h4", slot="heading").get_text(),
             "link": "https://overwatch.blizzard.com/en-us" + n["href"],
-            "thumbnail": "https:" + n.find("blz-image", slot="image")["src"],
+            "thumbnail": n.find("blz-image", slot="image")["src"],
             "date": n["date"].split(":")[0][:-3],  # from YYYY-MM-DDT18:00:00.000Z to YYYY-MM-DD
         }
         for n in news_container.find_all("blz-card")
