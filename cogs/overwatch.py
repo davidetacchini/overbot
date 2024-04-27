@@ -252,7 +252,7 @@ class Overwatch(commands.Cog):
                 if r.status == 422:
                     await interaction.response.send_message(f"Hero **{name}** not found.")
                     return
-                if r.status != 200:
+                elif r.status != 200:
                     raise UnknownError()
                 data = await r.json()
 
