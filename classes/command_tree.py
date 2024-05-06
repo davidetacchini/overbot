@@ -75,10 +75,7 @@ class OverBotCommandTree(app_commands.CommandTree):
 
             elif isinstance(error, NotPremium):
                 embed = discord.Embed(color=discord.Color.red())
-                embed.description = (
-                    "This command requires a Premium membership.\n"
-                    f"[Click here]({config.premium}) to have a look at the Premium plans."
-                )
+                embed.description = "This command requires Premium. Check out the Store to have a look at the Premium plans."
                 await self._send(interaction, embed)
 
             elif isinstance(error, NotOwner):
