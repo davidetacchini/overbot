@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import datetime
 import logging
-from datetime import datetime
 from typing import TYPE_CHECKING
 
 import discord
@@ -25,7 +25,7 @@ class Events(commands.Cog):
 
         embed = discord.Embed(color=color)
         embed.title = text
-        embed.timestamp = datetime.utcnow()
+        embed.timestamp = datetime.datetime.now(datetime.UTC)
         await self.bot.webhook.send(embed=embed)
 
     async def send_guild_log(self, guild: discord.Guild, embed: discord.Embed) -> None:
@@ -44,7 +44,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self) -> None:
         if not hasattr(self.bot, "uptime"):
-            setattr(self.bot, "uptime", datetime.utcnow())
+            setattr(self.bot, "uptime", datetime.datetime.now(datetime.UTC))
 
         log.info(f"Connected as {self.bot.user.display_name} in {len(self.bot.guilds)} guilds.")
         await self.send_log("Bot is online.", discord.Color.blue())
@@ -104,23 +104,43 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_entitlement_create(self, entitlement: discord.Entitlement) -> None:
-        if not entitlement.guild_id:
+        if not entitlement.guild_id and not entitlement.user_id:
             return
 
-        query = """INSERT INTO server (id, premium)
-                   VALUES ($1, true)
-                   ON CONFLICT (id) DO
-                   UPDATE SET premium = true;
-                """
+        query, target_id = None, None
+
+        if (
+            entitlement.type == discord.SKUType.durable
+            and entitlement.guild_id is not None
+            or entitlement.type == discord.SKUType.subscription
+        ):
+
+            query = """INSERT INTO server (id, premium)
+                       VALUES ($1, true)
+                       ON CONFLICT (id) DO
+                       UPDATE SET premium = true;
+                    """
+            target_id = entitlement.guild_id
+        elif entitlement.type == discord.SKUType.durable and entitlement.user_id is not None:
+            query = """INSERT INTO member (id, premium)
+                       VALUES ($1, true)
+                       ON CONFLICT (id) DO
+                       UPDATE SET premium = true;
+                    """
+            target_id = entitlement.user_id
+
+        if not query or not target_id:  # Redundant but I don't care
+            return
+
         try:
-            await self.bot.pool.execute(query, entitlement.guild_id)
-        except Exception:
-            message = f"Cannot set premium for **{entitlement.guild_id}**."
+            await self.bot.pool.execute(query, target_id)
+        except Exception as e:
+            message = f"Cannot set premium for **{target_id}**."
             color = discord.Color.red()
-            log.exception(message)
+            log.exception(e)
         else:
-            self.bot.premiums.add(entitlement.guild_id)
-            message = f"Premium set for **{entitlement.guild_id}**."
+            self.bot.premiums.add(target_id)
+            message = f"Premium set for **{target_id}**."
             color = discord.Color.green()
             log.info(message)
         await self.send_log(message, color)
