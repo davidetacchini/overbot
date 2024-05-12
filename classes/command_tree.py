@@ -64,19 +64,17 @@ class OverBotCommandTree(app_commands.CommandTree):
 
             elif isinstance(error, ProfileLimitReached):
                 if error.limit == 5:
-                    embed = discord.Embed(color=discord.Color.red())
-                    embed.description = (
-                        "Maximum limit of profiles reached.\n"
-                        f"[Upgrade to Premium]({config.premium}) to be able to link up to 25 profiles."
-                    )
-                    await self._send(interaction, embed)
+                    message = "Maximum limit of profiles reached. Upgrade to Premium to unlock 20 additional slots."
+                    await self._send(interaction, message)
                 else:
                     await self._send(interaction, "Maximum limit of profiles reached.")
 
             elif isinstance(error, NotPremium):
-                embed = discord.Embed(color=discord.Color.red())
-                embed.description = "This command requires Premium. Check out the Store to have a look at the Premium plans."
-                await self._send(interaction, embed)
+                if not config.DEBUG:
+                    await interaction.response.require_premium()
+                    return
+                message = "This command requires Premium. Check out the Store to have a look at the Premium plans."
+                await self._send(interaction, message)
 
             elif isinstance(error, NotOwner):
                 await self._send(interaction, "You are not allowed to run this command.")
