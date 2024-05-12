@@ -3,6 +3,6 @@
 -- Reason: Store latest overwatch news ID
 
 CREATE TABLE IF NOT EXISTS news (
-    id integer DEFAULT 1 PRIMARY KEY,
-    latest_id integer DEFAULT 0
+    id INTEGER DEFAULT 1 PRIMARY KEY,
+    latest_id INTEGER DEFAULT 0
 );

@@ -4,48 +4,48 @@
 
 CREATE TABLE IF NOT EXISTS command (
     id SERIAL PRIMARY KEY,
-    name text,
-    guild_id bigint,
-    channel_id bigint,
-    author_id bigint,
-    created_at timestamp
+    name TEXT,
+    guild_id BIGINT,
+    channel_id BIGINT,
+    author_id BIGINT,
+    created_at TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS member (
-    id bigint PRIMARY KEY,
-    embed_color integer,
-    premium boolean DEFAULT false
+    id BIGINT PRIMARY KEY,
+    embed_color INTEGER,
+    premium BOOLEAN DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS server (
-    id bigint PRIMARY KEY,
-    premium boolean DEFAULT false
+    id BIGINT PRIMARY KEY,
+    premium BOOLEAN DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS newsboard (
-    id bigint PRIMARY KEY,
-    server_id bigint REFERENCES server(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    member_id bigint REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
+    id BIGINT PRIMARY KEY,
+    server_id BIGINT REFERENCES server(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    member_id BIGINT REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS profile (
     id SERIAL PRIMARY KEY,
-    battletag varchar(100),
-    member_id bigint REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
+    battletag VARCHAR(100),
+    member_id BIGINT REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS rating (
     id SERIAL PRIMARY KEY,
-    tank smallint,
-    damage smallint,
-    support smallint,
-    date date DEFAULT CURRENT_DATE,
-    profile_id integer REFERENCES profile(id) ON UPDATE CASCADE ON DELETE CASCADE
+    tank SMALLINT,
+    damage SMALLINT,
+    support SMALLINT,
+    date DATE DEFAULT CURRENT_DATE,
+    profile_id INTEGER REFERENCES profile(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS trivia (
-    id bigint PRIMARY KEY,
-    won integer DEFAULT 0,
-    lost integer DEFAULT 0,
-    started integer DEFAULT 0
+    id BIGINT PRIMARY KEY,
+    won INTEGER DEFAULT 0,
+    lost INTEGER DEFAULT 0,
+    started INTEGER DEFAULT 0
 );
