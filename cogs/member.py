@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import discord
-from discord import Color, app_commands, ui
+from discord import Color, app_commands
 from discord.ext import commands
 
 from classes.exceptions import InvalidColor
@@ -42,8 +42,8 @@ class Member(commands.Cog):
 
         embed.description = f"Your Status: `{member}`\nServer Status: `{guild}`"
 
-        view = ui.View()
-        view.add_item(ui.Button(label="Premium", url=self.bot.config.premium))
+        view = discord.ui.View()
+        view.add_item(discord.ui.Button(label="Premium", url=self.bot.config.premium))
 
         await interaction.response.send_message(embed=embed, view=view)
 
