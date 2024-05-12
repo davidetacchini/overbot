@@ -6,6 +6,7 @@ import discord
 from discord import Color, app_commands
 from discord.ext import commands
 
+import config
 from classes.exceptions import InvalidColor
 from utils.checks import is_premium
 
@@ -80,6 +81,32 @@ class Member(commands.Cog):
         self.bot.embed_colors[interaction.user.id] = int(color)
         embed.description = "Color successfully set."
         await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(extras=dict(premium=True))
+    @app_commands.guilds(config.support_server_id)
+    @app_commands.checks.cooldown(1, 5.0, key=lambda i: i.user.id)
+    @is_premium()
+    async def premiumrole(self, interaction: discord.Interaction) -> None:
+        """Unlock the premium role"""
+        await interaction.response.defer(thinking=True)
+
+        assert isinstance(interaction.user, discord.Member)
+
+        premium_role_id = 818466886491701278
+        premium_role = discord.Object(id=premium_role_id)
+
+        if interaction.user.get_role(premium_role_id):
+            await interaction.followup.send(
+                f"You have already been assigned the <@&{premium_role_id}> role."
+            )
+            return
+        elif interaction.user.id in self.bot.premiums:
+            try:
+                await interaction.user.add_roles(premium_role, reason="Premium user")
+            except discord.HTTPException:
+                await interaction.followup.send("Something bad happened.")
+            else:
+                await interaction.followup.send(f"<@&{premium_role_id}> role successfully set.")
 
 
 async def setup(bot: OverBot) -> None:
