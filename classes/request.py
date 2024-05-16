@@ -21,7 +21,7 @@ class Request:
         self.battletag = battletag
         self.session = session
 
-    async def _resolve_name(self, players: list[dict[str, Any]]) -> str:
+    async def _resolve_battletag(self, players: list[dict[str, Any]]) -> str:
         if len(players) == 1:
             try:
                 return players[0]["battleTag"]
@@ -33,10 +33,10 @@ class Request:
                     return player["battleTag"]
             raise TooManyAccounts(self.battletag, len(players))
         else:
-            # return the battletag and let `resolve_response` handle it
+            # at this point just let `_handle_response` handle it
             return self.battletag
 
-    async def _get_name(self) -> str:
+    async def _normalize_battletag(self) -> str:
         url = config.overwatch["account"] + "/" + self.battletag.replace("#", "%23") + "/"
         async with self.session.get(url) as r:
             try:
@@ -47,7 +47,7 @@ class Request:
                 name = await self._resolve_battletag(data)
                 return name.replace("#", "-")
 
-    async def _resolve_response(self, response: aiohttp.ClientResponse) -> dict[str, Any]:
+    async def _handle_response(self, response: aiohttp.ClientResponse) -> dict[str, Any]:
         match response.status:
             case 200:
                 return await response.json()
@@ -62,7 +62,7 @@ class Request:
             case _:
                 raise UnknownError()
 
-    async def _request(self, path) -> dict[str, Any]:
+    async def _make_request(self, path) -> dict[str, Any]:
         url = config.base_url + path
         async with self.session.get(url) as r:
             try:
@@ -71,9 +71,9 @@ class Request:
                 raise UnknownError()
 
     async def fetch_data(self) -> dict[str, Any]:
-        name = await self._get_name()
-        return await self._request(f"/players/{name}")
+        name = await self._normalize_battletag()
+        return await self._make_request(f"/players/{name}")
 
-    async def fetch_stats_summary(self) -> dict[str, Any]:
-        name = await self._get_name()
-        return await self._request(f"/players/{name}/stats/summary")
+    async def fetch_summary_data(self) -> dict[str, Any]:
+        name = await self._normalize_battletag()
+        return await self._make_request(f"/players/{name}/stats/summary")
