@@ -390,7 +390,7 @@ class Owner(commands.Cog):
         ids = raw_ids.split(",")
 
         try:
-            news = await get_overwatch_news_from_ids(ids)
+            news = await get_overwatch_news_from_ids(ids, session=self.bot.session)
         except Exception as e:
             log.exception(e)
             await interaction.followup.send(f"```prolog\n{e}```")

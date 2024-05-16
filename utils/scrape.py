@@ -12,14 +12,9 @@ if TYPE_CHECKING:
     News = list[dict[str, str]]
 
 
-async def fetch(url: str) -> bytes:
-    async with aiohttp.ClientSession() as s:
-        async with s.get(url) as r:
-            return await r.read()
-
-
-async def get_overwatch_news() -> News:
-    content = await fetch(config.overwatch["news"])
+async def get_overwatch_news(*, session: aiohttp.ClientSession) -> News:
+    async with session.get(config.overwatch["news"]) as r:
+        content = await r.read()
 
     root_kwargs = {"name": "div", "class_": "main-content", "recursive": False}
     root = BeautifulSoup(content, features="lxml").body.find(**root_kwargs)
@@ -40,11 +35,12 @@ async def get_overwatch_news() -> News:
     return news
 
 
-async def get_overwatch_news_from_ids(ids: list[str]) -> News:
+async def get_overwatch_news_from_ids(ids: list[str], *, session: aiohttp.ClientSession) -> News:
     news = []
     for idx in ids:
         url = config.overwatch["news"] + idx
-        content = await fetch(url)
+        async with session.get(url) as r:
+            content = await r.read()
 
         root = BeautifulSoup(content, features="lxml")
 

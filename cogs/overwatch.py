@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import discord
-from aiohttp import ClientSession
 from discord import app_commands
 from discord.ext import commands
 
@@ -123,7 +122,7 @@ class Overwatch(commands.Cog):
         pages = []
 
         try:
-            news = await get_overwatch_news()
+            news = await get_overwatch_news(session=self.bot.session)
         except Exception:
             embed = discord.Embed(color=self.bot.color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
@@ -247,14 +246,13 @@ class Overwatch(commands.Cog):
     async def hero(self, interaction: discord.Interaction, name: str) -> None:
         """Returns information about a given hero"""
         url = f"{self.bot.BASE_URL}/heroes/{name}"
-        async with ClientSession() as s:
-            async with s.get(url) as r:
-                if r.status == 422:
-                    await interaction.response.send_message(f"Hero **{name}** not found.")
-                    return
-                elif r.status != 200:
-                    raise UnknownError()
-                data = await r.json()
+        async with self.bot.session.get(url) as r:
+            if r.status == 422:
+                await interaction.response.send_message(f"Hero **{name}** not found.")
+                return
+            elif r.status != 200:
+                raise UnknownError()
+            data = await r.json()
 
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.set_author(name=data.get("name"), icon_url=data.get("portrait"))
