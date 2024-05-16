@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class Targets(Enum):
+class Target(Enum):
     USER = 1
     SERVER = 2
 
@@ -422,18 +422,18 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def addpremium(
-        self, interaction: discord.Interaction, *, target: Targets, target_id: str
+        self, interaction: discord.Interaction, *, target: Target, target_id: str
     ) -> None:
         """Set Premium for a given target."""
         await interaction.response.defer(thinking=True)
 
-        if target == Targets.USER:
+        if target == Target.USER:
             query = """INSERT INTO member (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO
                        UPDATE SET premium = true;
                     """
-        elif target == Targets.SERVER:
+        elif target == Target.SERVER:
             query = """INSERT INTO server (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO
@@ -453,14 +453,14 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def delpremium(
-        self, interaction: discord.Interaction, *, target: Targets, target_id: str
+        self, interaction: discord.Interaction, *, target: Target, target_id: str
     ) -> None:
         """Delete Premium for a given target."""
         await interaction.response.defer(thinking=True)
 
-        if target == Targets.USER:
+        if target == Target.USER:
             query = "UPDATE member SET premium = false WHERE id = $1;"
-        elif target == Targets.SERVER:
+        elif target == Target.SERVER:
             query = "UPDATE server SET premium = false WHERE id = $1;"
         try:
             await self.bot.pool.execute(query, int(target_id))
