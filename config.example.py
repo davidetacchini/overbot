@@ -1,7 +1,7 @@
 """Configuration file for OverBot."""
 
 """Whether the version is realase or beta."""
-DEBUG = True
+debug = True
 
 """The Bot token."""
 token = "your_bot_token"
@@ -12,7 +12,7 @@ ignored_guilds = ()  # guilds (ids) to ignore when getting data from the databas
 database = "postgresql://user:password@host:port/database"
 
 # IGNORE (you don't actually need them to run the bot)
-# NOTE: DEBUG must be set to True though
+# NOTE: debug must be set to True though
 
 """Webhook credentials."""
 webhook = {

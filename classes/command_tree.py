@@ -70,7 +70,7 @@ class OverBotCommandTree(app_commands.CommandTree):
                     await self._send(interaction, "Maximum limit of profiles reached.")
 
             elif isinstance(error, NotPremium):
-                if not config.DEBUG:
+                if not config.debug:
                     await interaction.response.require_premium()
                     return
                 message = "This command requires Premium. Check out the Store to have a look at the Premium plans."

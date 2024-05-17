@@ -56,7 +56,7 @@ class OverBot(commands.AutoShardedBot):
 
     @property
     def debug(self) -> bool:
-        return config.DEBUG
+        return config.debug
 
     @property
     def webhook(self) -> discord.Webhook:
