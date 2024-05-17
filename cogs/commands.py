@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from typing import TYPE_CHECKING, Any
 
 from asyncpg import PostgresConnectionError
@@ -12,6 +13,8 @@ if TYPE_CHECKING:
     from discord import Interaction
 
     from bot import OverBot
+
+log = logging.getLogger(__name__)
 
 
 class Commands(commands.Cog):
@@ -29,6 +32,9 @@ class Commands(commands.Cog):
                 """
 
         if self._data_batch:
+            total = len(self._data_batch)
+            if total > 1:
+                log.info(f"Inserted {total} commands to the database.")
             for command in self._data_batch:
                 await self.bot.pool.execute(query, *command)
             self._data_batch.clear()
