@@ -275,7 +275,7 @@ class Tasks(commands.Cog):
         await self.bot.pool.execute(
             "UPDATE news SET latest_id = $1 WHERE id = 1", int(latest_news_id)
         )
-        log.info("News ID has been successfully updated.")
+        log.info(f"Sent news with ID {latest_news_id} in {len(records)} servers.")
 
     @tasks.loop(hours=1.0)
     async def update_bot_presence(self):
