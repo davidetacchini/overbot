@@ -1,4 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from discord import app_commands
+
+if TYPE_CHECKING:
+    from classes.profile import Profile
 
 
 class OverBotException(Exception):
@@ -78,6 +85,11 @@ class NoStats(OverBotException):
                 f"This profile has no quick play nor competitive stast for **{hero}** to display."
             )
         super().__init__(message)
+
+
+class ProfilePrivate(app_commands.CheckFailure):
+    def __init__(self, profile: Profile):
+        self.profile = profile
 
 
 class ProfileNotLinked(app_commands.CheckFailure):
