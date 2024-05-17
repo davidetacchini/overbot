@@ -138,7 +138,7 @@ class Tasks(commands.Cog):
                 all_commands.append(
                     {
                         "cog": cog_name,
-                        "name": "/" + command.qualified_name,
+                        "name": command.qualified_name,
                         "type": get_command_type(command),
                         "is_premium": command.extras.get("premium", False),
                         "description": command.description or "No description found...",
