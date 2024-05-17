@@ -31,12 +31,6 @@ obapi = {
 
 # ENDIGNORE
 
-"""Premium consts."""
-PREMIUM_PROFILES_LIMIT = 25
-
-"""Base consts."""
-DEFAULT_PROFILES_LIMIT = 5
-
 """The owner's ID."""
 owner_id = 285502621295312896
 

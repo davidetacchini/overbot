@@ -18,6 +18,9 @@ log = logging.getLogger(__name__)
 
 __version__ = "6.2.2"
 
+DEFAULT_PROFILES_LIMIT = 5
+PREMIUM_PROFILES_LIMIT = 25
+
 
 class OverBot(commands.AutoShardedBot):
     """Custom bot class for OverBot."""
@@ -141,8 +144,8 @@ class OverBot(commands.AutoShardedBot):
     def get_profiles_limit(self, interaction: discord.Interaction, user_id: int) -> int:
         guild_id = interaction.guild_id or 0
         if not self.is_it_premium(user_id, guild_id):
-            return config.DEFAULT_PROFILES_LIMIT
-        return config.PREMIUM_PROFILES_LIMIT
+            return DEFAULT_PROFILES_LIMIT
+        return PREMIUM_PROFILES_LIMIT
 
     async def _cache_premiums(self) -> None:
         query = """SELECT id
