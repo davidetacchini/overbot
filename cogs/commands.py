@@ -61,7 +61,7 @@ class Commands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction: Interaction) -> None:
-        if interaction.type == InteractionType.application_command:
+        if interaction.type is InteractionType.application_command:
             await self.register_command(interaction)
 
     def cog_unload(self) -> None:

@@ -110,9 +110,9 @@ class Events(commands.Cog):
         query, target_id = None, None
 
         if (
-            entitlement.type == discord.SKUType.durable.value
+            entitlement.type is discord.SKUType.durable
             and entitlement.guild_id is not None
-            or entitlement.type == discord.SKUType.subscription.value
+            or entitlement.type is discord.SKUType.subscription
         ):
 
             query = """INSERT INTO server (id, premium)
@@ -121,7 +121,7 @@ class Events(commands.Cog):
                        UPDATE SET premium = true;
                     """
             target_id = entitlement.guild_id
-        elif entitlement.type == discord.SKUType.durable.value and entitlement.user_id is not None:
+        elif entitlement.type is discord.SKUType.durable and entitlement.user_id is not None:
             query = """INSERT INTO member (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO

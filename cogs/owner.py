@@ -427,13 +427,13 @@ class Owner(commands.Cog):
         """Set Premium for a given target."""
         await interaction.response.defer(thinking=True)
 
-        if target == Target.USER:
+        if target is Target.USER:
             query = """INSERT INTO member (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO
                        UPDATE SET premium = true;
                     """
-        elif target == Target.SERVER:
+        elif target is Target.SERVER:
             query = """INSERT INTO server (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO
@@ -458,9 +458,9 @@ class Owner(commands.Cog):
         """Delete Premium for a given target."""
         await interaction.response.defer(thinking=True)
 
-        if target == Target.USER:
+        if target is Target.USER:
             query = "UPDATE member SET premium = false WHERE id = $1;"
-        elif target == Target.SERVER:
+        elif target is Target.SERVER:
             query = "UPDATE server SET premium = false WHERE id = $1;"
         try:
             await self.bot.pool.execute(query, int(target_id))
