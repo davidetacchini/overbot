@@ -3,16 +3,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import aiohttp
 from bs4 import BeautifulSoup
 
 import config
 
 if TYPE_CHECKING:
     News = list[dict[str, str]]
+    from aiohttp import ClientSession
 
 
-async def get_overwatch_news(*, session: aiohttp.ClientSession) -> News:
+async def get_overwatch_news(*, session: ClientSession) -> News:
     async with session.get(config.overwatch["news"]) as r:
         content = await r.read()
 
@@ -35,7 +35,7 @@ async def get_overwatch_news(*, session: aiohttp.ClientSession) -> News:
     return news
 
 
-async def get_overwatch_news_from_ids(ids: list[str], *, session: aiohttp.ClientSession) -> News:
+async def get_overwatch_news_from_ids(ids: list[str], *, session: ClientSession) -> News:
     news = []
     for idx in ids:
         url = config.overwatch["news"] + idx
