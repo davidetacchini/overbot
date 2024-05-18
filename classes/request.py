@@ -71,9 +71,9 @@ class Request:
                 raise UnknownError()
 
     async def fetch_data(self) -> dict[str, Any]:
-        name = await self._normalize_battletag()
-        return await self._make_request(f"/players/{name}")
+        battletag = await self._normalize_battletag()
+        return await self._make_request(f"/players/{battletag}")
 
     async def fetch_summary_data(self) -> dict[str, Any]:
-        name = await self._normalize_battletag()
-        return await self._make_request(f"/players/{name}/stats/summary")
+        battletag = await self._normalize_battletag()
+        return await self._make_request(f"/players/{battletag}/stats/summary")
