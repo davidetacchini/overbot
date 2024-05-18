@@ -294,23 +294,21 @@ class Owner(commands.Cog):
             profiles = await conn.fetchval("SELECT COUNT(*) FROM profile;")
             guilds = await conn.fetchval("SELECT COUNT(*) FROM server;")
             members = await conn.fetchval("SELECT COUNT(*) from member;")
-            ratings = await conn.fetchval("SELECT COUNT(*) FROM rating;")
             played, won, lost = await conn.fetchrow(
                 "SELECT SUM(started), SUM(won), SUM(lost) FROM trivia;"
             )
 
         total_commands = await self.bot.total_commands()
         bot_entries = (
-            ("Total profiles linked", profiles),
-            ("Total profile ratings", ratings),
-            ("Total guilds", guilds),
-            ("Total members", members),
-            ("Total commands runned", total_commands),
+            ("Profiles linked", profiles),
+            ("Guilds", guilds),
+            ("Members", members),
+            ("Commands runned", total_commands),
         )
         trivia_entries = (
-            ("Total games played", played),
-            ("Total games won", won),
-            ("Total games lost", lost),
+            ("Games played", played),
+            ("Games won", won),
+            ("Games lost", lost),
         )
 
         embed = discord.Embed(color=self.bot.color())
