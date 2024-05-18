@@ -106,7 +106,7 @@ class ProfileUnlinkView(BaseView):
 
 @app_commands.context_menu(name="List Profiles")
 async def list_profiles(interaction: discord.Interaction, member: discord.Member) -> None:
-    """List your own or a member's profiles"""
+    """Lists your own or a member's profiles."""
     bot: OverBot = getattr(interaction, "client")
     profile_cog: ProfileCog = bot.get_cog("profile")  # type: ignore
     profiles = await profile_cog.get_profiles(interaction, member.id)
@@ -194,7 +194,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
     @app_commands.command()
     @app_commands.describe(member="The member to list the profiles for")
     async def list(self, interaction: discord.Interaction, member: None | Member = None) -> None:
-        """List your own or a member's profiles"""
+        """Lists your own or a member's profiles."""
         member = member or interaction.user
         profiles = await self.get_profiles(interaction, member.id)
         entries = await self.list_profiles(interaction, member, profiles)
@@ -204,7 +204,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
     @app_commands.describe(battletag="The battletag of the profile")
     @can_add_profile()
     async def link(self, interaction: discord.Interaction, battletag: str) -> None:
-        """Link an Overwatch profile"""
+        """Link an Overwatch profile."""
         # Make sure the member is in the member table. If a new member runs this command as the first
         # command, it won't be in the member table and this could lead to a ForeignKeyViolationError.
         await self.bot.insert_member(interaction.user.id)
@@ -224,7 +224,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
     @app_commands.describe(battletag="The new profile battletag")
     @has_profile()
     async def update(self, interaction: discord.Interaction, profile: int, battletag: str) -> None:
-        """Update an Overwatch profile"""
+        """Update an Overwatch profile."""
         query = "UPDATE profile SET battletag = $1 WHERE id = $2;"
         try:
             await self.bot.pool.execute(query, battletag, profile)
@@ -238,7 +238,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
     @app_commands.command()
     @has_profile()
     async def unlink(self, interaction: discord.Interaction) -> None:
-        """Unlink an Overwatch profile"""
+        """Unlink an Overwatch profile."""
         profiles = await self.get_profiles(interaction, interaction.user.id)
         if len(profiles) == 1:
             profile = profiles[0]
@@ -258,7 +258,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
     @app_commands.describe(member="The member to show ratings for")
     @has_profile()
     async def ratings(self, interaction: discord.Interaction, member: None | Member = None) -> None:
-        """Provides SRs information for a profile"""
+        """Provides SRs information for a profile."""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         message = "Select a profile to view the skill ratings for:"
@@ -289,7 +289,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         hero: str = "all-heroes",
         member: None | Member = None,
     ) -> None:
-        """Provides general stats or hero specific stats for a profile"""
+        """Provides general stats or hero specific stats for a profile."""
         await interaction.response.defer(thinking=True)
         member = member or interaction.user
         if hero == "all-heroes":
@@ -307,9 +307,9 @@ class ProfileCog(commands.GroupCog, name="profile"):
     @app_commands.describe(member="The member to show summary for")
     @has_profile()
     async def summary(self, interaction: discord.Interaction, member: None | Member = None) -> None:
-        """Provides summarized stats for a profile
+        """Provides summarized stats for a profile.
 
-        Data from both competitive and quickplay, and/or pc and console is merged
+        Data from both competitive and quickplay, and/or pc and console is merged.
         """
         await interaction.response.defer(thinking=True)
         member = member or interaction.user

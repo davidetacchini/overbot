@@ -51,7 +51,7 @@ class Fun(commands.Cog):
     async def herotoplay(
         self, interaction: discord.Interaction, category: HeroCategories = None
     ) -> None:
-        """Returns a random hero"""
+        """Returns a random hero."""
         hero = self._get_random_hero(category)
         await interaction.response.send_message(hero)
 
@@ -60,7 +60,7 @@ class Fun(commands.Cog):
     async def goldengun(
         self, interaction: discord.Interaction, category: HeroCategories = None
     ) -> None:
-        """Returns a hero to get a golden gun for"""
+        """Returns a hero to get a golden gun for."""
         hero = self._get_random_hero(category)
         await interaction.response.send_message(hero)
 
@@ -69,13 +69,13 @@ class Fun(commands.Cog):
     async def maptoplay(
         self, interaction: discord.Interaction, category: MapCategories = None
     ) -> None:
-        """Returns a random map"""
+        """Returns a random map."""
         map_ = self._get_random_map(category)
         await interaction.response.send_message(map_)
 
     @app_commands.command()
     async def roletoplay(self, interaction: discord.Interaction) -> None:
-        """Returns a random role"""
+        """Returns a random role."""
         roles = ("Tank", "Damage", "Support", "Flex")
         await interaction.response.send_message(secrets.choice(roles))
 

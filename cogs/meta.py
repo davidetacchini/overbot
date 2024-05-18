@@ -29,7 +29,7 @@ class Meta(commands.Cog):
     @app_commands.command()
     @app_commands.autocomplete(command=command_autocomplete)
     async def help(self, interaction: discord.Interaction, command: None | str = None) -> None:
-        """Shows help for a given command"""
+        """Shows help for a given command."""
         await interaction.response.defer()
 
         if not command:
@@ -76,12 +76,12 @@ class Meta(commands.Cog):
 
     @app_commands.command()
     async def support(self, interaction: discord.Interaction) -> None:
-        """Returns the official bot support server invite link"""
+        """Returns the official bot support server invite link."""
         await interaction.response.send_message(self.bot.config.support)
 
     @app_commands.command()
     async def ping(self, interaction: discord.Interaction) -> None:
-        """Shows bot current websocket latency and ACK"""
+        """Shows bot current websocket latency and ACK."""
         start = time.monotonic()
         await interaction.response.defer(thinking=True)
         ack = round((time.monotonic() - start) * 1000, 2)
@@ -109,7 +109,7 @@ class Meta(commands.Cog):
     @app_commands.guild_only()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def about(self, interaction: discord.Interaction) -> None:
-        """Shows bot related information and useful links"""
+        """Shows bot related information and useful links."""
         await interaction.response.defer(thinking=True)
         commits = self.get_latest_commits()
 
@@ -186,10 +186,7 @@ class Meta(commands.Cog):
     @app_commands.command()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def topweekly(self, interaction: discord.Interaction) -> None:
-        """Shows bot's weekly most active servers
-
-        Based on commands runned
-        """
+        """Shows bot's weekly most active servers (based on commands runned)."""
         await interaction.response.defer(thinking=True)
         guilds = await self.get_weekly_top_guilds(self.bot)
         embed = discord.Embed(color=self.bot.color(interaction.user.id))

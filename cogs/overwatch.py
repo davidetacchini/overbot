@@ -109,7 +109,7 @@ class Overwatch(commands.Cog):
 
     @app_commands.command()
     async def status(self, interaction: discord.Interaction) -> None:
-        """Returns Overwatch server status link"""
+        """Returns Overwatch server status link."""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.description = f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
         embed.set_footer(text="downdetector.com")
@@ -118,7 +118,7 @@ class Overwatch(commands.Cog):
     @app_commands.command()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def news(self, interaction: discord.Interaction) -> None:
-        """Shows the latest Overwatch news"""
+        """Shows the latest Overwatch news."""
         pages = []
 
         try:
@@ -147,7 +147,7 @@ class Overwatch(commands.Cog):
 
     @app_commands.command()
     async def patch(self, interaction: discord.Interaction) -> None:
-        """Returns Overwatch patch notes links"""
+        """Returns Overwatch patch notes links."""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Overwatch Patch Notes"
         categories = ("Live", "PTR", "Experimental", "Beta")
@@ -175,7 +175,7 @@ class Overwatch(commands.Cog):
     @app_commands.guild_only()
     @is_premium()
     async def newsboard(self, interaction: discord.Interaction) -> None:
-        """Creates an Overwatch news channel"""
+        """Creates an Overwatch news channel."""
         await interaction.response.defer(thinking=True)
 
         if not interaction.guild:
@@ -244,7 +244,7 @@ class Overwatch(commands.Cog):
     @app_commands.autocomplete(name=hero_autocomplete)
     @app_commands.describe(name="The name of the hero to see information for")
     async def hero(self, interaction: discord.Interaction, name: str) -> None:
-        """Returns information about a given hero"""
+        """Returns information about a given hero."""
         url = f"{self.bot.BASE_URL}/heroes/{name}"
         async with self.bot.session.get(url) as r:
             if r.status == 422:
@@ -271,7 +271,7 @@ class Overwatch(commands.Cog):
     @app_commands.autocomplete(name=map_autocomplete)
     @app_commands.describe(name="The name of the map to see information for")
     async def map(self, interaction: discord.Interaction, name: str) -> None:
-        """Returns information about a given map"""
+        """Returns information about a given map."""
         map_ = self.bot.maps.get(name)
         if not map_:
             await interaction.response.send_message(f"Map **{name}** not found.")
@@ -284,7 +284,7 @@ class Overwatch(commands.Cog):
     @app_commands.autocomplete(name=gamemode_autocomplete)
     @app_commands.describe(name="The name of the gamemode to see information for")
     async def gamemode(self, interaction: discord.Interaction, name: str) -> None:
-        """Returns information about a given gamemode"""
+        """Returns information about a given gamemode."""
         gamemode = self.bot.gamemodes.get(name)
         if not gamemode:
             await interaction.response.send_message(f"Gamemode **{name}** not found.")

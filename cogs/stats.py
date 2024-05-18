@@ -43,7 +43,7 @@ class Stats(commands.Cog):
     @app_commands.command()
     @app_commands.describe(battletag="The battletag of the player")
     async def ratings(self, interaction: discord.Interaction, *, battletag: str) -> None:
-        """Provides ratings for a player"""
+        """Provides ratings for a player."""
         await interaction.response.defer(thinking=True)
         profile = Profile(battletag, interaction=interaction)
         await profile.fetch_data()
@@ -68,16 +68,16 @@ class Stats(commands.Cog):
     async def stats(
         self, interaction: discord.Interaction, *, battletag: str, hero: str = "all-heroes"
     ) -> None:
-        """Provides general stats or hero specific stats for a player"""
+        """Provides general stats or hero specific stats for a player."""
         await interaction.response.defer(thinking=True)
         await self.show_stats_for(interaction, hero, battletag)
 
     @app_commands.command()
     @app_commands.describe(battletag="The battletag of the player")
     async def summary(self, interaction: discord.Interaction, *, battletag: str) -> None:
-        """Provides summarized stats for a player
+        """Provides summarized stats for a player.
 
-        Data from both competitive and quickplay, and/or pc and console is merged
+        Data from both competitive and quickplay, and/or pc and console is merged.
         """
         await interaction.response.defer(thinking=True)
         profile = Profile(battletag, interaction=interaction)

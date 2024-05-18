@@ -140,7 +140,7 @@ class Trivia(commands.Cog):
 
     @trivia.command()
     async def play(self, interaction: discord.Interaction) -> None:
-        """Play an Overwatch trivia game"""
+        """Play an Overwatch trivia game."""
         question = self.get_question()
         await self.update_member_games_started(interaction.user.id)
         if await self.get_result(interaction, question):
@@ -156,7 +156,7 @@ class Trivia(commands.Cog):
     @trivia.command()
     @app_commands.describe(member="The member to show trivia stats for")
     async def stats(self, interaction: discord.Interaction, member: None | Member = None) -> None:
-        """Shows trivia stats"""
+        """Shows trivia stats."""
         member = member or interaction.user
         stats = await self.get_member_stats(member)
         embed = self.embed_member_stats(member, stats)
@@ -165,7 +165,7 @@ class Trivia(commands.Cog):
     @trivia.command()
     @app_commands.checks.cooldown(1, 60.0, key=lambda i: i.user.id)
     async def best(self, interaction: discord.Interaction) -> None:
-        """Shows top 10 trivia players (based on games won)"""
+        """Shows top 10 trivia players (based on games won)."""
         query = """SELECT id, started, won, lost
                    FROM trivia
                    WHERE id <> $1

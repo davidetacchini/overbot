@@ -34,7 +34,7 @@ class Member(commands.Cog):
 
     @app_commands.command()
     async def premium(self, interaction: discord.Interaction) -> None:
-        """Shows your premium status"""
+        """Shows your premium status."""
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
         embed.title = "Premium Status"
 
@@ -59,7 +59,7 @@ class Member(commands.Cog):
         *,
         color: app_commands.Transform[str, ColorTransformer] = None,
     ) -> None:
-        """Set a custom color for the embeds"""
+        """Set a custom color for the embeds."""
         if color is None:
             query = "UPDATE member SET embed_color = NULL WHERE id = $1;"
             await self.bot.pool.execute(query, interaction.user.id)

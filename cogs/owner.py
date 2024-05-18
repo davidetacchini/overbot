@@ -45,7 +45,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def clear(self, interaction: discord.Interaction, amount: int = 1) -> None:
-        """Remove the given amount of messages"""
+        """Remove the given amount of messages."""
         await interaction.response.defer()
         amount += 1
         if interaction.channel and isinstance(interaction.channel, discord.TextChannel):
@@ -54,7 +54,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def load(self, interaction: discord.Interaction, *, module: str) -> None:
-        """Loads a module"""
+        """Loads a module."""
         await interaction.response.defer(thinking=True)
         try:
             await self.bot.load_extension(module)
@@ -67,7 +67,7 @@ class Owner(commands.Cog):
     @app_commands.autocomplete(module=module_autocomplete)
     @is_owner()
     async def unload(self, interaction: discord.Interaction, *, module: str) -> None:
-        """Unloads a module"""
+        """Unloads a module."""
         await interaction.response.defer(thinking=True)
         try:
             await self.bot.unload_extension(module)
@@ -80,7 +80,7 @@ class Owner(commands.Cog):
     @app_commands.autocomplete(module=module_autocomplete)
     @is_owner()
     async def module(self, interaction: discord.Interaction, *, module: str) -> None:
-        """Reloads a module"""
+        """Reloads a module."""
         await interaction.response.defer(thinking=True)
         try:
             await self.bot.reload_extension(module)
@@ -92,7 +92,7 @@ class Owner(commands.Cog):
     @reload.command()
     @is_owner()
     async def config(self, interaction: discord.Interaction) -> None:
-        """Reloads the configuration file"""
+        """Reloads the configuration file."""
         await interaction.response.defer(thinking=True)
         try:
             importlib.reload(self.bot.config)
@@ -105,7 +105,7 @@ class Owner(commands.Cog):
     @reload.command()
     @is_owner()
     async def modules(self, interaction: discord.Interaction) -> None:
-        """Reloads all modules, while pulling from git"""
+        """Reloads all modules, while pulling from git."""
         await interaction.response.defer(thinking=True)
         stdout, _ = await self.run_process("git pull")
 
@@ -197,14 +197,14 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def shutdown(self, interaction: discord.Interaction) -> None:
-        """Kills the bot session"""
+        """Kills the bot session."""
         await interaction.response.send_message("Going offline.")
         await self.bot.close()
 
     @app_commands.command()
     @is_owner()
     async def exec(self, interaction: discord.Interaction, code: str) -> None:
-        """Evaluates a piece of code"""
+        """Evaluates a piece of code."""
         env = {
             "bot": self.bot,
             "interaction": interaction,
@@ -245,7 +245,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def speedtest(self, interaction: discord.Interaction) -> None:
-        """Run a speedtest directly from Discord"""
+        """Run a speedtest directly from Discord."""
         await interaction.response.send_message("Running the speedtest...")
         process = await asyncio.create_subprocess_shell(
             "speedtest-cli --simple",
@@ -260,7 +260,7 @@ class Owner(commands.Cog):
     @sql.command()
     @is_owner()
     async def execute(self, interaction: discord.Interaction, query: str) -> None:
-        """INSERT, UPDATE or DELETE from database"""
+        """INSERT, UPDATE or DELETE from database."""
         async with self.bot.pool.acquire() as conn:
             try:
                 await conn.execute(query)
@@ -272,7 +272,7 @@ class Owner(commands.Cog):
     @sql.command()
     @is_owner()
     async def fetch(self, interaction: discord.Interaction, query: str) -> None:
-        """Fetch data from database"""
+        """Fetch data from database."""
         async with self.bot.pool.acquire() as conn:
             try:
                 res = await conn.fetch(query)
@@ -289,7 +289,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def admin(self, interaction: discord.Interaction) -> None:
-        """Display an admin panel"""
+        """Display general bot statistics."""
         async with self.bot.pool.acquire() as conn:
             profiles = await conn.fetchval("SELECT COUNT(*) FROM profile;")
             guilds = await conn.fetchval("SELECT COUNT(*) FROM server;")
@@ -332,7 +332,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def backup(self, interaction: discord.Interaction) -> None:
-        """Backup database"""
+        """Backup database."""
         await interaction.response.send_message("Generating backup file...", ephemeral=True)
 
         try:
