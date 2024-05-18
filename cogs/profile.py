@@ -23,6 +23,10 @@ Member = discord.User | discord.Member
 log = logging.getLogger(__name__)
 
 
+DEFAULT_PROFILES_LIMIT = 5
+PREMIUM_PROFILES_LIMIT = 25
+
+
 class ProfileSelect(discord.ui.Select):
     def __init__(self, profiles: list[Profile], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -115,8 +119,14 @@ class ProfileCog(commands.GroupCog, name="profile"):
         self.bot = bot
         super().__init__()
 
+    def get_profiles_limit(self, interaction: discord.Interaction, user_id: int) -> int:
+        guild_id = interaction.guild_id or 0
+        if not self.bot.is_it_premium(user_id, guild_id):
+            return DEFAULT_PROFILES_LIMIT
+        return PREMIUM_PROFILES_LIMIT
+
     async def get_profiles(self, interaction: discord.Interaction, member_id: int) -> list[Profile]:
-        limit = self.bot.get_profiles_limit(interaction, member_id)
+        limit = self.get_profiles_limit(interaction, member_id)
         query = """SELECT profile.id, battletag
                    FROM profile
                    INNER JOIN member
@@ -166,7 +176,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
 
         # using iter(profiles) because as_chunks accepts an iterator as its first parameter
         chunks = [c for c in discord.utils.as_chunks(iter(profiles), 10)]
-        limit = self.bot.get_profiles_limit(interaction, member.id)
+        limit = self.get_profiles_limit(interaction, member.id)
 
         pages = []
         for chunk in chunks:
