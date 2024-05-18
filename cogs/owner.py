@@ -332,7 +332,7 @@ class Owner(commands.Cog):
     @app_commands.command()
     @is_owner()
     async def backup(self, interaction: discord.Interaction) -> None:
-        """Make database backup"""
+        """Backup database"""
         await interaction.response.send_message("Generating backup file...", ephemeral=True)
 
         try:
