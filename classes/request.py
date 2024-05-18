@@ -37,7 +37,7 @@ class Request:
             return self.battletag
 
     async def _normalize_battletag(self) -> str:
-        url = config.overwatch["account"] + "/" + self.battletag.replace("#", "%23") + "/"
+        url = f"{config.overwatch["account"]}/{self.battletag.replace("#", "%23")}/"
         async with self.session.get(url) as r:
             try:
                 data = await r.json()
