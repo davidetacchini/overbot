@@ -228,7 +228,7 @@ class MemberCog(commands.Cog, name="member"):
 
     @app_commands.command(extras=dict(premium=True))
     @app_commands.checks.cooldown(1, 5.0, key=lambda i: i.user.id)
-    @app_commands.describe(member="The member to show trivia stats for")
+    @app_commands.describe(member="The member to show usage stats for")
     @is_premium()
     async def usage(self, interaction: discord.Interaction, member: None | Member = None) -> None:
         """Shows your and the current server's OverBot usage."""
