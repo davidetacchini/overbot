@@ -190,8 +190,8 @@ class Meta(commands.Cog):
         await interaction.response.defer(thinking=True)
         guilds = await self.get_weekly_top_guilds(self.bot)
         embed = discord.Embed(color=self.bot.color(interaction.user.id))
-        embed.title = "Most Active Servers"
         embed.url = self.bot.config.website + "/#servers"
+        embed.title = "Weekly Most Active Servers"
         embed.set_footer(text="Tracking command usage since - 03/31/2021")
 
         board = []
