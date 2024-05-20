@@ -13,6 +13,8 @@ from utils.checks import is_premium
 if TYPE_CHECKING:
     from bot import OverBot
 
+Member = discord.User | discord.Member
+
 
 class ColorTransformer(app_commands.Transformer):
     @classmethod
@@ -28,7 +30,7 @@ class ColorTransformer(app_commands.Transformer):
             return color
 
 
-class Member(commands.Cog):
+class MemberCog(commands.Cog, name="member"):
     def __init__(self, bot: OverBot) -> None:
         self.bot = bot
 
@@ -108,6 +110,142 @@ class Member(commands.Cog):
             else:
                 await interaction.followup.send(f"<@&{premium_role_id}> role successfully set.")
 
+    async def get_member_usage(self, member: Member) -> discord.Embed:
+        embed = discord.Embed(color=self.bot.color(member_id=member.id))
+        embed.title = "Command Usage"
+        embed.set_author(name=str(member), icon_url=member.display_avatar)
+
+        query = "SELECT COUNT(*), MIN(created_at) FROM command WHERE author_id = $1;"
+        count, timestap = await self.bot.pool.fetchrow(query, member.id)
+
+        embed.description = f"{count} commands used"
+        embed.set_footer(text="First command used").timestamp = timestap
+
+        query = """SELECT name, count(*) as total from command
+                   WHERE author_id = $1
+                   GROUP BY name
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+
+        commands = await self.bot.pool.fetch(query, member.id)
+
+        value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
+        embed.add_field(name="Top Commands", value=value)
+
+        query = """SELECT name, count(*) as total from command
+                   WHERE author_id = $1
+                   AND created_at > (CURRENT_TIMESTAMP - '1 week'::interval)
+                   GROUP BY name
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+
+        commands = await self.bot.pool.fetch(query, member.id)
+
+        value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
+        embed.add_field(name="Top Commands This Week", value=value)
+
+        query = """SELECT name, count(*) as total from command
+                   WHERE author_id = $1
+                   AND created_at > (CURRENT_TIMESTAMP - '1 day'::interval)
+                   GROUP BY name
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+
+        commands = await self.bot.pool.fetch(query, member.id)
+
+        value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
+        embed.add_field(name="Top Commands Today", value=value)
+
+        return embed
+
+    async def get_guild_usage(self, guild: discord.Guild, *, member_id: int) -> discord.Embed:
+        embed = discord.Embed(color=self.bot.color(member_id))
+        embed.title = "Command Usage"
+        embed.set_author(name=str(guild), icon_url=guild.icon)
+
+        query = "SELECT COUNT(*), MIN(created_at) FROM command WHERE guild_id = $1;"
+        count, timestap = await self.bot.pool.fetchrow(query, guild.id)
+
+        embed.description = f"{count} commands used"
+        embed.set_footer(text="First command used").timestamp = timestap
+
+        query = """SELECT name, count(*) as total from command
+                   WHERE guild_id = $1
+                   GROUP BY name
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+        commands = await self.bot.pool.fetch(query, guild.id)
+
+        value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
+        embed.add_field(name="Top Commands", value=value)
+
+        query = """SELECT name, count(*) as total from command
+                   WHERE guild_id = $1
+                   AND created_at > (CURRENT_TIMESTAMP - '1 week'::interval)
+                   GROUP BY name
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+
+        commands = await self.bot.pool.fetch(query, guild.id)
+
+        value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
+        embed.add_field(name="Top Commands This week", value=value)
+
+        query = """SELECT name, count(*) as total from command
+                   WHERE guild_id = $1
+                   AND created_at > (CURRENT_TIMESTAMP - '1 day'::interval)
+                   GROUP BY name
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+
+        commands = await self.bot.pool.fetch(query, guild.id)
+
+        value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
+        embed.add_field(name="Top Commands Today", value=value)
+
+        query = """SELECT author_id, count(*) as total from command
+                   WHERE guild_id = $1
+                   AND created_at > (CURRENT_TIMESTAMP - '1 day'::interval)
+                   GROUP BY author_id
+                   ORDER BY total DESC
+                   LIMIT 5;
+                """
+
+        commands = await self.bot.pool.fetch(query, guild.id)
+
+        value = "\n".join(
+            f"{i}. <@!{c['author_id']}> ({c['total']} uses)" for i, c in enumerate(commands)
+        )
+        embed.add_field(name="Top Members", value=value)
+
+        return embed
+
+    @app_commands.command(extras=dict(premium=True))
+    @app_commands.checks.cooldown(1, 5.0, key=lambda i: i.user.id)
+    @app_commands.describe(member="The member to show trivia stats for")
+    @is_premium()
+    async def usage(self, interaction: discord.Interaction, member: None | Member = None) -> None:
+        """Shows your and the current server's OverBot usage."""
+        await interaction.response.defer(thinking=True)
+
+        pages = []
+        member = member or interaction.user
+
+        embed = await self.get_member_usage(member)
+        pages.append(embed)
+
+        if interaction.guild:
+            embed = await self.get_guild_usage(interaction.guild, member_id=member.id)
+            pages.append(embed)
+
+        await self.bot.paginate(pages, interaction=interaction)
+
 
 async def setup(bot: OverBot) -> None:
-    await bot.add_cog(Member(bot))
+    await bot.add_cog(MemberCog(bot))
