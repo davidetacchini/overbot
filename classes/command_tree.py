@@ -14,7 +14,6 @@ from classes.exceptions import (
     OverBotException,
     ProfileLimitReached,
     ProfileNotLinked,
-    ProfilePrivate,
 )
 
 if TYPE_CHECKING:
@@ -69,18 +68,6 @@ class OverBotCommandTree(app_commands.CommandTree):
                     await self._send(interaction, message)
                 else:
                     await self._send(interaction, "Maximum limit of profiles reached.")
-
-            elif isinstance(error, ProfilePrivate):
-                embed = discord.Embed(color=discord.Color.red())
-                embed.set_author(name=error.profile.username, icon_url=error.profile.avatar)
-                embed.title = "This profile is currently private"
-                embed.description = (
-                    "Profiles are set to private by default."
-                    " You can update the profile visibility in Overwatch 2 settings."
-                    " Depending on Blizzard servers this change could take effect"
-                    " in minutes or it could take days."
-                )
-                await self._send(interaction, embed=embed)
 
             elif isinstance(error, NotPremium):
                 if not config.debug:
