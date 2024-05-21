@@ -131,7 +131,7 @@ class MemberCog(commands.Cog, name="member"):
         commands = await self.bot.pool.fetch(query, member.id)
 
         value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
-        embed.add_field(name="Top Commands", value=value)
+        embed.add_field(name="Top Commands", value=value or "No commands.")
 
         query = """SELECT name, count(*) as total from command
                    WHERE author_id = $1
@@ -144,7 +144,7 @@ class MemberCog(commands.Cog, name="member"):
         commands = await self.bot.pool.fetch(query, member.id)
 
         value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
-        embed.add_field(name="Top Commands This Week", value=value)
+        embed.add_field(name="Top Commands This Week", value=value or "No commands.")
 
         query = """SELECT name, count(*) as total from command
                    WHERE author_id = $1
@@ -157,7 +157,7 @@ class MemberCog(commands.Cog, name="member"):
         commands = await self.bot.pool.fetch(query, member.id)
 
         value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
-        embed.add_field(name="Top Commands Today", value=value)
+        embed.add_field(name="Top Commands Today", value=value or "No commands.")
 
         return embed
 
@@ -181,7 +181,7 @@ class MemberCog(commands.Cog, name="member"):
         commands = await self.bot.pool.fetch(query, guild.id)
 
         value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
-        embed.add_field(name="Top Commands", value=value)
+        embed.add_field(name="Top Commands", value=value or "No commands.")
 
         query = """SELECT name, count(*) as total from command
                    WHERE guild_id = $1
@@ -194,7 +194,7 @@ class MemberCog(commands.Cog, name="member"):
         commands = await self.bot.pool.fetch(query, guild.id)
 
         value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
-        embed.add_field(name="Top Commands This week", value=value)
+        embed.add_field(name="Top Commands This week", value=value or "No commands.")
 
         query = """SELECT name, count(*) as total from command
                    WHERE guild_id = $1
@@ -207,7 +207,7 @@ class MemberCog(commands.Cog, name="member"):
         commands = await self.bot.pool.fetch(query, guild.id)
 
         value = "\n".join(f"{i}. {c['name']} ({c['total']} uses)" for i, c in enumerate(commands))
-        embed.add_field(name="Top Commands Today", value=value)
+        embed.add_field(name="Top Commands Today", value=value or "No commands.")
 
         query = """SELECT author_id, count(*) as total from command
                    WHERE guild_id = $1
@@ -222,7 +222,7 @@ class MemberCog(commands.Cog, name="member"):
         value = "\n".join(
             f"{i}. <@!{c['author_id']}> ({c['total']} uses)" for i, c in enumerate(commands)
         )
-        embed.add_field(name="Top Members", value=value)
+        embed.add_field(name="Top Members", value=value or "No commands.")
 
         return embed
 
