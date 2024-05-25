@@ -97,7 +97,7 @@ class Meta(commands.Cog):
         commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(commit_tz)
 
         offset = discord.utils.format_dt(commit_time.astimezone(datetime.timezone.utc), "R")
-        return f"[`{commit.hex[:6]}`](https://github.com/davidetacchini/overbot/commit/{commit.hex}) {message} ({offset})"
+        return f"[`{str(commit.id)[:6]}`](https://github.com/davidetacchini/overbot/commit/{str(commit.id)}) {message} ({offset})"
 
     def get_latest_commits(self, count: int = 3) -> str:
         repo = pygit2.Repository(".git")
