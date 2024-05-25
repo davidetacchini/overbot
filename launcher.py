@@ -190,7 +190,7 @@ async def run_bot() -> None:
         chunk_guilds_at_startup=False,
     ) as bot:
         bot.pool = await asyncpg.create_pool(
-            config.database, min_size=20, max_size=20, command_timeout=120.0
+            config.database, min_size=20, max_size=20, command_timeout=120
         )  # type: ignore
         await bot.start()
 
