@@ -37,7 +37,7 @@ class MemberCog(commands.Cog, name="member"):
     @app_commands.command()
     async def premium(self, interaction: discord.Interaction) -> None:
         """Shows your premium status."""
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.title = "Premium Status"
 
         member = "Premium" if interaction.user.id in self.bot.premiums else "N/A"
@@ -111,7 +111,7 @@ class MemberCog(commands.Cog, name="member"):
                 await interaction.followup.send(f"<@&{premium_role_id}> role successfully set.")
 
     async def get_member_usage(self, member: Member) -> discord.Embed:
-        embed = discord.Embed(color=self.bot.color(member_id=member.id))
+        embed = discord.Embed(color=self.bot.get_user_color(member_id=member.id))
         embed.title = "Command Usage"
         embed.set_author(name=str(member), icon_url=member.display_avatar)
 
@@ -162,7 +162,7 @@ class MemberCog(commands.Cog, name="member"):
         return embed
 
     async def get_guild_usage(self, guild: discord.Guild, *, member_id: int) -> discord.Embed:
-        embed = discord.Embed(color=self.bot.color(member_id))
+        embed = discord.Embed(color=self.bot.get_user_color(member_id))
         embed.title = "Command Usage"
         embed.set_author(name=str(guild), icon_url=guild.icon)
 

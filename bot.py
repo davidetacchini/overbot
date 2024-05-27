@@ -60,10 +60,10 @@ class OverBot(commands.AutoShardedBot):
         wh_id, wh_token = config.webhook.values()
         return discord.Webhook.partial(id=wh_id, token=wh_token, session=self.session)
 
-    def color(self, member_id: None | int = None) -> int:
-        if member_id is None:
+    def get_user_color(self, user_id: None | int = None) -> int:
+        if user_id is None:
             return config.main_color
-        return self.embed_colors.get(member_id, config.main_color)
+        return self.embed_colors.get(user_id, config.main_color)
 
     def get_uptime(self, *, brief: bool = False) -> str:
         return human_timedelta(getattr(self, "uptime"), accuracy=None, brief=brief, suffix=False)
@@ -202,9 +202,7 @@ class OverBot(commands.AutoShardedBot):
 
     async def setup_hook(self) -> None:
         self.session = ClientSession()
-
         self.app_info = await self.application_info()
-
         self.compute_sloc()
 
         # caching

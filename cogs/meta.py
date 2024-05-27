@@ -34,7 +34,7 @@ class Meta(commands.Cog):
 
         if not command:
             help_id = 1094929544055640084 if self.bot.debug else 1011734903471214622
-            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
             embed.title = "OverBot Help"
             description = (
                 f"Click the button below to look at all the available commands or use </help:{help_id}> "
@@ -54,7 +54,7 @@ class Meta(commands.Cog):
             assert isinstance(actual, app_commands.Command)
             signature = " ".join(map(lambda p: f"`{p.name}`", actual.parameters))
 
-            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
             embed.title = f"/{actual.qualified_name} {signature}"
             embed.description = actual.description
 
@@ -118,7 +118,7 @@ class Meta(commands.Cog):
         view.add_item(ui.Button(label="GitHub", url=self.bot.config.github["repo"]))
         view.add_item(ui.Button(label="Invite", url=self.bot.config.invite))
 
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.description = f"Latest Changes:\n{commits}"
 
         embed.set_author(
@@ -189,7 +189,7 @@ class Meta(commands.Cog):
         """Shows bot's weekly most active servers (based on commands runned)."""
         await interaction.response.defer(thinking=True)
         guilds = await self.get_weekly_top_guilds(self.bot)
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.title = "Weekly Most Active Servers"
         embed.url = f"{self.bot.config.website}/#servers"
         embed.set_footer(text="Tracking command usage since - 03/31/2021")

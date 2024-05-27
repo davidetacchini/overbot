@@ -110,7 +110,7 @@ class Overwatch(commands.Cog):
     @app_commands.command()
     async def status(self, interaction: discord.Interaction) -> None:
         """Returns Overwatch server status link."""
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.description = f"[Overwatch Servers Status]({self.bot.config.overwatch['status']})"
         embed.set_footer(text="downdetector.com")
         await interaction.response.send_message(embed=embed)
@@ -124,14 +124,14 @@ class Overwatch(commands.Cog):
         try:
             news = await get_overwatch_news(session=self.bot.session)
         except Exception:
-            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
             url = self.bot.config.overwatch["news"]
             embed.description = f"[Latest Overwatch News]({url})"
             await interaction.response.send_message(embed=embed)
             return
 
         for i, n in enumerate(news, start=1):
-            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
             embed.title = n["title"]
             embed.url = n["link"]
             embed.set_author(name="Blizzard Entertainment")
@@ -148,7 +148,7 @@ class Overwatch(commands.Cog):
     @app_commands.command()
     async def patch(self, interaction: discord.Interaction) -> None:
         """Returns Overwatch patch notes links."""
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.title = "Overwatch Patch Notes"
         categories = ("Live", "PTR", "Experimental", "Beta")
         description = []
@@ -254,7 +254,7 @@ class Overwatch(commands.Cog):
                 raise UnknownError()
             data = await r.json()
 
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.set_author(name=data.get("name"), icon_url=data.get("portrait"))
         embed.description = data.get("description")
         hitpoints = "\n".join(

@@ -72,7 +72,7 @@ class Trivia(commands.Cog):
         entries = [question["correct_answer"]] + question["wrong_answers"]
         shuffled = random.sample(entries, len(entries))
         timeout = 45.0
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.description = f'**{question["question"]}**' + "\n\n"  # separate from choices
         if question["image_url"]:
             embed.set_image(url=question["image_url"])
@@ -127,7 +127,7 @@ class Trivia(commands.Cog):
             return 0
 
     def embed_member_stats(self, member: Member, stats: Record) -> discord.Embed:
-        embed = discord.Embed(color=self.bot.color(member.id))
+        embed = discord.Embed(color=self.bot.get_user_color(member.id))
         embed.set_author(name=str(member), icon_url=member.display_avatar)
         unanswered = stats["started"] - (stats["won"] + stats["lost"])
         ratio = self.get_player_ratio(stats["won"], stats["lost"])
@@ -173,7 +173,7 @@ class Trivia(commands.Cog):
                    LIMIT 10;
                 """
         players = await self.bot.pool.fetch(query, self.bot.config.owner_id)
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.title = "Best Trivia Players"
 
         board = []
