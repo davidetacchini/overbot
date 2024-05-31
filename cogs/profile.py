@@ -136,7 +136,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
                    LIMIT $2;
                 """
         records = await self.bot.pool.fetch(query, member_id, limit)
-        return [Profile(interaction=interaction, record=r) for r in records]
+        return [Profile(session=self.bot.session, record=r) for r in records]
 
     async def select_profile(
         self, interaction: discord.Interaction, message: str, member: None | Member = None
@@ -166,7 +166,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
     async def list_profiles(
         self, interaction: discord.Interaction, member: Member, profiles: list[Profile]
     ) -> discord.Embed | list[discord.Embed]:
-        embed = discord.Embed(color=self.bot.color(interaction.user.id))
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.set_author(name=member.display_name, icon_url=member.display_avatar)
 
         if not profiles:
@@ -242,7 +242,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         profiles = await self.get_profiles(interaction, interaction.user.id)
         if len(profiles) == 1:
             profile = profiles[0]
-            embed = discord.Embed(color=self.bot.color(interaction.user.id))
+            embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
             embed.title = "Are you sure you want to unlink the following profile?"
             embed.add_field(name="BattleTag", value=profile.battletag)
 
@@ -265,12 +265,12 @@ class ProfileCog(commands.GroupCog, name="profile"):
         profile = await self.select_profile(interaction, message, member)
         await profile.fetch_data()
 
-        if profile.is_private():
-            embed = profile.embed_private()
-            await interaction.followup.send(embed=embed)
-            return
+        stats_cog: Stats = self.bot.get_cog("Stats")  # type: ignore
+        await stats_cog.save_stats(
+            interaction.user.id, interaction.guild_id, profile.battletag, profile._data  # type: ignore
+        )
+        data = await stats_cog.embed_ratings(profile, interaction=interaction)
 
-        data = profile.embed_ratings()
         value = "console" if not data["pc"] else "pc"
         view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
@@ -317,10 +317,11 @@ class ProfileCog(commands.GroupCog, name="profile"):
         profile = await self.select_profile(interaction, message, member)
         await profile.fetch_data()
 
-        if profile.is_private():
-            embed = profile.embed_private()
-        else:
-            embed = await profile.embed_summary()
+        stats_cog: Stats = self.bot.get_cog("Stats")  # type: ignore
+        await stats_cog.save_stats(
+            interaction.user.id, interaction.guild_id, profile.battletag, profile._data  # type: ignore
+        )
+        embed = await stats_cog.embed_summary(profile, interaction=interaction)
 
         await interaction.followup.send(embed=embed)
 
