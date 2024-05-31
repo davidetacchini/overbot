@@ -16,7 +16,7 @@ from utils.time import human_timedelta
 
 log = logging.getLogger(__name__)
 
-__version__ = "6.2.2"
+__version__ = "6.3.0"
 
 
 class OverBot(commands.AutoShardedBot):
