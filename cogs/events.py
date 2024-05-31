@@ -108,26 +108,21 @@ class Events(commands.Cog):
             return
 
         query, target_id = None, None
-
-        if (
-            entitlement.type is discord.SKUType.durable
-            and entitlement.guild_id is not None
-            or entitlement.type is discord.SKUType.subscription
-        ):
-
-            query = """INSERT INTO server (id, premium)
-                       VALUES ($1, true)
-                       ON CONFLICT (id) DO
-                       UPDATE SET premium = true;
-                    """
-            target_id = entitlement.guild_id
-        elif entitlement.type is discord.SKUType.durable and entitlement.user_id is not None:
-            query = """INSERT INTO member (id, premium)
-                       VALUES ($1, true)
-                       ON CONFLICT (id) DO
-                       UPDATE SET premium = true;
-                    """
-            target_id = entitlement.user_id
+        if entitlement.type is discord.EntitlementType.purchase:
+            if entitlement.guild_id:
+                query = """INSERT INTO server (id, premium)
+                           VALUES ($1, true)
+                           ON CONFLICT (id) DO
+                           UPDATE SET premium = true;
+                        """
+                target_id = entitlement.guild_id
+            elif entitlement.user_id:
+                query = """INSERT INTO member (id, premium)
+                           VALUES ($1, true)
+                           ON CONFLICT (id) DO
+                           UPDATE SET premium = true;
+                        """
+                target_id = entitlement.user_id
 
         if not query or not target_id:  # Redundant but I don't care
             return
