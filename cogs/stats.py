@@ -65,7 +65,9 @@ class Stats(commands.Cog):
                    WHERE NOT EXISTS (SELECT 1 FROM today_stats);
                 """
         try:
-            await self.bot.pool.execute(query, author_id, guild_id, battletag, json.dumps(data))
+            await self.bot.pool.execute(
+                query, author_id, guild_id, battletag.lower(), json.dumps(data)
+            )
         except Exception as e:
             log.exception(f"Something bad happened while saving stats for {battletag}.\n{e}")
         else:
