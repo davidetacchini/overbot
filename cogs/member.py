@@ -112,7 +112,7 @@ class MemberCog(commands.Cog, name="member"):
         await interaction.response.send_message(embed=embed)
 
     async def get_member_usage(self, member: Member) -> discord.Embed:
-        embed = discord.Embed(color=self.bot.get_user_color(member_id=member.id))
+        embed = discord.Embed(color=self.bot.get_user_color(member.id))
         embed.title = "Command Usage"
         embed.set_author(name=str(member), icon_url=member.display_avatar)
 
