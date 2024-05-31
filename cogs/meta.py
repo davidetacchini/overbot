@@ -32,8 +32,13 @@ class Meta(commands.Cog):
         """Shows help for a given command."""
         await interaction.response.defer()
 
+        view = ui.View()
+        view.add_item(
+            ui.Button(label="See all commands", url=self.bot.config.website + "/commands")
+        )
+
         if not command:
-            help_id = 1094929544055640084 if self.bot.debug else 1011734903471214622
+            help_id = 1246196392192512071 if self.bot.debug else 1011734903471214622
             embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
             embed.title = "OverBot Help"
             description = (
@@ -41,36 +46,39 @@ class Meta(commands.Cog):
                 "followed by a command name (e.g. **/help stats**) to get information about a command."
             )
             embed.description = description
-        else:
-            actual = self.bot.tree.get_command(command.split(" ")[0])
+            await interaction.followup.send(embed=embed, view=view)
+            return
 
-            if isinstance(actual, app_commands.Group):
-                actual = actual.get_command(command.split(" ")[1])
+        actual = self.bot.tree.get_command(command.split(" ")[0])
 
-            if not actual:
-                await interaction.followup.send(f"Command **{command}** not found.")
-                return
+        if isinstance(actual, app_commands.Group):
+            split = command.split(" ")
+            try:
+                split[1]
+            except IndexError:
+                actual = actual.get_command(split[0])
+            else:
+                actual = actual.get_command(split[1])
 
-            assert isinstance(actual, app_commands.Command)
-            signature = " ".join(map(lambda p: f"`{p.name}`", actual.parameters))
+        if not actual:
+            await interaction.followup.send(f"command **{command}** not found.")
+            return
 
-            embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
-            embed.title = f"/{actual.qualified_name} {signature}"
-            embed.description = actual.description
+        assert isinstance(actual, app_commands.Command)
+        signature = " ".join(map(lambda p: f"`{p.name}`", actual.parameters))
 
-            parameters = []
-            for p in actual.parameters:
-                tmp = f"`{p.name}`: {p.description}{' [**R**]' if p.required else ' [**O**]'}"
-                parameters.append(tmp)
+        embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
+        embed.title = f"/{actual.qualified_name} {signature}"
+        embed.description = actual.description
 
-            if parameters:
-                embed.set_footer(text="[R] = Required / [O] = Optional")
-                embed.add_field(name="Parameters", value="\n".join(parameters))
+        parameters = []
+        for p in actual.parameters:
+            tmp = f"`{p.name}`: {p.description}{' [**R**]' if p.required else ' [**O**]'}"
+            parameters.append(tmp)
 
-        view = ui.View()
-        view.add_item(
-            ui.Button(label="See all commands", url=self.bot.config.website + "/commands")
-        )
+        if parameters:
+            embed.set_footer(text="[R] = Required / [O] = Optional")
+            embed.add_field(name="Parameters", value="\n".join(parameters))
 
         await interaction.followup.send(embed=embed, view=view)
 
