@@ -5,10 +5,18 @@ from typing import TYPE_CHECKING
 import discord
 from discord import app_commands
 
+import config
+
 if TYPE_CHECKING:
     from asyncpg import Record
 
-from classes.exceptions import NotOwner, NotPremium, ProfileLimitReached, ProfileNotLinked
+from classes.exceptions import (
+    NotOwner,
+    NotPremium,
+    NotSupportServer,
+    ProfileLimitReached,
+    ProfileNotLinked,
+)
 
 
 async def get_profiles(interaction: discord.Interaction, member_id: int) -> list[Record]:
@@ -72,5 +80,14 @@ def is_owner():
         if interaction.user.id == interaction.client.owner.id:  # type: ignore
             return True
         raise NotOwner()
+
+    return app_commands.check(predicate)
+
+
+def is_support_server():
+    def predicate(interaction: discord.Interaction) -> bool:
+        if interaction.guild_id == config.support_server_id:
+            return True
+        raise NotSupportServer()
 
     return app_commands.check(predicate)

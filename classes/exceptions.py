@@ -98,3 +98,7 @@ class NotPremium(app_commands.CheckFailure):
 
 class NotOwner(app_commands.CheckFailure):
     pass
+
+
+class NotSupportServer(app_commands.CheckFailure):
+    pass

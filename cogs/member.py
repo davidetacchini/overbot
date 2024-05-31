@@ -7,7 +7,7 @@ from discord import Color, app_commands
 from discord.ext import commands
 
 from classes.exceptions import InvalidColor
-from utils.checks import is_premium
+from utils.checks import is_premium, is_support_server
 
 if TYPE_CHECKING:
     from bot import OverBot
@@ -54,6 +54,7 @@ class MemberCog(commands.Cog, name="member"):
     @premium.command(extras=dict(premium=True))
     @app_commands.checks.cooldown(1, 5.0, key=lambda i: i.user.id)
     @is_premium()
+    @is_support_server()
     async def role(self, interaction: discord.Interaction) -> None:
         """Unlock the premium role."""
         await interaction.response.defer(thinking=True)

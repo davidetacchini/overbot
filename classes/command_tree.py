@@ -11,6 +11,7 @@ from classes.exceptions import (
     NoChoice,
     NotOwner,
     NotPremium,
+    NotSupportServer,
     OverBotException,
     ProfileLimitReached,
     ProfileNotLinked,
@@ -78,6 +79,13 @@ class OverBotCommandTree(app_commands.CommandTree):
 
             elif isinstance(error, NotOwner):
                 await self._send(interaction, "You are not allowed to run this command.")
+
+            elif isinstance(error, NotSupportServer):
+                view = discord.ui.View()
+                view.add_item(discord.ui.Button(label="Support Server", url=config.support))
+                await self._send(
+                    interaction, "This command can only be used in the support server.", view=view
+                )
 
             elif isinstance(error, app_commands.NoPrivateMessage):
                 await self._send(interaction, "This command cannot be used in direct messages.")
