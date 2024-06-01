@@ -52,7 +52,8 @@ def can_add_profile():
 
     async def predicate(interaction: discord.Interaction) -> bool:
         profiles = await get_profiles(interaction, interaction.user.id)
-        limit = interaction.client.get_profiles_limit(interaction, interaction.user.id)  # type: ignore
+        profile_cog = interaction.client.get_cog("profile")  # type: ignore
+        limit = profile_cog.get_profiles_limit(interaction, interaction.user.id)
 
         if len(profiles) <= limit:
             return True
