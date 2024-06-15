@@ -181,9 +181,7 @@ class Overwatch(commands.Cog):
         """
         await interaction.response.defer(thinking=True)
 
-        if not interaction.guild:
-            await interaction.followup.send("Something bad happened. Please try again.")
-            return
+        assert interaction.guild is not None
 
         newsboard = await self.get_newsboard(interaction.guild_id)
         if newsboard.channel is not None:
