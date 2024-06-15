@@ -71,11 +71,17 @@ class OverBotCommandTree(app_commands.CommandTree):
                     await self._send(interaction, "Maximum limit of profiles reached.")
 
             elif isinstance(error, NotPremium):
+                embed = discord.Embed(color=discord.Color.dark_theme())
+                embed.description = "This command requires a premium subscription."
+
+                view = discord.ui.View()
+                view.add_item(discord.ui.Button(sku_id=1203400865625407588))
+
                 if not config.debug:
-                    await interaction.response.require_premium()
-                    return
-                message = "This command requires Premium. Check out the Store to have a look at the Premium plans."
-                await self._send(interaction, message)
+                    await self._send(interaction, embed=embed, view=view)
+                else:
+                    message = "This command requires Premium. Check out the Store to have a look at the Premium plans."
+                    await self._send(interaction, message)
 
             elif isinstance(error, NotOwner):
                 await self._send(interaction, "You are not allowed to run this command.")
