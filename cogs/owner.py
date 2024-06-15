@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import datetime
 import importlib
 import io
 import logging
@@ -30,8 +31,8 @@ log = logging.getLogger(__name__)
 
 
 class Target(Enum):
-    USER = 1
-    SERVER = 2
+    SERVER = 1
+    USER = 2
 
 
 class Owner(commands.Cog):
@@ -41,6 +42,7 @@ class Owner(commands.Cog):
     reload = app_commands.Group(name="reload", description="Reloads modules or the config file.")
     sql = app_commands.Group(name="sql", description="Executes SQL queries.")
     sync = app_commands.Group(name="sync", description="Sync stuff.")
+    entitlement = app_commands.Group(name="entitlement", description="Manage entitlements.")
 
     @app_commands.command()
     @is_owner()
@@ -470,6 +472,34 @@ class Owner(commands.Cog):
             message = f"Premium removed for **{target_id}**."
             log.info(message)
         await interaction.followup.send(message)
+
+    @entitlement.command(name="list")
+    @is_owner()
+    async def entitlement_list(self, interaction: discord.Interaction) -> None:
+        """List all entitlements."""
+        await interaction.response.defer(thinking=True)
+
+        pages = []
+        entitlement_chunks = discord.utils.as_chunks(
+            self.bot.entitlements(limit=None, exclude_ended=True), max_size=10
+        )
+        async for entitlement_chunk in entitlement_chunks:
+            embed = discord.Embed(color=discord.Color.dark_theme())
+            embed.title = "Entitlements"
+            for entitlement in entitlement_chunk:
+                created_at = discord.utils.format_dt(
+                    entitlement.created_at.astimezone(datetime.timezone.utc)
+                )
+                if entitlement.ends_at:
+                    ends_at = discord.utils.format_dt(
+                        entitlement.ends_at.astimezone(datetime.timezone.utc)
+                    )
+                value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreate at: {created_at}\nEnds at: {ends_at}"
+                embed.add_field(name=entitlement.id, value=value)
+
+            pages.append(embed)
+
+        await self.bot.paginate(pages, interaction=interaction)
 
 
 async def setup(bot: OverBot) -> None:
