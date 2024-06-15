@@ -175,7 +175,10 @@ class Overwatch(commands.Cog):
     @app_commands.guild_only()
     @is_premium()
     async def newsboard(self, interaction: discord.Interaction) -> None:
-        """Creates an Overwatch news channel."""
+        """Automatically set up an Overwatch news channel.
+
+        After created the channel will be empty.
+        """
         await interaction.response.defer(thinking=True)
 
         if not interaction.guild:
