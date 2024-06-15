@@ -311,7 +311,7 @@ class Owner(commands.Cog):
             ("Games lost", lost),
         )
 
-        embed = discord.Embed(color=self.bot.get_user_color())
+        embed = discord.Embed(color=discord.Color.dark_theme())
         embed.title = "Admin Panel"
         bot = []
         trivia = []
