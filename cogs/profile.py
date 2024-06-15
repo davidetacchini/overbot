@@ -175,7 +175,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
             return embed
 
         # using iter(profiles) because as_chunks accepts an iterator as its first parameter
-        chunks = [c for c in discord.utils.as_chunks(iter(profiles), 10)]
+        chunks = discord.utils.as_chunks(iter(profiles), 10)
         limit = self.get_profiles_limit(interaction, member.id)
 
         pages = []
