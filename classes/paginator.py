@@ -4,8 +4,6 @@ import discord
 
 from utils import emojis
 
-PageT = str | dict | discord.Embed
-
 
 class Paginator(discord.ui.View):
     def __init__(
@@ -60,7 +58,7 @@ class Paginator(discord.ui.View):
         self.first.disabled = self.previous.disabled = page == 0
         self.last.disabled = self.next.disabled = page == self.max_pages
 
-    def _get_kwargs_from_page(self, page: PageT) -> dict[str, Any]:
+    def _get_kwargs_from_page(self, page: str | dict | discord.Embed) -> dict[str, Any]:
         if isinstance(page, dict):
             return page
         elif isinstance(page, discord.Embed):
