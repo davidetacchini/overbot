@@ -65,10 +65,8 @@ class PlatformSelect(discord.ui.Select):
 
 
 class PlatformSelectMenu(Paginator):
-    def __init__(
-        self, entries: discord.Embed | list[discord.Embed], interaction: discord.Interaction
-    ) -> None:
-        super().__init__(entries, interaction=interaction)
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     def add_platforms(self, platforms: Mapping[str, discord.Embed | list[discord.Embed]]) -> None:
         self.clear_items()
