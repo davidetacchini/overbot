@@ -107,25 +107,23 @@ class Events(commands.Cog):
         if not entitlement.guild_id and not entitlement.user_id:
             return
 
-        query, target_id = None, None
-        if entitlement.type is discord.EntitlementType.purchase:
-            if entitlement.guild_id:
-                query = """INSERT INTO server (id, premium)
-                           VALUES ($1, true)
-                           ON CONFLICT (id) DO
-                           UPDATE SET premium = true;
-                        """
-                target_id = entitlement.guild_id
-            elif entitlement.user_id:
-                query = """INSERT INTO member (id, premium)
-                           VALUES ($1, true)
-                           ON CONFLICT (id) DO
-                           UPDATE SET premium = true;
-                        """
-                target_id = entitlement.user_id
-
-        if not query or not target_id:  # Redundant but I don't care
+        if entitlement.type != discord.EntitlementType.purchase.value:
             return
+
+        if entitlement.guild_id:
+            query = """INSERT INTO server (id, premium)
+                       VALUES ($1, true)
+                       ON CONFLICT (id) DO
+                       UPDATE SET premium = true;
+                    """
+            target_id = entitlement.guild_id
+        elif entitlement.user_id:
+            query = """INSERT INTO member (id, premium)
+                       VALUES ($1, true)
+                       ON CONFLICT (id) DO
+                       UPDATE SET premium = true;
+                    """
+            target_id = entitlement.user_id
 
         try:
             await self.bot.pool.execute(query, target_id)
