@@ -271,7 +271,7 @@ class ProfileCog(commands.GroupCog, name="profile"):
         )
         data = await stats_cog.embed_ratings(profile, interaction=interaction)
 
-        value = "console" if not data["pc"] else "pc"
+        value = "console" if isinstance(data["pc"], discord.Embed) else "pc"
         view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
         await view.start()

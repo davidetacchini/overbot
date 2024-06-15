@@ -71,6 +71,10 @@ class Stats(commands.Cog):
         except Exception as e:
             log.exception(f"Something bad happened while saving stats for {battletag}.\n{e}")
         else:
+            # TODO: Stats for each BattleTag are saved once a day. If stats for a specific
+            # BattleTag are already saved, it should not log this event. I need to refactor
+            # the code to split the query into two separate queries. This will allow me to
+            # determine if the stats have already been saved and avoid unnecessary logging.
             log.info(f"Stats successfully saved for {battletag}.")
 
     def format_stats(
@@ -198,7 +202,7 @@ class Stats(commands.Cog):
             interaction.user.id, interaction.guild_id, actual_battletag, profile._data  # type: ignore # can't be none
         )
         data = await self.embed_stats(profile, interaction=interaction, hero=hero)
-        value = "console" if not data["pc"] else "pc"
+        value = "console" if isinstance(data["pc"], discord.Embed) else "pc"
         view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
         await view.start()
@@ -212,7 +216,7 @@ class Stats(commands.Cog):
         await profile.fetch_data()
         await self.save_stats(interaction.user.id, interaction.guild_id, battletag, profile._data)
         data = await self.embed_ratings(profile, interaction=interaction)
-        value = "console" if not data["pc"] else "pc"
+        value = "console" if isinstance(data["pc"], discord.Embed) else "pc"
         view = PlatformSelectMenu(data[value], interaction=interaction)
         view.add_platforms(data)
         await view.start()
