@@ -500,7 +500,7 @@ class Owner(commands.Cog):
                         entitlement.ends_at.astimezone(datetime.timezone.utc)
                     )
                 value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreated at: {created_at}\nEnds at: {ends_at}"
-                if index % 2 == 0:
+                if index % 3 == 0:
                     embed.add_field(name=entitlement.id, value=value)
                 else:
                     embed.add_field(name=entitlement.id, value=value, inline=False)
