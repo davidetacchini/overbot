@@ -482,7 +482,7 @@ class Owner(commands.Cog):
 
         pages = []
         entitlements = [e async for e in self.bot.entitlements(limit=None, exclude_ended=True)]
-        entitlement_chunks = discord.utils.as_chunks(entitlements, max_size=6)
+        entitlement_chunks = discord.utils.as_chunks(entitlements, max_size=9)
 
         if len(entitlements) == 0:
             await interaction.followup.send("No entitlements found.", ephemeral=True)
@@ -491,7 +491,7 @@ class Owner(commands.Cog):
         for entitlement_chunk in entitlement_chunks:
             embed = discord.Embed(color=self.bot.get_user_color(self.bot.owner_id))
             embed.title = f"Entitlements ({len(entitlements)} total)"
-            for index, entitlement in enumerate(entitlement_chunk, start=1):
+            for entitlement in entitlement_chunk:
                 created_at = discord.utils.format_dt(
                     entitlement.created_at.astimezone(datetime.timezone.utc)
                 )
@@ -500,10 +500,7 @@ class Owner(commands.Cog):
                         entitlement.ends_at.astimezone(datetime.timezone.utc)
                     )
                 value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreated at: {created_at}\nEnds at: {ends_at}"
-                if index % 3 == 0:
-                    embed.add_field(name=entitlement.id, value=value, inline=False)
-                else:
-                    embed.add_field(name=entitlement.id, value=value)
+                embed.add_field(name=entitlement.id, value=value)
 
             pages.append(embed)
 
