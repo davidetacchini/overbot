@@ -313,7 +313,8 @@ class Owner(commands.Cog):
             ("Games lost", lost),
         )
 
-        embed = discord.Embed(color=discord.Color.dark_theme())
+        embed = discord.Embed(color=self.bot.get_user_color(self.bot.owner_id))
+
         embed.title = "Admin Panel"
         bot = []
         trivia = []
@@ -480,13 +481,17 @@ class Owner(commands.Cog):
         await interaction.response.defer(thinking=True)
 
         pages = []
-        entitlement_chunks = discord.utils.as_chunks(
-            self.bot.entitlements(limit=None, exclude_ended=True), max_size=10
-        )
-        async for entitlement_chunk in entitlement_chunks:
-            embed = discord.Embed(color=discord.Color.dark_theme())
-            embed.title = "Entitlements"
-            for entitlement in entitlement_chunk:
+        entitlements = [e async for e in self.bot.entitlements(limit=None, exclude_ended=True)]
+        entitlement_chunks = discord.utils.as_chunks(entitlements, max_size=6)
+
+        if len(entitlements) == 0:
+            await interaction.followup.send("No entitlements found.", ephemeral=True)
+            return
+
+        for index, entitlement_chunk in enumerate(entitlement_chunks, start=1):
+            embed = discord.Embed(color=self.bot.get_user_color(self.bot.owner_id))
+            embed.title = f"Entitlements ({len(entitlements)} total)"
+            for index, entitlement in enumerate(entitlement_chunk):
                 created_at = discord.utils.format_dt(
                     entitlement.created_at.astimezone(datetime.timezone.utc)
                 )
@@ -494,8 +499,11 @@ class Owner(commands.Cog):
                     ends_at = discord.utils.format_dt(
                         entitlement.ends_at.astimezone(datetime.timezone.utc)
                     )
-                value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreate at: {created_at}\nEnds at: {ends_at}"
-                embed.add_field(name=entitlement.id, value=value)
+                value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreated at: {created_at}\nEnds at: {ends_at}"
+                if index % 2 == 0:
+                    embed.add_field(name=entitlement.id, value=value)
+                else:
+                    embed.add_field(name=entitlement.id, value=value, inline=False)
 
             pages.append(embed)
 
