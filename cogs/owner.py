@@ -488,10 +488,10 @@ class Owner(commands.Cog):
             await interaction.followup.send("No entitlements found.", ephemeral=True)
             return
 
-        for index, entitlement_chunk in enumerate(entitlement_chunks, start=1):
+        for entitlement_chunk in entitlement_chunks:
             embed = discord.Embed(color=self.bot.get_user_color(self.bot.owner_id))
             embed.title = f"Entitlements ({len(entitlements)} total)"
-            for index, entitlement in enumerate(entitlement_chunk):
+            for index, entitlement in enumerate(entitlement_chunk, start=1):
                 created_at = discord.utils.format_dt(
                     entitlement.created_at.astimezone(datetime.timezone.utc)
                 )
@@ -501,7 +501,7 @@ class Owner(commands.Cog):
                     )
                 value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreated at: {created_at}\nEnds at: {ends_at}"
                 if index % 3 == 0:
-                    embed.add_field(name="\u200b", value="\u200b")
+                    embed.add_field(name=entitlement.id, value=value, inline=False)
                 else:
                     embed.add_field(name=entitlement.id, value=value)
 
