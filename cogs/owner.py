@@ -501,9 +501,9 @@ class Owner(commands.Cog):
                     )
                 value = f"Guild: {entitlement.guild}\nPurchased by: {entitlement.user}\nCreated at: {created_at}\nEnds at: {ends_at}"
                 if index % 3 == 0:
-                    embed.add_field(name=entitlement.id, value=value)
-                else:
                     embed.add_field(name=entitlement.id, value=value, inline=False)
+                else:
+                    embed.add_field(name=entitlement.id, value=value)
 
             pages.append(embed)
 
