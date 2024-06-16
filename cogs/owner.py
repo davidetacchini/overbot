@@ -488,7 +488,7 @@ class Owner(commands.Cog):
             await interaction.followup.send("No entitlements found.", ephemeral=True)
             return
 
-        for index, entitlement_chunk in enumerate(entitlement_chunks, start=1):
+        for index, entitlement_chunk in enumerate(entitlement_chunks):
             embed = discord.Embed(color=self.bot.get_user_color(self.bot.owner_id))
             embed.title = f"Entitlements ({len(entitlements)} total)"
             for index, entitlement in enumerate(entitlement_chunk):
