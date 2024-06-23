@@ -104,38 +104,67 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_entitlement_create(self, entitlement: discord.Entitlement) -> None:
-        if not entitlement.guild_id and not entitlement.user_id:
-            return
-
-        if entitlement.type != discord.EntitlementType.purchase.value:
-            return
-
-        if entitlement.guild_id:
+        if (target := entitlement.guild) is not None:
             query = """INSERT INTO server (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO
                        UPDATE SET premium = true;
                     """
-            target_id = entitlement.guild_id
-        elif entitlement.user_id:
+        elif (target := entitlement.user) is not None:
             query = """INSERT INTO member (id, premium)
                        VALUES ($1, true)
                        ON CONFLICT (id) DO
                        UPDATE SET premium = true;
                     """
-            target_id = entitlement.user_id
+
+        if target is None:
+            log.info("Target not available in on_entitlement_create.")
+            return
 
         try:
-            await self.bot.pool.execute(query, target_id)
+            await self.bot.pool.execute(query, target.id)
         except Exception as e:
-            message = f"Cannot set premium for **{target_id}**."
+            message = f"Cannot set premium for {target} (ID: {target.id})."
             color = discord.Color.red()
             log.exception(e)
         else:
-            self.bot.premiums.add(target_id)
-            message = f"Premium set for **{target_id}**."
+            self.bot.premiums.add(target.id)
+            message = f"Premium set for {target} (ID: {target.id})."
             color = discord.Color.green()
             log.info(message)
+        await self.send_log(message, color)
+
+    @commands.Cog.listener()
+    async def on_entitlement_update(self, entitlement: discord.Entitlement) -> None:
+        target = entitlement.guild or entitlement.user
+
+        if target is None:
+            log.info("Target not available in on_entitlement_update.")
+            return
+
+        if entitlement.ends_at:
+            message = f"Subscription canceled for {target} (ID: {target.id})."
+            color = discord.Color.red()
+        else:
+            message = f"Subscription renewed for {target} (ID: {target.id})."
+            color = discord.Color.green()
+
+        log.info(message)
+        await self.send_log(message, color)
+
+    @commands.Cog.listener()
+    async def on_entitlement_delete(self, entitlement: discord.Entitlement) -> None:
+        target = entitlement.guild or entitlement.user
+
+        if target is None:
+            log.info("Target not available in on_entitlement_delete.")
+            return
+
+        message = (
+            f"Discord either issued a refund or removed the entitlement for {target} ({target.id})."
+        )
+        color = discord.Color.red()
+        log.info(message)
         await self.send_log(message, color)
 
 
