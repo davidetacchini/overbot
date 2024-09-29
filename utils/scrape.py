@@ -16,7 +16,7 @@ async def get_overwatch_news(*, session: ClientSession) -> News:
     async with session.get(config.overwatch["news"]) as r:
         content = await r.read()
 
-    root_kwargs = {"name": "div", "class_": "main-content", "recursive": False}
+    root_kwargs = {"name": "main", "class_": "main-content", "recursive": False}
     root = BeautifulSoup(content, features="lxml").body.find(**root_kwargs)
 
     news_container = root.find("div", class_="news-header", recursive=False).find(
