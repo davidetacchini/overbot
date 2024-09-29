@@ -153,7 +153,10 @@ class Stats(commands.Cog):
     ) -> discord.Embed:
         embed = discord.Embed(color=self.bot.get_user_color(interaction.user.id))
         embed.set_author(name=profile.username, icon_url=profile.avatar)
-        embed.set_image(url=profile.namecard)
+        try:
+            embed.set_image(url=profile.namecard)
+        except discord.HTTPException:
+            pass
         embed.set_footer(text=f"Endorsement: {profile.endorsement}")
 
         def format_dict(source: dict[str, Any]):
